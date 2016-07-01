@@ -8,12 +8,16 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
-@app.route("/reflect", methods=['POST'])
+@app.route("/reflect")
 def reflect():
-    template = request.form.get('tpl')
-    injection = request.form.get('inj')
     
-    return Template(injection).render()
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+    
+    injection = request.values.get('inj')
+    
+    return Template(template % injection).render()
 
 @app.route('/shutdown')
 def shutdown():
