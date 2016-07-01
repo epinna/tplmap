@@ -1,6 +1,9 @@
 from flask import Flask, request
 app = Flask(__name__)
 from mako.template import Template
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.WARNING)
 
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
@@ -16,7 +19,7 @@ def reflect():
         template = '%s'
     
     injection = request.values.get('inj')
-    
+
     return Template(template % injection).render()
 
 @app.route('/shutdown')
