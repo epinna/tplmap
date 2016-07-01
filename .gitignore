@@ -35,3 +35,6 @@ coverage.xml
 
 # Translations
 *.mo
+
+# TplMap third party test-data
+test/_*
