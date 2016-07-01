@@ -38,4 +38,4 @@ coverage.xml
 
 # TplMap third party test-data
 tests/_test_*/lib/
-
+tests/_test_*/templates_c/
