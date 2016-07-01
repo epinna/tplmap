@@ -36,12 +36,18 @@ class Smarty(Check):
                     self.state.get('os', 'undetected')
                 )
             )
-            
-        self._check_read()
-        if self.state.get('read'):
-            log.warn('Can ready arbitrary file')
-            
-        self._check_write()
+        
+        # I've tested the techniques described in this article
+        # http://blog.portswigger.net/2015/08/server-side-template-injection.html
+        # for Smarty version prior 3.1.24 (3.1.23 and 3.1.21) but do not work for me.
+        # 
+        # Example on 3.1.21 when trying reading file with using self::getStreamVariable():
+        # Cannot access self:: when no class scope is active in smarty-3.1.21/libs/sysplugins/smarty_internal_templatebase.php(157) : eval()'d code on line 23
+        
+        #self._check_read()
+        #if self.state.get('read'):
+        #    log.warn('Can ready arbitrary file')
+        #self._check_write()
             
     def _check_engine(self):
         
