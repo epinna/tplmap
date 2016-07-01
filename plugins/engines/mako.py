@@ -7,6 +7,10 @@ class Mako(Check):
     
     def init(self):
         
+        # Declare payload
+        self.payload_left = '${%s}' % self.rand_left
+        self.payload_right = '${%s}' % self.rand_right
+        
         self._check_reflection()
         
         if not self.state.get('reflection'):
