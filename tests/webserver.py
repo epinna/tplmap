@@ -1,6 +1,7 @@
 from flask import Flask, request
 app = Flask(__name__)
-from mako.template import Template
+from mako.template import Template as MakoTemplates
+from jinja2 import Template as Jinja2Template
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.WARNING)
@@ -11,16 +12,20 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
-@app.route("/reflect")
-def reflect():
+@app.route("/reflect/<engine>")
+def reflect(engine):
     
     template = request.values.get('tpl')
     if not template:
         template = '%s'
     
     injection = request.values.get('inj')
-
-    return Template(template % injection).render()
+    
+    if engine == 'mako':
+        return MakoTemplates(template % injection).render()
+    elif engine == 'jinja2':
+        return Jinja2Template(template % injection).render()
+        
 
 @app.route('/shutdown')
 def shutdown():
