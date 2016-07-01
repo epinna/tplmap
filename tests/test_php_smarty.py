@@ -10,4 +10,24 @@ from core.http import Channel
 
 class SmartyTest(unittest.TestCase):
     
-    pass
+    def test_reflection_unsecured(self):
+        
+        channel = Channel('http://127.0.0.1:15001/test-unsecured.php?inj=*')
+        mako = Smarty(channel)
+        self.assertEqual(mako.state, { 
+            'reflection': True,
+            'language': 'php',
+            'engine': 'smarty-unsecured',  
+            'exec' : True,
+            'os' : 'Darwin'
+        })
+
+    def test_reflection_secured(self):
+        
+        channel = Channel('http://127.0.0.1:15001/test-secured.php?inj=*')
+        mako = Smarty(channel)
+        self.assertEqual(mako.state, { 
+            'reflection': True,
+            'language': 'php',
+            'engine': 'smarty-secured'
+        })

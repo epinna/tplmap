@@ -10,7 +10,7 @@ sleep 1
 curl http://localhost:15001/shutdown
 
 # Run PHP webserver
-php -S localhost:8000 -t _test_php_smarty/&
+php -S localhost:15001 -t _test_php_smarty/&
 PHPPID=$!
 # Download smarty if not already installed
 if [ ! -d ./_test_php_smarty/smarty/ ]; then
