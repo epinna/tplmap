@@ -13,10 +13,16 @@ curl http://localhost:15001/shutdown
 php -S localhost:15001 -t _test_php_smarty/&
 PHPPID=$!
 # Download smarty 3.1.29 if not already installed
-if [ ! -d ./_test_php_smarty/smarty-3.1.29/ ]; then
-    wget https://github.com/smarty-php/smarty/archive/v3.1.29.tar.gz -O ./_test_php_smarty/v3.1.29.tar.gz
-    tar xvf ./_test_php_smarty/v3.1.29.tar.gz -C ./_test_php_smarty/
-    rm ./_test_php_smarty/v3.1.29.tar.gz
+if [ ! -d ./_test_php_smarty/lib/smarty-3.1.29/ ]; then
+    wget https://github.com/smarty-php/smarty/archive/v3.1.29.tar.gz -O ./_test_php_smarty/lib/v3.1.29.tar.gz
+    tar xvf ./_test_php_smarty/lib/v3.1.29.tar.gz -C ./_test_php_smarty/lib/
+    rm ./_test_php_smarty/lib/v3.1.29.tar.gz
+fi
+# Download twig 1.24.1 if not already installed
+if [ ! -d ./_test_php_twig/lib/twig-1.24.1/ ]; then
+    wget https://github.com/twigphp/Twig/archive/v1.24.1.tar.gz -O ./_test_php_twig/lib/v1.24.1.tar.gz
+    tar xvf ./_test_php_twig/lib/v1.24.1.tar.gz -C ./_test_php_twig/lib/
+    rm ./_test_php_twig/lib/v1.24.1.tar.gz
 fi
 sleep 1
 # Launch PHP engines tests

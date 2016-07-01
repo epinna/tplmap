@@ -37,7 +37,5 @@ coverage.xml
 *.mo
 
 # TplMap third party test-data
-tests/_test_php_smarty/smarty-3.1.29/
-tests/_test_php_smarty/smarty-3.1.23/
-tests/_test_php_smarty/templates_c/
+tests/_test_*/lib/
 

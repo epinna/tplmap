@@ -1,5 +1,5 @@
 <?php
-require('smarty-3.1.29/libs/Smarty.class.php');
+require('lib/smarty-3.1.29/libs/Smarty.class.php');
 $smarty = new SmartyBC;
 
 $tpl=$_GET['inj'];
