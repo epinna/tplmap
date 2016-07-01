@@ -1,4 +1,4 @@
-from plugins.generic.check import Check
+from core.check import Check
 from utils.loggers import log
 import random
 import string

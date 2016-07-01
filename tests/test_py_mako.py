@@ -5,7 +5,7 @@ import sys
 import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from plugins.engines.mako.mako import Mako
+from plugins.engines.mako import Mako
 from core.http import Channel
 
 class MakoTest(unittest.TestCase):
