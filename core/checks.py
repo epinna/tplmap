@@ -8,7 +8,13 @@ from utils.loggers import log
 def checkTemplateInjection(args):
     
     channel = Channel(url = args["url"][0])
+    
+    # Probe if Mako
     mako = Mako(channel)
+    
+    # Probe if ninja
     jinja2 = Jinja2(channel)
+    
+    # Check Smarty and Jinja2 
     smarty = Smarty(channel)
     twig = Twig(channel)
