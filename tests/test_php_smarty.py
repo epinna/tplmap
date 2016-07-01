@@ -12,7 +12,7 @@ class SmartyTest(unittest.TestCase):
     
     def test_reflection_unsecured(self):
         
-        channel = Channel('http://127.0.0.1:15001/test-unsecured.php?inj=*')
+        channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-unsecured.php?inj=*')
         mako = Smarty(channel)
         self.assertEqual(mako.state, { 
             'reflection': True,
@@ -24,7 +24,7 @@ class SmartyTest(unittest.TestCase):
 
     def test_reflection_secured(self):
         
-        channel = Channel('http://127.0.0.1:15001/test-secured.php?inj=*')
+        channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-secured.php?inj=*')
         mako = Smarty(channel)
         self.assertEqual(mako.state, { 
             'reflection': True,

