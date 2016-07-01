@@ -37,4 +37,4 @@ coverage.xml
 *.mo
 
 # TplMap third party test-data
-test/_*
+tests/_*
