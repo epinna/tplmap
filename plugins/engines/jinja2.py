@@ -7,14 +7,18 @@ class Jinja2(Check):
     
     def init(self):
         
+        # Set base tag
         self.base_tag = '{{%s}}'
         
-        self._check_reflection()
-        
-        if not self.get('reflect_tag'):
-            return
+        # Skip reflection check if same tag has been detected before
+        if self.get('reflect_tag') != self.base_tag:
+            self._check_reflection()
             
-        log.warn('Reflection detected')
+            # Return if reflect_tag is not set
+            if not self.get('reflect_tag'):
+                return
+                
+            log.warn('Reflection detected with tag \'%s\'' % self.get('reflect_tag'))
         
         self._check_python()
             

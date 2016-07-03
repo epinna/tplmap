@@ -9,13 +9,22 @@ def checkTemplateInjection(args):
     
     channel = Channel(url = args["url"][0])
     
+    # Check Smarty 
+    Smarty(channel)
+    if channel.data.get('engine'):
+        return
+        
     # Probe if Mako
-    mako = Mako(channel)
-    
-    # Probe if ninja
-    jinja2 = Jinja2(channel)
-    
-    # Check Smarty and Jinja2 
-    smarty = Smarty(channel)
-    
-    twig = Twig(channel)
+    Mako(channel)
+    if channel.data.get('engine'):
+        return
+            
+    # Probe if Ninja2
+    Jinja2(channel)
+    if channel.data.get('engine'):
+        return
+            
+    # Probe Twig
+    Twig(channel)
+    if channel.data.get('engine'):
+        return
