@@ -8,4 +8,4 @@ cp -rf ./_test_java_freemarker/spark-app ./_test_java_freemarker/lib/spark-app/
 #fi
 
 cd ./_test_java_freemarker/lib/spark-app/
-gradle run --stacktrace
+gradle run --debug
