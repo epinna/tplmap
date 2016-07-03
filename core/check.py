@@ -10,22 +10,20 @@ class Check(Plugin):
         # HTTP channel
         self.channel = channel
         
-        # Payload wrappers
-        self.rand_left = str(random.randint(10, 100))
-        self.rand_right = str(random.randint(10, 100))
-        self.payload_left = ''
-        self.payload_right = ''
+        # Random header and trailer
+        self.req_header_rand = str(random.randint(99, 1000))
+        self.req_trailer_rand = str(random.randint(99, 1000))
     
         self.init()
         
-    def req(self, payload, wrap = True):
+    def req(self, payload):
         
-        if wrap and self.payload_left and self.payload_right:
-            response = self.channel.req(self.payload_left + payload + self.payload_right)
-            before,_,result = response.partition(self.rand_left)
-            result,_,after = result.partition(self.rand_right)
-        else:
-            result = self.channel.req(payload)
+        req_header = self.base_tag % self.req_header_rand
+        req_trailer = self.base_tag % self.req_trailer_rand
+        
+        response = self.channel.req(req_header + payload + req_trailer)
+        before,_,result = response.partition(self.req_header_rand)
+        result,_,after = result.partition(self.req_trailer_rand)
         
         return result.strip()
     

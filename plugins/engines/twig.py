@@ -11,8 +11,7 @@ class Twig(Check):
     def init(self):
         
         # Declare payload
-        self.payload_left = '{{%s}}' % self.rand_left
-        self.payload_right = '{{%s}}' % self.rand_right
+        self.base_tag = '{{%s}}'
         
         self._check_reflection()
         
