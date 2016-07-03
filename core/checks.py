@@ -17,4 +17,5 @@ def checkTemplateInjection(args):
     
     # Check Smarty and Jinja2 
     smarty = Smarty(channel)
+    
     twig = Twig(channel)

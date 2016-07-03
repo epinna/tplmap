@@ -16,14 +16,14 @@ class Twig(Check):
         
         self._check_reflection()
         
-        if not self.state.get('reflection'):
+        if not self.get('reflection'):
             return
             
         log.warn('Reflection detected')
         
         self._check_engine()
             
-        if not self.state.get('language') or  not self.state.get('engine'):
+        if not self.get('language') or not self.get('engine'):
             return
             
         log.warn('Twig engine detected')   
@@ -36,8 +36,8 @@ class Twig(Check):
         expected = str(rand*7)
         
         if expected == self.req(payload):
-            self.state['language'] = 'php'
-            self.state['engine'] = 'twig-*'
+            self.set('language', 'php')
+            self.set('engine', 'twig-*')
     
     def _check_reflection(self):
         
@@ -48,5 +48,5 @@ class Twig(Check):
         expected = str(randA*randB)
         
         if expected == self.req(payload):
-            self.state['reflection'] = True
+            self.set('reflection', True)
         

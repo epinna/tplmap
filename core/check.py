@@ -10,9 +10,6 @@ class Check(Plugin):
         # HTTP channel
         self.channel = channel
         
-        # Current state
-        self.state = {}
-        
         # Payload wrappers
         self.rand_left = str(random.randint(10, 100))
         self.rand_right = str(random.randint(10, 100))
@@ -31,10 +28,9 @@ class Check(Plugin):
             result = self.channel.req(payload)
         
         return result.strip()
-            
-    def check(self):
-        pass
-            
-    def setup(self):
-        pass
     
+    def set(self, key, value):
+        self.channel.data[key] = value
+        
+    def get(self, key, default = None):
+        return self.channel.data.get(key, default)

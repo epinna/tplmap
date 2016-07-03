@@ -13,26 +13,26 @@ class Mako(Check):
         
         self._check_reflection()
         
-        if not self.state.get('reflection'):
+        if not self.get('reflection'):
             return
             
         log.warn('Reflection detected')
         
         self._check_python()
             
-        if not self.state.get('language') or  not self.state.get('engine'):
+        if not self.get('language') or  not self.get('engine'):
             return
             
         log.warn('Python injection detected')   
         
         self._check_os()
         
-        if not self.state.get('exec'):
+        if not self.get('exec'):
             return
             
         log.warn(
             'Shell command execution detected on \'%s\' operating system' % (
-                self.state.get('os', 'undetected')
+                self.get('os', 'undetected')
             )
         )
 
@@ -45,8 +45,8 @@ class Mako(Check):
         expected = randA.join(randB)
         
         if expected == self.req(payload):
-            self.state['language'] = 'python'
-            self.state['engine'] = 'mako'
+            self.set('language', 'python')
+            self.set('engine', 'mako')
     
     def _check_reflection(self):
         
@@ -57,7 +57,7 @@ class Mako(Check):
         expected = str(randA*randB)
         
         if expected == self.req(payload):
-            self.state['reflection'] = True
+            self.set('reflection', True)
         
     def _check_os(self):
         
@@ -68,8 +68,8 @@ class Mako(Check):
         %%>${x}""" % expected_rand
                 
         if expected_rand == self.req(payload):
-            self.state['exec'] = True      
+            self.set('exec', True)      
 
         payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
                 
-        self.state['os'] = self.req(payload) 
+        self.set('os', self.req(payload))

