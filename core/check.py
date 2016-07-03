@@ -1,5 +1,5 @@
 from core.plugin import Plugin
-import random
+from utils import rand
 import re
 
 
@@ -11,8 +11,8 @@ class Check(Plugin):
         self.channel = channel
         
         # Random header and trailer
-        self.req_header_rand = str(random.randint(99, 1000))
-        self.req_trailer_rand = str(random.randint(99, 1000))
+        self.req_header_rand = str(rand.randint_n(4))
+        self.req_trailer_rand = str(rand.randint_n(4))
     
         self.init()
         

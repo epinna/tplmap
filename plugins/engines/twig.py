@@ -1,6 +1,6 @@
 from core.check import Check
 from utils.loggers import log
-import random
+from utils import rand
 import string
 import requests
 import urlparse
@@ -29,10 +29,10 @@ class Twig(Check):
             
     def _check_engine(self):
         
-        rand = random.randint(0, 10)
+        randA = rand.randint_n(1)
         
-        payload = '{{7*\'%s\'}}' % (rand)
-        expected = str(rand*7)
+        payload = '{{7*\'%s\'}}' % (randA)
+        expected = str(randA*7)
         
         if expected == self.req(payload):
             self.set('language', 'php')
@@ -40,8 +40,8 @@ class Twig(Check):
     
     def _check_reflection(self):
         
-        randA = random.randint(10, 100)
-        randB = random.randint(10, 100)
+        randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
 
         payload = '{{%i*%i}}' % (randA, randB)
         expected = str(randA*randB)

