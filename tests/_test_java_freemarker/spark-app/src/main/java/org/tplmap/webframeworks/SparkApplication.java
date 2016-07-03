@@ -15,6 +15,7 @@ import static spark.Spark.*;
 public class SparkApplication {
 
 public static void main(String[] args) {
+  port(15001);
   get("/freemarker", SparkApplication::freemarker);
 
 }
