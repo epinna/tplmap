@@ -14,8 +14,9 @@ with open(config_folder + "/../config.yml", 'r') as stream:
         # logger is not yet loaded, print it roughly
         print('[!][%s] %s' % ('config', e))
 
-if not os.path.isdir(config["base_path"]):
-    os.makedirs(config["base_path"])
-
 base_path = os.path.expanduser(config["base_path"])
+
+if not os.path.isdir(base_path):
+    os.makedirs(base_path)
+
 
