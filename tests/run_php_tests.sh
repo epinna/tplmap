@@ -1,16 +1,7 @@
 #!/bin/bash
 
-# Run python webserver
-python webserver.py&
-sleep 1
-# Launch python engines tests
-python -m unittest discover . 'test_py_*.py'
-sleep 1
-# Shutdown python webserver 
-curl http://localhost:15001/shutdown
-
 # Run PHP webserver
-php -S localhost:15001 -t _test_php_smarty/&
+php -S 127.0.0.1:15001 -t _test_php_smarty/&
 PHPPID=$!
 # Download smarty 3.1.29 if not already installed
 if [ ! -d ./_test_php_smarty/lib/smarty-3.1.29/ ]; then
