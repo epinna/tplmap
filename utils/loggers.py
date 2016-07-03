@@ -12,7 +12,7 @@ class TplmapFormatter(logging.Formatter):
     FORMATS = {
         # logging.DEBUG :"[D][%(module)s.%(funcName)s:%(lineno)d] %(message)s",
         logging.DEBUG: "[D][%(module)s] %(message)s",
-        logging.INFO: "%(message)s",
+        logging.INFO: "[+] %(message)s",
         logging.WARNING: "[-][%(module)s] %(message)s",
         logging.ERROR: "[!][%(module)s] %(message)s",
         logging.CRITICAL: "[!][%(module)s] %(message)s",
