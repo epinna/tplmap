@@ -17,7 +17,7 @@ class Jinja2Test(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template)
         Jinja2(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '{{%s}}',
             'language': 'python',
             'engine': 'jinja2',  
             'exec' : True,
@@ -31,7 +31,7 @@ class Jinja2Test(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template)
         Jinja2(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '{{%s}}',
             'language': 'python',
             'engine': 'jinja2',
             'exec' : True,

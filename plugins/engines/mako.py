@@ -12,7 +12,7 @@ class Mako(Check):
         
         self._check_reflection()
         
-        if not self.get('reflection'):
+        if not self.get('reflect_tag'):
             return
             
         log.warn('Reflection detected')
@@ -56,7 +56,7 @@ class Mako(Check):
         expected = str(randA*randB)
         
         if expected == self.req(payload):
-            self.set('reflection', True)
+            self.set('reflect_tag', self.base_tag)
         
     def _check_os(self):
         

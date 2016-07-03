@@ -15,7 +15,7 @@ class SmartyTest(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-unsecured.php?inj=*')
         Smarty(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '{%s}',
             'language': 'php',
             'engine': 'smarty-unsecured',  
             'exec' : True,
@@ -27,7 +27,7 @@ class SmartyTest(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-secured.php?inj=*')
         Smarty(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '{%s}',
             'language': 'php',
             'engine': 'smarty-secured'
         })

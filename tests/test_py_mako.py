@@ -17,7 +17,7 @@ class MakoTest(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template)
         Mako(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '${%s}',
             'language': 'python',
             'engine': 'mako',  
             'exec' : True,
@@ -31,7 +31,7 @@ class MakoTest(unittest.TestCase):
         channel = Channel('http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template)
         Mako(channel)
         self.assertEqual(channel.data, { 
-            'reflection': True,
+            'reflect_tag': '${%s}',
             'language': 'python',
             'engine': 'mako',
             'exec' : True,
