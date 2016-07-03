@@ -6,7 +6,7 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.jinja2 import Jinja2
-from core.http import Channel
+from core.channel import Channel
 
 class Jinja2Test(unittest.TestCase):
     
@@ -15,8 +15,8 @@ class Jinja2Test(unittest.TestCase):
         template = '%s'
         
         channel = Channel('http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template)
-        mako = Jinja2(channel)
-        self.assertEqual(mako.state, { 
+        Jinja2(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'python',
             'engine': 'jinja2',  
@@ -29,8 +29,8 @@ class Jinja2Test(unittest.TestCase):
         template = 'AAAA%sAAAA'
         
         channel = Channel('http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template)
-        mako = Jinja2(channel)
-        self.assertEqual(mako.state, { 
+        Jinja2(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'python',
             'engine': 'jinja2',

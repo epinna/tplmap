@@ -6,15 +6,15 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.smarty import Smarty
-from core.http import Channel
+from core.channel import Channel
 
 class SmartyTest(unittest.TestCase):
     
     def test_reflection_unsecured(self):
         
         channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-unsecured.php?inj=*')
-        mako = Smarty(channel)
-        self.assertEqual(mako.state, { 
+        Smarty(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'php',
             'engine': 'smarty-unsecured',  
@@ -25,8 +25,8 @@ class SmartyTest(unittest.TestCase):
     def test_reflection_secured(self):
         
         channel = Channel('http://127.0.0.1:15001/smarty-3.1.29-secured.php?inj=*')
-        mako = Smarty(channel)
-        self.assertEqual(mako.state, { 
+        Smarty(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'php',
             'engine': 'smarty-secured'

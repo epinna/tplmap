@@ -6,7 +6,7 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.mako import Mako
-from core.http import Channel
+from core.channel import Channel
 
 class MakoTest(unittest.TestCase):
     
@@ -15,8 +15,8 @@ class MakoTest(unittest.TestCase):
         template = '%s'
         
         channel = Channel('http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template)
-        mako = Mako(channel)
-        self.assertEqual(mako.state, { 
+        Mako(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'python',
             'engine': 'mako',  
@@ -29,8 +29,8 @@ class MakoTest(unittest.TestCase):
         template = 'AAAA%sAAAA'
         
         channel = Channel('http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template)
-        mako = Mako(channel)
-        self.assertEqual(mako.state, { 
+        Mako(channel)
+        self.assertEqual(channel.data, { 
             'reflection': True,
             'language': 'python',
             'engine': 'mako',
