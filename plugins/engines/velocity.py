@@ -7,8 +7,15 @@ class Velocity(Check):
     
     def init(self):
         
+        # Declare payload
+        self.base_tag = '#set($p=%s)\n$p'
+        
         self.req_header_rand = str(rand.randint_n(4))
         self.req_trailer_rand = str(rand.randint_n(4))
+        
+        # Skip reflection check if same tag has been detected before
+        if self.get('reflect_tag') != self.base_tag:
+            self._check_engine()
         
         self._check_engine()
     
@@ -32,10 +39,11 @@ class Velocity(Check):
 
     def _check_engine(self):
         
-        payload = rand.randstr_n(1)
+        expected_rand = str(rand.randint_n(1))
+        payload = self.base_tag % (expected_rand)
         
-        if payload == self.req(payload):
-            self.set('reflect_tag', 'custom')
+        if expected_rand == self.req(payload):
+            self.set('reflect_tag', self.base_tag)
             self.set('language', 'java')
             self.set('engine', 'velocity')
                       
@@ -66,5 +74,4 @@ $str.valueOf($chr.toChars($out.read()))
         response = self.channel.req(req_header + payload + req_trailer)
         before,_,result = response.partition(rand_header)
         result,_,after = result.partition(rand_trailer)
-        
         return result.strip()
