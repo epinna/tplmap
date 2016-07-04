@@ -27,4 +27,19 @@ class ChannelTest(unittest.TestCase):
             'os' : 'posix-darwin'
         })
 
-    
+    def test_header_reflection(self):
+        
+        template = '%s'
+        
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/header/mako',
+            'headers' : [ 'User-Agent: *' ]
+        })
+        Mako(channel)
+        self.assertEqual(channel.data, { 
+            'reflect_tag': '${%s}',
+            'language': 'python',
+            'engine': 'mako',  
+            'exec' : True,
+            'os' : 'posix-darwin'
+        })

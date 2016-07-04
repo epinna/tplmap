@@ -24,7 +24,7 @@ def reflect(engine):
         return Jinja2Template(template % injection).render()
 
 @app.route("/post/<engine>", methods = [ "POST" ])
-def postfunct(engine):
+def postfunc(engine):
     
     template = request.values.get('tpl')
     if not template:
@@ -36,7 +36,21 @@ def postfunct(engine):
         return MakoTemplates(template % injection).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
-            
+
+
+@app.route("/header/<engine>")
+def headerfunc(engine):
+    
+    template = request.headers.get('tpl')
+    if not template:
+        template = '%s'
+    
+    injection = request.headers.get('User-Agent')
+    
+    if engine == 'mako':
+        return MakoTemplates(template % injection).render()
+    elif engine == 'jinja2':
+        return Jinja2Template(template % injection).render()        
 
 @app.route('/shutdown')
 def shutdown():

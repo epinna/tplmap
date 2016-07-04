@@ -36,11 +36,18 @@ class Channel:
             self.http_method = 'GET'
     
     def _parse_header(self):
-        for param, value_list in self.args.get('headers', {}).items():
+        for param_value in self.args.get('headers', '[]'):
             
-            self.header_params[param] = value_list
+            if ':' not in param_value:
+                continue
             
-            if any(x for x in value_list if '*' in x):
+            param, value = param_value.split(':')
+            param = param.strip()
+            value = value.strip()
+            
+            self.header_params[param] = value
+            
+            if '*' in value:
                 self.header_placeholders.append(param)
                 log.warn('Found placeholder in Header \'%s\'' % param)
         
@@ -86,10 +93,21 @@ class Channel:
             post_params = self.post_params.copy()
             post_params[post_placeholder] = injection
             
+        header_params = {}
+        if self.header_placeholders:
+            
+            if '\n' in injection:
+                log.debug('Skip payload with not compatible character for headers')
+            else:
+                header_placeholder = self.header_placeholders[0]    
+                header_params = self.header_params.copy()
+                header_params[header_placeholder] = injection
+            
         return requests.request(
             method = self.http_method, 
             url = self.base_url, 
             params = get_params,
-            data = post_params
+            data = post_params,
+            headers = header_params
             ).text
     
