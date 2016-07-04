@@ -14,6 +14,7 @@ GRADLEPID=$!
 
 while ! echo exit | nc localhost 15001; do sleep 10; done
 
+cd ../../../
 python -m unittest discover . 'test_java_*.py'
 sleep 1
 # Shutdown Java webserver 
