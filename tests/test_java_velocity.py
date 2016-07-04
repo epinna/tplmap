@@ -14,7 +14,9 @@ class VelocityTest(unittest.TestCase):
         
         template = '%s'
         
-        channel = Channel('http://127.0.0.1:15001/velocity?inj=*')
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/velocity?inj=*'
+        })
         Velocity(channel)
         self.assertEqual(channel.data, {
             'reflect_tag': '#set($p=%s)\n$p',
@@ -26,7 +28,9 @@ class VelocityTest(unittest.TestCase):
     def test_reflection_within_text(self):
         template = 'AAAA%sAAAA'
         
-        channel = Channel('http://127.0.0.1:15001/velocity?inj=*')
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/velocity?inj=*'
+        })
         Velocity(channel)
         self.assertEqual(channel.data, {
             'reflect_tag': '#set($p=%s)\n$p',

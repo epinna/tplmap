@@ -5,19 +5,24 @@ from utils.loggers import log
 
 def main(args):
     
-    checks.checkTemplateInjection({
+    arguments = {
         'url' : args.url
-    })
+    }
     
+    if args.post_data:
+        arguments['post_data'] = args.post_data
+    
+    checks.checkTemplateInjection(arguments)
     
 if __name__ == '__main__':
 
     parser = CliParser(prog='tplmap')
     
-    parser.add_argument('url', nargs = 1, help = 'Target URL')
+    parser.add_argument('-d', action='append', dest='post_data', help = 'Post data')
+    parser.add_argument('url', help = 'Target URL')
 
     arguments = parser.parse_args()
-
+    
     try:
         main(arguments)
     except (KeyboardInterrupt):
