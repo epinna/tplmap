@@ -18,10 +18,14 @@ class Channel:
 
         self.post_params = {}
         self.post_placeholders = []
+
+        self.header_params = {}
+        self.header_placeholders = []
         
         self._parse_get()
         self._parse_post()
-        
+        self._parse_header()
+                
         if self.post_placeholders + self.get_placeholders:
             log.warn('Error, multiple placeholder in parameters')
         
@@ -30,14 +34,28 @@ class Channel:
             self.http_method = 'POST'
         else:
             self.http_method = 'GET'
+    
+    def _parse_header(self):
+        for param, value_list in self.args.get('headers', {}).items():
+            
+            self.header_params[param] = value_list
+            
+            if any(x for x in value_list if '*' in x):
+                self.header_placeholders.append(param)
+                log.warn('Found placeholder in Header \'%s\'' % param)
         
     def _parse_post(self):
         
-        for param, value_list in self.args.get('post_data', {}).items():
+        for param_value in self.args.get('post_data', '[]'):
             
-            self.post_params[param] = value_list
+            if '=' not in param_value:
+                continue
             
-            if any(x for x in value_list if '*' in x):
+            param, value = param_value.split('=')
+            
+            self.post_params[param] = value
+            
+            if '*' in value:
                 self.post_placeholders.append(param)
                 log.warn('Found placeholder in POST parameter \'%s\'' % param)
 

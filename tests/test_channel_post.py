@@ -16,7 +16,7 @@ class ChannelTest(unittest.TestCase):
         
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/post/mako',
-            'post_data' : { 'inj' : '*' }
+            'post_data' : [ 'inj=*' ]
         })
         Mako(channel)
         self.assertEqual(channel.data, { 
