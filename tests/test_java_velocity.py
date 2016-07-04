@@ -17,7 +17,7 @@ class VelocityTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/velocity?inj=*'
         })
-        Velocity(channel)
+        Velocity(channel).detect()
         self.assertEqual(channel.data, {
             'reflect_tag': '#set($p=%s)\n$p',
             'language': 'java',
@@ -31,7 +31,7 @@ class VelocityTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/velocity?inj=*'
         })
-        Velocity(channel)
+        Velocity(channel).detect()
         self.assertEqual(channel.data, {
             'reflect_tag': '#set($p=%s)\n$p',
             'language': 'java',

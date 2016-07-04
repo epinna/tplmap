@@ -18,7 +18,7 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/post/mako',
             'post_data' : [ 'inj=*' ]
         })
-        Mako(channel)
+        Mako(channel).detect()
         self.assertEqual(channel.data, { 
             'reflect_tag': '${%s}',
             'language': 'python',
@@ -35,7 +35,7 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/header/mako',
             'headers' : [ 'User-Agent: *' ]
         })
-        Mako(channel)
+        Mako(channel).detect()
         self.assertEqual(channel.data, { 
             'reflect_tag': '${%s}',
             'language': 'python',
@@ -53,7 +53,7 @@ class ChannelTest(unittest.TestCase):
             'post_data' : [ 'inj=*' ],
             'method' : 'PUT'
         })
-        Mako(channel)
+        Mako(channel).detect()
         self.assertEqual(channel.data, { 
             'reflect_tag': '${%s}',
             'language': 'python',

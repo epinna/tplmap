@@ -5,7 +5,7 @@ import string
 
 class Jinja2(Check):
     
-    def init(self):
+    def detect(self):
         
         # Set base tag
         self.base_tag = '{{%s}}'

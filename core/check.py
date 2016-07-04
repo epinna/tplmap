@@ -13,8 +13,6 @@ class Check(Plugin):
         # Random header and trailer
         self.req_header_rand = str(rand.randint_n(4))
         self.req_trailer_rand = str(rand.randint_n(4))
-    
-        self.init()
         
     def req(self, payload):
         

@@ -8,7 +8,7 @@ import os
 
 class Twig(Check):
     
-    def init(self):
+    def detect(self):
         
         # Declare payload
         self.base_tag = '{{%s}}'

@@ -17,7 +17,7 @@ class Jinja2Test(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template
         })
-        Jinja2(channel)
+        Jinja2(channel).detect()
         self.assertEqual(channel.data, { 
             'reflect_tag': '{{%s}}',
             'language': 'python',
@@ -33,7 +33,7 @@ class Jinja2Test(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*' % template
         })
-        Jinja2(channel)
+        Jinja2(channel).detect()
         self.assertEqual(channel.data, { 
             'reflect_tag': '{{%s}}',
             'language': 'python',

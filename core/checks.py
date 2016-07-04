@@ -12,31 +12,31 @@ def checkTemplateInjection(args):
     channel = Channel(args)
 
     # Check Smarty 
-    Smarty(channel)
+    Smarty(channel).detect()
     if channel.data.get('engine'):
         return
         
     # Probe if Mako
-    Mako(channel)
+    Mako(channel).detect()
     if channel.data.get('engine'):
         return
             
     # Probe if Ninja2
-    Jinja2(channel)
+    Jinja2(channel).detect()
     if channel.data.get('engine'):
         return
             
     # Probe Twig
-    Twig(channel)
+    Twig(channel).detect()
     if channel.data.get('engine'):
         return
     
     # Probe Freemarker
-    Freemarker(channel)
+    Freemarker(channel).detect()
     if channel.data.get('engine'):
         return
         
     # Probe Velocity
-    Velocity(channel)
+    Velocity(channel).detect()
     if channel.data.get('engine'):
         return

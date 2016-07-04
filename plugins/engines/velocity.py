@@ -5,7 +5,7 @@ import string
 
 class Velocity(Check):
     
-    def init(self):
+    def detect(self):
         
         # Declare payload
         self.base_tag = '#set($p=%s)\n$p'
