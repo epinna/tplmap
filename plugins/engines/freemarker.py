@@ -22,6 +22,17 @@ class Freemarker(Check):
                 return
                 
             log.warn('Reflection detected with tag \'%s\'' % self.get('reflect_tag'))
+
+    def _check_reflection(self):
+        
+        randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
+
+        payload = '${%i*%i}' % (randA, randB)
+        expected = str(randA*randB)
+        
+        if expected == self.req(payload):
+            self.set('reflect_tag', self.base_tag)
     
     def req(self, payload):
     
