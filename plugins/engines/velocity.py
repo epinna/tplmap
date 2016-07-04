@@ -26,6 +26,11 @@ class Velocity(Check):
         log.warn('Reflection detected')
         log.warn('Velocity engine detected')
 
+        # I've tested the techniques described in this article
+        # http://blog.portswigger.net/2015/08/server-side-template-injection.html
+        # for it didn't work. Still keeping the check active to cover previous
+        # affected versions.
+
         self._check_os()
         
         if not self.get('exec'):
