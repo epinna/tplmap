@@ -4,18 +4,47 @@ import urlparse
 
 class Channel:
     
-    def __init__(self, url):
+    def __init__(self, args):
         
-        self.url = url
+        self.args = args
+        
+        self.url = self.args.get('url','')
+        self.base_url = self.url.split("?")[0] if '?' in self.url else self.url
+        
         self.data = {}
         
         self.get_params = {}
         self.get_placeholders = []
-        
-        if '*' not in self.url:
-            log.warn("no GET or parameter(s) found for testing ")
 
+        self.post_params = {}
+        self.post_placeholders = []
+        
         self._parse_get()
+        self._parse_post()
+        
+        if self.post_placeholders + self.get_placeholders:
+            log.warn('Error, multiple placeholder in parameters')
+        
+        # TODO: consider passing the http method via cli argument
+        if self.post_params:
+            self.http_method = 'POST'
+        else:
+            self.http_method = 'GET'
+            
+    def _parse_post(self):
+        
+        for post_param in self.args.get('post_data', []):
+            
+            if not '=' in post_param:
+                continue
+                
+            param, value_list = post_param.split('=')
+            
+            self.post_params[param] = value_list
+            
+            if any(x for x in value_list if '*' in x):
+                self.post_placeholders.append(param)
+                log.warn('Found placeholder in POST parameter \'%s\'' % param)
 
     def _parse_get(self):
         
@@ -26,16 +55,28 @@ class Channel:
             
             if any(x for x in value_list if '*' in x):
                 self.get_placeholders.append(param)
-                log.warn('Found placeholder in parameter \'%s\'' % param)
+                log.warn('Found placeholder in GET parameter \'%s\'' % param)
                 
             
     def req(self, injection):
         
-        # Get base URL
-        url_string = self.url.split("?")[0]
-        get_placeholder = self.get_placeholders[0]
-            
-        get_params = self.get_params.copy()
-        get_params[get_placeholder] = injection
-        return requests.get(url_string, params = get_params).text
+        # Inject 
+        get_params = {}
+        if self.get_placeholders:
+            get_placeholder = self.get_placeholders[0]    
+            get_params = self.get_params.copy()
+            get_params[get_placeholder] = injection
         
+        post_params = {}
+        if self.post_placeholders:
+            post_placeholder = self.post_placeholders[0]    
+            post_params = self.post_params.copy()
+            post_params[post_placeholder] = injection
+            
+        return requests.request(
+            method = self.http_method, 
+            url = self.base_url, 
+            params = get_params,
+            data = post_params
+            ).text
+    

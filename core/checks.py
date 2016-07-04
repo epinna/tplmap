@@ -9,7 +9,7 @@ from utils.loggers import log
 
 def checkTemplateInjection(args):
     
-    channel = Channel(url = args["url"][0])
+    channel = Channel(args)
 
     # Check Smarty 
     Smarty(channel)
