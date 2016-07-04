@@ -30,15 +30,10 @@ class Channel:
             self.http_method = 'POST'
         else:
             self.http_method = 'GET'
-            
+        
     def _parse_post(self):
         
-        for post_param in self.args.get('post_data', []):
-            
-            if not '=' in post_param:
-                continue
-                
-            param, value_list = post_param.split('=')
+        for param, value_list in self.args.get('post_data', {}).items():
             
             self.post_params[param] = value_list
             
