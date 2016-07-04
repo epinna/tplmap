@@ -11,11 +11,6 @@ from utils.loggers import log
 def checkTemplateInjection(args):
     
     channel = Channel(args)
-
-    # Probe Jade
-    Jade(channel).detect()
-    if channel.data.get('engine'):
-        return
         
     # Check Smarty 
     Smarty(channel).detect()
@@ -44,5 +39,10 @@ def checkTemplateInjection(args):
         
     # Probe Velocity
     Velocity(channel).detect()
+    if channel.data.get('engine'):
+        return
+        
+    # Probe Jade
+    Jade(channel).detect()
     if channel.data.get('engine'):
         return
