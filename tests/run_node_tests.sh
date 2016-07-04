@@ -10,7 +10,7 @@ cp ../connect-app.js connect-app.js
 node connect-app.js &
 NODEPID=$!
 
-#while ! echo exit | nc localhost 15001; do sleep 10; done
+while ! echo exit | nc localhost 15001; do sleep 1; done
 
 cd ../../
 python -m unittest discover . 'test_node_*.py'
