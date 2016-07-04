@@ -64,10 +64,7 @@ class Mako(Check):
     def _check_os(self):
         
         expected_rand = str(rand.randint_n(2))
-        payload = """<%%
-        import os
-        x=os.popen('echo %s').read()
-        %%>${x}""" % expected_rand
+        payload = """<%% import os; x=os.popen('echo %s').read() %%>${x}""" % expected_rand
                 
         if expected_rand == self.req(payload):
             self.set('exec', True)      
