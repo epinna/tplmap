@@ -25,15 +25,19 @@ class Channel:
         self._parse_get()
         self._parse_post()
         self._parse_header()
+        self._parse_method()
                 
-        if self.post_placeholders + self.get_placeholders:
+        if len(self.post_placeholders + self.get_placeholders) > 1:
             log.warn('Error, multiple placeholder in parameters')
+    
+    def _parse_method(self):
         
-        # TODO: consider passing the http method via cli argument
-        if self.post_params:
+        if self.args.get('method'):
+            self.http_method = self.args.get('method')
+        elif self.post_params:
             self.http_method = 'POST'
         else:
-            self.http_method = 'GET'
+            self.http_method = 'GET'    
     
     def _parse_header(self):
         for param_value in self.args.get('headers', '[]'):
@@ -102,7 +106,7 @@ class Channel:
                 header_placeholder = self.header_placeholders[0]    
                 header_params = self.header_params.copy()
                 header_params[header_placeholder] = injection
-            
+                
         return requests.request(
             method = self.http_method, 
             url = self.base_url, 

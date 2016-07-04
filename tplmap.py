@@ -14,7 +14,10 @@ def main(args):
 
     if args.headers:
         arguments['headers'] = args.headers
-    
+
+    if args.method:
+        arguments['method'] = args.method
+        
     checks.checkTemplateInjection(arguments)
     
 if __name__ == '__main__':
@@ -23,6 +26,8 @@ if __name__ == '__main__':
     
     parser.add_argument('-d', '--data', action='append', dest='post_data', help = 'Post data')
     parser.add_argument('-H', '--header', action='append', dest='headers', help = 'Headers')
+    parser.add_argument('-X', '--request', dest='method', help = 'HTTP Method')
+
     parser.add_argument('url', help = 'Target URL')
 
     arguments = parser.parse_args()

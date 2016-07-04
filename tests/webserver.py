@@ -52,6 +52,21 @@ def headerfunc(engine):
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()        
 
+@app.route("/put/<engine>", methods = [ "PUT" ])
+def putfunc(engine):
+    
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+    
+    injection = request.values.get('inj')
+    if engine == 'mako':
+        return MakoTemplates(template % injection).render()
+    elif engine == 'jinja2':
+        return Jinja2Template(template % injection).render()
+
+
+
 @app.route('/shutdown')
 def shutdown():
     shutdown_server()
