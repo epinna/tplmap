@@ -11,13 +11,13 @@ def shutdown_server():
 
 @app.route("/reflect/<engine>")
 def reflect(engine):
-    
+
     template = request.values.get('tpl')
     if not template:
         template = '%s'
-    
+
     injection = request.values.get('inj')
-    
+
     if engine == 'mako':
         return MakoTemplates(template % injection).render()
     elif engine == 'jinja2':
@@ -25,13 +25,13 @@ def reflect(engine):
 
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
-    
+
     template = request.values.get('tpl')
     if not template:
         template = '%s'
-    
+
     injection = request.values.get('inj')
-    
+
     if engine == 'mako':
         return MakoTemplates(template % injection).render()
     elif engine == 'jinja2':
@@ -40,32 +40,45 @@ def postfunc(engine):
 
 @app.route("/header/<engine>")
 def headerfunc(engine):
-    
+
     template = request.headers.get('tpl')
     if not template:
         template = '%s'
-    
+
     injection = request.headers.get('User-Agent')
-    
+
     if engine == 'mako':
         return MakoTemplates(template % injection).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()        
+        return Jinja2Template(template % injection).render()
 
 @app.route("/put/<engine>", methods = [ "PUT" ])
 def putfunc(engine):
-    
+
     template = request.values.get('tpl')
     if not template:
         template = '%s'
-    
+
     injection = request.values.get('inj')
     if engine == 'mako':
         return MakoTemplates(template % injection).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
+@app.route("/limit/<engine>")
+def limited(engine):
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
 
+    injection = request.values.get('inj')
+    if len(injection) > 6:
+        injection = injection[:6]
+
+    if engine == 'mako':
+        return MakoTemplates(template % injection).render()
+    elif engine == 'jinja2':
+        return Jinja2Template(template % injection).render()
 
 @app.route('/shutdown')
 def shutdown():
@@ -73,4 +86,4 @@ def shutdown():
     return 'Server shutting down...'
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=15001)
+    app.run(host='127.0.0.1', port=15001, debug=True)
