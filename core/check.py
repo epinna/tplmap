@@ -29,11 +29,19 @@ class Check(Plugin):
         if self.get('header_tag') == None or self.get('trailer_tag') == None:
 
             if self.get('render_tag'):
-                log.warn('%s: Weak Reflection detected with tag \'%s\', continuing' % (self.plugin, self.get('render_tag')))
+                log.warn('%s: Weak Reflection detected with tag %s, continuing' % (
+                    self.plugin, self.get('render_tag').replace('\n', '\\n'))
+                )
 
             return
 
-        log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (self.plugin, self.get('prefix', ''), self.get('render_tag'), self.get('suffix', '')))
+        log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (
+            self.plugin, 
+            self.get('prefix', '').replace('\n', '\\n'), 
+            self.get('render_tag').replace('\n', '\\n'), 
+            self.get('suffix', '').replace('\n', '\\n')
+            )
+        )
 
         self.detect_engine()
 
