@@ -15,7 +15,6 @@ class MakoTest(unittest.TestCase):
         'engine': 'mako',
         'eval' : 'python' ,
         'exec' : True,
-        'os' : 'posix-darwin',
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
@@ -29,6 +28,7 @@ class MakoTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template
         })
         Mako(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
 
@@ -39,6 +39,7 @@ class MakoTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*' % template
         })
         Mako(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
     def test_reflection_context_code(self):
@@ -51,7 +52,8 @@ class MakoTest(unittest.TestCase):
 
         expected_data = self.expected_data.copy()
         expected_data.update({ 'prefix' : '}', 'suffix' : '${' })
-
+        
+        del channel.data['os']
         self.assertEqual(channel.data, expected_data)
 
     def test_reflection_limit(self):
@@ -64,5 +66,5 @@ class MakoTest(unittest.TestCase):
         Mako(channel).detect()
 
         expected_data = { 'render_tag' : self.expected_data['render_tag'] }
-
+        
         self.assertEqual(channel.data, expected_data)

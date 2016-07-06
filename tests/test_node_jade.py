@@ -15,7 +15,6 @@ class JadeTest(unittest.TestCase):
         'engine': 'jade',
         'eval' : 'javascript' ,
         'exec' : True,
-        'os' : 'darwin',
         'trailer_tag': '\n= %(trailer)s\n',
         'header_tag': '\n= %(header)s\n',
         'render_tag': '\n= %(payload)s\n',
@@ -29,6 +28,7 @@ class JadeTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15004/jade?inj=*'
         })
         Jade(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
     
@@ -39,5 +39,6 @@ class JadeTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15004/jade?inj=*'
         })
         Jade(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
         

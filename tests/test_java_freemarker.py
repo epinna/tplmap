@@ -15,7 +15,6 @@ class FreemarkerTest(unittest.TestCase):
         'language': 'java',
         'engine': 'freemarker',
         'exec' : True,
-        'os' : 'Darwin',
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
@@ -29,6 +28,7 @@ class FreemarkerTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15003/freemarker?inj=*'
         })
         Freemarker(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
 
@@ -39,4 +39,5 @@ class FreemarkerTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15003/freemarker?inj=*'
         })
         Freemarker(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
