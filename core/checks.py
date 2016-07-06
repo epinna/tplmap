@@ -4,6 +4,7 @@ from plugins.engines.smarty import Smarty
 from plugins.engines.twig import Twig
 from plugins.engines.freemarker import Freemarker
 from plugins.engines.velocity import Velocity
+from plugins.engines.jade import Jade
 from core.channel import Channel
 from utils.loggers import log
 
@@ -38,5 +39,10 @@ def checkTemplateInjection(args):
         
     # Probe if Velocity
     Velocity(channel).detect()
+    if channel.data.get('engine'):
+        return
+        
+    # Probe if Jade
+    Jade(channel).detect()
     if channel.data.get('engine'):
         return
