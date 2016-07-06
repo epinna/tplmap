@@ -11,6 +11,9 @@ class Check(Plugin):
         # HTTP channel
         self.channel = channel
 
+        # Plugin name
+        self.plugin = self.__class__.__name__
+
     def detect(self):
 
         # Skip detection if render, header and trailer tags article
@@ -26,11 +29,11 @@ class Check(Plugin):
         if self.get('header_tag') == None or self.get('trailer_tag') == None:
 
             if self.get('render_tag'):
-                log.warn('Weak Reflection detected with tag \'%s\', continuing' % (self.get('render_tag')))
+                log.warn('%s: Weak Reflection detected with tag \'%s\', continuing' % (self.plugin, self.get('render_tag')))
 
             return
 
-        log.warn('Reflection detected with tag \'%s%s%s\'' % (self.get('prefix', ''), self.get('render_tag'), self.get('suffix', '')))
+        log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (self.plugin, self.get('prefix', ''), self.get('render_tag'), self.get('suffix', '')))
 
         self.detect_engine()
 
@@ -38,7 +41,7 @@ class Check(Plugin):
         if not self.get('engine'):
             return
 
-        log.warn('Template engine \'%s\' detected' % self.get('engine'))
+        log.warn('%s: Template engine \'%s\' detected' % (self.plugin, self.get('engine')))
 
         self.detect_eval()
 
@@ -46,15 +49,17 @@ class Check(Plugin):
         if not self.get('eval'):
             return
 
-        log.warn('Code evaluation in \'%s\' detected' % self.get('eval'))
+        log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
 
         self.detect_exec()
 
         # Return if eval is unset
         if not self.get('exec'):
             return
+
         log.warn(
-            'Shell command execution detected on \'%s\' operating system' % (
+            '%s: Shell command execution detected on \'%s\' operating system' % (
+                self.plugin,
                 self.get('os', 'undetected')
             )
         )
@@ -76,7 +81,7 @@ class Check(Plugin):
         trailer_rand = rand.randint_n(3)
         trailer = self.trailer_tag % ({ 'trailer' : trailer_rand })
 
-        log.debug('Trying to inject in text context')
+        log.debug('%s: Trying to inject in text context' % self.plugin)
 
         # First probe with payload wrapped by header and trailer, no suffex or prefix
         if expected == self.inject(
@@ -93,7 +98,7 @@ class Check(Plugin):
             self.set('trailer_tag', self.trailer_tag)
             return
 
-        log.debug('Injection in text context failed, trying to inject in code context')
+        log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
 
         # If not found, try to inject all the prefix and suffix pairs falling below the level
         for ctx in self.contexts:
@@ -116,7 +121,7 @@ class Check(Plugin):
 
                 return
 
-        log.debug('Injection in code context failed, trying to inject only payload with no header')
+        log.debug('%s: Injection in code context failed, trying to inject only payload with no header' % self.plugin)
 
         # As last resort, just inject without header and trailer and
         # see if expected is contained in the response page
@@ -170,7 +175,7 @@ class Check(Plugin):
 
         injection = prefix + header + payload + trailer + suffix
         result = self.channel.req(injection)
-        log.debug('[request]\n  > %s\n  < %s' % (injection.replace('\n', '\n  > '), result.replace('\n', '  \n  < ')) )
+        log.debug('[request %s]\n  > %s\n  < %s' % (self.plugin, injection.replace('\n', '\n  > '), result.replace('\n', '  \n  < ')) )
 
         # Cut the result using the header and trailer if specified
         if header:
