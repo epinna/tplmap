@@ -16,23 +16,32 @@ class Check(Plugin):
 
     def detect(self):
 
-        # Skip detection if render, header and trailer tags article
-        # same as this module
+        # If no weak reflection has been detected so far
+        if not self.get('render_tag'):
+            # Start detection
+            self._detect_context()
+            
+            # Print message if header or trailer are still unset
+            if self.get('header_tag') == None or self.get('trailer_tag') == None:
+                if self.get('render_tag'):
+                    log.warn('%s: Weak Reflection detected with tag %s, continuing' % (
+                        self.plugin, self.get('render_tag').replace('\n', '\\n'))
+                    )
+        
+        # If tags found previously are the same as current plugin, skip context detection
         if not (
                 self.get('render_tag') == self.render_tag and
                 self.get('header_tag') == self.header_tag and
                 self.get('trailer_tag') == self.trailer_tag
             ):
             self._detect_context()
-
-        # Return if header or trailer are still unset
-        if self.get('header_tag') == None or self.get('trailer_tag') == None:
-
-            if self.get('render_tag'):
-                log.warn('%s: Weak Reflection detected with tag %s, continuing' % (
-                    self.plugin, self.get('render_tag').replace('\n', '\\n'))
-                )
-
+            
+        # Exit if header or trailer are still different
+        if not (
+                self.get('render_tag') == self.render_tag and
+                self.get('header_tag') == self.header_tag and
+                self.get('trailer_tag') == self.trailer_tag
+            ):
             return
 
         log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (
