@@ -1,7 +1,9 @@
 #!/bin/bash
 
+cd env_py_tests/
 # Run python webserver
 python webserver.py&
+cd ..
 sleep 1
 # Launch python engines tests
 python -m unittest discover . 'test_py_*.py'
