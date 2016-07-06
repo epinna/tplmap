@@ -8,41 +8,23 @@ from plugins.engines.jade import Jade
 from core.channel import Channel
 from utils.loggers import log
 
+plugins = [
+    Mako,
+    Jinja2,
+    Twig,
+    Freemarker,
+    Velocity,
+    Jade
+]
+
 def checkTemplateInjection(args):
 
     channel = Channel(args)
 
-    # Probe if Mako
-    Mako(channel).detect()
-    if channel.data.get('engine'):
-        return
-
-    # Probe if Jinja2
-    Jinja2(channel).detect()
-    if channel.data.get('engine'):
-        return
-
-    # Probe if Smarty
-    Smarty(channel).detect()
-    if channel.data.get('engine'):
-        return
-
-    # Probe if Twig
-    Twig(channel).detect()
-    if channel.data.get('engine'):
-        return
-
-    # Probe if Freemarker
-    Freemarker(channel).detect()
-    if channel.data.get('engine'):
-        return
+    # Iterate all the available plugins until
+    # the first template engine is detected. 
+    for plugin in plugins:
+        plugin(channel).detect()
         
-    # Probe if Velocity
-    Velocity(channel).detect()
-    if channel.data.get('engine'):
-        return
-        
-    # Probe if Jade
-    Jade(channel).detect()
-    if channel.data.get('engine'):
-        return
+        if channel.data.get('engine'):
+            break
