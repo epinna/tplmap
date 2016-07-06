@@ -114,4 +114,3 @@ class Channel:
             data = post_params,
             headers = header_params
             ).text
-    

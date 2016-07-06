@@ -59,7 +59,7 @@ detection.add_option("--level",
 
 
 # OS command execution options
-oscmd = OptionGroup(parser, "Operating system command execution", "These "
+oscmd = OptionGroup(parser, "Operating system access", "These "
                        "options can be used to access the underlying "
                        "operating system")
 

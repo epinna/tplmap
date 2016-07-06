@@ -164,9 +164,21 @@ class Check(Plugin):
 
 
     """
-    Detect shell command execution:
+    Detect shell command execution
     """
     def detect_exec(self):
+        pass
+
+    """
+    Inject shell commands
+    """
+    def execute(self, code):
+        pass
+
+    """
+    Inject code
+    """
+    def evaluate(self, command):
         pass
 
     """
