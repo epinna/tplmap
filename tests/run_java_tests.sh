@@ -12,10 +12,10 @@ cd ./env_java_tests/lib/spark-app/
 gradle run --debug&
 GRADLEPID=$!
 
-while ! echo exit | nc localhost 15001; do sleep 10; done
+while ! echo exit | nc localhost 15003; do sleep 3; done
 
 cd ../../../
-#python -m unittest discover . 'test_java_*.py'
+python -m unittest discover . 'test_java_freemarker.py'
 sleep 1
 # Shutdown Java webserver
 kill ${GRADLEPID}
