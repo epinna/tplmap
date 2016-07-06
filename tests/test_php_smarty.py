@@ -24,7 +24,7 @@ class SmartyTest(unittest.TestCase):
     def test_reflection_unsecured(self):
 
         channel = Channel({
-            'url' : 'http://127.0.0.1:15001/smarty-3.1.29-unsecured.php?inj=*'
+            'url' : 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*'
         })
         Smarty(channel).detect()
         self.assertEqual(channel.data, self.expected_data)
@@ -32,7 +32,7 @@ class SmartyTest(unittest.TestCase):
     def test_reflection_secured(self):
 
         channel = Channel({
-            'url' : 'http://127.0.0.1:15001/smarty-3.1.29-secured.php?inj=*'
+            'url' : 'http://127.0.0.1:15002/smarty-3.1.29-secured.php?inj=*'
         })
         Smarty(channel).detect()
 
