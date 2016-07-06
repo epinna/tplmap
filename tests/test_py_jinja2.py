@@ -58,7 +58,7 @@ class Jinja2Test(unittest.TestCase):
         template = '%s'
 
         channel = Channel({
-            'url' : 'http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*' % template
+            'url' : 'http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*&limit=8' % template
         })
 
         Jinja2(channel).detect()

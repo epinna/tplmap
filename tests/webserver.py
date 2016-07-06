@@ -71,9 +71,11 @@ def limited(engine):
     if not template:
         template = '%s'
 
-    injection = request.values.get('inj')
-    if len(injection) > 6:
-        injection = injection[:6]
+    length = int(request.values.get('limit', 6))
+
+    injection = request.values.get('inj', '')
+    if len(injection) > length:
+        return 'Inj too long'
 
     if engine == 'mako':
         return MakoTemplates(template % injection).render()
@@ -86,4 +88,4 @@ def shutdown():
     return 'Server shutting down...'
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=15001, debug=True)
+    app.run(host='127.0.0.1', port=15001, debug=False)
