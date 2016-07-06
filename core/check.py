@@ -45,24 +45,20 @@ class Check(Plugin):
 
         self.detect_eval()
 
-        # Return if eval is unset
-        if not self.get('eval'):
-            return
-
-        log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
+        # Print code evaluation state if eval is set
+        if self.get('eval'):
+            log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
 
         self.detect_exec()
 
-        # Return if eval is unset
-        if not self.get('exec'):
-            return
-
-        log.warn(
-            '%s: Shell command execution detected on \'%s\' operating system' % (
-                self.plugin,
-                self.get('os', 'undetected')
+        # Print shell command execution  state if eval is set
+        if self.get('exec'):
+            log.warn(
+                '%s: Shell command execution detected on \'%s\' operating system' % (
+                    self.plugin,
+                    self.get('os', 'undetected')
+                )
             )
-        )
 
     """
     First detection of the injection and the context.
