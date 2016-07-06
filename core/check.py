@@ -11,11 +11,6 @@ class Check(Plugin):
         # HTTP channel
         self.channel = channel
 
-        self.prefix = ''
-        self.suffix = ''
-
-        self.context = 0
-
     def detect(self):
 
         # Skip detection if render, header and trailer tags article
