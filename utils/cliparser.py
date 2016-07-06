@@ -58,9 +58,23 @@ detection.add_option("--level",
                     help="Level of tests to perform (1-5, Default: 1).")
 
 
+# OS command execution options
+oscmd = OptionGroup(parser, "Operating system command execution", "These "
+                       "options can be used to access the underlying "
+                       "operating system")
+
+oscmd.add_option("--os-cmd", dest="os_cmd",
+                    help="Execute an operating system command")
+
+oscmd.add_option("--os-shell", dest="os_shell",
+                    action="store_true",
+                    help="Prompt for an interactive operating "
+                         "system shell")
+
 parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)
+parser.add_option_group(oscmd)
 
 """
 Dirty hack from sqlmap [1], to display longer options without breaking into two lines.
