@@ -7,6 +7,7 @@ This can be used by developers, penetration testers, and security researchers to
 
 The technique can be used to compromise web servers' internals and often obtain Remote Code Execution (RCE), turning every vulnerable application into a potential pivot point.
 
+> The application is currently under heavy development and misses some functionalities.
 
 Supported template engines
 --------------------------
