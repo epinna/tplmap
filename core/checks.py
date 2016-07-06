@@ -3,6 +3,7 @@ from plugins.engines.jinja2 import Jinja2
 from plugins.engines.smarty import Smarty
 from plugins.engines.twig import Twig
 from plugins.engines.freemarker import Freemarker
+from plugins.engines.velocity import Velocity
 from core.channel import Channel
 from utils.loggers import log
 
@@ -32,5 +33,10 @@ def checkTemplateInjection(args):
 
     # Probe if Freemarker
     Freemarker(channel).detect()
+    if channel.data.get('engine'):
+        return
+        
+    # Probe if Velocity
+    Velocity(channel).detect()
     if channel.data.get('engine'):
         return

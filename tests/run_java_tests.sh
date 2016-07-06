@@ -15,7 +15,7 @@ GRADLEPID=$!
 while ! echo exit | nc localhost 15003; do sleep 3; done
 
 cd ../../../
-python -m unittest discover . 'test_java_freemarker.py'
+python -m unittest discover . 'test_java_*.py'
 sleep 1
 # Shutdown Java webserver
 kill ${GRADLEPID}
