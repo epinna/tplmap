@@ -10,7 +10,7 @@ def main():
     if not args.get('url'):
         cliparser.parser.error('URL is required. Run with -h for help.')
     
-    checks.checkTemplateInjection(arguments)
+    checks.checkTemplateInjection(args)
     
 if __name__ == '__main__':
 
