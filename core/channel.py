@@ -8,7 +8,7 @@ class Channel:
         
         self.args = args
         
-        self.url = self.args.get('url','')
+        self.url = self.args.get('url')
         self.base_url = self.url.split("?")[0] if '?' in self.url else self.url
         
         self.data = {}
