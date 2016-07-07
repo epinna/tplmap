@@ -7,6 +7,7 @@ from plugins.engines.velocity import Velocity
 from plugins.engines.jade import Jade
 from core.channel import Channel
 from utils.loggers import log
+from core.clis import Shell, MultilineShell
 
 plugins = [
     Mako,
@@ -49,10 +50,10 @@ def checkTemplateInjection(args):
         if args.get('os_cmd'):
             print current_plugin.execute(args.get('os_cmd'))
         elif args.get('os_shell'):
+            log.warn('Run commands on the operating system.')
 
-            while True:
-                command = raw_input('$ ')
-                print current_plugin.execute(command.strip())
+            Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
+            
 
     # Execute operating system commands
     if channel.data.get('engine'):
@@ -60,14 +61,7 @@ def checkTemplateInjection(args):
         if args.get('tpl_code'):
             print current_plugin.inject(args.get('os_cmd'))
         elif args.get('tpl_shell'):
-            log.warn('Inject multi-line code on the template engine. Double-return to send the code.')
+            log.warn('Inject multi-line template code. Double empty line to send the data.')
 
-            lines = []
-            while True:
-                command = raw_input('%s %i> ' % (channel.data.get('engine'), len(lines)))
-                lines.append(command.strip())
+            MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
 
-                # Send in case of double-return
-                if command.strip() == '' and lines[-1] == '':
-                    print current_plugin.inject('\n'.join(lines[:-1]))
-                    lines = []
