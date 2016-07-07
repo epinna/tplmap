@@ -1,11 +1,6 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-import string
-import requests
-import urlparse
-import os
-
 
 class Twig(Check):
 
@@ -21,7 +16,7 @@ class Twig(Check):
         randA = rand.randint_n(1)
         randB = rand.randint_n(1)
 
-        # {{7*'7'}} and a{#b#}c works in freemarker as well
+        # {{7*'7'}} and a{#b#}c work in freemarker as well
         payload = '{%% set a=%i*%i %%}{{a}}' % (randA, randB)
         expected = str(randA * randB)
 

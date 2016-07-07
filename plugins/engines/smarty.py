@@ -1,10 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-import string
-import requests
-import urlparse
-import os
+from utils.strings import quote
 
 class Smarty(Check):
 
@@ -52,5 +49,4 @@ class Smarty(Check):
 
     def execute(self, command):
 
-        # TODO: quote command
-        return self.evaluate("""system('%s');""" % (command))
+        return self.evaluate("""system("%s");""" % (quote(command)))

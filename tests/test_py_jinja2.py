@@ -68,3 +68,15 @@ class Jinja2Test(unittest.TestCase):
         expected_data = { 'render_tag' : self.expected_data['render_tag'] }
         
         self.assertEqual(channel.data, expected_data)
+
+    def test_reflection_quotes(self):
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/reflect/jinja2?&inj=*',
+        })
+
+        jinja2 = Jinja2(channel)
+        result = jinja2.execute('echo 1"2"')
+        self.assertEqual(result, '12')
+        
+        result = jinja2.execute('echo 1\\"2')
+        self.assertEqual(result, '1"2')

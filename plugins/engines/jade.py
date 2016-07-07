@@ -34,7 +34,7 @@ class Jade(Check):
         execution_code = """- var x = global.process
 - x = x.mainModule.require
 - x = x('child_process')
-= x.execSync('%s')
+= x.execSync("%s")
 """ % command
 
         # TODO: quote command

