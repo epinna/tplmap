@@ -7,6 +7,8 @@ This can be used by developers, penetration testers, and security researchers to
 
 The technique can be used to compromise web servers' internals and often obtain Remote Code Execution (RCE), turning every vulnerable application into a potential pivot point.
 
+The modular approach allows any contributor to extend the support to other templating engines or introduce new exploitation techniques. The majority of the techniques currently implemented came from the amazing research done by [James Kett, PortSwigger][1].
+
 > The application is currently under heavy development and misses some functionalities.
 
 Supported template engines
@@ -24,3 +26,4 @@ Supported template engines
 | Smarty (secured)   |  yes      | no                | no              | no        | no         |
 
 
+[1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
