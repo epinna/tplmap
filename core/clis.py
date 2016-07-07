@@ -11,7 +11,9 @@ class Shell(cmd.Cmd):
     
     def default(self, line):
         print self.inject_function(line)
-        
+    
+    def emptyline(self):
+        pass
         
 class MultilineShell(cmd.Cmd):
     """Interactive multiline shell."""
