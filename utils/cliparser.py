@@ -11,7 +11,7 @@ epilog = """
 Example:
 
  ./tplmap -u 'http://www.target.com/page.php?id=1*'
- 
+
 """
 
 class MyParser(OptionParser):
@@ -31,7 +31,7 @@ target.add_option("-u","--url",
 # Request options
 request = OptionGroup(parser, "Request", "These options have how to connect and where to inject to the target URL.")
 
-request.add_option("-d","--data", 
+request.add_option("-d","--data",
                 action="store",
                 dest="data",
                 help="Data string to be sent through POST.",
@@ -51,12 +51,24 @@ target.add_option("-X","--request",
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
 
-detection.add_option("--level", 
-                    dest="level", 
+detection.add_option("--level",
+                    dest="level",
                     type="int",
                     default=1,
                     help="Level of tests to perform (1-5, Default: 1).")
 
+# Template inspection options
+tplcmd = OptionGroup(parser, "Template inspection", "These "
+                       "options can be used to inspect the "
+                       "template engine")
+
+tplcmd.add_option("--tpl-shell", dest="tpl_shell",
+                    action="store_true",
+                    help="Prompt for an interactive shell "
+                         "on the template engine")
+
+tplcmd.add_option("--tpl-code", dest="tpl_code",
+                    help="Inject code in the template engine")
 
 # OS command execution options
 oscmd = OptionGroup(parser, "Operating system access", "These "
@@ -75,6 +87,7 @@ parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)
 parser.add_option_group(oscmd)
+parser.add_option_group(tplcmd)
 
 """
 Dirty hack from sqlmap [1], to display longer options without breaking into two lines.
