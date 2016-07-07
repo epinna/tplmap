@@ -15,7 +15,6 @@ class ChannelTest(unittest.TestCase):
         'engine': 'mako',
         'eval' : 'python' ,
         'exec' : True,
-        'os' : 'posix-darwin',
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
@@ -30,6 +29,7 @@ class ChannelTest(unittest.TestCase):
             'post_data' : [ 'inj=*' ]
         })
         Mako(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
     def test_header_reflection(self):
@@ -41,6 +41,7 @@ class ChannelTest(unittest.TestCase):
             'headers' : [ 'User-Agent: *' ]
         })
         Mako(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
     def test_put_reflection(self):
@@ -53,4 +54,5 @@ class ChannelTest(unittest.TestCase):
             'method' : 'PUT'
         })
         Mako(channel).detect()
+        del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
