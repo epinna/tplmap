@@ -1,4 +1,0 @@
-
-class Plugin:
-    
-    pass

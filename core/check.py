@@ -1,10 +1,8 @@
-from core.plugin import Plugin
 from utils import rand
 from utils.loggers import log
 import re
 
-
-class Check(Plugin):
+class Check:
 
     def __init__(self, channel):
 
