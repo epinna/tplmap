@@ -19,10 +19,12 @@ class Twig(Check):
     def detect_engine(self):
 
         randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
 
-        payload = '{{7*\'%s\'}}' % (randA)
-        expected = str(randA*7)
+        # {{7*'7'}} and a{#b#}c works in freemarker as well
+        payload = '{%% set a=%i*%i %%}{{a}}' % (randA, randB)
+        expected = str(randA * randB)
 
         if expected == self.inject(payload):
-            self.set('language', 'python')
+            self.set('language', 'php')
             self.set('engine', 'twig')
