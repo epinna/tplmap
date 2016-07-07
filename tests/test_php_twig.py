@@ -11,7 +11,7 @@ from core.channel import Channel
 class TwigTest(unittest.TestCase):
 
     expected_data = {
-        'language': 'python',
+        'language': 'php',
         'engine': 'twig',
         'trailer_tag': '{{%(trailer)s}}',
         'header_tag': '{{%(header)s}}',
