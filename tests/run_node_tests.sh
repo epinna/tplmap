@@ -7,9 +7,16 @@ NODEPID=0
 
 mkdir -p ./env_node_tests/lib/ 2> /dev/null
 
+api_string="Exposed testing APIs:
+
+http://localhost:15004/jade?inj=*
+"
+
 # Run  webserver
 function run_webserver()
 {
+
+  echo "$api_string"
 
   cd ./env_node_tests/lib/
 

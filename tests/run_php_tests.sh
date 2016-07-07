@@ -7,9 +7,19 @@ PHPPID=0
 
 mkdir -p ./env_php_tests/lib/ 2> /dev/null
 
+api_string="Exposed testing APIs:
+
+http://localhost:15002/smarty-3.1.29-secured.php?inj=*
+http://localhost:15002/smarty-3.1.29-unsecured.php?inj=*
+http://localhost:15002/twig-1.24.1-secured.php?inj=*
+"
+
 # Run  webserver
 function run_webserver()
 {
+
+  echo "$api_string"
+
   # Download smarty 3.1.29 if not already installed
   if [ ! -d ./env_php_tests/lib/smarty-3.1.29/ ]; then
       wget https://github.com/smarty-php/smarty/archive/v3.1.29.tar.gz -O ./env_php_tests/lib/v3.1.29.tar.gz
