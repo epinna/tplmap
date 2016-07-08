@@ -53,7 +53,7 @@ def checkTemplateInjection(args):
             log.warn('Run commands on the operating system.')
 
             Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
-            
+
 
     # Execute operating system commands
     if channel.data.get('engine'):
@@ -65,3 +65,16 @@ def checkTemplateInjection(args):
 
             MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
 
+    # Perform file write
+    if channel.data.get('write'):
+
+        local_remote_paths = args.get('file_write')
+
+        if local_remote_paths:
+
+            local_path, remote_path = local_remote_paths
+
+            with open(local_path, 'rb') as f:
+                data = f.read()
+
+            current_plugin.write(data, remote_path)

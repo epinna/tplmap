@@ -70,7 +70,7 @@ tplcmd.add_option("--tpl-shell", dest="tpl_shell",
 tplcmd.add_option("--tpl-code", dest="tpl_code",
                     help="Inject code in the template engine")
 
-# OS command execution options
+# OS access options
 oscmd = OptionGroup(parser, "Operating system access", "These "
                        "options can be used to access the underlying "
                        "operating system")
@@ -82,6 +82,18 @@ oscmd.add_option("--os-shell", dest="os_shell",
                     action="store_true",
                     help="Prompt for an interactive operating "
                          "system shell")
+
+oscmd.add_option("--file-write", dest="file_write",
+                    help="Upload local file remotely",
+                    nargs=2)
+
+oscmd.add_option("--force-overwrite", dest="force_overwrite",
+                    action="store_true",
+                    help="Force file overwrite using --write-file")
+
+oscmd.add_option("--file-read", dest="read_file",
+                    help="Download remote file locally",
+                    nargs=2)
 
 parser.add_option_group(target)
 parser.add_option_group(request)

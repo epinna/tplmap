@@ -18,14 +18,14 @@ class Check:
         if not self.get('render_tag'):
             # Start detection
             self._detect_context()
-            
+
             # Print message if header or trailer are still unset
             if self.get('header_tag') == None or self.get('trailer_tag') == None:
                 if self.get('render_tag'):
                     log.warn('%s: Weak Reflection detected with tag %s, continuing' % (
                         self.plugin, self.get('render_tag').replace('\n', '\\n'))
                     )
-        
+
         # If tags found previously are the same as current plugin, skip context detection
         if not (
                 self.get('render_tag') == self.render_tag and
@@ -33,7 +33,7 @@ class Check:
                 self.get('trailer_tag') == self.trailer_tag
             ):
             self._detect_context()
-            
+
         # Exit if header or trailer are still different
         if not (
                 self.get('render_tag') == self.render_tag and
@@ -43,9 +43,9 @@ class Check:
             return
 
         log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (
-            self.plugin, 
-            self.get('prefix', '').replace('\n', '\\n'), 
-            self.get('render_tag').replace('\n', '\\n'), 
+            self.plugin,
+            self.get('prefix', '').replace('\n', '\\n'),
+            self.get('render_tag').replace('\n', '\\n'),
             self.get('suffix', '').replace('\n', '\\n')
             )
         )
@@ -74,6 +74,22 @@ class Check:
                     self.get('os', 'undetected')
                 )
             )
+
+        # Print code evaluation state if eval is set
+        if self.get('eval'):
+            log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
+
+        self.detect_write()
+
+        # Print code evaluation state if eval is set
+        if self.get('write'):
+            log.warn('%s: File write capability detected' % (self.plugin))
+
+        self.detect_read()
+
+        # Print code evaluation state if eval is set
+        if self.get('read'):
+            log.warn('%s: File read capability detected' % (self.plugin))
 
     """
     First detection of the injection and the context.
@@ -168,6 +184,18 @@ class Check:
         pass
 
     """
+    Detect file write capability
+    """
+    def detect_write(self):
+        pass
+
+    """
+    Detect file read capability
+    """
+    def detect_read(self):
+        pass
+
+    """
     Inject shell commands
     """
     def execute(self, code):
@@ -177,6 +205,18 @@ class Check:
     Inject code
     """
     def evaluate(self, command):
+        pass
+
+    """
+    Read file
+    """
+    def read(self, command):
+        pass
+
+    """
+    Write file
+    """
+    def read(self, command):
         pass
 
     """
