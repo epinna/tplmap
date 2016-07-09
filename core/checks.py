@@ -78,3 +78,17 @@ def checkTemplateInjection(args):
                 data = f.read()
 
             current_plugin.write(data, remote_path)
+
+    # Perform file read
+    if channel.data.get('read'):
+
+        remote_local_paths = args.get('file_read')
+        
+        if remote_local_paths:
+            
+            remote_path, local_path = remote_local_paths
+
+            content = current_plugin.read(remote_path)
+
+            with open(local_path, 'wb') as f:
+                f.write(content)
