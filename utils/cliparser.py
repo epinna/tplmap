@@ -91,7 +91,7 @@ oscmd.add_option("--force-overwrite", dest="force_overwrite",
                     action="store_true",
                     help="Force file overwrite using --write-file")
 
-oscmd.add_option("--file-read", dest="read_file",
+oscmd.add_option("--file-read", dest="file_read",
                     help="Download remote file locally",
                     nargs=2)
 

