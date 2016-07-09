@@ -40,7 +40,7 @@ request.add_option("-d","--data",
 request.add_option("-H","--headers",
                 action="store",
                 dest="headers",
-                help="Extra headers (e.g. 'Header1:Value1\\nHeader2:Value2').",
+                help="Extra headers (e.g. 'Header1: Value1').",
                 default=[])
 
 target.add_option("-X","--request",
@@ -84,15 +84,15 @@ oscmd.add_option("--os-shell", dest="os_shell",
                          "system shell")
 
 oscmd.add_option("--file-write", dest="file_write",
-                    help="Upload local file remotely",
+                    help="Upload file. Takes two args LFILE and RFILE",
                     nargs=2)
 
 oscmd.add_option("--force-overwrite", dest="force_overwrite",
                     action="store_true",
-                    help="Force file overwrite using --write-file")
+                    help="Force file overwrite")
 
 oscmd.add_option("--file-read", dest="file_read",
-                    help="Download remote file locally",
+                    help="Download file. Takes two args RFILE and LFILE",
                     nargs=2)
 
 parser.add_option_group(target)
