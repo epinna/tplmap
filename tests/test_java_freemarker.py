@@ -2,11 +2,11 @@ import unittest
 import requests
 import os
 import sys
-import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.freemarker import Freemarker
 from core.channel import Channel
+from utils import rand
 
 class FreemarkerTest(unittest.TestCase):
 
@@ -18,6 +18,7 @@ class FreemarkerTest(unittest.TestCase):
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
+        'write': True
     }
 
     def test_reflection(self):
