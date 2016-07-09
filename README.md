@@ -11,20 +11,6 @@ The modular approach allows any contributor to extend the support to other templ
 
 > The application is currently under heavy development and misses some functionalities.
 
-Supported template engines
---------------------------
-
-| Template engine    | Detection | command execution | Code evaluation | File read | File write |
-|--------------------|-----------|-------------------|-----------------|-----------|------------|
-| Mako               |  yes      | yes               | python          | yes       | yes        |
-| Jinja2             |  yes      | yes               | python          | yes       | yes        |
-| Jade               |  yes      | yes               | javascript      | yes       | yes        |
-| Smarty (unsecured) |  yes      | yes               | PHP             | yes       | yes        |
-| Freemarker         |  yes      | yes               | no              | yes       | yes        |
-| Velocity           |  yes      | no                | no              | no        | no         |
-| Twig               |  yes      | no                | no              | no        | no         |
-| Smarty (secured)   |  yes      | no                | no              | no        | no         |
-
 Example
 --------
 
@@ -59,5 +45,20 @@ linux $ ls -al /etc/passwd
 -rw-r--r--  1 root  wheel  5925 16 Sep  2015 /etc/passwd
 linux $
 ```
+
+Supported template engines
+--------------------------
+
+| Template engine    | Detection | command execution | Code evaluation | File read | File write |
+|--------------------|-----------|-------------------|-----------------|-----------|------------|
+| Mako               |  yes      | yes               | python          | yes       | yes        |
+| Jinja2             |  yes      | yes               | python          | yes       | yes        |
+| Jade               |  yes      | yes               | javascript      | yes       | yes        |
+| Smarty (unsecured) |  yes      | yes               | PHP             | yes       | yes        |
+| Freemarker         |  yes      | yes               | no              | yes       | yes        |
+| Velocity           |  yes      | no                | no              | no        | no         |
+| Twig               |  yes      | no                | no              | no        | no         |
+| Smarty (secured)   |  yes      | no                | no              | no        | no         |
+
 
 [1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
