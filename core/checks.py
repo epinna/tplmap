@@ -19,6 +19,36 @@ plugins = [
     Jade
 ]
 
+def _print_injection_summary(channel):
+    
+    prefix = channel.data.get('prefix', '').replace('\n', '\\n') % ({'payload' : '' })
+    render_tag = channel.data.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
+    suffix = channel.data.get('suffix', '').replace('\n', '\\n') % ({'payload' : '' })
+    
+    log.info("""Tplmap identified the following injection point:
+
+  Engine: %(engine)s
+  Template: %(prefix)s%(render_tag)s%(suffix)s
+  Context: %(context)s
+  OS: %(os)s
+  Capabilities:
+    Code evaluation: %(eval)s 
+    OS command execution: %(exec)s 
+    File write: %(write)s 
+    File read: %(read)s    
+""" % ({
+    'prefix': prefix,
+    'render_tag': render_tag,
+    'suffix': suffix,
+    'context': 'text' if (not prefix and not suffix) else 'code',
+    'engine': channel.data.get('engine').capitalize(),
+    'os': channel.data.get('os', 'undetected'),
+    'eval': 'no' if not channel.data.get('eval') else 'yes, %s code' % (channel.data.get('eval')),
+    'exec': 'no' if not channel.data.get('exec') else 'yes',
+    'write': 'no' if not channel.data.get('write') else 'yes',
+    'read': 'no' if not channel.data.get('read') else 'yes',
+}))    
+
 def checkTemplateInjection(args):
 
     channel = Channel(args)
@@ -37,12 +67,28 @@ def checkTemplateInjection(args):
     if not channel.data.get('engine'):
         log.fatal("""Tested parameters appear to be not injectable. Try to increase '--level' value to perform more tests.""")
         return
+        
+    # Print injection summary
+    _print_injection_summary(channel)
 
-    # If there are no operating system actions, exit
-    if not any(f for f,v in args.items() if f in ('os_cmd', 'os_shell') and v ):
-        log.warn("""Tested parameters have been found injectable.""")
-        if channel.data.get('exec'):
-            log.warn("""Try options '--os-cmd' or '--os-shell' to access the underlying operating system.""")
+    # If actions are not required, prints the advices and exit
+    if not any(
+            f for f,v in args.items() if f in (
+                'os_cmd', 'os_shell', 'file_write', 'file_read', 'tpl_shell'
+            ) and v
+        ):
+        
+        log.info(
+            """Rerun tplmap providing one of the following options:%(exec)s%(write)s%(read)s""" % (
+                { 
+                 'exec' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('exec') else '',
+                 'write' : '\n    --file-write to upload files to the server' if channel.data.get('write') else '',
+                 'read' : '\n    --file-read to download remote files' if channel.data.get('read') else '' 
+                 }
+            )
+        )
+    
+        return
 
     # Execute operating system commands
     if channel.data.get('exec'):
@@ -50,7 +96,7 @@ def checkTemplateInjection(args):
         if args.get('os_cmd'):
             print current_plugin.execute(args.get('os_cmd'))
         elif args.get('os_shell'):
-            log.warn('Run commands on the operating system.')
+            log.info('Run commands on the operating system.')
 
             Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
 
@@ -61,7 +107,7 @@ def checkTemplateInjection(args):
         if args.get('tpl_code'):
             print current_plugin.inject(args.get('os_cmd'))
         elif args.get('tpl_shell'):
-            log.warn('Inject multi-line template code. Double empty line to send the data.')
+            log.info('Inject multi-line template code. Double empty line to send the data.')
 
             MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
 

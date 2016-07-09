@@ -16,14 +16,22 @@ class Check:
 
         # If no weak reflection has been detected so far
         if not self.get('render_tag'):
+            
+            # Print what it's going to be tested
+            log.info('Testing reflection with tag %s%s' % (
+                    self.render_tag.replace('\n', '\\n') % ({'payload' : '' }),
+                    ' and variances to escape code context' if self.contexts else ''
+                )
+            )
+            
             # Start detection
             self._detect_context()
 
             # Print message if header or trailer are still unset
             if self.get('header_tag') == None or self.get('trailer_tag') == None:
                 if self.get('render_tag'):
-                    log.warn('%s: Weak Reflection detected with tag %s, continuing' % (
-                        self.plugin, self.get('render_tag').replace('\n', '\\n'))
+                    log.info('Detected unreliable reflection with tag %s, continuing' % (
+                        self.get('render_tag').replace('\n', '\\n')) % ({'payload' : '' })
                     )
 
         # If tags found previously are the same as current plugin, skip context detection
@@ -41,55 +49,23 @@ class Check:
                 self.get('trailer_tag') == self.trailer_tag
             ):
             return
-
-        log.warn('%s: Reflection detected with tag \'%s%s%s\'' % (
-            self.plugin,
-            self.get('prefix', '').replace('\n', '\\n'),
-            self.get('render_tag').replace('\n', '\\n'),
-            self.get('suffix', '').replace('\n', '\\n')
-            )
-        )
+        
+        prefix = self.get('prefix', '').replace('\n', '\\n') % ({'payload' : '' })
+        render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
+        suffix = self.get('suffix', '').replace('\n', '\\n') % ({'payload' : '' })
+        log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (prefix, render_tag, suffix, self.plugin))
 
         self.detect_engine()
 
         # Return if engine is still unset
         if not self.get('engine'):
             return
-
-        log.warn('%s: Template engine \'%s\' detected' % (self.plugin, self.get('engine')))
-
+            
         self.detect_eval()
-
-        # Print code evaluation state if eval is set
-        if self.get('eval'):
-            log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
-
         self.detect_exec()
-
-        # Print shell command execution  state if eval is set
-        if self.get('exec'):
-            log.warn(
-                '%s: Shell command execution detected on \'%s\' operating system' % (
-                    self.plugin,
-                    self.get('os', 'undetected')
-                )
-            )
-
-        # Print code evaluation state if eval is set
-        if self.get('eval'):
-            log.warn('%s: Code evaluation in \'%s\' detected' % (self.plugin, self.get('eval')))
-
         self.detect_write()
-
-        # Print code evaluation state if eval is set
-        if self.get('write'):
-            log.warn('%s: File write capability detected' % (self.plugin))
-
         self.detect_read()
 
-        # Print code evaluation state if eval is set
-        if self.get('read'):
-            log.warn('%s: File read capability detected' % (self.plugin))
 
     """
     First detection of the injection and the context.

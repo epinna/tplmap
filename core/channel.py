@@ -79,7 +79,7 @@ class Channel:
             
             if any(x for x in value_list if '*' in x):
                 self.get_placeholders.append(param)
-                log.warn('Found placeholder in GET parameter \'%s\'' % param)
+                log.info('Found placeholder in GET parameter \'%s\'' % param)
                 
             
     def req(self, injection):
