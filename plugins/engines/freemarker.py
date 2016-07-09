@@ -1,7 +1,7 @@
+from utils.strings import quote, chunkit, base64encode, base64decode, md5
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-from utils.strings import quote, chunkit, base64encode, base64decode, md5
 import re
 
 class Freemarker(Check):
