@@ -208,15 +208,15 @@ class Check:
         pass
 
     """
-    Read file
+    Download file
     """
-    def read(self, command):
+    def read(self, remote_path):
         pass
 
     """
-    Write file
+    Upload file
     """
-    def read(self, command):
+    def write(self, data, remote_path):
         pass
 
     """
