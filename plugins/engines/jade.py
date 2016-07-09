@@ -1,6 +1,7 @@
 from core.check import Check
 from utils.loggers import log
 from utils import rand
+from utils.strings import quote
 import string
 
 class Jade(Check):
@@ -35,7 +36,7 @@ class Jade(Check):
 - x = x.mainModule.require
 - x = x('child_process')
 = x.execSync("%s")
-""" % command
+""" % quote(command)
 
         # TODO: quote command
         return self.inject(execution_code)
