@@ -19,7 +19,8 @@ class FreemarkerTest(unittest.TestCase):
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
-        'write': True
+        'write': True,
+        'read': True
     }
 
     def test_reflection(self):
@@ -79,5 +80,31 @@ class FreemarkerTest(unittest.TestCase):
         self.assertEqual(freemarkerobj._md5(remote_temp_path), strings.md5(data))
         freemarkerobj.execute('rm %s' % (remote_temp_path))
 
+    def test_file_read(self):
+        template = 'AAAA%sAAAA'
 
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15003/freemarker?inj=*'
+        })
+        freemarkerobj = Freemarker(channel)
+        freemarkerobj.detect()
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)
+        
+        # Normal ASCII file
+        readable_file = '/etc/resolv.conf'
+        content = open(readable_file, 'r').read()
+        self.assertEqual(content, freemarkerobj.read(readable_file))
+        
+        # Long binary file
+        readable_file = '/bin/ls'
+        content = open(readable_file, 'rb').read()
+        self.assertEqual(content, freemarkerobj.read(readable_file))    
+        
+        # Non existant file
+        self.assertEqual(None, freemarkerobj.read('/nonexistant'))
+        # Unpermitted file
+        self.assertEqual(None, freemarkerobj.read('/etc/shadow'))
+        # Empty file
+        self.assertEqual('', freemarkerobj.read('/dev/null'))
 
