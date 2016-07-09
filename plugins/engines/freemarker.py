@@ -90,6 +90,6 @@ class Freemarker(Check):
         if not md5(data) == md5_remote:
             log.warn('Remote file md5 mismatch, check manually')
         else:
-            log.warn('File downloaded correctly')
+            log.info('File downloaded correctly')
             
         return data
