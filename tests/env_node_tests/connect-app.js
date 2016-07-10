@@ -9,10 +9,17 @@ var app = connect();
 app.use('/jade', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
-    if('inj' in url_parts.query) {
-      res.end(jade.render(url_parts.query.inj));  
+    
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
     }
-    res.end();
+    else {
+      tpl = inj;
+    }
+    res.end(jade.render(tpl));  
   }
 });
  
