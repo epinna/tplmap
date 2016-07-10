@@ -18,9 +18,10 @@ class Check:
         if not self.get('render_tag'):
             
             # Print what it's going to be tested
-            log.info('Testing reflection with tag %s%s' % (
+            log.info('Testing reflection on %s engine with tag %s%s' % (
+                    self.plugin,
                     self.render_tag.replace('\n', '\\n') % ({'payload' : '' }),
-                    ' and variances to escape code context' if self.contexts else ''
+                    ' and variances' if self.contexts else ''
                 )
             )
             
