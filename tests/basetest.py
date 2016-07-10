@@ -38,7 +38,6 @@ class BaseTest(object):
             self.assertEqual(
                 data, 
                 expected_data, 
-                """Reflection '%s' -> '%s'""" % (template, str(channel_updates))
             )
 
     def test_download(self):

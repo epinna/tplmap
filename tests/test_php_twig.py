@@ -7,8 +7,9 @@ import random
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.twig import Twig
 from core.channel import Channel
+from basetest import BaseTest
 
-class TwigTest(unittest.TestCase):
+class TwigTest(unittest.TestCase, BaseTest):
 
     expected_data = {
         'language': 'php',
@@ -17,11 +18,20 @@ class TwigTest(unittest.TestCase):
         'header_tag': '{{%(header)s}}',
         'render_tag': '{{%(payload)s}}',
     }
-
-    def test_reflection_unsecured(self):
-
-        channel = Channel({
-            'url' : 'http://127.0.0.1:15002/twig-1.24.1-secured.php?inj=*'
-        })
-        Twig(channel).detect()
-        self.assertEqual(channel.data, self.expected_data)
+    
+    url = 'http://127.0.0.1:15002/twig-1.24.1-secured.php?tpl=%s&inj=*'
+    
+    plugin = Twig
+    
+    reflection_tests = [
+        ("%s", {}),
+        ("AAA%sAAA", {})
+    ]
+    
+    # Defuse download tests, capabilities not present
+    def test_download(self):
+        pass
+        
+    # Defuse upload tests, capabilities not present
+    def test_upload(self):
+        pass    
