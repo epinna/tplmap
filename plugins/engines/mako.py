@@ -10,23 +10,28 @@ class Mako(Check):
     header_tag = '${%(header)s}'
     trailer_tag = '${%(trailer)s}'
     contexts = [
+        # Normal reflecting tag ${}
         { 'level': 1, 'prefix': '}', 'suffix' : '${' },
+        
+        # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
         { 'level': 1, 'prefix': '%>', 'suffix' : '<%#' },
         # This covers <% a=%s %>
         { 'level': 2, 'prefix': '1%>', 'suffix' : '<%#' },
         # This covers <% a='%s' %>
         { 'level': 2, 'prefix': '1\'%>', 'suffix' : '<%#' },
-        # % if %s:\n% endif
-        # % for a in %s:\n% endfor
-        # % if %s==1:\n% endif
-        { 'level': 2, 'prefix': '[1]:#\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
         # <% a=range(%s) %>
         { 'level': 3, 'prefix': '1)%>', 'suffix' : '<%#' },
         # <% a=''.join('%s') %>
         { 'level': 3, 'prefix': '1\')%>', 'suffix' : '<%#' },
+        
+        # if and for blocks
+        # % if %s:\n% endif
+        # % for a in %s:\n% endfor
+        # % if %s==1:\n% endif
+        { 'level': 2, 'prefix': '\'a\':#\n', 'suffix' : '\n' },
+        # % if '%s'=='':\n% endif
+        { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
 
     ]
 
