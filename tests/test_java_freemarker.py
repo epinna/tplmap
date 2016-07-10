@@ -45,7 +45,7 @@ class FreemarkerTest(unittest.TestCase):
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
-    def test_file_write(self):
+    def test_upload(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({
@@ -80,7 +80,7 @@ class FreemarkerTest(unittest.TestCase):
         self.assertEqual(freemarkerobj._md5(remote_temp_path), strings.md5(data))
         freemarkerobj.execute('rm %s' % (remote_temp_path))
 
-    def test_file_read(self):
+    def test_download(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({

@@ -74,7 +74,7 @@ class MakoTest(unittest.TestCase):
         self.assertEqual(channel.data, expected_data)
         
         
-    def test_file_read(self):
+    def test_download(self):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj=*'
@@ -101,7 +101,7 @@ class MakoTest(unittest.TestCase):
         # Empty file
         self.assertEqual('', makoobj.read('/dev/null'))
 
-    def test_file_write(self):
+    def test_upload(self):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj=*'

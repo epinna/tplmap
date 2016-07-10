@@ -86,7 +86,7 @@ class Jinja2Test(unittest.TestCase):
         self.assertEqual(result, '1"2')
         
         
-    def test_file_read(self):
+    def test_download(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({
@@ -114,7 +114,7 @@ class Jinja2Test(unittest.TestCase):
         # Empty file
         self.assertEqual('', jinja2obj.read('/dev/null'))
 
-    def test_file_write(self):
+    def test_upload(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({

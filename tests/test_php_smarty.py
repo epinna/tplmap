@@ -48,7 +48,7 @@ class SmartyTest(unittest.TestCase):
         self.assertEqual(channel.data, expected_data)
 
         
-    def test_file_read(self):
+    def test_download(self):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*'
@@ -75,7 +75,7 @@ class SmartyTest(unittest.TestCase):
         # Empty file - returns None, unlike the others
         self.assertEqual(None, smartyobj.read('/dev/null'))
 
-    def test_file_write(self):
+    def test_upload(self):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*'

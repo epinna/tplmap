@@ -74,7 +74,7 @@ def checkTemplateInjection(args):
     # If actions are not required, prints the advices and exit
     if not any(
             f for f,v in args.items() if f in (
-                'os_cmd', 'os_shell', 'file_write', 'file_read', 'tpl_shell'
+                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell'
             ) and v
         ):
         
@@ -82,8 +82,8 @@ def checkTemplateInjection(args):
             """Rerun tplmap providing one of the following options:%(exec)s%(write)s%(read)s""" % (
                 { 
                  'exec' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('exec') else '',
-                 'write' : '\n    --file-write to upload files to the server' if channel.data.get('write') else '',
-                 'read' : '\n    --file-read to download remote files' if channel.data.get('read') else '' 
+                 'write' : '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
+                 'read' : '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '' 
                  }
             )
         )
@@ -114,7 +114,7 @@ def checkTemplateInjection(args):
     # Perform file write
     if channel.data.get('write'):
 
-        local_remote_paths = args.get('file_write')
+        local_remote_paths = args.get('upload')
 
         if local_remote_paths:
 
@@ -128,7 +128,7 @@ def checkTemplateInjection(args):
     # Perform file read
     if channel.data.get('read'):
 
-        remote_local_paths = args.get('file_read')
+        remote_local_paths = args.get('download')
         
         if remote_local_paths:
             

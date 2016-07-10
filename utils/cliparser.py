@@ -83,16 +83,16 @@ oscmd.add_option("--os-shell", dest="os_shell",
                     help="Prompt for an interactive operating "
                          "system shell")
 
-oscmd.add_option("--file-write", dest="file_write",
-                    help="Upload file. Takes two args LFILE and RFILE",
+oscmd.add_option("--upload", dest="upload",
+                    help="Upload LOCAL to REMOTE files",
                     nargs=2)
 
 oscmd.add_option("--force-overwrite", dest="force_overwrite",
                     action="store_true",
-                    help="Force file overwrite")
+                    help="Force file overwrite when uploading")
 
-oscmd.add_option("--file-read", dest="file_read",
-                    help="Download file. Takes two args RFILE and LFILE",
+oscmd.add_option("--download", dest="download",
+                    help="Download REMOTE to LOCAL files",
                     nargs=2)
 
 parser.add_option_group(target)

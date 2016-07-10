@@ -47,7 +47,7 @@ class JadeTest(unittest.TestCase):
         self.assertEqual(channel.data, self.expected_data)
         
         
-    def test_file_read(self):
+    def test_download(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({
@@ -75,7 +75,7 @@ class JadeTest(unittest.TestCase):
         # Empty file
         self.assertEqual('', jadeobj.read('/dev/null'))
 
-    def test_file_write(self):
+    def test_upload(self):
         template = 'AAAA%sAAAA'
 
         channel = Channel({
