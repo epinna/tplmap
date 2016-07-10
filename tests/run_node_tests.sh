@@ -33,10 +33,7 @@ function run_webserver()
   cd ../../
 }
 
-if [[ "$1" == "--server" ]]; then
-  echo 'Raise web server only'
-  run_webserver
-else
+if [[ "$1" == "--test" ]]; then
   echo 'Run web server and launch tests'
   run_webserver &
 
@@ -46,4 +43,7 @@ else
 
   # Shutdown node webserver
   kill ${NODEPID}
+else
+  echo 'Starting web server. Press ctrl-C to quit. Run with --test to run automated tests.'
+  run_webserver
 fi

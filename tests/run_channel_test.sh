@@ -28,10 +28,7 @@ function run_webserver()
 }
 
 
-if [[ "$1" == "--server" ]]; then
-  echo 'Raise web server only'
-  run_webserver
-else
+if [[ "$1" == "--test" ]]; then
   echo 'Run web server and launch tests'
   run_webserver &
 
@@ -41,4 +38,7 @@ else
   python -m unittest discover . 'test_channel_*.py'
   # Shutdown python webserver
   curl http://localhost:15001/shutdown
+else
+    echo 'Starting web server. Press ctrl-C to quit. Run with --test to run automated tests.'
+    run_webserver
 fi
