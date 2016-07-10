@@ -15,6 +15,8 @@ class ChannelTest(unittest.TestCase):
         'engine': 'mako',
         'eval' : 'python' ,
         'exec' : True,
+        'write' : True,
+        'read' : True,
         'trailer_tag': '${%(trailer)s}',
         'header_tag': '${%(header)s}',
         'render_tag': '${%(payload)s}',
