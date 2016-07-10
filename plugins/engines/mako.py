@@ -33,6 +33,10 @@ class Mako(Check):
         # % if '%s'=='':\n% endif
         { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
 
+        { 'level': 3, 'prefix': '\'a\'):#\n', 'suffix' : '\n' },
+        # % if '%s'=='':\n% endif
+        { 'level': 3, 'prefix': 'a\'):#\n', 'suffix' : '\n' },
+
     ]
 
     def detect_engine(self):
