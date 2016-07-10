@@ -6,9 +6,9 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.velocity import Velocity
-from core.channel import Channel
+from basetest import BaseTest
 
-class VelocityTest(unittest.TestCase):
+class VelocityTest(unittest.TestCase, BaseTest):
     
     expected_data = {
         'language': 'java',
@@ -18,23 +18,17 @@ class VelocityTest(unittest.TestCase):
         'render_tag': '#set($p=%(payload)s)\n$p\n',
     }
     
-    def test_reflection(self):
-        
-        template = '%s'
-        
-        channel = Channel({
-            'url' : 'http://127.0.0.1:15003/velocity?inj=*'
-        })
-        Velocity(channel).detect()
-        self.assertEqual(channel.data, self.expected_data)
+    url = 'http://127.0.0.1:15003/velocity?inj=*&tpl=%s'
 
+    plugin = Velocity
     
-    def test_reflection_within_text(self):
-        template = 'AAAA%sAAAA'
+    reflection_tests = [
+        ('%s', {}),
+        ('AAA%sAAA', {})
+    ]
+
+    def test_download(self):
+        pass
         
-        channel = Channel({
-            'url' : 'http://127.0.0.1:15003/velocity?inj=*'
-        })
-        Velocity(channel).detect()
-        self.assertEqual(channel.data, self.expected_data)
-        
+    def test_upload(self):
+        pass
