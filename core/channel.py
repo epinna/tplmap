@@ -106,11 +106,15 @@ class Channel:
                 header_placeholder = self.header_placeholders[0]    
                 header_params = self.header_params.copy()
                 header_params[header_placeholder] = injection
-                
-        return requests.request(
+
+        result = requests.request(
             method = self.http_method, 
             url = self.base_url, 
             params = get_params,
             data = post_params,
             headers = header_params
             ).text
+        
+        log.debug('> %s\n  < %s' % (injection.replace('\n', '\n  > '), result.replace('\n', '  \n  < ')) )
+                    
+        return result

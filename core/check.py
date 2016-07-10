@@ -215,7 +215,8 @@ class Check:
 
         injection = prefix + header + payload + trailer + suffix
         result = self.channel.req(injection)
-        log.debug('[request %s]\n  > %s\n  < %s' % (self.plugin, injection.replace('\n', '\n  > '), result.replace('\n', '  \n  < ')) )
+        log.debug('[request %s]' % (self.plugin))
+
 
         # Cut the result using the header and trailer if specified
         if header:
