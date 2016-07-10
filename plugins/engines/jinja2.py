@@ -101,4 +101,4 @@ class Jinja2(Check):
         if not md5(data) == self._md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
         else:
-            log.warn('File uploaded correctly')
+            log.info('File uploaded correctly')
