@@ -40,7 +40,8 @@ class Freemarker(Check):
         return self.inject("""<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("%s") }""" % (quote(command)))
 
     def detect_write(self):
-        self.set('write', self.get('exec'))
+        if self.get('exec'):
+            self.set('write', True)
     
     def write(self, data, remote_path):
         
@@ -61,7 +62,7 @@ class Freemarker(Check):
         if not md5(data) == self._md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
         else:
-            log.warn('File uploaded correctly')
+            log.info('File uploaded correctly')
 
     def _md5(self, remote_path):
         
@@ -71,7 +72,8 @@ class Freemarker(Check):
             return md5_extracted[0]
             
     def detect_read(self):
-        self.set('read', self.get('exec'))
+        if self.get('exec'):
+            self.set('read', True)
     
     def read(self, remote_path):
         
