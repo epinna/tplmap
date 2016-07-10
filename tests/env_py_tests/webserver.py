@@ -71,7 +71,7 @@ def limited(engine):
     if not template:
         template = '%s'
 
-    length = int(request.values.get('limit', 6))
+    length = int(request.values.get('limit'))
 
     injection = request.values.get('inj', '')
     if len(injection) > length:
