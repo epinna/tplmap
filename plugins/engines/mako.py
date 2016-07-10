@@ -17,14 +17,16 @@ class Mako(Check):
         { 'level': 2, 'prefix': '1%>', 'suffix' : '<%#' },
         # This covers <% a='%s' %>
         { 'level': 2, 'prefix': '1\'%>', 'suffix' : '<%#' },
-        # This covers 
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
         # % if %s==1:\n% endif
         { 'level': 2, 'prefix': '[1]:#\n', 'suffix' : '\n' },
-        # This covers 
         # % if '%s'=='':\n% endif
         { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
+        # <% a=range(%s) %>
+        { 'level': 3, 'prefix': '1)%>', 'suffix' : '<%#' },
+        # <% a=''.join('%s') %>
+        { 'level': 3, 'prefix': '1\')%>', 'suffix' : '<%#' },
 
     ]
 

@@ -36,10 +36,15 @@ class MakoTest(unittest.TestCase, BaseTest):
         (1, '<%% %s=1 %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
         (2, '<%% a=%s %%>', { 'prefix' : '1%>', 'suffix' : '<%#' }),
         (2, '<%% a=\'%s\' %%>', { 'prefix' : '1\'%>', 'suffix' : '<%#' }),
+        
         (2, '%% if %s:\n%% endif', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
         (2, '%% for a in %s:\n%% endfor', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
         (2, '%% if %s==1:\n%% endif', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
         (2, '%% if \'%s\'==1:\n%% endif', { 'prefix' : 'a\':#\n', 'suffix' : '\n' }),
+        
+        (3, '<%% a=range(%s) %%>', { 'prefix' : '1)%>', 'suffix' : '<%#' }),
+        (3, '<%% a=\'\'.join(\'%s\') %%>', { 'prefix' : '1\')%>', 'suffix' : '<%#' }),
+
     ]
         
     def test_reflection_limit(self):
