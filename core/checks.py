@@ -49,7 +49,7 @@ def _print_injection_summary(channel):
     'read': 'no' if not channel.data.get('read') else 'yes',
 }))    
 
-def checkTemplateInjection(args):
+def check_template_injection(args):
 
     channel = Channel(args)
     current_plugin = None
