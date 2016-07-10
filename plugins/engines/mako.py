@@ -33,8 +33,9 @@ class Mako(Check):
         # % if '%s'=='':\n% endif
         { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
 
+        # % if (%s)==1:\n% endif
         { 'level': 3, 'prefix': '\'a\'):#\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
+        # % if ('%s')=='':\n% endif
         { 'level': 3, 'prefix': 'a\'):#\n', 'suffix' : '\n' },
 
     ]
