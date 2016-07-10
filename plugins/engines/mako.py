@@ -11,6 +11,21 @@ class Mako(Check):
     trailer_tag = '${%(trailer)s}'
     contexts = [
         { 'level': 1, 'prefix': '}', 'suffix' : '${' },
+        # This covers <% %s %>, <%! %s %>, <% %s=1 %>
+        { 'level': 1, 'prefix': '%>', 'suffix' : '<%#' },
+        # This covers <% a=%s %>
+        { 'level': 2, 'prefix': '1%>', 'suffix' : '<%#' },
+        # This covers <% a='%s' %>
+        { 'level': 2, 'prefix': '1\'%>', 'suffix' : '<%#' },
+        # This covers 
+        # % if %s:\n% endif
+        # % for a in %s:\n% endfor
+        # % if %s==1:\n% endif
+        { 'level': 2, 'prefix': '[1]:#\n', 'suffix' : '\n' },
+        # This covers 
+        # % if '%s'=='':\n% endif
+        { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
+
     ]
 
     def detect_engine(self):
