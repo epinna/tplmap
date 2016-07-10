@@ -51,9 +51,9 @@ class Check:
             ):
             return
         
-        prefix = self.get('prefix', '').replace('\n', '\\n') % ({'payload' : '' })
+        prefix = self.get('prefix', '').replace('\n', '\\n')
         render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
-        suffix = self.get('suffix', '').replace('\n', '\\n') % ({'payload' : '' })
+        suffix = self.get('suffix', '').replace('\n', '\\n')
         log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (prefix, render_tag, suffix, self.plugin))
 
         self.detect_engine()

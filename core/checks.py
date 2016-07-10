@@ -21,9 +21,9 @@ plugins = [
 
 def _print_injection_summary(channel):
     
-    prefix = channel.data.get('prefix', '').replace('\n', '\\n') % ({'payload' : '' })
+    prefix = channel.data.get('prefix', '').replace('\n', '\\n')
     render_tag = channel.data.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
-    suffix = channel.data.get('suffix', '').replace('\n', '\\n') % ({'payload' : '' })
+    suffix = channel.data.get('suffix', '').replace('\n', '\\n')
     
     log.info("""Tplmap identified the following injection point:
 
