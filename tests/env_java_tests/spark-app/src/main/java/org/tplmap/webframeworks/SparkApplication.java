@@ -30,10 +30,21 @@ public static void main(String[] args) {
 
 public static Object velocity(Request request, Response response) {
 
+
   // Get inj parameter, exit if none
-  String templateStr = request.queryParams("inj");
-  if(templateStr == null) {
+  String inj = request.queryParams("inj");
+  if(inj == null) {
     return "";
+  }
+  
+  // Get tpl parameter
+  String tpl = request.queryParams("tpl");
+  if(tpl == null) {
+    tpl = inj;
+  }
+  else {
+    // Keep the formatting a-la-python
+    tpl = tpl.replaceAll("%s", inj)
   }
 
   LogChute velocityLogChute = new NullLogChute() ;
@@ -46,12 +57,10 @@ public static Object velocity(Request request, Response response) {
     velocity.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8") ;
     velocity.init() ;
 
-
     VelocityContext context = new VelocityContext();
-    String s = templateStr;
     w = new StringWriter();
 
-    velocity.evaluate( context, w, "mystring", s );
+    velocity.evaluate( context, w, "mystring", tpl );
 
 
   }catch(Exception e){
@@ -66,15 +75,25 @@ public static Object velocity(Request request, Response response) {
 public static Object freemarker(Request request, Response response) {
 
   // Get inj parameter, exit if none
-  String templateStr = request.queryParams("inj");
-  if(templateStr == null) {
+  String inj = request.queryParams("inj");
+  if(inj == null) {
     return "";
+  }
+  
+  // Get tpl parameter
+  String tpl = request.queryParams("tpl");
+  if(tpl == null) {
+    tpl = inj;
+  }
+  else {
+    // Keep the formatting a-la-python
+    tpl = tpl.replaceAll("%s", inj)
   }
 
   // Generate template from "inj"
   Template tpl;
   try{
-    tpl = new Template("name", new StringReader(templateStr),  new Configuration());
+    template = new Template("name", new StringReader(tpl),  new Configuration());
   }catch(IOException e){
     e.printStackTrace();
     return "";
@@ -84,7 +103,7 @@ public static Object freemarker(Request request, Response response) {
   HashMap data = new HashMap();
   StringWriter out = new StringWriter();
   try{
-    tpl.process(data, out);
+    template.process(data, out);
   }catch(TemplateException | IOException e){
     e.printStackTrace();
     return "";
