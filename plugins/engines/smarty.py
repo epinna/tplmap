@@ -49,13 +49,11 @@ class Smarty(Check):
             self.set('exec', True)
 
     def execute(self, command):
-
         return self.evaluate("""system("%s");""" % (quote(command)))
 
-
-
     def detect_read(self):
-        self.set('read', True)
+        if self.get('eval'):
+            self.set('read', True)
 
     def _md5(self, remote_path):
         return self.evaluate("""is_file("%s") && print(md5_file("%s"));""" % (remote_path, remote_path))
@@ -80,7 +78,8 @@ class Smarty(Check):
         return data
         
     def detect_write(self):
-        self.set('write', True)
+        if self.get('eval'):
+            self.set('write', True)
         
     def write(self, data, remote_path):
         
