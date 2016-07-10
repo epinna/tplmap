@@ -27,6 +27,6 @@ class JadeTest(unittest.TestCase, BaseTest):
     plugin = Jade
     
     reflection_tests = [
-        ('%s', {}),
-        ('AAA%sAAA', {})
+        (1, '%s', {}),
+        (1, 'AAA%sAAA', {})
     ]

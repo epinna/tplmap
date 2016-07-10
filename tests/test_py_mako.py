@@ -29,9 +29,17 @@ class MakoTest(unittest.TestCase, BaseTest):
     plugin = Mako
     
     reflection_tests = [
-        ('%s', {}),
-        ('AAA%sAAA', {}),
-        ('${%s}', { 'prefix' : '}', 'suffix' : '${' })
+        (1, '%s', {}),
+        (1, 'AAA%sAAA', {}),
+        (1, '<%% %s %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
+        (1, '<%%! %s %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
+        (1, '<%% %s=1 %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
+        (2, '<%% a=%s %%>', { 'prefix' : '1%>', 'suffix' : '<%#' }),
+        (2, '<%% a=\'%s\' %%>', { 'prefix' : '1\'%>', 'suffix' : '<%#' }),
+        (2, '%% if %s:\n%% endif', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
+        (2, '%% for a in %s:\n%% endfor', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
+        (2, '%% if %s==1:\n%% endif', { 'prefix' : '[1]:#\n', 'suffix' : '\n' }),
+        (2, '%% if \'%s\'==1:\n%% endif', { 'prefix' : 'a\':#\n', 'suffix' : '\n' }),
     ]
         
     def test_reflection_limit(self):

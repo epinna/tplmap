@@ -28,12 +28,15 @@ class BaseTest(object):
         
         for reflection_test in self.reflection_tests:
             
-            template, channel_updates = reflection_test
+            risk, template, channel_updates = reflection_test
 
             expected_data = self.expected_data.copy()
             expected_data.update(channel_updates)
             
             obj, data = self._get_detection_obj_data(self.url % template)
+            
+            # Set the required risk level
+            obj.channel.args['level'] = risk
             
             self.assertEqual(
                 data, 

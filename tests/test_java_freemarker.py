@@ -26,6 +26,6 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
     plugin = Freemarker
     
     reflection_tests = [
-        ('%s', {}),
-        ('AAA%sAAA', {})
+        (1, '%s', {}),
+        (1, 'AAA%sAAA', {})
     ]

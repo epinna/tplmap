@@ -29,9 +29,9 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     plugin = Jinja2
     
     reflection_tests = [
-        ('%s', {}),
-        ('AAA%sAAA', {}),
-        ('{{%s}}', { 'prefix' : '""}}', 'suffix' : '{{""' })
+        (1, '%s', {}),
+        (1, 'AAA%sAAA', {}),
+        (1, '{{%s}}', { 'prefix' : '""}}', 'suffix' : '{{""' })
     ]
 
     def test_reflection_limit(self):
