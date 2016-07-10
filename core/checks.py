@@ -57,7 +57,13 @@ def check_template_injection(args):
     # Iterate all the available plugins until
     # the first template engine is detected.
     for plugin in plugins:
+        
         current_plugin = plugin(channel)
+            
+        # Skip if user specify a specific --engine
+        if args.get('engine') and args.get('engine').lower() != current_plugin.plugin.lower():
+            continue
+        
         current_plugin.detect()
 
         if channel.data.get('engine'):

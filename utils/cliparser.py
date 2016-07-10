@@ -46,7 +46,7 @@ request.add_option("-H","--headers",
 target.add_option("-X","--request",
                 action="store",
                 dest="request",
-                help="Force usage of given HTTP method (e.g. PUT)")
+                help="Force usage of given HTTP method (e.g. PUT).")
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
@@ -56,6 +56,10 @@ detection.add_option("--level",
                     type="int",
                     default=1,
                     help="Level of tests to perform (1-5, Default: 1).")
+
+detection.add_option("-e", "--engine",
+                    dest="engine",
+                    help="Force back-end template engine to this value.")
 
 # Template inspection options
 tplcmd = OptionGroup(parser, "Template inspection", "These "
