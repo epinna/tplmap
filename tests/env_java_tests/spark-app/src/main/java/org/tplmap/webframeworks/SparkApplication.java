@@ -36,7 +36,7 @@ public static Object velocity(Request request, Response response) {
   if(inj == null) {
     return "";
   }
-  
+
   // Get tpl parameter
   String tpl = request.queryParams("tpl");
   if(tpl == null) {
@@ -44,7 +44,7 @@ public static Object velocity(Request request, Response response) {
   }
   else {
     // Keep the formatting a-la-python
-    tpl = tpl.replaceAll("%s", inj)
+    tpl = tpl.replace("%s", inj);
   }
 
   LogChute velocityLogChute = new NullLogChute() ;
@@ -79,7 +79,7 @@ public static Object freemarker(Request request, Response response) {
   if(inj == null) {
     return "";
   }
-  
+
   // Get tpl parameter
   String tpl = request.queryParams("tpl");
   if(tpl == null) {
@@ -87,11 +87,11 @@ public static Object freemarker(Request request, Response response) {
   }
   else {
     // Keep the formatting a-la-python
-    tpl = tpl.replaceAll("%s", inj)
+    tpl = tpl.replace("%s", inj);
   }
 
   // Generate template from "inj"
-  Template tpl;
+  Template template;
   try{
     template = new Template("name", new StringReader(tpl),  new Configuration());
   }catch(IOException e){
