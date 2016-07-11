@@ -72,13 +72,13 @@ class BaseTest(object):
         self.assertEqual(data, self.expected_data)
 
         remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
-
         # Send long binary
         data = open('/bin/ls', 'rb').read()
         obj.write(data, remote_temp_path)
         self.assertEqual(obj._md5(remote_temp_path), strings.md5(data))
         obj.execute('rm %s' % (remote_temp_path))
 
+        remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
         # Send short ASCII data, without removing it
         data = 'SHORT ASCII DATA'
         obj.write(data, remote_temp_path)
