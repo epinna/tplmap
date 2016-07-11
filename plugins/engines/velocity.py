@@ -5,11 +5,11 @@ from utils.strings import quote
 
 class Velocity(Check):
 
-    render_tag = '#set($p=%(payload)s)\n$p\n'
-    header_tag = '#set($h=%(header)s)\n$h\n'
-    trailer_tag = '\n#set($t=%(trailer)s)\n$t'
+    render_tag = '#set($p=%(payload)s)\n${p}\n'
+    header_tag = '#set($h=%(header)s)\n${h}\n'
+    trailer_tag = '\n#set($t=%(trailer)s)\n${t}'
     contexts = [ ]
-        
+
     def detect_engine(self):
 
         expected_rand = str(rand.randint_n(1))
