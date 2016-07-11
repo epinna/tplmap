@@ -30,8 +30,27 @@ class Mako(Check):
         { 'level': 3, 'prefix': '1\')%>', 'suffix' : '<%#' },
         # <% a=''.join("%s") %>
         { 'level': 3, 'prefix': '1")%>', 'suffix' : '<%#' },
-        # <% a=''.join("""%s""" %>
+        # <% a=''.join("""%s""") %>
         { 'level': 3, 'prefix': '1""")%>', 'suffix' : '<%#' },
+
+
+        # This covers <% a=[%s] %>
+        { 'level': 4, 'prefix': '1]%>', 'suffix' : '<%#' },
+        # This covers <% a=['%s'] %>
+        { 'level': 4, 'prefix': '1\']%>', 'suffix' : '<%#' },
+        # This covers <% a=["%s"] %>
+        { 'level': 4, 'prefix': '1"]%>', 'suffix' : '<%#' },
+        # This covers <% a=["""%s"""] %>
+        { 'level': 4, 'prefix': '1"""]%>', 'suffix' : '<%#' },
+        # <% a=set([%s]) %>
+        { 'level': 4, 'prefix': '1])%>', 'suffix' : '<%#' },
+        # <% a=set(['%s']) %>
+        { 'level': 4, 'prefix': '1\'])%>', 'suffix' : '<%#' },
+        # <% a=set(["%s"]) %>
+        { 'level': 4, 'prefix': '1"])%>', 'suffix' : '<%#' },
+        # <% a=set(["""%s"""]) %>
+        { 'level': 4, 'prefix': '1"""])%>', 'suffix' : '<%#' },
+
 
         # If and for blocks
         # % if %s:\n% endif
@@ -52,6 +71,26 @@ class Mako(Check):
         { 'level': 3, 'prefix': 'a"):#\n', 'suffix' : '\n' },
         # % if ("""%s""")=='':\n% endif
         { 'level': 3, 'prefix': 'a"""):#\n', 'suffix' : '\n' },
+
+
+        # % if [%s]:\n% endif
+        # % for a in [%s]:\n% endfor
+        # % if [%s]==1:\n% endif
+        { 'level': 4, 'prefix': '\'a\']:#\n', 'suffix' : '\n' },
+        # % if '%s'=='':\n% endif
+        { 'level': 4, 'prefix': 'a\']:#\n', 'suffix' : '\n' },
+        # % if "%s"=='':\n% endif
+        { 'level': 4, 'prefix': 'a"]:#\n', 'suffix' : '\n' },
+        # % if """%s"""=='':\n% endif
+        { 'level': 4, 'prefix': 'a"""]:#\n', 'suffix' : '\n' },
+        # % if (%s)==1:\n% endif
+        { 'level': 4, 'prefix': '\'a\']):#\n', 'suffix' : '\n' },
+        # % if ('%s')=='':\n% endif
+        { 'level': 4, 'prefix': 'a\']):#\n', 'suffix' : '\n' },
+        # % if ("%s")=='':\n% endif
+        { 'level': 4, 'prefix': 'a"]):#\n', 'suffix' : '\n' },
+        # % if ("""%s""")=='':\n% endif
+        { 'level': 4, 'prefix': 'a"""]):#\n', 'suffix' : '\n' },
 
     ]
 
