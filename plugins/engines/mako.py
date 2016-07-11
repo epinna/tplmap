@@ -126,6 +126,14 @@ class Mako(Check):
         # % if {1:"""%s"""}=='':\n% endif
         { 'level': 5, 'prefix': 'a"""}:#\n', 'suffix' : '\n' },
 
+        # Mako blocks
+        #{ 'level': 2, 'prefix' : '"/>', 'suffix' : ''},
+        { 'level': 5, 'prefix' : '</%doc>', 'suffix' : '<%doc>'},
+        { 'level': 5, 'prefix' : '</%doc>', 'suffix' : '<%doc>' },
+        #{ 'level': 5, 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' },
+        { 'level': 5, 'prefix' : '</%block>', 'suffix' : '<%block>' },
+        { 'level': 5, 'prefix' : '</%text>', 'suffix' : '<%text>'},
+
     ]
 
     def detect_engine(self):

@@ -100,6 +100,15 @@ class MakoTest(unittest.TestCase, BaseTest):
         (5, '%% if {1:\'%s\'}==1:\n%% endif', { 'prefix' : 'a\'}:#\n', 'suffix' : '\n' }),
         (5, '%% if {1:"%s"}==1:\n%% endif', { 'prefix' : 'a"}:#\n', 'suffix' : '\n' }),
         (5, '%% if {1:"""%s"""}==1:\n%% endif', { 'prefix' : 'a"""}:#\n', 'suffix' : '\n' }),
+
+
+        # Mako blocks. Skip <%block> which doesn't seem affecting the standard inj
+        #(2, '<%%include file="%s"/>', { 'prefix' : '"/>', 'suffix' : '' }),
+        #(2, '<%%include file=\'heade%sr.html\'/>', { 'prefix' : '\'/>', 'suffix' : '' }),
+        (5, '<%%doc> %s </%%doc>', { 'prefix' : '</%doc>', 'suffix' : '<%doc>' }),
+        #(5, '<%%def name="a(x)"> %s </%%def>', { 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' }),
+        (5, '<%%text> %s </%%text>', { 'prefix' : '</%text>', 'suffix' : '<%text>' }),
+
     ]
 
     def test_reflection_limit(self):
