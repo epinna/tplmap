@@ -33,8 +33,7 @@ class Mako(Check):
         # <% a=''.join("""%s""") %>
         { 'level': 3, 'prefix': '1""")%>', 'suffix' : '<%#' },
 
-
-        # This covers <% a=[%s] %>
+        # This covers <% [%s] %>, <%! [%s] %>, <% [%s]=1 %> <% a=[%s] %>
         { 'level': 4, 'prefix': '1]%>', 'suffix' : '<%#' },
         # This covers <% a=['%s'] %>
         { 'level': 4, 'prefix': '1\']%>', 'suffix' : '<%#' },
@@ -51,6 +50,22 @@ class Mako(Check):
         # <% a=set(["""%s"""]) %>
         { 'level': 4, 'prefix': '1"""])%>', 'suffix' : '<%#' },
 
+        # This covers <% {%s} %>, <%! {%s} %>, <% {%s}=1 %> <% a={%s} %>
+        { 'level': 5, 'prefix': '1:1}%>', 'suffix' : '<%#' },
+        # This covers <% a={'%s':1} %>
+        { 'level': 5, 'prefix': '1\':1}%>', 'suffix' : '<%#' },
+        # This covers <% a={"%s":1} %>
+        { 'level': 5, 'prefix': '1":1}%>', 'suffix' : '<%#' },
+        # This covers <% a={"""%s""":1} %>
+        { 'level': 5, 'prefix': '1""":1}%>', 'suffix' : '<%#' },
+        # This covers <% a={1:%s} %>
+        { 'level': 5, 'prefix': '1}%>', 'suffix' : '<%#' },
+        # This covers <% a={1:'%s'} %>
+        { 'level': 5, 'prefix': '1\'}%>', 'suffix' : '<%#' },
+        # This covers <% a={1:"%s"} %>
+        { 'level': 5, 'prefix': '1"}%>', 'suffix' : '<%#' },
+        # This covers <% a={1:"""%s"""} %>
+        { 'level': 5, 'prefix': '1"""}%>', 'suffix' : '<%#' },
 
         # If and for blocks
         # % if %s:\n% endif
@@ -71,8 +86,6 @@ class Mako(Check):
         { 'level': 3, 'prefix': 'a"):#\n', 'suffix' : '\n' },
         # % if ("""%s""")=='':\n% endif
         { 'level': 3, 'prefix': 'a"""):#\n', 'suffix' : '\n' },
-
-
         # % if [%s]:\n% endif
         # % for a in [%s]:\n% endfor
         # % if [%s]==1:\n% endif
@@ -91,6 +104,27 @@ class Mako(Check):
         { 'level': 4, 'prefix': 'a"]):#\n', 'suffix' : '\n' },
         # % if ("""%s""")=='':\n% endif
         { 'level': 4, 'prefix': 'a"""]):#\n', 'suffix' : '\n' },
+
+
+        # If and for blocks
+        # % if {%s}:\n% endif
+        # % for a in {%s}:\n% endfor
+        # % if {%s}==1:\n% endif
+        { 'level': 5, 'prefix': '1:1}:#\n', 'suffix' : '\n' },
+        # % if {'%s':1}=='':\n% endif
+        { 'level': 5, 'prefix': 'a\':1}:#\n', 'suffix' : '\n' },
+        # % if {"%s":1}=='':\n% endif
+        { 'level': 5, 'prefix': 'a":1}:#\n', 'suffix' : '\n' },
+        # % if {"""%s""":1}=='':\n% endif
+        { 'level': 5, 'prefix': 'a""":1}:#\n', 'suffix' : '\n' },
+        # % if {1:%s}=='':\n% endif
+        { 'level': 5, 'prefix': '1}:#\n', 'suffix' : '\n' },
+        # % if {1:'%s'}=='':\n% endif
+        { 'level': 5, 'prefix': 'a\'}:#\n', 'suffix' : '\n' },
+        # % if {1:%s"}=='':\n% endif
+        { 'level': 5, 'prefix': 'a"}:#\n', 'suffix' : '\n' },
+        # % if {1:"""%s"""}=='':\n% endif
+        { 'level': 5, 'prefix': 'a"""}:#\n', 'suffix' : '\n' },
 
     ]
 

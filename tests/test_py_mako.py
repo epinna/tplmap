@@ -55,6 +55,19 @@ class MakoTest(unittest.TestCase, BaseTest):
         (4, '<%% a=set(["%s"]) %%>', { 'prefix' : '1"])%>', 'suffix' : '<%#' }),
         (4, '<%% a=set(["""%s"""]) %%>', { 'prefix' : '1"""])%>', 'suffix' : '<%#' }),
 
+
+        (5, '<%% a={%s} %%>', { 'prefix' : '1:1}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={1:%s} %%>', { 'prefix' : '1}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={1:\'%s\'} %%>', { 'prefix' : '1\'}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={1:"%s"} %%>', { 'prefix' : '1"}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={1:"""%s"""} %%>', { 'prefix' : '1"""}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={%s:1} %%>', { 'prefix' : '1:1}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={\'%s\':1}] %%>', { 'prefix' : '1\':1}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={"%s":1}] %%>', { 'prefix' : '1":1}%>', 'suffix' : '<%#' }),
+        (5, '<%% a={"""%s""":1} %%>', { 'prefix' : '1""":1}%>', 'suffix' : '<%#' }),
+
+
+
         # if and for blocks
         (2, '%% if %s:\n%% endif', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
         (2, '%% for a in %s:\n%% endfor', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
@@ -67,7 +80,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         (3, '%% if ("%s")==1:\n%% endif', { 'prefix' : 'a"):#\n', 'suffix' : '\n' }),
         (3, '%% if ("""%s""")==1:\n%% endif', { 'prefix' : 'a"""):#\n', 'suffix' : '\n' }),
 
-        (4, '%% for a in [%s]:\n%% endfor', { 'prefix' : '\'a\']:#\n', 'suffix' : '\n' }),
+        (4, '%% for a in {%s}:\n%% endfor', { 'prefix' : '1:1}:#\n', 'suffix' : '\n' }),
         (4, '%% if [%s]==1:\n%% endif', { 'prefix' : '\'a\']:#\n', 'suffix' : '\n' }),
         (4, '%% if [\'%s\']==1:\n%% endif', { 'prefix' : 'a\']:#\n', 'suffix' : '\n' }),
         (4, '%% if ["%s"]==1:\n%% endif', { 'prefix' : 'a"]:#\n', 'suffix' : '\n' }),
@@ -77,6 +90,16 @@ class MakoTest(unittest.TestCase, BaseTest):
         (4, '%% if (["%s"])==1:\n%% endif', { 'prefix' : 'a"]):#\n', 'suffix' : '\n' }),
         (4, '%% if (["""%s"""])==1:\n%% endif', { 'prefix' : 'a"""]):#\n', 'suffix' : '\n' }),
 
+
+        (5, '%% for a in {%s}:\n%% endfor', { 'prefix' : '1:1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {%s:1}==1:\n%% endif', { 'prefix' : '1:1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {\'%s\':1}==1:\n%% endif', { 'prefix' : 'a\':1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {"%s":1}==1:\n%% endif', { 'prefix' : 'a":1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {"""%s""":1}==1:\n%% endif', { 'prefix' : 'a""":1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {1:%s}==1:\n%% endif', { 'prefix' : '1}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {1:\'%s\'}==1:\n%% endif', { 'prefix' : 'a\'}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {1:"%s"}==1:\n%% endif', { 'prefix' : 'a"}:#\n', 'suffix' : '\n' }),
+        (5, '%% if {1:"""%s"""}==1:\n%% endif', { 'prefix' : 'a"""}:#\n', 'suffix' : '\n' }),
     ]
 
     def test_reflection_limit(self):
