@@ -16,15 +16,15 @@ class Check:
 
         # If no weak reflection has been detected so far
         if not self.get('render_tag'):
-            
+
             # Print what it's going to be tested
             log.info('Testing reflection on %s engine with tag %s%s' % (
                     self.plugin,
                     self.render_tag.replace('\n', '\\n') % ({'payload' : '' }),
-                    ' and variances' if self.contexts else ''
+                    ' and variations' if self.contexts else ''
                 )
             )
-            
+
             # Start detection
             self._detect_context()
 
@@ -50,7 +50,7 @@ class Check:
                 self.get('trailer_tag') == self.trailer_tag
             ):
             return
-        
+
         prefix = self.get('prefix', '').replace('\n', '\\n')
         render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
         suffix = self.get('suffix', '').replace('\n', '\\n')
@@ -61,7 +61,7 @@ class Check:
         # Return if engine is still unset
         if not self.get('engine'):
             return
-            
+
         self.detect_eval()
         self.detect_exec()
         self.detect_write()

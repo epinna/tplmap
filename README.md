@@ -1,7 +1,7 @@
 Tplmap
 ======
 
-Tplmap (short for _Template Mapper_) is a tool that automate the process of detecting and exploiting Server-Side Template Injection vulnerabilities (SSTI). 
+Tplmap (short for _Template Mapper_) is a tool that automate the process of detecting and exploiting Server-Side Template Injection vulnerabilities (SSTI).
 
 This can be used by developers, penetration testers, and security researchers to detect and exploit vulnerabilities related to the template injection attacks.
 
@@ -17,11 +17,11 @@ Example
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=*'
 [+] Found placeholder in GET parameter 'id'
-[+] Testing reflection on Mako engine with tag ${} and variances
-[+] Testing reflection on Jinja2 engine with tag {{}} and variances
-[+] Testing reflection on Twig engine with tag {{}} and variances
-[+] Testing reflection on Smarty engine with tag {} and variances
-[+] Testing reflection on Freemarker engine with tag ${} and variances
+[+] Testing reflection on Mako engine with tag ${} and variations
+[+] Testing reflection on Jinja2 engine with tag {{}} and variations
+[+] Testing reflection on Twig engine with tag {{}} and variations
+[+] Testing reflection on Smarty engine with tag {} and variations
+[+] Testing reflection on Freemarker engine with tag ${} and variations
 [+] Testing reflection on Velocity engine with tag #set($p=)\n$p\n
 [+] Detected unreliable reflection with tag #set($p=)\n$p\n, continuing
 [+] Confirmed reflection with tag '\n= \n' by Jade plugin
@@ -49,7 +49,7 @@ www-data
 linux $ ls -al /etc/passwd
 -rw-r--r--  1 root  wheel  5925 16 Sep  2015 /etc/passwd
 linux $
-  
+
 ```
 
 Supported template engines
