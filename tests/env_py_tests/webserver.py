@@ -1,7 +1,10 @@
 from flask import Flask, request
 app = Flask(__name__)
 from mako.template import Template as MakoTemplates
+from mako.lookup import TemplateLookup
 from jinja2 import Template as Jinja2Template
+
+mylookup = TemplateLookup(directories=['/tpl'])
 
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
@@ -19,7 +22,7 @@ def reflect(engine):
     injection = request.values.get('inj')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection).render()
+        return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
@@ -33,7 +36,7 @@ def postfunc(engine):
     injection = request.values.get('inj')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection).render()
+        return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
@@ -48,7 +51,7 @@ def headerfunc(engine):
     injection = request.headers.get('User-Agent')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection).render()
+        return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
@@ -61,7 +64,7 @@ def putfunc(engine):
 
     injection = request.values.get('inj')
     if engine == 'mako':
-        return MakoTemplates(template % injection).render()
+        return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
@@ -78,7 +81,7 @@ def limited(engine):
         return 'Inj too long'
 
     if engine == 'mako':
-        return MakoTemplates(template % injection).render()
+        return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         return Jinja2Template(template % injection).render()
 
