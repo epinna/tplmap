@@ -40,8 +40,11 @@ class MakoTest(unittest.TestCase, BaseTest):
         (2, '<%% a=%s %%>', { 'prefix' : '1%>', 'suffix' : '<%#' }),
         (2, '<%% a=\'%s\' %%>', { 'prefix' : '1\'%>', 'suffix' : '<%#' }),
         (2, '<%% a="%s" %%>', { 'prefix' : '1"%>', 'suffix' : '<%#' }),
+        (2, '<%% a="""%s""" %%>', { 'prefix' : '1"""%>', 'suffix' : '<%#' }),
         (3, '<%% a=range(%s) %%>', { 'prefix' : '1)%>', 'suffix' : '<%#' }),
         (3, '<%% a=\'\'.join(\'%s\') %%>', { 'prefix' : '1\')%>', 'suffix' : '<%#' }),
+        (3, '<%% a=\'\'.join("%s") %%>', { 'prefix' : '1\")%>', 'suffix' : '<%#' }),
+        (3, '<%% a=\'\'.join("""%s""") %%>', { 'prefix' : '1""")%>', 'suffix' : '<%#' }),
 
         # if and for blocks
         (2, '%% if %s:\n%% endif', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
@@ -49,8 +52,11 @@ class MakoTest(unittest.TestCase, BaseTest):
         (2, '%% if %s==1:\n%% endif', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
         (2, '%% if \'%s\'==1:\n%% endif', { 'prefix' : 'a\':#\n', 'suffix' : '\n' }),
         (2, '%% if "%s"==1:\n%% endif', { 'prefix' : 'a":#\n', 'suffix' : '\n' }),
+        (2, '%% if """%s"""==1:\n%% endif', { 'prefix' : 'a""":#\n', 'suffix' : '\n' }),
         (3, '%% if (%s)==1:\n%% endif', { 'prefix' : '\'a\'):#\n', 'suffix' : '\n' }),
         (3, '%% if (\'%s\')==1:\n%% endif', { 'prefix' : 'a\'):#\n', 'suffix' : '\n' }),
+        (3, '%% if ("%s")==1:\n%% endif', { 'prefix' : 'a"):#\n', 'suffix' : '\n' }),
+        (3, '%% if ("""%s""")==1:\n%% endif', { 'prefix' : 'a"""):#\n', 'suffix' : '\n' }),
 
     ]
 
