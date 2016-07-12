@@ -61,7 +61,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (5, '{{ {"""%s""":1}} }', { 'prefix': '1":1}}}', 'suffix' : '' }),
 
 
-        # if and for blocks context
+        # if and for blocks context with {% %}
         (2, '{%% if %s: %%}\n{%% endif %%}', { 'prefix' : '\'a\': %}\n', 'suffix' : '\n' }),
         (2, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '\'a\': %}\n', 'suffix' : '\n' }),
         (2, '{%% if %s==1: %%}\n{%% endif %%}', { 'prefix' : '\'a\': %}\n', 'suffix' : '\n' }),
@@ -92,6 +92,9 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (5, '{%% if {1:\'%s\'}==1: %%}\n{%% endif %%}', { 'prefix' : 'a\'}: %}\n', 'suffix' : '\n' }),
         (5, '{%% if {1:"%s"}==1: %%}\n{%% endif %%}', { 'prefix' : 'a"}: %}\n', 'suffix' : '\n' }),
         (5, '{%% if {1:"""%s"""}==1: %%}\n{%% endif %%}', { 'prefix' : 'a"}: %}\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
+
+        # Comment blocks
+        (5, '{# %s #}', { 'prefix' : '#}', 'suffix' : '{#' }),
 
     ]
 

@@ -55,7 +55,7 @@ class Jinja2(Check):
         { 'level': 5, 'prefix': '1"}}}', 'suffix' : '' },
 
 
-        # If and for blocks
+        # If and for blocks with {% %}
 
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
@@ -90,7 +90,6 @@ class Jinja2(Check):
         # % if ("""%s""")=='':\n% endif
         { 'level': 4, 'prefix': 'a"]): %}\n', 'suffix' : '\n' },
 
-        # If and for blocks
         # % if {%s}:\n% endif
         # % for a in {%s}:\n% endfor
         # % if {%s}==1:\n% endif
@@ -108,6 +107,8 @@ class Jinja2(Check):
         # % if {1:"""%s"""}=='':\n% endif
         { 'level': 5, 'prefix': 'a"}: %}\n', 'suffix' : '\n' },
 
+        # Comment blocks
+        { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
 
     ]
 
