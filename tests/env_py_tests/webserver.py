@@ -2,9 +2,11 @@ from flask import Flask, request
 app = Flask(__name__)
 from mako.template import Template as MakoTemplates
 from mako.lookup import TemplateLookup
-from jinja2 import Template as Jinja2Template
+from jinja2 import Environment as Jinja2Environment
 
 mylookup = TemplateLookup(directories=['/tpl'])
+
+Jinja2Env = Jinja2Environment(line_statement_prefix='#')
 
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
@@ -24,7 +26,7 @@ def reflect(engine):
     if engine == 'mako':
         return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()
+        return Jinja2Env.from_string(template % injection).render()
 
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
@@ -38,7 +40,7 @@ def postfunc(engine):
     if engine == 'mako':
         return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()
+        return Jinja2Env.from_string(template % injection).render()
 
 
 @app.route("/header/<engine>")
@@ -53,7 +55,7 @@ def headerfunc(engine):
     if engine == 'mako':
         return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()
+        return Jinja2Env.from_string(template % injection).render()
 
 @app.route("/put/<engine>", methods = [ "PUT" ])
 def putfunc(engine):
@@ -66,7 +68,7 @@ def putfunc(engine):
     if engine == 'mako':
         return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()
+        return Jinja2Env.from_string(template % injection).render()
 
 @app.route("/limit/<engine>")
 def limited(engine):
@@ -83,7 +85,7 @@ def limited(engine):
     if engine == 'mako':
         return MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
-        return Jinja2Template(template % injection).render()
+        return Jinja2Env.from_string(template % injection).render()
 
 @app.route('/shutdown')
 def shutdown():
