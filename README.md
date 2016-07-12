@@ -15,14 +15,15 @@ Example
 --------
 
 ```
-$ ./tplmap.py -u 'http://www.target.com/app?id=*'
+$ ./tplmap.py -u 'http://www.target.com/app?id=*' --level 2
 [+] Found placeholder in GET parameter 'id'
-[+] Testing reflection on Mako engine with tag ${*} and variations
-[+] Testing reflection on Jinja2 engine with tag {{*}} and variations
-[+] Testing reflection on Twig engine with tag {{*}} and variations
-[+] Testing reflection on Smarty engine with tag {*} and variations
-[+] Testing reflection on Freemarker engine with tag ${*} and variations
+[+] Testing reflection on Mako engine with tag ${*} and 13 variations
+[+] Testing reflection on Jinja2 engine with tag {{*}} and 9 variations
+[+] Testing reflection on Twig engine with tag {{*}} and 1 variation
+[+] Testing reflection on Smarty engine with tag {*} and 1 variation
+[+] Testing reflection on Freemarker engine with tag ${*} and 1 variation
 [+] Testing reflection on Velocity engine with tag #set($p=*)\n${p}\n
+[+] Detected unreliable reflection with tag #set($p=*)\n${p}\n, continuing
 [+] Testing reflection on Jade engine with tag \n= *\n
 [+] Confirmed reflection with tag '\n= *\n' by Jade plugin
 [+] Tplmap identified the following injection point:
