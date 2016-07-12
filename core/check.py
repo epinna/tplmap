@@ -104,10 +104,13 @@ class Check:
 
         log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
 
-        # If not found, try to inject all the prefix and suffix pairs falling below the level
+        # If not found, try to inject all the prefix and suffix pairs
         for ctx in self.contexts:
-            if self.channel.args.get('level') > ctx.get('level', 1):
+
+            # Stay under the specified  level
+            if ctx.get('level', 1) > self.channel.args.get('level'):
                 break
+
             if expected == self.inject(
                     payload = payload,
                     header = header,
