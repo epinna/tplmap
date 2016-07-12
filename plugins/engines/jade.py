@@ -11,9 +11,9 @@ class Jade(Check):
     trailer_tag = '\n= %(trailer)s\n'
     contexts = [         
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '\')', 'suffix' : '//' },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//' },
         # String interpolation ${}
-        { 'level': 1, 'prefix' : '1}', 'suffix' : '//' },
+        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//' },
 
     ]
 

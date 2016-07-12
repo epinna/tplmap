@@ -11,7 +11,7 @@ class Smarty(Check):
     header_tag = '{%(header)s}'
     trailer_tag = '{%(trailer)s}'
     contexts = [
-        { 'level': 1, 'prefix': '}', 'suffix' : '${' },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '${' },
     ]
 
     def detect_engine(self):

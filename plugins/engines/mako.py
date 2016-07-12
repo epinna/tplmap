@@ -14,176 +14,24 @@ class Mako(Check):
         # Normal reflecting tag ${}
 
         # This covers ${%s}
-        { 'level': 1, 'prefix': '1}', 'suffix' : '' },
-        # ${'%s'}
-        { 'level': 2, 'prefix': '1\'}', 'suffix' : '' },
-        # ${"%s"}
-        { 'level': 2, 'prefix': '1"}', 'suffix' : '' },
-        # ${"""%s"""}
-        { 'level': 2, 'prefix': '1"""}', 'suffix' : '' },
-        # ${(%s)}
-        { 'level': 3, 'prefix': '1)}', 'suffix' : '' },
-        # ${('%s')}
-        { 'level': 3, 'prefix': '1\')}', 'suffix' : '' },
-        # ${("%s")}
-        { 'level': 3, 'prefix': '1")}', 'suffix' : '' },
-        # ${("""%s""")}
-        { 'level': 3, 'prefix': '1""")}', 'suffix' : '' },
-        # ${[%s]}
-        { 'level': 4, 'prefix': '1]}', 'suffix' : '' },
-        # ${['%s']}
-        { 'level': 4, 'prefix': '1\']}', 'suffix' : '' },
-        # ${["%s"]}
-        { 'level': 4, 'prefix': '1"]}', 'suffix' : '' },
-        # ${["""%s"""]}
-        { 'level': 4, 'prefix': '1"""]}', 'suffix' : '' },
-        # ${([%s])}
-        { 'level': 4, 'prefix': '1])}', 'suffix' : '' },
-        # ${(['%s'])}
-        { 'level': 4, 'prefix': '1\'])}', 'suffix' : '' },
-        # ${(["%s"])}
-        { 'level': 4, 'prefix': '1"])}', 'suffix' : '' },
-        # ${(["""%s"""])}
-        { 'level': 4, 'prefix': '1"""])}', 'suffix' : '' },
-
-        # This covers ${{%s}}
-        { 'level': 5, 'prefix': '1:1}}', 'suffix' : '' },
-        # This covers ${{'%s':1}}
-        { 'level': 5, 'prefix': '1\':1}}', 'suffix' : '' },
-        # This covers ${{"%s":1}}
-        { 'level': 5, 'prefix': '1":1}}', 'suffix' : '' },
-        # This covers ${{"""%s""":1}}
-        { 'level': 5, 'prefix': '1""":1}}', 'suffix' : '' },
-        # This covers ${{1:%s}}
-        { 'level': 5, 'prefix': '1}}', 'suffix' : '' },
-        # This covers ${{1:'%s'}}
-        { 'level': 5, 'prefix': '1\'}}', 'suffix' : '' },
-        # This covers ${{:"%s"}}
-        { 'level': 5, 'prefix': '1"}}', 'suffix' : '' },
-        # This covers ${{1:"""%s"""}}
-        { 'level': 5, 'prefix': '1"""}}', 'suffix' : '' },
-
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '' },
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-        { 'level': 1, 'prefix': '%>', 'suffix' : '<%#' },
-        # This covers <% a=%s %>
-        { 'level': 2, 'prefix': '1%>', 'suffix' : '<%#' },
-        # This covers <% a='%s' %>
-        { 'level': 2, 'prefix': '1\'%>', 'suffix' : '<%#' },
-        # This covers <% a="%s" %>
-        { 'level': 2, 'prefix': '1"%>', 'suffix' : '<%#' },
-        # This covers <% a="""%s""" %>
-        { 'level': 2, 'prefix': '1"""%>', 'suffix' : '<%#' },
-        # <% a=range(%s) %>
-        { 'level': 3, 'prefix': '1)%>', 'suffix' : '<%#' },
-        # <% a=''.join('%s') %>
-        { 'level': 3, 'prefix': '1\')%>', 'suffix' : '<%#' },
-        # <% a=''.join("%s") %>
-        { 'level': 3, 'prefix': '1")%>', 'suffix' : '<%#' },
-        # <% a=''.join("""%s""") %>
-        { 'level': 3, 'prefix': '1""")%>', 'suffix' : '<%#' },
-
-        # This covers <% [%s] %>, <%! [%s] %>, <% [%s]=1 %> <% a=[%s] %>
-        { 'level': 4, 'prefix': '1]%>', 'suffix' : '<%#' },
-        # This covers <% a=['%s'] %>
-        { 'level': 4, 'prefix': '1\']%>', 'suffix' : '<%#' },
-        # This covers <% a=["%s"] %>
-        { 'level': 4, 'prefix': '1"]%>', 'suffix' : '<%#' },
-        # This covers <% a=["""%s"""] %>
-        { 'level': 4, 'prefix': '1"""]%>', 'suffix' : '<%#' },
-        # <% a=set([%s]) %>
-        { 'level': 4, 'prefix': '1])%>', 'suffix' : '<%#' },
-        # <% a=set(['%s']) %>
-        { 'level': 4, 'prefix': '1\'])%>', 'suffix' : '<%#' },
-        # <% a=set(["%s"]) %>
-        { 'level': 4, 'prefix': '1"])%>', 'suffix' : '<%#' },
-        # <% a=set(["""%s"""]) %>
-        { 'level': 4, 'prefix': '1"""])%>', 'suffix' : '<%#' },
-
-        # This covers <% {%s} %>, <%! {%s} %>, <% {%s}=1 %> <% a={%s} %>
-        { 'level': 5, 'prefix': '1:1}%>', 'suffix' : '<%#' },
-        # This covers <% a={'%s':1} %>
-        { 'level': 5, 'prefix': '1\':1}%>', 'suffix' : '<%#' },
-        # This covers <% a={"%s":1} %>
-        { 'level': 5, 'prefix': '1":1}%>', 'suffix' : '<%#' },
-        # This covers <% a={"""%s""":1} %>
-        { 'level': 5, 'prefix': '1""":1}%>', 'suffix' : '<%#' },
-        # This covers <% a={1:%s} %>
-        { 'level': 5, 'prefix': '1}%>', 'suffix' : '<%#' },
-        # This covers <% a={1:'%s'} %>
-        { 'level': 5, 'prefix': '1\'}%>', 'suffix' : '<%#' },
-        # This covers <% a={1:"%s"} %>
-        { 'level': 5, 'prefix': '1"}%>', 'suffix' : '<%#' },
-        # This covers <% a={1:"""%s"""} %>
-        { 'level': 5, 'prefix': '1"""}%>', 'suffix' : '<%#' },
+        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#' },
 
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        # % if %s==1:\n% endif
-        { 'level': 2, 'prefix': '\'a\':#\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 2, 'prefix': 'a\':#\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        { 'level': 2, 'prefix': 'a":#\n', 'suffix' : '\n' },
-        # % if """%s"""=='':\n% endif
-        { 'level': 2, 'prefix': 'a""":#\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 3, 'prefix': '\'a\'):#\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 3, 'prefix': 'a\'):#\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        { 'level': 3, 'prefix': 'a"):#\n', 'suffix' : '\n' },
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 3, 'prefix': 'a"""):#\n', 'suffix' : '\n' },
-        # % if [%s]:\n% endif
-        # % for a in [%s]:\n% endfor
-        # % if [%s]==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']:#\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']:#\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]:#\n', 'suffix' : '\n' },
-        # % if """%s"""=='':\n% endif
-        { 'level': 4, 'prefix': 'a"""]:#\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']):#\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']):#\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]):#\n', 'suffix' : '\n' },
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 4, 'prefix': 'a"""]):#\n', 'suffix' : '\n' },
-
-
-        # If and for blocks
-        # % if {%s}:\n% endif
-        # % for a in {%s}:\n% endfor
-        # % if {%s}==1:\n% endif
-        { 'level': 5, 'prefix': '1:1}:#\n', 'suffix' : '\n' },
-        # % if {'%s':1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\':1}:#\n', 'suffix' : '\n' },
-        # % if {"%s":1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a":1}:#\n', 'suffix' : '\n' },
-        # % if {"""%s""":1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a""":1}:#\n', 'suffix' : '\n' },
-        # % if {1:%s}=='':\n% endif
-        { 'level': 5, 'prefix': '1}:#\n', 'suffix' : '\n' },
-        # % if {1:'%s'}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\'}:#\n', 'suffix' : '\n' },
-        # % if {1:%s"}=='':\n% endif
-        { 'level': 5, 'prefix': 'a"}:#\n', 'suffix' : '\n' },
-        # % if {1:"""%s"""}=='':\n% endif
-        { 'level': 5, 'prefix': 'a"""}:#\n', 'suffix' : '\n' },
+        { 'level': 2, 'prefix': '%(closure)s#\n', 'suffix' : '\n' },
 
         # Mako blocks
         #{ 'level': 2, 'prefix' : '"/>', 'suffix' : ''},
-        { 'level': 5, 'prefix' : '</%doc>', 'suffix' : '<%doc>'},
-        { 'level': 5, 'prefix' : '</%doc>', 'suffix' : '<%doc>' },
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>'},
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>' },
         #{ 'level': 5, 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' },
-        { 'level': 5, 'prefix' : '</%block>', 'suffix' : '<%block>' },
-        { 'level': 5, 'prefix' : '</%text>', 'suffix' : '<%text>'},
+        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>' },
+        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>'},
 
     ]
 

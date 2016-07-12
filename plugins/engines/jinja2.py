@@ -13,154 +13,18 @@ class Jinja2(Check):
         # Normal reflecting tag {{}}
 
         # This covers {{%s}}
-        { 'level': 1, 'prefix': '1}}', 'suffix' : '' },
-        # {{'%s'}}
-        { 'level': 2, 'prefix': '1\'}}', 'suffix' : '' },
-        # {{"%s"}} and {{"""%s"""}} -> {{"""1"}}
-        { 'level': 2, 'prefix': '1"}}', 'suffix' : '' },
-        # {{(%s)}}
-        { 'level': 3, 'prefix': '1)}}', 'suffix' : '' },
-        # {{('%s')}}
-        { 'level': 3, 'prefix': '1\')}}', 'suffix' : '' },
-        # {{("%s")}} and {{("""%s""")}} -> {{("""1")}}
-        { 'level': 3, 'prefix': '1")}}', 'suffix' : '' },
-        # {{[%s]}}
-        { 'level': 4, 'prefix': '1]}}', 'suffix' : '' },
-        # {{['%s']}}
-        { 'level': 4, 'prefix': '1\']}}', 'suffix' : '' },
-        # {{["%s"]}}
-        { 'level': 4, 'prefix': '1"]}}', 'suffix' : '' },
-        # {{["""%s"""]}}
-        { 'level': 4, 'prefix': '1"""]}}', 'suffix' : '' },
-        # {{([%s])}}
-        { 'level': 4, 'prefix': '1])}}', 'suffix' : '' },
-        # {{(['%s'])}}
-        { 'level': 4, 'prefix': '1\'])}}', 'suffix' : '' },
-        # {{(["%s"])}} and {{(["""%s"""])}} -> {{(["""%s"])}}
-        { 'level': 4, 'prefix': '1"])}}', 'suffix' : '' },
-
-        # This covers {{{%s}}}
-        { 'level': 5, 'prefix': '1:1}}}', 'suffix' : '' },
-        # This covers {{{'%s':1}}}
-        { 'level': 5, 'prefix': '1\':1}}}', 'suffix' : '' },
-        # This covers {{{"%s":1}}}
-        { 'level': 5, 'prefix': '1":1}}}', 'suffix' : '' },
-        # This covers {{{"""%s""":1}}}
-        { 'level': 5, 'prefix': '1""":1}}}', 'suffix' : '' },
-        # This covers {{{1:%s}}}
-        { 'level': 5, 'prefix': '1}}}', 'suffix' : '' },
-        # This covers {{{1:'%s'}}}
-        { 'level': 5, 'prefix': '1\'}}}', 'suffix' : '' },
-        # This covers {{{:"%s"}}} and {{{1:"""%s"""}}}
-        { 'level': 5, 'prefix': '1"}}}', 'suffix' : '' },
-
-
-        # If and for blocks with {% %}
-
-        # % if %s:\n% endif
-        # % for a in %s:\n% endfor
-        # % if %s==1:\n% endif
-        { 'level': 2, 'prefix': '\'a\': %}\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 2, 'prefix': 'a\': %}\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        # % if """%s"""=='':\n% endif
-        { 'level': 2, 'prefix': 'a": %}\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 3, 'prefix': '\'a\'): %}\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 3, 'prefix': 'a\'): %}\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 3, 'prefix': 'a"): %}\n', 'suffix' : '\n' },
-        # % if [%s]:\n% endif
-        # % for a in [%s]:\n% endfor
-        # % if [%s]==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']: %}\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']: %}\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        # % if """%s"""=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]: %}\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']): %}\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']): %}\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]): %}\n', 'suffix' : '\n' },
-
-        # % if {%s}:\n% endif
-        # % for a in {%s}:\n% endfor
-        # % if {%s}==1:\n% endif
-        { 'level': 5, 'prefix': '1:1}: %}\n', 'suffix' : '\n' },
-        # % if {'%s':1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\':1}: %}\n', 'suffix' : '\n' },
-        # % if {"%s":1}=='':\n% endif
-        # % if {"""%s""":1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a":1}: %}\n', 'suffix' : '\n' },
-        # % if {1:%s}=='':\n% endif
-        { 'level': 5, 'prefix': '1}: %}\n', 'suffix' : '\n' },
-        # % if {1:'%s'}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\'}: %}\n', 'suffix' : '\n' },
-        # % if {1:%s"}=='':\n% endif
-        # % if {1:"""%s"""}=='':\n% endif
-        { 'level': 5, 'prefix': 'a"}: %}\n', 'suffix' : '\n' },
-
-        # If and for blocks with line_statement_prefix
-
-        # % if %s:\n% endif
-        # % for a in %s:\n% endfor
-        # % if %s==1:\n% endif
-        { 'level': 2, 'prefix': '\'a\':\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 2, 'prefix': 'a\':\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        # % if """%s"""=='':\n% endif
-        { 'level': 2, 'prefix': 'a":\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 3, 'prefix': '\'a\'):\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 3, 'prefix': 'a\'):\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 3, 'prefix': 'a"):\n', 'suffix' : '\n' },
-        # % if [%s]:\n% endif
-        # % for a in [%s]:\n% endfor
-        # % if [%s]==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']:\n', 'suffix' : '\n' },
-        # % if '%s'=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']:\n', 'suffix' : '\n' },
-        # % if "%s"=='':\n% endif
-        # % if """%s"""=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]:\n', 'suffix' : '\n' },
-        # % if (%s)==1:\n% endif
-        { 'level': 4, 'prefix': '\'a\']):\n', 'suffix' : '\n' },
-        # % if ('%s')=='':\n% endif
-        { 'level': 4, 'prefix': 'a\']):\n', 'suffix' : '\n' },
-        # % if ("%s")=='':\n% endif
-        # % if ("""%s""")=='':\n% endif
-        { 'level': 4, 'prefix': 'a"]):\n', 'suffix' : '\n' },
-
-        # % if {%s}:\n% endif
-        # % for a in {%s}:\n% endfor
-        # % if {%s}==1:\n% endif
-        { 'level': 5, 'prefix': '1:1}:\n', 'suffix' : '\n' },
-        # % if {'%s':1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\':1}:\n', 'suffix' : '\n' },
-        # % if {"%s":1}=='':\n% endif
-        # % if {"""%s""":1}=='':\n% endif
-        { 'level': 5, 'prefix': 'a":1}:\n', 'suffix' : '\n' },
-        # % if {1:%s}=='':\n% endif
-        { 'level': 5, 'prefix': '1}:\n', 'suffix' : '\n' },
-        # % if {1:'%s'}=='':\n% endif
-        { 'level': 5, 'prefix': 'a\'}:\n', 'suffix' : '\n' },
-        # % if {1:%s"}=='':\n% endif
-        # % if {1:"""%s"""}=='':\n% endif
-        { 'level': 5, 'prefix': 'a"}:\n', 'suffix' : '\n' },
-
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '' },
+        
+        # This covers {% %s %}
+        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '' },
+        
+        # If and for blocks
+        # # if %s:\n# endif
+        # # for a in %s:\n# endfor
+        { 'level': 2, 'prefix': '%(closure)s\n', 'suffix' : '\n' },
+        
         # Comment blocks
-        { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
+        { 'level': 5, 'prefix' : '%(closure)s#}', 'suffix' : '{#' },
 
     ]
 
