@@ -107,6 +107,58 @@ class Jinja2(Check):
         # % if {1:"""%s"""}=='':\n% endif
         { 'level': 5, 'prefix': 'a"}: %}\n', 'suffix' : '\n' },
 
+        # If and for blocks with line_statement_prefix
+
+        # % if %s:\n% endif
+        # % for a in %s:\n% endfor
+        # % if %s==1:\n% endif
+        { 'level': 2, 'prefix': '\'a\':\n', 'suffix' : '\n' },
+        # % if '%s'=='':\n% endif
+        { 'level': 2, 'prefix': 'a\':\n', 'suffix' : '\n' },
+        # % if "%s"=='':\n% endif
+        # % if """%s"""=='':\n% endif
+        { 'level': 2, 'prefix': 'a":\n', 'suffix' : '\n' },
+        # % if (%s)==1:\n% endif
+        { 'level': 3, 'prefix': '\'a\'):\n', 'suffix' : '\n' },
+        # % if ('%s')=='':\n% endif
+        { 'level': 3, 'prefix': 'a\'):\n', 'suffix' : '\n' },
+        # % if ("%s")=='':\n% endif
+        # % if ("""%s""")=='':\n% endif
+        { 'level': 3, 'prefix': 'a"):\n', 'suffix' : '\n' },
+        # % if [%s]:\n% endif
+        # % for a in [%s]:\n% endfor
+        # % if [%s]==1:\n% endif
+        { 'level': 4, 'prefix': '\'a\']:\n', 'suffix' : '\n' },
+        # % if '%s'=='':\n% endif
+        { 'level': 4, 'prefix': 'a\']:\n', 'suffix' : '\n' },
+        # % if "%s"=='':\n% endif
+        # % if """%s"""=='':\n% endif
+        { 'level': 4, 'prefix': 'a"]:\n', 'suffix' : '\n' },
+        # % if (%s)==1:\n% endif
+        { 'level': 4, 'prefix': '\'a\']):\n', 'suffix' : '\n' },
+        # % if ('%s')=='':\n% endif
+        { 'level': 4, 'prefix': 'a\']):\n', 'suffix' : '\n' },
+        # % if ("%s")=='':\n% endif
+        # % if ("""%s""")=='':\n% endif
+        { 'level': 4, 'prefix': 'a"]):\n', 'suffix' : '\n' },
+
+        # % if {%s}:\n% endif
+        # % for a in {%s}:\n% endfor
+        # % if {%s}==1:\n% endif
+        { 'level': 5, 'prefix': '1:1}:\n', 'suffix' : '\n' },
+        # % if {'%s':1}=='':\n% endif
+        { 'level': 5, 'prefix': 'a\':1}:\n', 'suffix' : '\n' },
+        # % if {"%s":1}=='':\n% endif
+        # % if {"""%s""":1}=='':\n% endif
+        { 'level': 5, 'prefix': 'a":1}:\n', 'suffix' : '\n' },
+        # % if {1:%s}=='':\n% endif
+        { 'level': 5, 'prefix': '1}:\n', 'suffix' : '\n' },
+        # % if {1:'%s'}=='':\n% endif
+        { 'level': 5, 'prefix': 'a\'}:\n', 'suffix' : '\n' },
+        # % if {1:%s"}=='':\n% endif
+        # % if {1:"""%s"""}=='':\n% endif
+        { 'level': 5, 'prefix': 'a"}:\n', 'suffix' : '\n' },
+
         # Comment blocks
         { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
 

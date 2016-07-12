@@ -92,6 +92,38 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (5, '{%% if {1:"%s"}==1: %%}\n{%% endif %%}', { 'prefix' : 'a"}: %}\n', 'suffix' : '\n' }),
         (5, '{%% if {1:"""%s"""}==1: %%}\n{%% endif %%}', { 'prefix' : 'a"}: %}\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
 
+        # if and for blocks context with line_statement_prefix
+        (2, '# if %s:\n# endif', { 'prefix' : '\'a\':\n', 'suffix' : '\n' }),
+        (2, '# for a in %s:\n# endfor', { 'prefix' : '\'a\':\n', 'suffix' : '\n' }),
+        (2, '# if %s==1:\n# endif', { 'prefix' : '\'a\':\n', 'suffix' : '\n' }),
+        (2, '# if \'%s\'==1:\n# endif', { 'prefix' : 'a\':\n', 'suffix' : '\n' }),
+        (2, '# if "%s"==1:\n# endif', { 'prefix' : 'a":\n', 'suffix' : '\n' }),
+        (2, '# if """%s"""==1:\n# endif', { 'prefix' : 'a":\n', 'suffix' : '\n' }), # if """%s""": -> if """1":
+        (3, '# if (%s)==1:\n# endif', { 'prefix' : '\'a\'):\n', 'suffix' : '\n' }),
+        (3, '# if (\'%s\')==1:\n# endif', { 'prefix' : 'a\'):\n', 'suffix' : '\n' }),
+        (3, '# if ("%s")==1:\n# endif', { 'prefix' : 'a"):\n', 'suffix' : '\n' }),
+        (3, '# if ("""%s""")==1:\n# endif', { 'prefix' : 'a"):\n', 'suffix' : '\n' }), # if ("""%s"""): -> if ("""1"):
+
+        (4, '# if [%s]==1:\n# endif', { 'prefix' : '\'a\']:\n', 'suffix' : '\n' }),
+        (4, '# if [\'%s\']==1:\n# endif', { 'prefix' : 'a\']:\n', 'suffix' : '\n' }),
+        (4, '# if ["%s"]==1:\n# endif', { 'prefix' : 'a"]:\n', 'suffix' : '\n' }),
+        (4, '# if ["""%s"""]==1:\n# endif', { 'prefix' : 'a"]:\n', 'suffix' : '\n' }), # if ["""%s"""]: -> if ["""1"]:
+        (4, '# if ([%s])==1:\n# endif', { 'prefix' : '\'a\']):\n', 'suffix' : '\n' }),
+        (4, '# if ([\'%s\'])==1:\n# endif', { 'prefix' : 'a\']):\n', 'suffix' : '\n' }),
+        (4, '# if (["%s"])==1:\n# endif', { 'prefix' : 'a"]):\n', 'suffix' : '\n' }),
+        (4, '# if (["""%s"""])==1:\n# endif', { 'prefix' : 'a"]):\n', 'suffix' : '\n' }), # if (["""%s"""]): -> if (["""1"]):
+
+        (5, '# for a in {%s}:\n# endfor', { 'prefix' : '1:1}:\n', 'suffix' : '\n' }),
+        (5, '# if {%s:1}==1:\n# endif', { 'prefix' : '1:1}:\n', 'suffix' : '\n' }),
+        (5, '# if {\'%s\':1}==1:\n# endif', { 'prefix' : 'a\':1}:\n', 'suffix' : '\n' }),
+        (5, '# if {"%s":1}==1:\n# endif', { 'prefix' : 'a":1}:\n', 'suffix' : '\n' }),
+        (5, '# if {"""%s""":1}==1:\n# endif', { 'prefix' : 'a":1}:\n', 'suffix' : '\n' }), # if {"""%s""":1}: -> if {"""1":1}:
+        (5, '# if {1:%s}==1:\n# endif', { 'prefix' : '1}:\n', 'suffix' : '\n' }),
+        (5, '# if {1:\'%s\'}==1:\n# endif', { 'prefix' : 'a\'}:\n', 'suffix' : '\n' }),
+        (5, '# if {1:"%s"}==1:\n# endif', { 'prefix' : 'a"}:\n', 'suffix' : '\n' }),
+        (5, '# if {1:"""%s"""}==1:\n# endif', { 'prefix' : 'a"}:\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
+
+
         # Comment blocks
         (5, '{# %s #}', { 'prefix' : '#}', 'suffix' : '{#' }),
 
