@@ -9,7 +9,13 @@ class Jade(Check):
     render_tag = '\n= %(payload)s\n'
     header_tag = '\n= %(header)s\n'
     trailer_tag = '\n= %(trailer)s\n'
-    contexts = [ ]
+    contexts = [         
+        # Attribute close a(href=\'%s\')
+        { 'level': 1, 'prefix' : '\')', 'suffix' : '//' },
+        # String interpolation ${}
+        { 'level': 1, 'prefix' : '1}', 'suffix' : '//' },
+
+    ]
 
     def detect_engine(self):
 
