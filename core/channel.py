@@ -116,6 +116,6 @@ class Channel:
             headers = header_params
             ).text
 
-        log.debug('> %s\n  < %s' % (injection.replace('\n', '\n  > '), result.replace('\n', '  \n  < ')) )
+        log.debug('\n> %s\n  < %s' % (repr(injection).replace('\n', '\n  > '), repr(result).replace('\n', '  \n  < ')) )
 
         return result
