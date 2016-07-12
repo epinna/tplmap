@@ -10,7 +10,49 @@ class Jinja2(Check):
     header_tag = '{{%(header)s}}'
     trailer_tag = '{{%(trailer)s}}'
     contexts = [
-        { 'level': 1, 'prefix': '""}}', 'suffix' : '{{""' },
+        # Normal reflecting tag {{}}
+
+        # This covers {{%s}}
+        { 'level': 1, 'prefix': '1}}', 'suffix' : '' },
+        # {{'%s'}}
+        { 'level': 2, 'prefix': '1\'}}', 'suffix' : '' },
+        # {{"%s"}} and {{"""%s"""}} -> {{"""1"}}
+        { 'level': 2, 'prefix': '1"}}', 'suffix' : '' },
+        # {{(%s)}}
+        { 'level': 3, 'prefix': '1)}}', 'suffix' : '' },
+        # {{('%s')}}
+        { 'level': 3, 'prefix': '1\')}}', 'suffix' : '' },
+        # {{("%s")}} and {{("""%s""")}} -> {{("""1")}}
+        { 'level': 3, 'prefix': '1")}}', 'suffix' : '' },
+        # {{[%s]}}
+        { 'level': 4, 'prefix': '1]}}', 'suffix' : '' },
+        # {{['%s']}}
+        { 'level': 4, 'prefix': '1\']}}', 'suffix' : '' },
+        # {{["%s"]}}
+        { 'level': 4, 'prefix': '1"]}}', 'suffix' : '' },
+        # {{["""%s"""]}}
+        { 'level': 4, 'prefix': '1"""]}}', 'suffix' : '' },
+        # {{([%s])}}
+        { 'level': 4, 'prefix': '1])}}', 'suffix' : '' },
+        # {{(['%s'])}}
+        { 'level': 4, 'prefix': '1\'])}}', 'suffix' : '' },
+        # {{(["%s"])}} and {{(["""%s"""])}} -> {{(["""%s"])}}
+        { 'level': 4, 'prefix': '1"])}}', 'suffix' : '' },
+
+        # This covers {{{%s}}}
+        { 'level': 5, 'prefix': '1:1}}}', 'suffix' : '' },
+        # This covers {{{'%s':1}}}
+        { 'level': 5, 'prefix': '1\':1}}}', 'suffix' : '' },
+        # This covers {{{"%s":1}}}
+        { 'level': 5, 'prefix': '1":1}}}', 'suffix' : '' },
+        # This covers {{{"""%s""":1}}}
+        { 'level': 5, 'prefix': '1""":1}}}', 'suffix' : '' },
+        # This covers {{{1:%s}}}
+        { 'level': 5, 'prefix': '1}}}', 'suffix' : '' },
+        # This covers {{{1:'%s'}}}
+        { 'level': 5, 'prefix': '1\'}}}', 'suffix' : '' },
+        # This covers {{{:"%s"}}} and {{{1:"""%s"""}}}
+        { 'level': 5, 'prefix': '1"}}}', 'suffix' : '' },
     ]
 
     def detect_engine(self):
