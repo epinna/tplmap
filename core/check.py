@@ -14,16 +14,19 @@ class Check:
 
     def detect(self):
 
+
+        context_num = len([c for c in self.contexts if (c.get('level') <= self.channel.args.get('level'))])
+
+        # Print what it's going to be tested
+        log.info('Testing reflection on %s engine with tag %s%s' % (
+                self.plugin,
+                self.render_tag.replace('\n', '\\n') % ({'payload' : '*' }),
+                ' and %i variation%s' % (context_num, 's' if context_num > 1 else '') if context_num else ''
+            )
+        )
+
         # If no weak reflection has been detected so far
         if not self.get('render_tag'):
-
-            # Print what it's going to be tested
-            log.info('Testing reflection on %s engine with tag %s%s' % (
-                    self.plugin,
-                    self.render_tag.replace('\n', '\\n') % ({'payload' : '*' }),
-                    ' and variations' if self.contexts else ''
-                )
-            )
 
             # Start detection
             self._detect_context()
