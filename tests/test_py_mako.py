@@ -131,8 +131,7 @@ class MakoTest(unittest.TestCase, BaseTest):
 
 
         # Mako blocks. Skip <%block> which doesn't seem affecting the standard inj
-        #(2, '<%%include file="%s"/>', { 'prefix' : '"/>', 'suffix' : '' }),
-        #(2, '<%%include file=\'heade%sr.html\'/>', { 'prefix' : '\'/>', 'suffix' : '' }),
+        # Inejcting includes e.g. '<%%include file="%s"/>' generates a missing file exception
         (5, '<%%doc> %s </%%doc>', { 'prefix' : '</%doc>', 'suffix' : '<%doc>' }),
         #(5, '<%%def name="a(x)"> %s </%%def>', { 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' }),
         (5, '<%%text> %s </%%text>', { 'prefix' : '</%text>', 'suffix' : '<%text>' }),
