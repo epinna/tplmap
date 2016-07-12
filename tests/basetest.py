@@ -39,7 +39,7 @@ class BaseTest(object):
             self.assertEqual(
                 data,
                 expected_data,
-                msg = 'template: %s\nrisk: %i\nreturned data: %s\n expected data: %s' % (template, risk, str(data), str(expected_data))
+                msg = '\ntemplate: %s\nrisk: %i\nreturned data: %s\n expected data: %s' % (repr(template).strip("'"), risk, str(data), str(expected_data))
             )
 
     def test_download(self):
