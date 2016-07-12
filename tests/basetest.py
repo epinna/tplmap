@@ -10,12 +10,13 @@ from utils import strings
 
 class BaseTest(object):
 
-    def _get_detection_obj_data(self, url):
+    def _get_detection_obj_data(self, url, level = 5):
 
         channel = Channel({
             'url' : url
         })
         obj = self.plugin(channel)
+        obj.channel.args['level'] = level
         obj.detect()
 
         # Delete OS to make the tests portable
@@ -33,15 +34,12 @@ class BaseTest(object):
             expected_data = self.expected_data.copy()
             expected_data.update(channel_updates)
 
-            obj, data = self._get_detection_obj_data(self.url % template)
-
-            # Set the required risk level
-            obj.channel.args['level'] = risk
+            obj, data = self._get_detection_obj_data(self.url % template, risk)
 
             self.assertEqual(
                 data,
                 expected_data,
-                msg = 'template %s returned data: %s expected data: %s' % (template, str(data), str(expected_data))
+                msg = 'template: %s\nrisk: %i\nreturned data: %s\n expected data: %s' % (template, risk, str(data), str(expected_data))
             )
 
     def test_download(self):

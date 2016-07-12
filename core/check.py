@@ -107,9 +107,9 @@ class Check:
         # If not found, try to inject all the prefix and suffix pairs
         for ctx in self.contexts:
 
-            # Stay under the specified  level
+            # Stay under the specified level
             if ctx.get('level', 1) > self.channel.args.get('level'):
-                break
+                continue
 
             if expected == self.inject(
                     payload = payload,
