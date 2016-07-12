@@ -12,7 +12,57 @@ class Mako(Check):
     trailer_tag = '${%(trailer)s}'
     contexts = [
         # Normal reflecting tag ${}
-        { 'level': 1, 'prefix': '}', 'suffix' : '${' },
+
+        # This covers ${%s}
+        { 'level': 1, 'prefix': '1}', 'suffix' : '' },
+        # ${'%s'}
+        { 'level': 2, 'prefix': '1\'}', 'suffix' : '' },
+        # ${"%s"}
+        { 'level': 2, 'prefix': '1"}', 'suffix' : '' },
+        # ${"""%s"""}
+        { 'level': 2, 'prefix': '1"""}', 'suffix' : '' },
+        # ${(%s)}
+        { 'level': 3, 'prefix': '1)}', 'suffix' : '' },
+        # ${('%s')}
+        { 'level': 3, 'prefix': '1\')}', 'suffix' : '' },
+        # ${("%s")}
+        { 'level': 3, 'prefix': '1")}', 'suffix' : '' },
+        # ${("""%s""")}
+        { 'level': 3, 'prefix': '1""")}', 'suffix' : '' },
+        # ${[%s]}
+        { 'level': 4, 'prefix': '1]}', 'suffix' : '' },
+        # ${['%s']}
+        { 'level': 4, 'prefix': '1\']}', 'suffix' : '' },
+        # ${["%s"]}
+        { 'level': 4, 'prefix': '1"]}', 'suffix' : '' },
+        # ${["""%s"""]}
+        { 'level': 4, 'prefix': '1"""]}', 'suffix' : '' },
+        # ${([%s])}
+        { 'level': 4, 'prefix': '1])}', 'suffix' : '' },
+        # ${(['%s'])}
+        { 'level': 4, 'prefix': '1\'])}', 'suffix' : '' },
+        # ${(["%s"])}
+        { 'level': 4, 'prefix': '1"])}', 'suffix' : '' },
+        # ${(["""%s"""])}
+        { 'level': 4, 'prefix': '1"""])}', 'suffix' : '' },
+
+        # This covers ${{%s}}
+        { 'level': 5, 'prefix': '1:1}}', 'suffix' : '' },
+        # This covers ${{'%s':1}}
+        { 'level': 5, 'prefix': '1\':1}}', 'suffix' : '' },
+        # This covers ${{"%s":1}}
+        { 'level': 5, 'prefix': '1":1}}', 'suffix' : '' },
+        # This covers ${{"""%s""":1}}
+        { 'level': 5, 'prefix': '1""":1}}', 'suffix' : '' },
+        # This covers ${{1:%s}}
+        { 'level': 5, 'prefix': '1}}', 'suffix' : '' },
+        # This covers ${{1:'%s'}}
+        { 'level': 5, 'prefix': '1\'}}', 'suffix' : '' },
+        # This covers ${{:"%s"}}
+        { 'level': 5, 'prefix': '1"}}', 'suffix' : '' },
+        # This covers ${{1:"""%s"""}}
+        { 'level': 5, 'prefix': '1"""}}', 'suffix' : '' },
+
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>

@@ -29,11 +29,40 @@ class MakoTest(unittest.TestCase, BaseTest):
     plugin = Mako
 
     reflection_tests = [
-        # Normal reflecting tag ${}
+        # Text context
         (1, '%s', {}),
         (1, 'AAA%sAAA', {}),
 
-        # Code blocks
+        # Reflecting tag ${} context
+        (1, '${%s}', { 'prefix': '1}', 'suffix' : '' }),
+        (2, '${ \'%s\' }', { 'prefix': '1\'}', 'suffix' : '' }),
+        (2, '${ "%s" }', { 'prefix': '1"}', 'suffix' : '' }),
+        (2, '${ """%s""" }', { 'prefix': '1"""}', 'suffix' : '' }),
+        (3, '${ range(%s) }', { 'prefix': '1)}', 'suffix' : '' }),
+        (3, '${ set(\'%s\') }', { 'prefix': '1\')}', 'suffix' : '' }),
+        (3, '${ set("%s") }', { 'prefix': '1")}', 'suffix' : '' }),
+        (3, '${ set("""%s""") }', { 'prefix': '1""")}', 'suffix' : '' }),
+
+        (4, '${[%s]}', { 'prefix': '1]}', 'suffix' : '' }),
+        (4, '${ [\'%s\'] }', { 'prefix': '1\']}', 'suffix' : '' }),
+        (4, '${ ["%s"] }', { 'prefix': '1"]}', 'suffix' : '' }),
+        (4, '${ ["""%s"""] }', { 'prefix': '1"""]}', 'suffix' : '' }),
+        (4, '${ set([%s]) }', { 'prefix': '1])}', 'suffix' : '' }),
+        (4, '${ set([\'%s\']) }', { 'prefix': '1\'])}', 'suffix' : '' }),
+        (4, '${ set(["%s"]) }', { 'prefix': '1"])}', 'suffix' : '' }),
+        (4, '${ set(["""%s"""]) }', { 'prefix': '1"""])}', 'suffix' : '' }),
+
+        (5, '${{%s}}', { 'prefix': '1:1}}', 'suffix' : '' }),
+        (5, '${{1:%s}}', { 'prefix': '1}}', 'suffix' : '' }),
+        (5, '${ {1:\'%s\'} }', { 'prefix': '1\'}}', 'suffix' : '' }),
+        (5, '${ {1:"%s"} }', { 'prefix': '1"}}', 'suffix' : '' }),
+        (5, '${ {1:"""%s"""} }', { 'prefix': '1"""}}', 'suffix' : '' }),
+        (5, '${{%s:1}}', { 'prefix': '1:1}}', 'suffix' : '' }),
+        (5, '${ {\'%s\':1} }', { 'prefix': '1\':1}}', 'suffix' : '' }),
+        (5, '${ {"%s":1} }', { 'prefix': '1":1}}', 'suffix' : '' }),
+        (5, '${ {"""%s""":1} }', { 'prefix': '1""":1}}', 'suffix' : '' }),
+
+        # Code blocks context
         (1, '<%% %s %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
         (1, '<%%! %s %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
         (1, '<%% %s=1 %%>', { 'prefix' : '%>', 'suffix' : '<%#' }),
@@ -55,7 +84,6 @@ class MakoTest(unittest.TestCase, BaseTest):
         (4, '<%% a=set(["%s"]) %%>', { 'prefix' : '1"])%>', 'suffix' : '<%#' }),
         (4, '<%% a=set(["""%s"""]) %%>', { 'prefix' : '1"""])%>', 'suffix' : '<%#' }),
 
-
         (5, '<%% a={%s} %%>', { 'prefix' : '1:1}%>', 'suffix' : '<%#' }),
         (5, '<%% a={1:%s} %%>', { 'prefix' : '1}%>', 'suffix' : '<%#' }),
         (5, '<%% a={1:\'%s\'} %%>', { 'prefix' : '1\'}%>', 'suffix' : '<%#' }),
@@ -68,7 +96,7 @@ class MakoTest(unittest.TestCase, BaseTest):
 
 
 
-        # if and for blocks
+        # if and for blocks context
         (2, '%% if %s:\n%% endif', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
         (2, '%% for a in %s:\n%% endfor', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
         (2, '%% if %s==1:\n%% endif', { 'prefix' : '\'a\':#\n', 'suffix' : '\n' }),
