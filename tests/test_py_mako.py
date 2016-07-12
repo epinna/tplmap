@@ -108,7 +108,6 @@ class MakoTest(unittest.TestCase, BaseTest):
         (3, '%% if ("%s")==1:\n%% endif', { 'prefix' : 'a"):#\n', 'suffix' : '\n' }),
         (3, '%% if ("""%s""")==1:\n%% endif', { 'prefix' : 'a"""):#\n', 'suffix' : '\n' }),
 
-        (4, '%% for a in {%s}:\n%% endfor', { 'prefix' : '1:1}:#\n', 'suffix' : '\n' }),
         (4, '%% if [%s]==1:\n%% endif', { 'prefix' : '\'a\']:#\n', 'suffix' : '\n' }),
         (4, '%% if [\'%s\']==1:\n%% endif', { 'prefix' : 'a\']:#\n', 'suffix' : '\n' }),
         (4, '%% if ["%s"]==1:\n%% endif', { 'prefix' : 'a"]:#\n', 'suffix' : '\n' }),
