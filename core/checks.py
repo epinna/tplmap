@@ -20,11 +20,11 @@ plugins = [
 ]
 
 def _print_injection_summary(channel):
-    
+
     prefix = channel.data.get('prefix', '').replace('\n', '\\n')
-    render_tag = channel.data.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
+    render_tag = channel.data.get('render_tag').replace('\n', '\\n') % ({'payload' : '*' })
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
-    
+
     log.info("""Tplmap identified the following injection point:
 
   Engine: %(engine)s
@@ -32,10 +32,10 @@ def _print_injection_summary(channel):
   Context: %(context)s
   OS: %(os)s
   Capabilities:
-    Code evaluation: %(eval)s 
-    OS command execution: %(exec)s 
-    File write: %(write)s 
-    File read: %(read)s    
+    Code evaluation: %(eval)s
+    OS command execution: %(exec)s
+    File write: %(write)s
+    File read: %(read)s
 """ % ({
     'prefix': prefix,
     'render_tag': render_tag,
@@ -47,7 +47,7 @@ def _print_injection_summary(channel):
     'exec': 'no' if not channel.data.get('exec') else 'yes',
     'write': 'no' if not channel.data.get('write') else 'yes',
     'read': 'no' if not channel.data.get('read') else 'yes',
-}))    
+}))
 
 def check_template_injection(args):
 
@@ -57,13 +57,13 @@ def check_template_injection(args):
     # Iterate all the available plugins until
     # the first template engine is detected.
     for plugin in plugins:
-        
+
         current_plugin = plugin(channel)
-            
+
         # Skip if user specify a specific --engine
         if args.get('engine') and args.get('engine').lower() != current_plugin.plugin.lower():
             continue
-        
+
         current_plugin.detect()
 
         if channel.data.get('engine'):
@@ -73,7 +73,7 @@ def check_template_injection(args):
     if not channel.data.get('engine'):
         log.fatal("""Tested parameters appear to be not injectable. Try to increase '--level' value to perform more tests.""")
         return
-        
+
     # Print injection summary
     _print_injection_summary(channel)
 
@@ -83,17 +83,17 @@ def check_template_injection(args):
                 'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell'
             ) and v
         ):
-        
+
         log.info(
             """Rerun tplmap providing one of the following options:%(exec)s%(write)s%(read)s""" % (
-                { 
+                {
                  'exec' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('exec') else '',
                  'write' : '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
-                 'read' : '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '' 
+                 'read' : '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else ''
                  }
             )
         )
-    
+
         return
 
     # Execute operating system commands
@@ -135,9 +135,9 @@ def check_template_injection(args):
     if channel.data.get('read'):
 
         remote_local_paths = args.get('download')
-        
+
         if remote_local_paths:
-            
+
             remote_path, local_path = remote_local_paths
 
             content = current_plugin.read(remote_path)

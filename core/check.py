@@ -20,7 +20,7 @@ class Check:
             # Print what it's going to be tested
             log.info('Testing reflection on %s engine with tag %s%s' % (
                     self.plugin,
-                    self.render_tag.replace('\n', '\\n') % ({'payload' : '' }),
+                    self.render_tag.replace('\n', '\\n') % ({'payload' : '*' }),
                     ' and variations' if self.contexts else ''
                 )
             )
@@ -32,7 +32,7 @@ class Check:
             if self.get('header_tag') == None or self.get('trailer_tag') == None:
                 if self.get('render_tag'):
                     log.info('Detected unreliable reflection with tag %s, continuing' % (
-                        self.get('render_tag').replace('\n', '\\n')) % ({'payload' : '' })
+                        self.get('render_tag').replace('\n', '\\n')) % ({'payload' : '*' })
                     )
 
         # If tags found previously are the same as current plugin, skip context detection
@@ -52,7 +52,7 @@ class Check:
             return
 
         prefix = self.get('prefix', '').replace('\n', '\\n')
-        render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '' })
+        render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '*' })
         suffix = self.get('suffix', '').replace('\n', '\\n')
         log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (prefix, render_tag, suffix, self.plugin))
 
