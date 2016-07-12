@@ -17,18 +17,18 @@ Example
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=*'
 [+] Found placeholder in GET parameter 'id'
-[+] Testing reflection on Mako engine with tag ${} and variations
-[+] Testing reflection on Jinja2 engine with tag {{}} and variations
-[+] Testing reflection on Twig engine with tag {{}} and variations
-[+] Testing reflection on Smarty engine with tag {} and variations
-[+] Testing reflection on Freemarker engine with tag ${} and variations
-[+] Testing reflection on Velocity engine with tag #set($p=)\n$p\n
-[+] Detected unreliable reflection with tag #set($p=)\n$p\n, continuing
-[+] Confirmed reflection with tag '\n= \n' by Jade plugin
+[+] Testing reflection on Mako engine with tag ${*} and variations
+[+] Testing reflection on Jinja2 engine with tag {{*}} and variations
+[+] Testing reflection on Twig engine with tag {{*}} and variations
+[+] Testing reflection on Smarty engine with tag {*} and variations
+[+] Testing reflection on Freemarker engine with tag ${*} and variations
+[+] Testing reflection on Velocity engine with tag #set($p=*)\n${p}\n
+[+] Testing reflection on Jade engine with tag \n= *\n
+[+] Confirmed reflection with tag '\n= *\n' by Jade plugin
 [+] Tplmap identified the following injection point:
 
   Engine: Jade
-  Template: \n= \n
+  Template: \n= *\n
   Context: text
   OS: linux
   Capabilities:
