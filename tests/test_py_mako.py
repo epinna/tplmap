@@ -127,11 +127,11 @@ class MakoTest(unittest.TestCase, BaseTest):
         (5, '%% if {1:\'%s\'}==1:\n%% endif', { 'prefix' : '1\'}:#\n', 'suffix' : '\n' }),
         (5, '%% if {1:"%s"}==1:\n%% endif', { 'prefix' : '1"}:#\n', 'suffix' : '\n' }),
         (5, '%% if {1:"""%s"""}==1:\n%% endif', { 'prefix' : '1"""}:#\n', 'suffix' : '\n' }),
-        
+
         # Mako blocks. Skip <%block> which doesn't seem affecting the standard inj
         # Inejcting includes e.g. '<%%include file="%s"/>' generates a missing file exception
         (5, '<%%doc> %s </%%doc>', { 'prefix' : '</%doc>', 'suffix' : '<%doc>' }),
-        #(5, '<%%def name="a(x)"> %s </%%def>', { 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' }),
+        (5, '<%%def name="a(x)"> %s </%%def>', { 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' }),
         (5, '<%%text> %s </%%text>', { 'prefix' : '</%text>', 'suffix' : '<%text>' }),
 
     ]

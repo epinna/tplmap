@@ -28,7 +28,7 @@ class Mako(Python):
         # Mako blocks
         { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
         { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
-        #{ 'level': 5, 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' },
+        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : Python.closure_levels },
         { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : Python.closure_levels },
         { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : Python.closure_levels},
 
