@@ -3,7 +3,7 @@ from utils.loggers import log
 import re
 import itertools
 
-class Check:
+class Plugin:
 
     def __init__(self, channel):
 
@@ -12,9 +12,6 @@ class Check:
 
         # Plugin name
         self.plugin = self.__class__.__name__
-        
-        # Generate context escape payloads
-        self._prepare_closures()
 
     def detect(self):
 
@@ -37,7 +34,7 @@ class Check:
                 self.get('trailer_tag') == self.trailer_tag
             ):
             self._detect_context()
-            
+
         # If no weak reflection has been detected so far
         elif not self.get('render_tag'):
 
@@ -80,7 +77,7 @@ class Check:
     First detection of the injection and the context.
     """
     def _detect_context(self):
-        
+
         # Prepare base operation to be evalued server-side
         randA = rand.randint_n(1)
         randB = rand.randint_n(1)
@@ -112,38 +109,36 @@ class Check:
 
         log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
 
-        # If not found, try to inject all the prefix and suffix pairs
+
+        # Loop all the contexts
         for ctx in self.contexts:
 
-            # Stay under the specified level for self.contexts risks
+            # Skip any context which is above the required level
             if ctx.get('level', 1) > self.channel.args.get('level'):
                 continue
-            
-            # Stay under the specified level for the escape self.closures
-            for level_idx in range(1, self.channel.args.get('level')):
-                
-                for closure in self.closures[level_idx]:
-                
-                    # Format the prefix with closure
-                    prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
-                    suffix = ctx.get('suffix', '') % ()
 
-                    if expected == self.inject(
-                            payload = payload,
-                            header = header,
-                            trailer = trailer,
-                            header_rand = header_rand,
-                            trailer_rand = trailer_rand,
-                            prefix = prefix,
-                            suffix = suffix
-                        ):
-                        self.set('render_tag', self.render_tag)
-                        self.set('header_tag', self.header_tag)
-                        self.set('trailer_tag', self.trailer_tag)
-                        self.set('prefix', prefix)
-                        self.set('suffix', suffix)
+            for closure in self._prepare_closures(ctx):
 
-                        return
+                # Format the prefix with closure
+                prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
+                suffix = ctx.get('suffix', '') % ()
+
+                if expected == self.inject(
+                        payload = payload,
+                        header = header,
+                        trailer = trailer,
+                        header_rand = header_rand,
+                        trailer_rand = trailer_rand,
+                        prefix = prefix,
+                        suffix = suffix
+                    ):
+                    self.set('render_tag', self.render_tag)
+                    self.set('header_tag', self.header_tag)
+                    self.set('trailer_tag', self.trailer_tag)
+                    self.set('prefix', prefix)
+                    self.set('suffix', suffix)
+
+                    return
 
         log.debug('%s: Injection in code context failed, trying to inject only payload with no header' % self.plugin)
 
@@ -252,23 +247,30 @@ class Check:
     def get(self, key, default = None):
         return self.channel.data.get(key, default)
 
-    def _prepare_closures(self):
+    def _prepare_closures(self, ctx):
+
+        ctx_closures_names_dict_of_lists = ctx.get('closures', {})
+
+        closures = []
+
+        # Loop all the closure names
+        for ctx_closure_level, ctx_closure_lists_of_lists_of_names in ctx_closures_names_dict_of_lists.items():
+
+            # Skip any closure list which is above the required level
+            if ctx_closure_level > self.channel.args.get('level'):
+                continue
+
+            closure_matrix = []
+            # Expand the names
+            for ctx_closure_lists_of_names in ctx_closure_lists_of_lists_of_names:
+
+                # This will be merged in a single list
+                closure_matrix.append(list(itertools.chain(*[ self.language_closures[n] for n in ctx_closure_lists_of_names])))
+
+            closures += [ ''.join(x) for x in itertools.product(*closure_matrix) ]
+
+        closures = sorted(set(closures), key=len)
         
-        ctx_closures = [ 
-            ''.join(x) for x in itertools.product(
-                    [ '1', '1\'', '1"', '1"""', '"1"' ], 
-                    [ '', '}', ':1}' ], 
-                    [ '', ')', ']' ], 
-                    [ '', ')', ']' ], 
-                    [ '', ':' ] 
-            ) 
-        ]
-        
-        self.closures = {}
-        for ctx in ctx_closures:
-            
-            if not len(ctx) in self.closures:
-                self.closures[len(ctx)] = []
-            
-            self.closures[len(ctx)].append(ctx)
-        
+        # Return it string by string
+        for closure in closures:
+            yield closure
