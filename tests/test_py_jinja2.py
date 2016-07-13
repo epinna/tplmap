@@ -29,101 +29,101 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     plugin = Jinja2
 
     reflection_tests = [
-        (1, '%s', {}),
-        (1, 'AAA%sAAA', {}),
+        (1, 1, '%s', {}),
+        (1, 1, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
-        (1, '{{%s}}', { 'prefix': '1}}', 'suffix' : '' }),
-        (1, '{{ \'%s\' }}', { 'prefix': '1\'}}', 'suffix' : '' }),
-        (1, '{{ "%s" }}', { 'prefix': '1"}}', 'suffix' : '' }),
-        (3, '{{ """%s""" }}', { 'prefix': '1"}}', 'suffix' : '' }), # {{"""%s"""}} -> {{"""1"}}
-        (2, '{{ "1"|join(%s) }}', { 'prefix': '1)}}', 'suffix' : '' }),
-        (2, '{{ "1"|join(\'%s\') }}', { 'prefix': '1\')}}', 'suffix' : '' }),
-        (2, '{{ "1"|join("%s") }}', { 'prefix': '1")}}', 'suffix' : '' }),
-        (2, '{{ "1"|join("""%s""") }}', { 'prefix': '1")}}', 'suffix' : '' }), # {{("""%s""")}} -> {{("""1")]}}
+        (1, 1, '{{%s}}', { 'prefix': '1}}', 'suffix' : '' }),
+        (1, 1, '{{ \'%s\' }}', { 'prefix': '1\'}}', 'suffix' : '' }),
+        (1, 1, '{{ "%s" }}', { 'prefix': '1"}}', 'suffix' : '' }),
+        (1, 3, '{{ """%s""" }}', { 'prefix': '1"}}', 'suffix' : '' }), # {{"""%s"""}} -> {{"""1"}}
+        (1, 2, '{{ "1"|join(%s) }}', { 'prefix': '1)}}', 'suffix' : '' }),
+        (1, 2, '{{ "1"|join(\'%s\') }}', { 'prefix': '1\')}}', 'suffix' : '' }),
+        (1, 2, '{{ "1"|join("%s") }}', { 'prefix': '1")}}', 'suffix' : '' }),
+        (1, 2, '{{ "1"|join("""%s""") }}', { 'prefix': '1")}}', 'suffix' : '' }), # {{("""%s""")}} -> {{("""1")]}}
 
-        (2, '{{[%s]}}', { 'prefix': '1]}}', 'suffix' : '' }),
-        (2, '{{ [\'%s\'] }}', { 'prefix': '1\']}}', 'suffix' : '' }),
-        (2, '{{ ["%s"] }}', { 'prefix': '1"]}}', 'suffix' : '' }),
-        (2, '{{ ["""%s"""] }}', { 'prefix': '1"]}}', 'suffix' : '' }), # {{["""%s"""]}} -> {{["""1"]}}
-        (4, '{{ "1"|join([%s]) }}', { 'prefix': '1])}}', 'suffix' : '' }),
-        (4, '{{ "1"|join([\'%s\'])) }}', { 'prefix': '1\'])}}', 'suffix' : '' }),
-        (4, '{{ "1"|join(["%s"]) }}', { 'prefix': '1"])}}', 'suffix' : '' }), # {{["""%s"""]}} -> {{["""1"]}}
+        (1, 2, '{{[%s]}}', { 'prefix': '1]}}', 'suffix' : '' }),
+        (1, 2, '{{ [\'%s\'] }}', { 'prefix': '1\']}}', 'suffix' : '' }),
+        (1, 2, '{{ ["%s"] }}', { 'prefix': '1"]}}', 'suffix' : '' }),
+        (1, 2, '{{ ["""%s"""] }}', { 'prefix': '1"]}}', 'suffix' : '' }), # {{["""%s"""]}} -> {{["""1"]}}
+        (1, 4, '{{ "1"|join([%s]) }}', { 'prefix': '1])}}', 'suffix' : '' }),
+        (1, 4, '{{ "1"|join([\'%s\'])) }}', { 'prefix': '1\'])}}', 'suffix' : '' }),
+        (1, 4, '{{ "1"|join(["%s"]) }}', { 'prefix': '1"])}}', 'suffix' : '' }), # {{["""%s"""]}} -> {{["""1"]}}
 
-        (3, '{{{%s}}}', { 'prefix': '1:1}}}', 'suffix' : '' }),
-        (3, '{{{1:%s}}}', { 'prefix': '1}}}', 'suffix' : '' }),
-        (3, '{{ {1:\'%s\'} }}', { 'prefix': '1\'}}}', 'suffix' : '' }),
-        (3, '{{ {1:"%s"} }}', { 'prefix': '1"}}}', 'suffix' : '' }),
-        (3, '{{ {1:"""%s"""} }}', { 'prefix': '1"}}}', 'suffix' : '' }),
-        (3, '{{{%s:1}}}', { 'prefix': '1:1}}}', 'suffix' : '' }),
-        (3, '{{ {\'%s\':1} }}', { 'prefix': '1\':1}}}', 'suffix' : '' }),
-        (3, '{{ {"%s":1} }}', { 'prefix': '1":1}}}', 'suffix' : '' }),
-        (3, '{{ {"""%s""":1}} }', { 'prefix': '1":1}}}', 'suffix' : '' }),
+        (1, 3, '{{{%s}}}', { 'prefix': '1:1}}}', 'suffix' : '' }),
+        (1, 3, '{{{1:%s}}}', { 'prefix': '1}}}', 'suffix' : '' }),
+        (1, 3, '{{ {1:\'%s\'} }}', { 'prefix': '1\'}}}', 'suffix' : '' }),
+        (1, 3, '{{ {1:"%s"} }}', { 'prefix': '1"}}}', 'suffix' : '' }),
+        (1, 3, '{{ {1:"""%s"""} }}', { 'prefix': '1"}}}', 'suffix' : '' }),
+        (1, 3, '{{{%s:1}}}', { 'prefix': '1:1}}}', 'suffix' : '' }),
+        (1, 3, '{{ {\'%s\':1} }}', { 'prefix': '1\':1}}}', 'suffix' : '' }),
+        (1, 3, '{{ {"%s":1} }}', { 'prefix': '1":1}}}', 'suffix' : '' }),
+        (1, 3, '{{ {"""%s""":1}} }', { 'prefix': '1":1}}}', 'suffix' : '' }),
 
         # if and for blocks context with {% %}
-        (1, '{%% if %s: %%}\n{%% endif %%}', { 'prefix' : '1%}', 'suffix' : '' }),
-        (1, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '"1"%}', 'suffix' : '' }),
-        (1, '{%% if %s==1: %%}\n{%% endif %%}', { 'prefix' : '1%}', 'suffix' : '' }),
-        (1, '{%% if \'%s\'==1: %%}\n{%% endif %%}', { 'prefix' : '1\'%}', 'suffix' : '' }),
-        (1, '{%% if "%s"==1: %%}\n{%% endif %%}', { 'prefix' : '1"%}', 'suffix' : '' }),
-        (1, '{%% if """%s"""==1: %%}\n{%% endif %%}', { 'prefix' : '1"%}', 'suffix' : '' }), # if """%s""": -> if """1":
-        (2, '{%% if (%s)==1: %%}\n{%% endif %%}', { 'prefix' : '1)%}', 'suffix' : '' }),
-        (2, '{%% if (\'%s\')==1: %%}\n{%% endif %%}', { 'prefix' : '1\')%}', 'suffix' : '' }),
-        (2, '{%% if ("%s")==1: %%}\n{%% endif %%}', { 'prefix' : '1")%}', 'suffix' : '' }),
-        (2, '{%% if ("""%s""")==1: %%}\n{%% endif %%}', { 'prefix' : '1")%}', 'suffix' : '' }), # if ("""%s"""): -> if ("""1"):
+        (1, 1, '{%% if %s: %%}\n{%% endif %%}', { 'prefix' : '1%}', 'suffix' : '' }),
+        (1, 1, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '"1"%}', 'suffix' : '' }),
+        (1, 1, '{%% if %s==1: %%}\n{%% endif %%}', { 'prefix' : '1%}', 'suffix' : '' }),
+        (1, 1, '{%% if \'%s\'==1: %%}\n{%% endif %%}', { 'prefix' : '1\'%}', 'suffix' : '' }),
+        (1, 1, '{%% if "%s"==1: %%}\n{%% endif %%}', { 'prefix' : '1"%}', 'suffix' : '' }),
+        (1, 1, '{%% if """%s"""==1: %%}\n{%% endif %%}', { 'prefix' : '1"%}', 'suffix' : '' }), # if """%s""": -> if """1":
+        (1, 2, '{%% if (1, %s)==1: %%}\n{%% endif %%}', { 'prefix' : '1)%}', 'suffix' : '' }),
+        (1, 2, '{%% if (1, \'%s\')==1: %%}\n{%% endif %%}', { 'prefix' : '1\')%}', 'suffix' : '' }),
+        (1, 2, '{%% if (1, "%s")==1: %%}\n{%% endif %%}', { 'prefix' : '1")%}', 'suffix' : '' }),
+        (1, 2, '{%% if (1, """%s""")==1: %%}\n{%% endif %%}', { 'prefix' : '1")%}', 'suffix' : '' }), # if (1, """%s"""): -> if (1, """1"):
 
-        (2, '{%% if [%s]==1: %%}\n{%% endif %%}', { 'prefix' : '1]%}', 'suffix' : '' }),
-        (2, '{%% if [\'%s\']==1: %%}\n{%% endif %%}', { 'prefix' : '1\']%}', 'suffix' : '' }),
-        (2, '{%% if ["%s"]==1: %%}\n{%% endif %%}', { 'prefix' : '1"]%}', 'suffix' : '' }),
-        (2, '{%% if ["""%s"""]==1: %%}\n{%% endif %%}', { 'prefix' : '1"]%}', 'suffix' : '' }), # if ["""%s"""]: -> if ["""1"]:
-        (4, '{%% if ([%s])==1: %%}\n{%% endif %%}', { 'prefix' : '1])%}', 'suffix' : '' }),
-        (4, '{%% if ([\'%s\'])==1: %%}\n{%% endif %%}', { 'prefix' : '1\'])%}', 'suffix' : '' }),
-        (4, '{%% if (["%s"])==1: %%}\n{%% endif %%}', { 'prefix' : '1"])%}', 'suffix' : '' }),
-        (4, '{%% if (["""%s"""])==1: %%}\n{%% endif %%}', { 'prefix' : '1"])%}', 'suffix' : '' }), # if (["""%s"""]): -> if (["""1"]):
+        (1, 2, '{%% if [%s]==1: %%}\n{%% endif %%}', { 'prefix' : '1]%}', 'suffix' : '' }),
+        (1, 2, '{%% if [\'%s\']==1: %%}\n{%% endif %%}', { 'prefix' : '1\']%}', 'suffix' : '' }),
+        (1, 2, '{%% if ["%s"]==1: %%}\n{%% endif %%}', { 'prefix' : '1"]%}', 'suffix' : '' }),
+        (1, 2, '{%% if ["""%s"""]==1: %%}\n{%% endif %%}', { 'prefix' : '1"]%}', 'suffix' : '' }), # if ["""%s"""]: -> if ["""1"]:
+        (1, 4, '{%% if (1, [%s])==1: %%}\n{%% endif %%}', { 'prefix' : '1])%}', 'suffix' : '' }),
+        (1, 4, '{%% if (1, [\'%s\'])==1: %%}\n{%% endif %%}', { 'prefix' : '1\'])%}', 'suffix' : '' }),
+        (1, 4, '{%% if (1, ["%s"])==1: %%}\n{%% endif %%}', { 'prefix' : '1"])%}', 'suffix' : '' }),
+        (1, 4, '{%% if (1, ["""%s"""])==1: %%}\n{%% endif %%}', { 'prefix' : '1"])%}', 'suffix' : '' }), # if (1, ["""%s"""]): -> if (1, ["""1"]):
 
-        (3, '{%% for a in {%s}: %%}\n{%% endfor %%}', { 'prefix' : '1:1}%}', 'suffix' : '' }),
-        (3, '{%% if {%s:1}==1: %%}\n{%% endif %%}', { 'prefix' : '1:1}%}', 'suffix' : '' }),
-        (3, '{%% if {\'%s\':1}==1: %%}\n{%% endif %%}', { 'prefix' : '1\':1}%}', 'suffix' : '' }),
-        (3, '{%% if {"%s":1}==1: %%}\n{%% endif %%}', { 'prefix' : '1":1}%}', 'suffix' : '' }),
-        (3, '{%% if {"""%s""":1}==1: %%}\n{%% endif %%}', { 'prefix' : '1":1}%}', 'suffix' : '' }), # if {"""%s""":1}: -> if {"""1":1}:
-        (3, '{%% if {1:%s}==1: %%}\n{%% endif %%}', { 'prefix' : '1}%}', 'suffix' : '' }),
-        (3, '{%% if {1:\'%s\'}==1: %%}\n{%% endif %%}', { 'prefix' : '1\'}%}', 'suffix' : '' }),
-        (3, '{%% if {1:"%s"}==1: %%}\n{%% endif %%}', { 'prefix' : '1"}%}', 'suffix' : '' }),
-        (3, '{%% if {1:"""%s"""}==1: %%}\n{%% endif %%}', { 'prefix' : '1"}%}', 'suffix' : '' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
+        (1, 3, '{%% for a in {%s}: %%}\n{%% endfor %%}', { 'prefix' : '1:1}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {%s:1}==1: %%}\n{%% endif %%}', { 'prefix' : '1:1}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {\'%s\':1}==1: %%}\n{%% endif %%}', { 'prefix' : '1\':1}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {"%s":1}==1: %%}\n{%% endif %%}', { 'prefix' : '1":1}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {"""%s""":1}==1: %%}\n{%% endif %%}', { 'prefix' : '1":1}%}', 'suffix' : '' }), # if {"""%s""":1}: -> if {"""1":1}:
+        (1, 3, '{%% if {1:%s}==1: %%}\n{%% endif %%}', { 'prefix' : '1}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {1:\'%s\'}==1: %%}\n{%% endif %%}', { 'prefix' : '1\'}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {1:"%s"}==1: %%}\n{%% endif %%}', { 'prefix' : '1"}%}', 'suffix' : '' }),
+        (1, 3, '{%% if {1:"""%s"""}==1: %%}\n{%% endif %%}', { 'prefix' : '1"}%}', 'suffix' : '' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
 
         # if and for blocks context with line_statement_prefix
-        (5, '# if %s:\n# endif\n', { 'prefix' : '1\n', 'suffix' : '\n' }),
-        (5, '# for a in %s:\n# endfor', { 'prefix' : '"1"\n', 'suffix' : '\n' }),
-        (5, '# if %s==1:\n# endif', { 'prefix' : '1\n', 'suffix' : '\n' }),
-        (5, '# if \'%s\'==1:\n# endif', { 'prefix' : '1\'\n', 'suffix' : '\n' }),
-        (5, '# if "%s"==1:\n# endif', { 'prefix' : '1"\n', 'suffix' : '\n' }),
-        (5, '# if """%s"""==1:\n# endif', { 'prefix' : '1"\n', 'suffix' : '\n' }), # if """%s""": -> if """1":
-        (5, '# if (%s)==1:\n# endif', { 'prefix' : '1)\n', 'suffix' : '\n' }),
-        (5, '# if (\'%s\')==1:\n# endif', { 'prefix' : '1\')\n', 'suffix' : '\n' }),
-        (5, '# if ("%s")==1:\n# endif', { 'prefix' : '1")\n', 'suffix' : '\n' }),
-        (5, '# if ("""%s""")==1:\n# endif', { 'prefix' : '1")\n', 'suffix' : '\n' }), # if ("""%s"""): -> if ("""1"):
+        (5, 5, '# if %s:\n# endif\n', { 'prefix' : '1\n', 'suffix' : '\n' }),
+        (5, 5, '# for a in %s:\n# endfor', { 'prefix' : '"1"\n', 'suffix' : '\n' }),
+        (5, 5, '# if %s==1:\n# endif', { 'prefix' : '1\n', 'suffix' : '\n' }),
+        (5, 5, '# if \'%s\'==1:\n# endif', { 'prefix' : '1\'\n', 'suffix' : '\n' }),
+        (5, 5, '# if "%s"==1:\n# endif', { 'prefix' : '1"\n', 'suffix' : '\n' }),
+        (5, 5, '# if """%s"""==1:\n# endif', { 'prefix' : '1"\n', 'suffix' : '\n' }), # if """%s""": -> if """1":
+        (5, 5, '# if (1, %s)==1:\n# endif', { 'prefix' : '1)\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, \'%s\')==1:\n# endif', { 'prefix' : '1\')\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, "%s")==1:\n# endif', { 'prefix' : '1")\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, """%s""")==1:\n# endif', { 'prefix' : '1")\n', 'suffix' : '\n' }), # if (1, """%s"""): -> if (1, """1"):
 
-        (5, '# if [%s]==1:\n# endif', { 'prefix' : '1]\n', 'suffix' : '\n' }),
-        (5, '# if [\'%s\']==1:\n# endif', { 'prefix' : '1\']\n', 'suffix' : '\n' }),
-        (5, '# if ["%s"]==1:\n# endif', { 'prefix' : '1"]\n', 'suffix' : '\n' }),
-        (5, '# if ["""%s"""]==1:\n# endif', { 'prefix' : '1"]\n', 'suffix' : '\n' }), # if ["""%s"""]: -> if ["""1"]:
-        (5, '# if ([%s])==1:\n# endif', { 'prefix' : '1])\n', 'suffix' : '\n' }),
-        (5, '# if ([\'%s\'])==1:\n# endif', { 'prefix' : '1\'])\n', 'suffix' : '\n' }),
-        (5, '# if (["%s"])==1:\n# endif', { 'prefix' : '1"])\n', 'suffix' : '\n' }),
-        (5, '# if (["""%s"""])==1:\n# endif', { 'prefix' : '1"])\n', 'suffix' : '\n' }), # if (["""%s"""]): -> if (["""1"]):
+        (5, 5, '# if [%s]==1:\n# endif', { 'prefix' : '1]\n', 'suffix' : '\n' }),
+        (5, 5, '# if [\'%s\']==1:\n# endif', { 'prefix' : '1\']\n', 'suffix' : '\n' }),
+        (5, 5, '# if ["%s"]==1:\n# endif', { 'prefix' : '1"]\n', 'suffix' : '\n' }),
+        (5, 5, '# if ["""%s"""]==1:\n# endif', { 'prefix' : '1"]\n', 'suffix' : '\n' }), # if ["""%s"""]: -> if ["""1"]:
+        (5, 5, '# if (1, [%s])==1:\n# endif', { 'prefix' : '1])\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, [\'%s\'])==1:\n# endif', { 'prefix' : '1\'])\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, ["%s"])==1:\n# endif', { 'prefix' : '1"])\n', 'suffix' : '\n' }),
+        (5, 5, '# if (1, ["""%s"""])==1:\n# endif', { 'prefix' : '1"])\n', 'suffix' : '\n' }), # if (1, ["""%s"""]): -> if (1, ["""1"]):
 
-        (5, '# for a in {%s}:\n# endfor', { 'prefix' : '1:1}\n', 'suffix' : '\n' }),
-        (5, '# if {%s:1}==1:\n# endif', { 'prefix' : '1:1}\n', 'suffix' : '\n' }),
-        (5, '# if {\'%s\':1}==1:\n# endif', { 'prefix' : '1\':1}\n', 'suffix' : '\n' }),
-        (5, '# if {"%s":1}==1:\n# endif', { 'prefix' : '1":1}\n', 'suffix' : '\n' }),
-        (5, '# if {"""%s""":1}==1:\n# endif', { 'prefix' : '1":1}\n', 'suffix' : '\n' }), # if {"""%s""":1}: -> if {"""1":1}:
-        (5, '# if {1:%s}==1:\n# endif', { 'prefix' : '1}\n', 'suffix' : '\n' }),
-        (5, '# if {1:\'%s\'}==1:\n# endif', { 'prefix' : '1\'}\n', 'suffix' : '\n' }),
-        (5, '# if {1:"%s"}==1:\n# endif', { 'prefix' : '1"}\n', 'suffix' : '\n' }),
-        (5, '# if {1:"""%s"""}==1:\n# endif', { 'prefix' : '1"}\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
+        (5, 5, '# for a in {%s}:\n# endfor', { 'prefix' : '1:1}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {%s:1}==1:\n# endif', { 'prefix' : '1:1}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {\'%s\':1}==1:\n# endif', { 'prefix' : '1\':1}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {"%s":1}==1:\n# endif', { 'prefix' : '1":1}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {"""%s""":1}==1:\n# endif', { 'prefix' : '1":1}\n', 'suffix' : '\n' }), # if {"""%s""":1}: -> if {"""1":1}:
+        (5, 5, '# if {1:%s}==1:\n# endif', { 'prefix' : '1}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {1:\'%s\'}==1:\n# endif', { 'prefix' : '1\'}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {1:"%s"}==1:\n# endif', { 'prefix' : '1"}\n', 'suffix' : '\n' }),
+        (5, 5, '# if {1:"""%s"""}==1:\n# endif', { 'prefix' : '1"}\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
 
         # Comment blocks
-        (5, '{# %s #}', { 'prefix' : '1#}', 'suffix' : '{#' }),
+        (5, 1, '{# %s #}', { 'prefix' : '1#}', 'suffix' : '{#' }),
 
     ]
 

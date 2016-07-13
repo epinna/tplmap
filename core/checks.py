@@ -11,7 +11,7 @@ from core.clis import Shell, MultilineShell
 
 plugins = [
     Mako,
-#    Jinja2,
+    Jinja2,
 #    Twig,
 #    Smarty,
 #    Freemarker,
