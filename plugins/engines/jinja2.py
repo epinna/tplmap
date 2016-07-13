@@ -20,7 +20,7 @@ class Jinja2(Python):
         # If and for blocks
         # # if %s:\n# endif
         # # for a in %s:\n# endfor
-        { 'level': 2, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
 
         # Comment blocks
         { 'level': 5, 'prefix' : '%(closure)s#}', 'suffix' : '{#', 'closures' : Python.closure_levels },

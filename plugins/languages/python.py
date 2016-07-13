@@ -13,8 +13,9 @@ class Python(Plugin):
     }
 
     closure_levels = {
-            1: [[ 'close_single_double_quotes' ], ['close_funct_list', 'empty' ]],
+            1: [[ 'close_single_double_quotes', 'str_int' ]],
             2: [[ 'close_single_double_quotes', 'str_int' ], ['close_funct_list', 'empty' ]],
             3: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ]],
-            4: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ], [ 'close_funct_list', 'empty' ], ['close_if_loop', 'empty']],
+            4: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ], [ 'close_funct_list', 'empty' ]],
+            5: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ], [ 'close_funct_list', 'empty' ], ['close_if_loop', 'empty']],
     }

@@ -270,7 +270,7 @@ class Plugin:
             closures += [ ''.join(x) for x in itertools.product(*closure_matrix) ]
 
         closures = sorted(set(closures), key=len)
-        
+
         # Return it string by string
         for closure in closures:
             yield closure

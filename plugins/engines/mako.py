@@ -12,7 +12,7 @@ class Mako(Python):
     trailer_tag = '${%(trailer)s}'
 
     contexts = [
-    
+
         # Normal reflecting tag ${}
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : Python.closure_levels },
 
@@ -23,10 +23,9 @@ class Mako(Python):
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        { 'level': 2, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
 
         # Mako blocks
-        #{ 'level': 2, 'prefix' : '"/>', 'suffix' : ''},
         { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
         { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
         #{ 'level': 5, 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' },
