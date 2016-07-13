@@ -16,7 +16,7 @@ class BaseTest(object):
             'url' : url
         })
         obj = self.plugin(channel)
-        obj.channel.args['level'] = level
+        obj.channel.args['force_level'] = level
         obj.detect()
 
         # Delete OS to make the tests portable

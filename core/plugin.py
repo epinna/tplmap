@@ -18,14 +18,11 @@ class Plugin:
         context_num = len([c for c in self.contexts if (c.get('level') <= self.channel.args.get('level'))])
 
         # Print what it's going to be tested
-        log.info('Testing reflection on %s engine with tag %s%s' % (
+        log.info('Testing reflection on text context on %s with tag %s' % (
                 self.plugin,
                 self.render_tag.replace('\n', '\\n') % ({'payload' : '*' }),
-                ' and %i variation%s' % (context_num, 's' if context_num > 1 else '') if context_num else ''
             )
         )
-
-
 
         # If tags found previously are the same as current plugin, skip context detection
         if not (
@@ -113,15 +110,33 @@ class Plugin:
         # Loop all the contexts
         for ctx in self.contexts:
 
-            # Skip any context which is above the required level
-            if ctx.get('level', 1) > self.channel.args.get('level'):
+            # If --force-level skip any other level
+            force_level = self.channel.args.get('force_level')
+            if force_level and ctx.get('level') != self.channel.args.get('force_level'):
                 continue
+            
+            # Skip any context which is above the required level
+            if ctx.get('level') > self.channel.args.get('level'):
+                continue
+            
+            # The suffix is fixed
+            suffix = ctx.get('suffix', '') % ()
 
-            for closure in self._generate_closures(ctx):
+            closures = self._generate_closures(ctx)
+            
+            prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )
+            log.info('Testing code context escape %s*%s with %i closures%s' % (
+                            repr(prefix).strip("'"), 
+                            repr(suffix).strip("'"), 
+                            len(closures),
+                            ' (level %i)' % (ctx.get('level', 1))
+                    )
+            )
+
+            for closure in closures:
 
                 # Format the prefix with closure
                 prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
-                suffix = ctx.get('suffix', '') % ()
 
                 if expected == self.inject(
                         payload = payload,
@@ -271,6 +286,5 @@ class Plugin:
 
         closures = sorted(set(closures), key=len)
 
-        # Return it string by string
-        for closure in closures:
-            yield closure
+        # Return it
+        return closures

@@ -99,11 +99,20 @@ oscmd.add_option("--download", dest="download",
                     help="Download REMOTE to LOCAL files",
                     nargs=2)
 
+# OS access options
+general = OptionGroup(parser, "General", "These "
+                       "options can be used to set some general working parameters")
+
+general.add_option("--force-level", dest="force_level",
+                    help="Force a LEVEL and CLEVEL to test",
+                    type="int")
+                    
 parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)
 parser.add_option_group(oscmd)
 parser.add_option_group(tplcmd)
+parser.add_option_group(general)
 
 """
 Dirty hack from sqlmap [1], to display longer options without breaking into two lines.
