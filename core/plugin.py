@@ -117,7 +117,7 @@ class Plugin:
             if ctx.get('level', 1) > self.channel.args.get('level'):
                 continue
 
-            for closure in self._prepare_closures(ctx):
+            for closure in self._generate_closures(ctx):
 
                 # Format the prefix with closure
                 prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
@@ -247,7 +247,7 @@ class Plugin:
     def get(self, key, default = None):
         return self.channel.data.get(key, default)
 
-    def _prepare_closures(self, ctx):
+    def _generate_closures(self, ctx):
 
         ctx_closures_names_dict_of_lists = ctx.get('closures', {})
 
