@@ -1,19 +1,19 @@
 from utils.strings import quote, chunkit, md5
-from core.check import Check
 from utils.loggers import log
 from utils import rand
+from plugins.languages.javascript import Javascript
 import base64
 
-class Jade(Check):
+class Jade(Javascript):
 
     render_tag = '\n= %(payload)s\n'
     header_tag = '\n= %(header)s\n'
     trailer_tag = '\n= %(trailer)s\n'
     contexts = [         
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//' },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : Javascript.closure_levels },
         # String interpolation ${}
-        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//' },
+        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.closure_levels },
 
     ]
 

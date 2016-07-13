@@ -27,9 +27,9 @@ class JadeTest(unittest.TestCase, BaseTest):
     plugin = Jade
     
     reflection_tests = [
-        (1, '%s', {}),
-        (1, 'AAA%sAAA', {}),
+        (1, 1, '%s', {}),
+        (1, 1, 'AAA%sAAA', {}),
         
-        (1, 'a(href=\'%s\')', { 'prefix' : '\')', 'suffix' : '//' }),
-        (1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' })
+        (1, 2, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
+        (1, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' })
     ]
