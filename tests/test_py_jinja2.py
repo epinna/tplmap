@@ -60,7 +60,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (10, '{{ {"%s":1} }}', { 'prefix': '1":1}}}', 'suffix' : '' }),
         (10, '{{ {"""%s""":1}} }', { 'prefix': '1":1}}}', 'suffix' : '' }),
 
-    
+
         # if and for blocks context with {% %}
         (10, '{%% if %s: %%}\n{%% endif %%}', { 'prefix' : '1%}', 'suffix' : '' }),
         (10, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '"1"%}', 'suffix' : '' }),

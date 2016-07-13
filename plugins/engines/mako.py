@@ -1,37 +1,37 @@
 from utils.strings import quote, chunkit, md5
-from core.check import Check
+from plugins.languages.python import Python
 from utils.loggers import log
 from utils import rand
 import base64
 
 
-class Mako(Check):
+class Mako(Python):
 
     render_tag = '${%(payload)s}'
     header_tag = '${%(header)s}'
     trailer_tag = '${%(trailer)s}'
-    contexts = [
-        # Normal reflecting tag ${}
 
-        # This covers ${%s}
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '' },
+    contexts = [
+    
+        # Normal reflecting tag ${}
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : Python.closure_levels },
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#' },
+        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : Python.closure_levels },
 
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        { 'level': 2, 'prefix': '%(closure)s#\n', 'suffix' : '\n' },
+        { 'level': 2, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
 
         # Mako blocks
         #{ 'level': 2, 'prefix' : '"/>', 'suffix' : ''},
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>'},
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>' },
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
         #{ 'level': 5, 'prefix' : '</%def>', 'suffix' : '<%def name="t(x)">' },
-        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>' },
-        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>'},
+        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : Python.closure_levels},
 
     ]
 

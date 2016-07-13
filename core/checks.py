@@ -11,12 +11,12 @@ from core.clis import Shell, MultilineShell
 
 plugins = [
     Mako,
-    Jinja2,
-    Twig,
-    Smarty,
-    Freemarker,
-    Velocity,
-    Jade
+#    Jinja2,
+#    Twig,
+#    Smarty,
+#    Freemarker,
+#    Velocity,
+#    Jade
 ]
 
 def _print_injection_summary(channel):

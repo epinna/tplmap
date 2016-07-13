@@ -17,7 +17,7 @@ function run_webserver()
     echo "$api_string"
     cd env_py_tests/
     mkdir tpl/ 2> /dev/null
-    python webserver.py
+    python webserver.py 2> /dev/null
     cd ..
 }
 
@@ -29,7 +29,7 @@ if [[ "$1" == "--test" ]]; then
   # Wait until the port is open
   while ! echo exit | nc localhost 15001; do sleep 1; done
   # Launch python engines tests
-  python -m unittest discover . 'test_py_*.py'
+  python -m unittest discover . 'test_py_jinja2.py'
   # Shutdown python webserver
   curl http://localhost:15001/shutdown
 else

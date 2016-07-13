@@ -29,7 +29,7 @@ class MakoTest(unittest.TestCase, BaseTest):
     plugin = Mako
 
     reflection_tests = [
-    
+
         # Text context
         (10, '%s', {}),
         (10, 'AAA%sAAA', {}),
@@ -115,6 +115,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         (10, '%% if ([%s])==1:\n%% endif', { 'prefix' : '1]):#\n', 'suffix' : '\n' }),
         (10, '%% if ([\'%s\'])==1:\n%% endif', { 'prefix' : '1\']):#\n', 'suffix' : '\n' }),
         (10, '%% if (["%s"])==1:\n%% endif', { 'prefix' : '1"]):#\n', 'suffix' : '\n' }),
+
         (10, '%% if (["""%s"""])==1:\n%% endif', { 'prefix' : '1"""]):#\n', 'suffix' : '\n' }),
 
         (10, '%% for a in {%s}:\n%% endfor', { 'prefix' : '1}:#\n', 'suffix' : '\n' }),
