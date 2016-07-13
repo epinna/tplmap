@@ -10,13 +10,13 @@ from utils import strings
 
 class BaseTest(object):
 
-    def _get_detection_obj_data(self, url, level = 5):
+    def _get_detection_obj_data(self, url, level = 1, closure_level = 1):
 
         channel = Channel({
-            'url' : url
+            'url' : url,
+            'force_level': [ level, closure_level ]
         })
         obj = self.plugin(channel)
-        obj.channel.args['force_level'] = level
         obj.detect()
 
         # Delete OS to make the tests portable
@@ -29,17 +29,17 @@ class BaseTest(object):
 
         for reflection_test in self.reflection_tests:
 
-            risk, template, channel_updates = reflection_test
+            level, clevel, template, channel_updates = reflection_test
 
             expected_data = self.expected_data.copy()
             expected_data.update(channel_updates)
 
-            obj, data = self._get_detection_obj_data(self.url % template, risk)
+            obj, data = self._get_detection_obj_data(self.url % template, level, clevel)
 
             self.assertEqual(
                 data,
                 expected_data,
-                msg = '\ntemplate: %s\nrisk: %i\nreturned data: %s\n expected data: %s' % (repr(template).strip("'"), risk, str(data), str(expected_data))
+                msg = '\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
             )
 
     def test_download(self):

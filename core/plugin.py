@@ -112,11 +112,10 @@ class Plugin:
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')
-            if force_level and ctx.get('level') != self.channel.args.get('force_level'):
+            if force_level and force_level[0] and ctx.get('level') != int(force_level[0]):
                 continue
-            
             # Skip any context which is above the required level
-            if ctx.get('level') > self.channel.args.get('level'):
+            if not force_level and ctx.get('level') > self.channel.args.get('level'):
                 continue
             
             # The suffix is fixed
@@ -271,8 +270,13 @@ class Plugin:
         # Loop all the closure names
         for ctx_closure_level, ctx_closure_lists_of_lists_of_names in ctx_closures_names_dict_of_lists.items():
 
+            # If --force-level skip any other level
+            force_level = self.channel.args.get('force_level')
+            if force_level and force_level[1] and ctx_closure_level != int(force_level[1]):
+                continue
+
             # Skip any closure list which is above the required level
-            if ctx_closure_level > self.channel.args.get('level'):
+            if not force_level and ctx_closure_level > self.channel.args.get('level'):
                 continue
 
             closure_matrix = []

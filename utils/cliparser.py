@@ -105,7 +105,7 @@ general = OptionGroup(parser, "General", "These "
 
 general.add_option("--force-level", dest="force_level",
                     help="Force a LEVEL and CLEVEL to test",
-                    type="int")
+                    nargs=2)
                     
 parser.add_option_group(target)
 parser.add_option_group(request)
