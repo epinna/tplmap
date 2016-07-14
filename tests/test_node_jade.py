@@ -25,11 +25,25 @@ class JadeTest(unittest.TestCase, BaseTest):
 
     url = 'http://127.0.0.1:15004/jade?inj=*&tpl=%s'
     plugin = Jade
-    
+
     reflection_tests = [
         (1, 1, '%s', {}),
         (1, 1, 'AAA%sAAA', {}),
-        
-        (1, 2, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
-        (1, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' })
+
+        (1, 1, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
+        (1, 1, 'a(href="%s")', { 'prefix' : '1")', 'suffix' : '//' }),
+        (1, 1, '#container.%s', {  }),
+        (1, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' }),
+
+        (1, 1, '- var %s = true', { }),
+        (1, 1, '- var a = %s', { }),
+
+
     ]
+
+
+    def test_download(self):
+        pass
+
+    def test_upload(self):
+        pass
