@@ -14,23 +14,23 @@ class Mako(Python):
     contexts = [
 
         # Normal reflecting tag ${}
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : Python.closure_levels },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : Python.code_context_closures },
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : Python.closure_levels },
+        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : Python.code_context_closures },
 
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.code_context_closures },
 
         # Mako blocks
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.closure_levels },
-        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : Python.closure_levels },
-        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : Python.closure_levels },
-        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : Python.closure_levels},
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.code_context_closures },
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.code_context_closures },
+        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : Python.code_context_closures },
+        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : Python.code_context_closures },
+        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : Python.code_context_closures},
 
     ]
 

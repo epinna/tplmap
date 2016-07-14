@@ -255,7 +255,7 @@ class Plugin:
         closures = []
 
         # Loop all the closure names
-        for ctx_closure_level, ctx_closure_lists_of_lists_of_names in ctx_closures_names_dict_of_lists.items():
+        for ctx_closure_level, ctx_closure_matrix in ctx_closures_names_dict_of_lists.items():
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')
@@ -266,14 +266,7 @@ class Plugin:
             if not force_level and ctx_closure_level > self.channel.args.get('level'):
                 continue
 
-            closure_matrix = []
-            # Expand the names
-            for ctx_closure_lists_of_names in ctx_closure_lists_of_lists_of_names:
-
-                # This will be merged in a single list
-                closure_matrix.append(list(itertools.chain(*[ self.language_closures[n] for n in ctx_closure_lists_of_names])))
-
-            closures += [ ''.join(x) for x in itertools.product(*closure_matrix) ]
+            closures += [ ''.join(x) for x in itertools.product(*ctx_closure_matrix) ]
 
         closures = sorted(set(closures), key=len)
 

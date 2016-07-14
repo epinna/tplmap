@@ -2,20 +2,37 @@ from core.plugin import Plugin
 
 class Python(Plugin):
 
-    language_closures = {
-        'close_single_double_quotes': [ '1\'', '1"' ],
-        'str_int': [ '1', '"1"' ],
-        'close_triple_quotes': [ '1"""' ],
-        'close_dict': [ '}', ':1}' ],
-        'close_funct_list': [ ')', ']' ],
-        'close_if_loop': [ ':' ],
-        'empty': [ '' ]
-    }
+    closure_close_single_duble_quotes = [ '1\'', '1"' ]
+    closure_integer = [ '1' ]
+    closure_string = [ '"1"' ]
+    closure_close_triple_quotes = [ '1"""' ]
+    closure_close_dict = [ '}', ':1}' ]
+    closure_close_function = [ ')' ]
+    closure_close_list = [ ']' ]
+    closure_if_loops = [ ':' ]
+    closure_empty = [ '' ]
 
-    closure_levels = {
-            1: [[ 'close_single_double_quotes', 'str_int' ]],
-            2: [[ 'close_single_double_quotes', 'str_int' ], ['close_funct_list', 'empty' ]],
-            3: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ]],
-            4: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ], [ 'close_funct_list', 'empty' ]],
-            5: [[ 'close_single_double_quotes', 'str_int', 'close_triple_quotes' ], [ 'close_dict', 'empty' ], [ 'close_funct_list', 'empty' ], [ 'close_funct_list', 'empty' ], ['close_if_loop', 'empty']],
+    code_context_closures = {
+            1: [
+                closure_close_single_duble_quotes + closure_integer,
+                closure_close_function + closure_empty
+            ],
+            2: [
+                closure_close_single_duble_quotes + closure_integer + closure_string,
+                closure_close_function + closure_empty
+            ],
+            3: [
+                closure_close_single_duble_quotes + closure_integer + closure_string + closure_close_triple_quotes,
+                closure_close_function + closure_close_list + closure_close_dict + closure_empty
+            ],
+            4: [
+                closure_close_single_duble_quotes + closure_integer + closure_string + closure_close_triple_quotes,
+                closure_close_function + closure_close_list + closure_close_dict + closure_empty
+            ],
+            5: [
+                closure_close_single_duble_quotes + closure_integer + closure_string + closure_close_triple_quotes,
+                closure_close_function + closure_close_list + closure_close_dict + closure_empty,
+                closure_close_function + closure_close_list + closure_empty,
+                closure_if_loops + closure_empty
+            ],
     }

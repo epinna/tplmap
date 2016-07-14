@@ -12,18 +12,18 @@ class Jinja2(Python):
     contexts = [
 
         # This covers {{%s}}
-        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : Python.closure_levels },
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : Python.code_context_closures },
 
         # This covers {% %s %}
-        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : Python.closure_levels },
+        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : Python.code_context_closures },
 
         # If and for blocks
         # # if %s:\n# endif
         # # for a in %s:\n# endfor
-        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : Python.code_context_closures },
 
         # Comment blocks
-        { 'level': 5, 'prefix' : '%(closure)s#}', 'suffix' : '{#', 'closures' : Python.closure_levels },
+        { 'level': 5, 'prefix' : '%(closure)s#}', 'suffix' : '{#', 'closures' : Python.code_context_closures },
 
     ]
 
