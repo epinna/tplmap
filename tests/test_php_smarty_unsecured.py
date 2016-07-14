@@ -26,8 +26,12 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
     plugin = Smarty
     
     reflection_tests = [
-        (1, 1, '%s', {}),
+        (1, 1, '%s', { }),
         (1, 1, 'AAA%sAAA', {}), 
+        (1, 1, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
+        (1, 1, '{* %s *}', {}),
+        (1, 1, '{if %s}\n{/if}', { 'prefix': 'a}', 'suffix' : '{'}),
+        (1, 1, '{if (%s)}\n{/if}', { 'prefix': 'a)}{/if}{if 1}', 'suffix' : ''}),
     ]
 
     def test_download(self):

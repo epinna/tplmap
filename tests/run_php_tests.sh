@@ -45,7 +45,7 @@ if [[ "$1" == "--test" ]]; then
 
   while ! echo exit | nc localhost 15002; do sleep 3; done
 
-  python -m unittest discover . 'test_php_*.py'
+  python -m unittest discover . 'test_php_smarty_unsecured.py'
 
   # Shutdown PHP webserver
   kill ${PHPPID}
