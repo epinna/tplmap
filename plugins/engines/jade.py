@@ -12,10 +12,10 @@ class Jade(Javascript):
     contexts = [
         # Attribute close a(href=\'%s\')
         { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
-        # String interpolation ${}
-        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
-        # Code context -
-        { 'level': 1, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
+        # String interpolation #{
+        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
+        # Code context
+        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
     ]
 
     def detect_engine(self):
