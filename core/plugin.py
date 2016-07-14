@@ -24,26 +24,15 @@ class Plugin:
             )
         )
 
-        if not self.get('render_tag'):
+        # Start detection
+        self._detect_context()
 
-            # Start detection
-            self._detect_context()
-
-            # Print message if header or trailer are still unset
-            if self.get('header_tag') == None or self.get('trailer_tag') == None:
-                if self.get('render_tag'):
-                    log.info('Detected unreliable reflection with tag %s, continuing' % (repr(self.get('render_tag') % ({'payload' : '*' })).strip("'")))
-
-        # Exit if header or trailer are still different
-        if not (
-                self.get('render_tag') == self.render_tag and
-                self.get('header_tag') == self.header_tag and
-                self.get('trailer_tag') == self.trailer_tag
-            ):
-            return
+        # Print message if header or trailer are still unset
+        if self.get('render_tag') != None and (self.get('header_tag') == None or self.get('trailer_tag') == None):
+            log.info('Detected unreliable reflection with tag %s, continuing' % (repr(self.get('render_tag') % ({'payload' : '*' })).strip("'")))
 
         prefix = self.get('prefix', '')
-        render_tag = self.get('render_tag') % ({'payload' : '*' })
+        render_tag = self.get('render_tag', '%(payload)s') % ({'payload' : '*' })
         suffix = self.get('suffix', '')
         log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (
             repr(prefix).strip("'"),
@@ -99,7 +88,6 @@ class Plugin:
             return
 
         log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
-
 
         # Loop all the contexts
         for ctx in self.contexts:
@@ -253,12 +241,9 @@ class Plugin:
         closures_list_of_lists = ctx.get('closures', [])
 
         closures = []
-        
+
         # Loop all the closure names
         for ctx_closure_level, ctx_closure_matrix in enumerate(closures_list_of_lists):
-
-            # Align index level with required level
-            ctx_closure_level += 1
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')
