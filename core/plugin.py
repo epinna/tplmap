@@ -248,15 +248,15 @@ class Plugin:
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
 
         result_raw = self.channel.req(injection)
-        result = ''
+        result = None
 
         # Cut the result using the header and trailer if specified
         if header:
             before,_,result_after = result_raw.partition(str(header_rand))
         if trailer and result_after:
             result,_,after = result_after.partition(str(trailer_rand))
-            
-        return result.strip()
+
+        return result.strip() if result else result
 
     def set(self, key, value):
         self.channel.data[key] = value
