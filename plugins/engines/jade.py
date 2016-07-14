@@ -9,11 +9,11 @@ class Jade(Javascript):
     render_tag = '\n= %(payload)s\n'
     header_tag = '\n= %(header)s\n'
     trailer_tag = '\n= %(trailer)s\n'
-    contexts = [         
+    contexts = [
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : Javascript.closure_levels },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
         # String interpolation ${}
-        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.closure_levels },
+        { 'level': 1, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
 
     ]
 
