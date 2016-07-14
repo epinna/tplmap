@@ -71,3 +71,32 @@ javascript_ctx_closures = [
             closure_close_function + closure_close_list + closure_empty,
         ],
 ]
+
+php_ctx_closures = [
+        #1: 
+        [
+            closure_close_single_duble_quotes + closure_integer,
+            closure_close_function + closure_empty
+        ],
+        #2: 
+        [
+            closure_close_single_duble_quotes + closure_integer + closure_string + closure_var,
+            closure_close_function + closure_empty
+        ],
+        #3: 
+        [
+            closure_close_single_duble_quotes + closure_integer + closure_string + closure_var,
+            closure_close_function + closure_close_list + closure_close_dict + closure_empty
+        ],
+        #4: 
+        [
+            closure_close_single_duble_quotes + closure_integer + closure_string + closure_var,
+            closure_close_function + closure_close_list + closure_close_dict + closure_empty
+        ],
+        #5: 
+        [
+            closure_close_single_duble_quotes + closure_integer + closure_string + closure_var,
+            closure_close_function + closure_close_list + closure_close_dict + closure_empty,
+            closure_close_function + closure_close_list + closure_empty,
+        ],
+]
