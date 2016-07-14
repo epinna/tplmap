@@ -43,4 +43,6 @@ coverage.xml
 # TplMap third party test-data
 tests/env_*/lib/
 tests/env_*/templates_c/
-tests/env_*/node_modules/
+
+# Npm local modules
+node_modules
