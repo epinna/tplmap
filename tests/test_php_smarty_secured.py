@@ -23,8 +23,8 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
     plugin = Smarty
     
     reflection_tests = [
-        (1, '%s', {}),
-        (1, 'AAA%sAAA', {})
+        (1, 1, '%s', {}),
+        (1, 1, 'AAA%sAAA', {})
     ]
 
     def test_download(self):

@@ -24,8 +24,8 @@ class TwigTest(unittest.TestCase, BaseTest):
     plugin = Twig
     
     reflection_tests = [
-        (1, "%s", {}),
-        (1, "AAA%sAAA", {})
+        (1, 1, "%s", {}),
+        (1, 1, "AAA%sAAA", {})
     ]
     
     # Defuse download tests, capabilities not present
