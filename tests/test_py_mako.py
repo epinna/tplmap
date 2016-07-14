@@ -35,6 +35,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         (1, 1, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
+        (1, 1, '${ %s = 1 }', {  'prefix': '1}', 'suffix' : ''  }),
         (1, 1, '${%s}', { 'prefix': '1}', 'suffix' : '' }),
         (1, 1, '${ \'%s\' }', { 'prefix': '1\'}', 'suffix' : '' }),
         (1, 1, '${ "%s" }', { 'prefix': '1"}', 'suffix' : '' }),
