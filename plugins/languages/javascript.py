@@ -5,6 +5,7 @@ class Javascript(Plugin):
     closure_close_single_duble_quotes = [ '1\'', '1"' ]
     closure_integer = [ '1' ]
     closure_string = [ '"1"' ]
+    closure_var = [ 'a' ]
     closure_close_dict = [ '}', ':1}' ]
     closure_close_function = [ ')' ]
     closure_close_list = [ ']' ]
@@ -16,7 +17,7 @@ class Javascript(Plugin):
                 closure_close_function + closure_empty
             ],
             2: [
-                closure_close_single_duble_quotes + closure_integer + closure_string,
+                closure_close_single_duble_quotes + closure_integer + closure_string + closure_var,
                 closure_close_function + closure_empty
             ],
             3: [

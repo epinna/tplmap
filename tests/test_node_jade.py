@@ -35,7 +35,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         (1, 1, '#container.%s', {  }),
         (1, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' }),
 
-        (1, 1, '- var %s = true', { }),
+        (1, 2, '- var %s = true', { 'prefix' : 'a\n', 'suffix' : '//' }),
         (1, 1, '- var a = %s', { }),
 
 
