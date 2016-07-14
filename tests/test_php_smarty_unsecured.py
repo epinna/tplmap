@@ -31,7 +31,6 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
     ]
 
     def test_download(self):
-        return
 
         # This is overriden due to the slight
         # difference from the base test_download()
