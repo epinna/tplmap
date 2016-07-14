@@ -11,7 +11,7 @@ class Jade(Javascript):
     trailer_tag = '\n= %(trailer)s\n'
     contexts = [
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: Javascript.code_context_closures[1] } },
         # String interpolation #{
         { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
         # Code context
