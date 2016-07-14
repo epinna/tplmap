@@ -1,11 +1,12 @@
+from core import closures
+from core.plugin import Plugin
 from utils.strings import quote, chunkit, md5
-from plugins.languages.python import Python
 from utils.loggers import log
 from utils import rand
 import base64
 
 
-class Mako(Python):
+class Mako(Plugin):
 
     render_tag = '${%(payload)s}'
     header_tag = '${%(header)s}'
@@ -14,23 +15,23 @@ class Mako(Python):
     contexts = [
 
         # Normal reflecting tag ${}
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : Python.code_context_closures },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : Python.code_context_closures },
+        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : closures.python_ctx_closures },
 
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : Python.code_context_closures },
+        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : closures.python_ctx_closures },
 
         # Mako blocks
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.code_context_closures },
-        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : Python.code_context_closures },
-        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : Python.code_context_closures },
-        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : Python.code_context_closures },
-        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : Python.code_context_closures},
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : closures.python_ctx_closures},
 
     ]
 

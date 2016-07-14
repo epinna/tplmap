@@ -1,21 +1,22 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
+from core import closures
+from core.plugin import Plugin
 from utils import rand
-from plugins.languages.javascript import Javascript
 import base64
 
-class Jade(Javascript):
+class Jade(Plugin):
 
     render_tag = '\n= %(payload)s\n'
     header_tag = '\n= %(header)s\n'
     trailer_tag = '\n= %(trailer)s\n'
     contexts = [
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: Javascript.code_context_closures[1] } },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: closures.javascript_ctx_closures[1] } },
         # String interpolation #{
-        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
+        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : closures.javascript_ctx_closures },
         # Code context
-        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : Javascript.code_context_closures },
+        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : closures.javascript_ctx_closures },
     ]
 
     def detect_engine(self):
