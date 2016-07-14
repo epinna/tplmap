@@ -39,10 +39,3 @@ class JadeTest(unittest.TestCase, BaseTest):
         (2, 1, '- var a = %s', { }),
 
     ]
-
-
-    def test_download(self):
-        pass
-
-    def test_upload(self):
-        pass
