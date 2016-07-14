@@ -20,7 +20,7 @@ class Plugin:
         # Print what it's going to be tested
         log.info('Testing reflection on text context on %s with tag %s' % (
                 self.plugin,
-                self.render_tag.replace('\n', '\\n') % ({'payload' : '*' }),
+                repr(self.render_tag % ({'payload' : '*' })).strip("'"),
             )
         )
 
@@ -41,9 +41,7 @@ class Plugin:
             # Print message if header or trailer are still unset
             if self.get('header_tag') == None or self.get('trailer_tag') == None:
                 if self.get('render_tag'):
-                    log.info('Detected unreliable reflection with tag %s, continuing' % (
-                        self.get('render_tag').replace('\n', '\\n')) % ({'payload' : '*' })
-                    )
+                    log.info('Detected unreliable reflection with tag %s, continuing' % (repr(self.get('render_tag') % ({'payload' : '*' })).strip("'")))
 
         # Exit if header or trailer are still different
         if not (
@@ -53,10 +51,15 @@ class Plugin:
             ):
             return
 
-        prefix = self.get('prefix', '').replace('\n', '\\n')
-        render_tag = self.get('render_tag').replace('\n', '\\n') % ({'payload' : '*' })
-        suffix = self.get('suffix', '').replace('\n', '\\n')
-        log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (prefix, render_tag, suffix, self.plugin))
+        prefix = self.get('prefix', '')
+        render_tag = self.get('render_tag') % ({'payload' : '*' })
+        suffix = self.get('suffix', '')
+        log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (
+            repr(prefix).strip("'"),
+            repr(render_tag).strip("'"),
+            repr(suffix).strip("'"),
+            self.plugin)
+        )
 
         self.detect_engine()
 
@@ -82,9 +85,9 @@ class Plugin:
 
         # Prepare first detection payload and header
         payload = self.render_tag % ({ 'payload': '%s*%s' % (randA, randB) })
-        header_rand = rand.randint_n(3)
+        header_rand = rand.randint_n(10)
         header = self.header_tag % ({ 'header' : header_rand })
-        trailer_rand = rand.randint_n(3)
+        trailer_rand = rand.randint_n(10)
         trailer = self.trailer_tag % ({ 'trailer' : trailer_rand })
 
         log.debug('%s: Trying to inject in text context' % self.plugin)
@@ -117,16 +120,16 @@ class Plugin:
             # Skip any context which is above the required level
             if not force_level and ctx.get('level') > self.channel.args.get('level'):
                 continue
-            
+
             # The suffix is fixed
             suffix = ctx.get('suffix', '') % ()
 
             closures = self._generate_closures(ctx)
-            
+
             prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )
             log.info('Testing code context escape %s*%s with %i closures%s' % (
-                            repr(prefix).strip("'"), 
-                            repr(suffix).strip("'"), 
+                            repr(prefix).strip("'"),
+                            repr(suffix).strip("'"),
                             len(closures),
                             ' (level %i)' % (ctx.get('level', 1))
                     )
@@ -136,7 +139,6 @@ class Plugin:
 
                 # Format the prefix with closure
                 prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
-
                 if expected == self.inject(
                         payload = payload,
                         header = header,
@@ -233,26 +235,27 @@ class Plugin:
     """
     def inject(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
 
-        header_rand = rand.randint_n(3) if header_rand == None else header_rand
+        header_rand = rand.randint_n(10) if header_rand == None else header_rand
         header = self.get('header_tag', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
 
-        trailer_rand = rand.randint_n(3) if trailer_rand == None else trailer_rand
+        trailer_rand = rand.randint_n(10) if trailer_rand == None else trailer_rand
         trailer = self.get('trailer_tag', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
 
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix
 
         injection = prefix + header + payload + trailer + suffix
-        result = self.channel.req(injection)
-        log.debug('[request %s]' % (self.plugin))
+        log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
 
+        result_raw = self.channel.req(injection)
+        result = ''
 
         # Cut the result using the header and trailer if specified
         if header:
-            before,_,result = result.partition(str(header_rand))
-        if trailer:
-            result,_,after = result.partition(str(trailer_rand))
-
+            before,_,result_after = result_raw.partition(str(header_rand))
+        if trailer and result_after:
+            result,_,after = result_after.partition(str(trailer_rand))
+            
         return result.strip()
 
     def set(self, key, value):
