@@ -24,16 +24,7 @@ class Plugin:
             )
         )
 
-        # If tags found previously are the same as current plugin, skip context detection
-        if not (
-                self.get('render_tag') == self.render_tag and
-                self.get('header_tag') == self.header_tag and
-                self.get('trailer_tag') == self.trailer_tag
-            ):
-            self._detect_context()
-
-        # If no weak reflection has been detected so far
-        elif not self.get('render_tag'):
+        if not self.get('render_tag'):
 
             # Start detection
             self._detect_context()
@@ -156,19 +147,12 @@ class Plugin:
 
                     return
 
-        log.debug('%s: Injection in code context failed, trying to inject only payload with no header' % self.plugin)
+        log.debug('%s: Injection in code context failed, trying raw payload with no header and trailer' % self.plugin)
 
         # As last resort, just inject without header and trailer and
         # see if expected is contained in the response page
-        if expected in self.inject(
-                payload = payload,
-                header = '',
-                trailer = '',
-                header_rand = 0,
-                trailer_rand = 0,
-                prefix = '',
-                suffix = ''
-            ):
+        result = self.channel.req(payload)
+        if result and expected in result:
             self.set('render_tag', self.render_tag)
             return
 
