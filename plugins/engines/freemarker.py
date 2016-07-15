@@ -1,17 +1,24 @@
 from utils.strings import quote, chunkit, md5
-from core.check import Check
 from utils.loggers import log
 from utils import rand
+from core.plugin import Plugin
+from core import closures
 import re
 import base64
 
-class Freemarker(Check):
+class Freemarker(Plugin):
 
     render_tag = '${%(payload)s}'
-    header_tag = '${%(header)s}'
-    trailer_tag = '${%(trailer)s}'
+    header_tag = '${%(header)s?c}'
+    trailer_tag = '${%(trailer)s?c}'
+    
     contexts = [
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '${' },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        
+        # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
+        { 'level': 1, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 1, 'prefix': '-->', 'suffix' : '<#--', 'closures' : closures.java_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
     ]
 
     def detect_engine(self):
