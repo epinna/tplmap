@@ -3,7 +3,7 @@ from utils.loggers import log
 import re
 import itertools
 
-class Plugin:
+class Plugin(object):
 
     def __init__(self, channel):
 
