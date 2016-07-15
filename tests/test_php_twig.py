@@ -25,13 +25,17 @@ class TwigTest(unittest.TestCase, BaseTest):
     
     reflection_tests = [
         (1, 1, "%s", {}),
-        (1, 1, "AAA%sAAA", {})
+        (1, 1, "AAA%sAAA", {}),
+        (1, 1, "{{ %s }}", { 'prefix': 'a}}', 'suffix' : '{{1' }),
+        (1, 1, "{% block title %}%s{% endblock %}", {}),
+        (1, 1, "{% set foo = '%s' %}", {  'prefix': "1' %}", 'suffix' : '' }),
+        (1, 1, "{% for item in %s %}{% endfor %}", {'prefix': 'a %}{% endfor %}{% for a in [1] %}', 'suffix' : ''}),
     ]
     
-    # Defuse download tests, capabilities not present
+    # Defuse download tests, capabilities not available
     def test_download(self):
         pass
         
-    # Defuse upload tests, capabilities not present
+    # Defuse upload tests, capabilities not available
     def test_upload(self):
         pass    

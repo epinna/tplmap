@@ -1,14 +1,17 @@
-from core.check import Check
 from utils.loggers import log
+from core.plugin import Plugin
 from utils import rand
+from core import closures
 
-class Twig(Check):
+class Twig(Plugin):
 
     render_tag = '{{%(payload)s}}'
     header_tag = '{{%(header)s}}'
     trailer_tag = '{{%(trailer)s}}'
     contexts = [
-        { 'level': 1, 'prefix': '""%(closure)s}}', 'suffix' : '{{""' },
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : closures.php_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
     ]
 
     def detect_engine(self):
