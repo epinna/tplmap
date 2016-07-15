@@ -17,7 +17,10 @@ class Smarty(Plugin):
         # {config_load file="missing_file"} raises an exception
         
         # Escape Ifs
-        { 'level': 1, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : closures.php_ctx_closures },        
+        { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : closures.php_ctx_closures },        
+
+        # Escape {assign var="%s" value="%s"}
+        { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : closures.php_ctx_closures },        
 
 
     ]
