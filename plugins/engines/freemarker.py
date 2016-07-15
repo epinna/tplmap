@@ -16,9 +16,9 @@ class Freemarker(Plugin):
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },
         
         # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
-        { 'level': 1, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
-        { 'level': 1, 'prefix': '-->', 'suffix' : '<#--', 'closures' : closures.java_ctx_closures },
-        { 'level': 1, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 5, 'prefix': '-->', 'suffix' : '<#--', 'closures' : closures.java_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
     ]
 
     def detect_engine(self):

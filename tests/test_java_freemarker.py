@@ -30,12 +30,12 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         (1, 1, 'AAA%sAAA', {}),
         (1, 1, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
         
-        (1, 1, '<#assign s = %s>', { 'prefix': '1>', 'suffix': '' }),
-        (1, 1, '<#-- %s -->', { 'prefix': '-->', 'suffix': '<#--' }),
-        (1, 1, '<#if 1 == %s></#if>', { 'prefix': '1>', 'suffix' : ''}),
-        (1, 2, '<#if %s == 1></#if>', { 'prefix': 'true>', 'suffix' : ''}),
-        (1, 3, '<#list [%s] as a></#list>', { 'prefix' : '1] as a></#list><#list [1] as a>', 'suffix' : ''}),
-        (1, 5, '<#list %s as a></#list>', { 'prefix' : '[1] as a></#list><#list [1] as a>', 'suffix' : ''}),
+        (2, 1, '<#assign s = %s>', { 'prefix': '1>', 'suffix': '' }),
+        (5, 1, '<#-- %s -->', { 'prefix': '-->', 'suffix': '<#--' }),
+        (2, 1, '<#if 1 == %s></#if>', { 'prefix': '1>', 'suffix' : ''}),
+        (2, 2, '<#if %s == 1></#if>', { 'prefix': 'true>', 'suffix' : ''}),
+        (5, 3, '<#list [%s] as a></#list>', { 'prefix' : '1] as a></#list><#list [1] as a>', 'suffix' : ''}),
+        (5, 5, '<#list %s as a></#list>', { 'prefix' : '[1] as a></#list><#list [1] as a>', 'suffix' : ''}),
         (1, 5, '<#assign ages = {"J":2, "%s":2}>', { 'prefix' : '1":1}]}', 'suffix' : ''}),
 
         #(1, 5, '${[1,2]%3Fjoin(%s)}', { 'prefix' : '[1])}', 'suffix' : ''}),
