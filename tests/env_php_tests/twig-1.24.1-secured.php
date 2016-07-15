@@ -1,7 +1,12 @@
 <?php
-
 require_once './lib/Twig-1.24.1/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
+
+// Run render via CLI
+if (php_sapi_name() == "cli") {
+    $_GET["inj"] = '';
+    $_GET["tpl"] = "";
+} 
 
 $inj=$_GET["inj"];
 if(isset($_GET["tpl"])) {
