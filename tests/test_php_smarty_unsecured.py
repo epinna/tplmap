@@ -32,6 +32,8 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         (1, 1, '{* %s *}', {}),
         (1, 1, '{if %s}\n{/if}', { 'prefix': 'a}', 'suffix' : '{'}),
         (1, 1, '{if (%s)}\n{/if}', { 'prefix': 'a)}{/if}{if 1}', 'suffix' : ''}),
+        (1, 1, '{html_select_date display_days=%s}', { 'prefix': 'a}', 'suffix' : '{'}),
+        (1, 1, '{html_options values=%s}', { 'prefix': 'a}', 'suffix' : '{'}),
     ]
 
     def test_download(self):
