@@ -131,7 +131,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
 
         obj, data = self._get_detection_obj_data('http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*&limit=8' % '')
 
-        expected_data = { 'render_tag' : self.expected_data['render_tag'] }
+        expected_data = { 'render_tag' : self.expected_data['render_tag'], 'unreliable' : 'Jinja2' }
 
         self.assertEqual(data, expected_data)
 

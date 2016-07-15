@@ -240,12 +240,12 @@ class Plugin:
 
     def _generate_closures(self, ctx):
 
-        closures_list_of_lists = ctx.get('closures', [])
+        closures_list_of_lists = ctx.get('closures', {})
 
         closures = []
-
+    
         # Loop all the closure names
-        for ctx_closure_level, ctx_closure_matrix in enumerate(closures_list_of_lists):
+        for ctx_closure_level, ctx_closure_matrix in closures_list_of_lists.items():
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')
@@ -255,7 +255,7 @@ class Plugin:
             # Skip any closure list which is above the required level
             if not force_level and ctx_closure_level > self.channel.args.get('level'):
                 continue
-                
+            
             closures += [ ''.join(x) for x in itertools.product(*ctx_closure_matrix) ]
 
         closures = sorted(set(closures), key=len)
