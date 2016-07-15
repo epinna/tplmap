@@ -12,7 +12,7 @@ from core.clis import Shell, MultilineShell
 plugins = [
     Mako,
     Jinja2,
-#    Twig,
+    Twig,
     Smarty,
 #    Freemarker,
 #    Velocity,
@@ -70,10 +70,10 @@ def check_template_injection(args):
             break
 
     # Kill execution if no engine have been found
-    if not channel.data.get('engine'):
+    if not channel.data.get('render_tag') or not channel.data.get('engine'):
         log.fatal("""Tested parameters appear to be not injectable. Try to increase '--level' value to perform more tests.""")
         return
-
+        
     # Print injection summary
     _print_injection_summary(channel)
 
