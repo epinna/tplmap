@@ -28,9 +28,11 @@ class Plugin:
         self._detect_context()
 
         # Print message if header or trailer are still unset
-        if self.get('render_tag') != None and (self.get('header_tag') == None or self.get('trailer_tag') == None):
+        if not self.get('unreliable') and self.get('render_tag') != None and (self.get('header_tag') == None or self.get('trailer_tag') == None):
+            self.set('unreliable', self.plugin)
             log.info('Detected unreliable reflection with tag %s, continuing' % (repr(self.get('render_tag') % ({'payload' : '*' })).strip("'")))
-
+            return
+            
         prefix = self.get('prefix', '')
         render_tag = self.get('render_tag', '%(payload)s') % ({'payload' : '*' })
         suffix = self.get('suffix', '')
