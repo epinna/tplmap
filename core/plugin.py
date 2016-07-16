@@ -18,7 +18,7 @@ class Plugin(object):
         context_num = len([c for c in self.contexts if (c.get('level') <= self.channel.args.get('level'))])
 
         # Print what it's going to be tested
-        log.info('Testing reflection on text context on %s with tag %s' % (
+        log.info('%s plugin is testing reflection on text context with tag %s' % (
                 self.plugin,
                 repr(self.render_tag % ({'payload' : '*' })).strip("'"),
             )
@@ -27,20 +27,29 @@ class Plugin(object):
         # Start detection
         self._detect_context()
 
-        # Print message if header or trailer are still unset
-        if not self.get('unreliable') and self.get('render_tag') != None and (self.get('header_tag') == None or self.get('trailer_tag') == None):
-            self.set('unreliable', self.plugin)
-            log.info('Detected unreliable reflection with tag %s, continuing' % (repr(self.get('render_tag') % ({'payload' : '*' })).strip("'")))
-            return
+        # Return if render_tag or header or trailer is not set
+        if self.get('render_tag') == None or self.get('header_tag') == None or self.get('trailer_tag') == None:
             
+            # If render_tag is set and it's the first unrealiable detection, handle this as unreliable
+            if not self.get('unreliable') and self.get('render_tag') != None:
+                self.set('unreliable', self.plugin)
+                log.info('%s plugin has detected unreliable reflection with tag %s, skipping' % (
+                    self.plugin, 
+                    repr(self.get('render_tag') % ({'payload' : '*' })).strip("'"))
+                )
+                            
+            return
+        
+        # Here the reflection is confirmed
         prefix = self.get('prefix', '')
         render_tag = self.get('render_tag', '%(payload)s') % ({'payload' : '*' })
         suffix = self.get('suffix', '')
-        log.info('Confirmed reflection with tag \'%s%s%s\' by %s plugin' % (
+        log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
+            self.plugin,
             repr(prefix).strip("'"),
             repr(render_tag).strip("'"),
             repr(suffix).strip("'"),
-            self.plugin)
+            )
         )
 
         self.detect_engine()
@@ -114,11 +123,12 @@ class Plugin(object):
                 closures = [ '' ]
                 prefix = '%(closure)s' + ctx.get('prefix')
 
-            log.info('Testing code context escape %s*%s with %i closures%s' % (
+            log.info('%s plugin is testing %s*%s code context escape with %i mutations%s' % (
+                            self.plugin,
                             repr(prefix).strip("'"),
                             repr(suffix).strip("'"),
                             len(closures),
-                            ' (level %i)' % (ctx.get('level', 1))
+                            ' (level %i)' % (ctx.get('level', 1)) if self.get('level') else ''
                     )
             )
 
