@@ -7,16 +7,21 @@ mkdir -p ./env_java_tests/lib/ 2> /dev/null
 
 GRADLEPID=0
 
-api_string="Exposed testing APIs:
+webserver_log=$(mktemp)
+
+webserver_banner="Exposed testing APIs:
 
 http://localhost:15003/velocity?inj=*
 http://localhost:15003/freemarker?inj=*
+
+Web server standard output and error are redirected to file
+$webserver_log
 "
 
 # Run  webserver
 function run_webserver()
 {
-  echo "$api_string"
+  echo "$webserver_banner"
 
   if [ ! -d ./env_java_tests/lib/spark-example/ ]; then
     rm  -rf ./env_java_tests/lib/spark-app/
@@ -24,7 +29,7 @@ function run_webserver()
   fi
 
   cd ./env_java_tests/lib/spark-app/
-  gradle run
+  gradle run &> $webserver_log
   GRADLEPID=$!
   cd ../../../
 }

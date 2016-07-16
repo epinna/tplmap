@@ -7,16 +7,20 @@ NODEPID=0
 
 mkdir -p ./env_node_tests/lib/ 2> /dev/null
 
-api_string="Exposed testing APIs:
+webserver_log=$(mktemp)
+webserver_banner="Exposed testing APIs:
 
 http://localhost:15004/jade?inj=*
+
+Web server standard output and error are redirected to file
+$webserver_log
 "
 
 # Run  webserver
 function run_webserver()
 {
 
-  echo "$api_string"
+  echo "$webserver_banner"
 
   cd ./env_node_tests/lib/
 
@@ -27,7 +31,7 @@ function run_webserver()
 
   cp ../connect-app.js connect-app.js
 
-  node connect-app.js
+  node connect-app.js &> $webserver_log
   NODEPID=$!
 
   cd ../../

@@ -7,6 +7,10 @@ import random
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.mako import Mako
 from core.channel import Channel
+import utils.loggers
+import logging
+
+utils.loggers.stream_handler.setLevel(logging.FATAL)
 
 class ChannelTest(unittest.TestCase):
 

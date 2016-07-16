@@ -5,8 +5,9 @@ curl --version >/dev/null 2>&1 || { echo >&2 "Curl required but it's not install
 python -c 'import mako' 2>&1 || { echo >&2 "Python Mako required but it's not installed.  Aborting."; exit 1; }
 python -c 'import jinja2' 2>&1 || { echo >&2 "Python Jinja2 required but it's not installed.  Aborting."; exit 1; }
 
+webserver_log=$(mktemp)
 
-api_string="Exposed testing APIs:
+webserver_banner="Exposed testing APIs:
 
 http://localhost:15001/reflect/mako?inj=*
 http://localhost:15001/reflect/jinja2?inj=*
@@ -16,14 +17,17 @@ http://localhost:15001/limit/mako?inj=*
 http://localhost:15001/limit/jinja2?inj=*
 http://localhost:15001/put/mako?inj=*
 http://localhost:15001/put/jinja2?inj=*
+
+Web server standard output and error are redirected to file
+$webserver_log
 "
 
 # Run  webserver
 function run_webserver()
 {
-    echo "$api_string"
+    echo "$webserver_banner"
     cd env_py_tests/
-    python webserver.py
+    python webserver.py &> $webserver_log
     cd ..
 }
 

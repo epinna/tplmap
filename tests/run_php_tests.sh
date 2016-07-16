@@ -7,18 +7,22 @@ PHPPID=0
 
 mkdir -p ./env_php_tests/lib/ 2> /dev/null
 
-api_string="Exposed testing APIs:
+webserver_log=$(mktemp)
+webserver_banner="Exposed testing APIs:
 
 http://localhost:15002/smarty-3.1.29-secured.php?inj=*
 http://localhost:15002/smarty-3.1.29-unsecured.php?inj=*
 http://localhost:15002/twig-1.24.1-secured.php?inj=*
+
+Web server standard output and error are redirected to file
+$webserver_log
 "
 
 # Run  webserver
 function run_webserver()
 {
 
-  echo "$api_string"
+  echo "$webserver_banner"
 
   # Download smarty 3.1.29 if not already installed
   if [ ! -d ./env_php_tests/lib/smarty-3.1.29/ ]; then
@@ -34,7 +38,7 @@ function run_webserver()
   fi
 
   # Run PHP webserver
-  php -S 127.0.0.1:15002 -t env_php_tests/
+  php -S 127.0.0.1:15002 -t env_php_tests/ &> $webserver_log
   PHPPID=$!
 }
 

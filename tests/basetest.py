@@ -8,6 +8,11 @@ from core.channel import Channel
 from core.checks import check_template_injection
 from utils import rand
 from utils import strings
+import utils.loggers
+import logging
+
+utils.loggers.stream_handler.setLevel(logging.FATAL)
+
 
 class BaseTest(object):
 
