@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from utils import cliparser
 from core import checks
+from core.channel import Channel
 from utils.loggers import log
 
 def main():
@@ -10,7 +11,7 @@ def main():
     if not args.get('url'):
         cliparser.parser.error('URL is required. Run with -h for help.')
     
-    checks.check_template_injection(args)
+    checks.check_template_injection(Channel(args))
     
 if __name__ == '__main__':
 

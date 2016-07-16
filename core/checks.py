@@ -49,9 +49,8 @@ def _print_injection_summary(channel):
     'read': 'no' if not channel.data.get('read') else 'yes',
 }))
 
-def check_template_injection(args):
+def check_template_injection(channel):
 
-    channel = Channel(args)
     current_plugin = None
 
     # Iterate all the available plugins until
@@ -61,7 +60,7 @@ def check_template_injection(args):
         current_plugin = plugin(channel)
 
         # Skip if user specify a specific --engine
-        if args.get('engine') and args.get('engine').lower() != current_plugin.plugin.lower():
+        if channel.args.get('engine') and channel.args.get('engine').lower() != current_plugin.plugin.lower():
             continue
 
         current_plugin.detect()
@@ -79,7 +78,7 @@ def check_template_injection(args):
 
     # If actions are not required, prints the advices and exit
     if not any(
-            f for f,v in args.items() if f in (
+            f for f,v in channel.args.items() if f in (
                 'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell'
             ) and v
         ):
@@ -99,9 +98,9 @@ def check_template_injection(args):
     # Execute operating system commands
     if channel.data.get('exec'):
 
-        if args.get('os_cmd'):
-            print current_plugin.execute(args.get('os_cmd'))
-        elif args.get('os_shell'):
+        if channel.args.get('os_cmd'):
+            print current_plugin.execute(channel.args.get('os_cmd'))
+        elif channel.args.get('os_shell'):
             log.info('Run commands on the operating system.')
 
             Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
@@ -110,9 +109,9 @@ def check_template_injection(args):
     # Execute operating system commands
     if channel.data.get('engine'):
 
-        if args.get('tpl_code'):
-            print current_plugin.inject(args.get('os_cmd'))
-        elif args.get('tpl_shell'):
+        if channel.args.get('tpl_code'):
+            print current_plugin.inject(channel.args.get('os_cmd'))
+        elif channel.args.get('tpl_shell'):
             log.info('Inject multi-line template code. Press ctrl-D to send the lines.')
 
             MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
@@ -120,7 +119,7 @@ def check_template_injection(args):
     # Perform file write
     if channel.data.get('write'):
 
-        local_remote_paths = args.get('upload')
+        local_remote_paths = channel.args.get('upload')
 
         if local_remote_paths:
 
@@ -134,7 +133,7 @@ def check_template_injection(args):
     # Perform file read
     if channel.data.get('read'):
 
-        remote_local_paths = args.get('download')
+        remote_local_paths = channel.args.get('download')
 
         if remote_local_paths:
 

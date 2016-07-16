@@ -5,6 +5,7 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from core.channel import Channel
+from core.checks import check_template_injection
 from utils import rand
 from utils import strings
 
@@ -24,6 +25,28 @@ class BaseTest(object):
             del channel.data['os']
 
         return obj, channel.data
+
+
+    def test_detection(self):
+        
+        channel = Channel({
+            'url' : self.url,
+            'level': 5
+        })
+        check_template_injection(channel)
+        
+        # Delete OS to make the tests portable
+        if 'os' in channel.data:
+            del channel.data['os']
+            
+        # Delete any unreliable engine detected
+        if 'unreliable' in channel.data:
+            del channel.data['unreliable']
+            
+        self.assertEqual(
+            channel.data,
+            self.expected_data,
+        )
 
     def test_reflection(self):
 
