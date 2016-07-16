@@ -6,6 +6,9 @@ import sys
 
 _ = os.path.normpath(sys.argv[0])
 
+banner = """Tplmap %s
+    Automatic Server-Side Template Injection Detection and Exploitation Tool
+"""
 usage = "python %prog [options]"
 epilog = """
 Example:

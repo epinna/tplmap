@@ -4,6 +4,8 @@ from core import checks
 from core.channel import Channel
 from utils.loggers import log
 
+version = '0.1b'
+
 def main():
     
     args = vars(cliparser.options)
@@ -15,6 +17,8 @@ def main():
     
 if __name__ == '__main__':
 
+    log.info(cliparser.banner % version)
+    
     try:
         main()
     except (KeyboardInterrupt):
