@@ -113,7 +113,7 @@ def check_template_injection(args):
         if args.get('tpl_code'):
             print current_plugin.inject(args.get('os_cmd'))
         elif args.get('tpl_shell'):
-            log.info('Inject multi-line template code. Double empty line to send the data.')
+            log.info('Inject multi-line template code. Press ctrl-D to send the lines.')
 
             MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
 

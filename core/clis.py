@@ -25,7 +25,6 @@ class MultilineShell(cmd.Cmd):
         self.fixed_prompt = prompt
         
         self.lines = []
-        self.empty_lines = 0
         
         self._format_prompt()
 
@@ -47,14 +46,17 @@ class MultilineShell(cmd.Cmd):
         # Do not save empty line if there is nothing to send
         if not self.lines:
             return
-        
-        # Else, increase the empty lines amount. If two, run
-        # the inject function and reset the state
-        self.empty_lines += 1
-        if self.empty_lines == 2:
-            print self.inject_function('\n'.join(self.lines))
-            self.lines = []
-            self.empty_lines = 0
+
+    def do_EOF(self, line):
+        # Run the inject function and reset the state
+    
+        # Send the current line as well
+        if line:
+            self.lines.append(line)
+
+        print
+        print self.inject_function('\n'.join(self.lines))
+        self.lines = []
         
     
         
