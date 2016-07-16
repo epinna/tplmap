@@ -17,9 +17,9 @@ class ChannelTest(unittest.TestCase):
         'exec' : True,
         'write' : True,
         'read' : True,
-        'trailer_tag': '${%(trailer)s}',
-        'header_tag': '${%(header)s}',
-        'render_tag': '${%(payload)s}',
+        'trailer_fmt': '${%(trailer)s}',
+        'header_fmt': '${%(header)s}',
+        'render_fmt': '${%(payload)s}',
     }
 
     def test_post_reflection(self):

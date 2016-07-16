@@ -6,9 +6,9 @@ from utils.strings import quote
 
 class Velocity(Plugin):
 
-    render_tag = '#set($p=%(payload)s)\n${p}\n'
-    header_tag = '\n#set($h=%(header)s)\n${h}\n'
-    trailer_tag = '\n#set($t=%(trailer)s)\n${t}'
+    render_fmt = '#set($p=%(payload)s)\n${p}\n'
+    header_fmt = '\n#set($h=%(header)s)\n${h}\n'
+    trailer_fmt = '\n#set($t=%(trailer)s)\n${t}'
     contexts = [
             { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : closures.java_ctx_closures },
             

@@ -20,34 +20,34 @@ class Plugin(object):
         # Print what it's going to be tested
         log.info('%s plugin is testing reflection on text context with tag %s' % (
                 self.plugin,
-                repr(self.render_tag % ({'payload' : '*' })).strip("'"),
+                repr(self.render_fmt % ({'payload' : '*' })).strip("'"),
             )
         )
 
         # Start detection
         self._detect_context()
 
-        # Return if render_tag or header or trailer is not set
-        if self.get('render_tag') == None or self.get('header_tag') == None or self.get('trailer_tag') == None:
+        # Return if render_fmt or header or trailer is not set
+        if self.get('render_fmt') == None or self.get('header_fmt') == None or self.get('trailer_fmt') == None:
             
-            # If render_tag is set and it's the first unrealiable detection, handle this as unreliable
-            if not self.get('unreliable') and self.get('render_tag') != None:
+            # If render_fmt is set and it's the first unrealiable detection, handle this as unreliable
+            if not self.get('unreliable') and self.get('render_fmt') != None:
                 self.set('unreliable', self.plugin)
                 log.info('%s plugin has detected unreliable reflection with tag %s, skipping' % (
                     self.plugin, 
-                    repr(self.get('render_tag') % ({'payload' : '*' })).strip("'"))
+                    repr(self.get('render_fmt') % ({'payload' : '*' })).strip("'"))
                 )
                             
             return
         
         # Here the reflection is confirmed
         prefix = self.get('prefix', '')
-        render_tag = self.get('render_tag', '%(payload)s') % ({'payload' : '*' })
+        render_fmt = self.get('render_fmt', '%(payload)s') % ({'payload' : '*' })
         suffix = self.get('suffix', '')
         log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
             self.plugin,
             repr(prefix).strip("'"),
-            repr(render_tag).strip("'"),
+            repr(render_fmt).strip("'"),
             repr(suffix).strip("'"),
             )
         )
@@ -75,11 +75,11 @@ class Plugin(object):
         expected = str(randA*randB)
 
         # Prepare first detection payload and header
-        payload = self.render_tag % ({ 'payload': '%s*%s' % (randA, randB) })
+        payload = self.render_fmt % ({ 'payload': '%s*%s' % (randA, randB) })
         header_rand = rand.randint_n(10)
-        header = self.header_tag % ({ 'header' : header_rand })
+        header = self.header_fmt % ({ 'header' : header_rand })
         trailer_rand = rand.randint_n(10)
-        trailer = self.trailer_tag % ({ 'trailer' : trailer_rand })
+        trailer = self.trailer_fmt % ({ 'trailer' : trailer_rand })
 
         log.debug('%s: Trying to inject in text context' % self.plugin)
 
@@ -93,9 +93,9 @@ class Plugin(object):
                 prefix = '',
                 suffix = ''
             ):
-            self.set('render_tag', self.render_tag)
-            self.set('header_tag', self.header_tag)
-            self.set('trailer_tag', self.trailer_tag)
+            self.set('render_fmt', self.render_fmt)
+            self.set('header_fmt', self.header_fmt)
+            self.set('trailer_fmt', self.trailer_fmt)
             return
 
         log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
@@ -145,9 +145,9 @@ class Plugin(object):
                         prefix = prefix,
                         suffix = suffix
                     ):
-                    self.set('render_tag', self.render_tag)
-                    self.set('header_tag', self.header_tag)
-                    self.set('trailer_tag', self.trailer_tag)
+                    self.set('render_fmt', self.render_fmt)
+                    self.set('header_fmt', self.header_fmt)
+                    self.set('trailer_fmt', self.trailer_fmt)
                     self.set('prefix', prefix)
                     self.set('suffix', suffix)
 
@@ -159,7 +159,7 @@ class Plugin(object):
         # see if expected is contained in the response page
         result = self.channel.req(payload)
         if result and expected in result:
-            self.set('render_tag', self.render_tag)
+            self.set('render_fmt', self.render_fmt)
             return
 
     """
@@ -226,10 +226,10 @@ class Plugin(object):
     def inject(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
 
         header_rand = rand.randint_n(10) if header_rand == None else header_rand
-        header = self.get('header_tag', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
+        header = self.get('header_fmt', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
 
         trailer_rand = rand.randint_n(10) if trailer_rand == None else trailer_rand
-        trailer = self.get('trailer_tag', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
+        trailer = self.get('trailer_fmt', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
 
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix

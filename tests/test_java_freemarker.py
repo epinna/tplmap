@@ -14,9 +14,9 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'language': 'java',
         'engine': 'freemarker',
         'exec' : True,
-        'trailer_tag': '${%(trailer)s?c}',
-        'header_tag': '${%(header)s?c}',
-        'render_tag': '${%(payload)s}',
+        'trailer_fmt': '${%(trailer)s?c}',
+        'header_fmt': '${%(header)s?c}',
+        'render_fmt': '${%(payload)s}',
         'write': True,
         'read': True
     }

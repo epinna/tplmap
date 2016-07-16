@@ -14,9 +14,9 @@ class TwigTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'php',
         'engine': 'twig',
-        'trailer_tag': '{{%(trailer)s}}',
-        'header_tag': '{{%(header)s}}',
-        'render_tag': '{{%(payload)s}}',
+        'trailer_fmt': '{{%(trailer)s}}',
+        'header_fmt': '{{%(header)s}}',
+        'render_fmt': '{{%(payload)s}}',
     }
     
     url = 'http://127.0.0.1:15002/twig-1.24.1-secured.php?tpl=%s&inj=*'

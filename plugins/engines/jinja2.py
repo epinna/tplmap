@@ -7,9 +7,9 @@ import base64
 
 class Jinja2(Plugin):
 
-    render_tag = '{{%(payload)s}}'
-    header_tag = '{{%(header)s}}'
-    trailer_tag = '{{%(trailer)s}}'
+    render_fmt = '{{%(payload)s}}'
+    header_fmt = '{{%(header)s}}'
+    trailer_fmt = '{{%(trailer)s}}'
     contexts = [
 
         # This covers {{%s}}

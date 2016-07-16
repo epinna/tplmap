@@ -22,13 +22,13 @@ plugins = [
 def _print_injection_summary(channel):
 
     prefix = channel.data.get('prefix', '').replace('\n', '\\n')
-    render_tag = channel.data.get('render_tag').replace('\n', '\\n') % ({'payload' : '*' })
+    render_fmt = channel.data.get('render_fmt').replace('\n', '\\n') % ({'payload' : '*' })
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
     log.info("""Tplmap identified the following injection point:
 
   Engine: %(engine)s
-  Template: %(prefix)s%(render_tag)s%(suffix)s
+  Template: %(prefix)s%(render_fmt)s%(suffix)s
   Context: %(context)s
   OS: %(os)s
   Capabilities:
@@ -38,7 +38,7 @@ def _print_injection_summary(channel):
     File read: %(read)s
 """ % ({
     'prefix': prefix,
-    'render_tag': render_tag,
+    'render_fmt': render_fmt,
     'suffix': suffix,
     'context': 'text' if (not prefix and not suffix) else 'code',
     'engine': channel.data.get('engine').capitalize(),
@@ -69,7 +69,7 @@ def check_template_injection(channel):
             break
 
     # Kill execution if no engine have been found
-    if not channel.data.get('render_tag') or not channel.data.get('engine'):
+    if not channel.data.get('render_fmt') or not channel.data.get('engine'):
         log.fatal("""Tested parameters appear to be not injectable. Try to increase '--level' value to perform more tests.""")
         return
         

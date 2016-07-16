@@ -13,9 +13,9 @@ class VelocityTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'java',
         'engine': 'velocity',
-        'trailer_tag': '\n#set($t=%(trailer)s)\n${t}',
-        'header_tag': '\n#set($h=%(header)s)\n${h}\n',
-        'render_tag': '#set($p=%(payload)s)\n${p}\n',
+        'trailer_fmt': '\n#set($t=%(trailer)s)\n${t}',
+        'header_fmt': '\n#set($h=%(header)s)\n${h}\n',
+        'render_fmt': '#set($p=%(payload)s)\n${p}\n',
     }
 
     url = 'http://127.0.0.1:15003/velocity?inj=*&tpl=%s'
