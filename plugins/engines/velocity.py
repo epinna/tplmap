@@ -11,9 +11,16 @@ class Velocity(Plugin):
     trailer_tag = '\n#set($t=%(trailer)s)\n${t}'
     contexts = [
             { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : closures.java_ctx_closures },
-            { 'level': 1, 'prefix': '*#', 'suffix' : '#*' },
-    ]
+            
+            # This catches 
+            # #if(%s == 1)\n#end 
+            # #foreach($item in %s)\n#end
+            # #define( %s )a#end
+            { 'level': 3, 'prefix': '%(closure)s#end#if(1==1)', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+            { 'level': 5, 'prefix': '*#', 'suffix' : '#*' },
 
+    ]
+    
     def detect_engine(self):
 
         expected_rand = str(rand.randint_n(1))

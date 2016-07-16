@@ -26,9 +26,17 @@ class VelocityTest(unittest.TestCase, BaseTest):
         (1, 1, '%s', {}),
         (1, 1, 'AAA%sAAA', {}),
         (1, 1, '#set( $a = "%s" )', { 'prefix' : '1")', 'suffix': ''}),
+        (1, 1, '#if(1 == %s)\n#end', { 'prefix' : '1)', 'suffix': ''}),
+        (3, 1, '#if(%s == 1)\n#end', { 'prefix' : '1)#end#if(1==1)', 'suffix': ''}),
+        (3, 1, '#foreach($item in %s)\n#end', { 'prefix' : '1)#end#if(1==1)', 'suffix': ''}),
         (1, 1, '## comment %s', { }),
         (5, 1, '#* %s *#', { }),
-        
+        (5, 1, '#[[%s]]# ', { }),        
+        (1, 1, '${%s}', {}),
+        (1, 1, '${(%s)}', {}),
+        (3, 1, '#define( %s )a#end', { 'prefix': '1)#end#if(1==1)', 'suffix' : ''}),
+        (3, 1, '#define( $asd )%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
+        (3, 1, '#macro(d)%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
     ]
 
     def test_download(self):
