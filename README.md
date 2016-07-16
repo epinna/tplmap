@@ -23,19 +23,15 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*'
 [+] Smarty plugin is testing reflection on text context with tag {*}
 [+] Smarty plugin is testing }*{ code context escape with 6 mutations
 [+] Mako plugin is testing reflection on text context with tag ${*}
-[+] Mako plugin is testing }* code context escape with 6 mutations
 [+] Mako plugin is testing %>*<%# code context escape with 6 mutations
 [+] Jinja2 plugin is testing reflection on text context with tag {{*}}
-[+] Jinja2 plugin is testing }}* code context escape with 6 mutations
 [+] Jinja2 plugin is testing %}* code context escape with 6 mutations
 [+] Twig plugin is testing reflection on text context with tag {{*}}
 [+] Twig plugin is testing }}*{{1 code context escape with 6 mutations
-[+] Twig plugin is testing  %}* code context escape with 6 mutations
 [+] Freemarker plugin is testing reflection on text context with tag ${*}
 [+] Freemarker plugin is testing }* code context escape with 6 mutations
 [+] Velocity plugin is testing reflection on text context with tag #set($p=*)\n${p}\n
 [+] Velocity plugin is testing )* code context escape with 6 mutations
-[+] Velocity plugin has detected unreliable reflection with tag #set($p=*)\n${p}\n, skipping
 [+] Jade plugin is testing reflection on text context with tag \n= *\n
 [+] Jade plugin has confirmed injection with tag '\n= *\n'
 [+] Tplmap identified the following injection point:
