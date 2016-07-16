@@ -10,10 +10,10 @@ from utils.loggers import log
 from core.clis import Shell, MultilineShell
 
 plugins = [
+    Smarty,
     Mako,
     Jinja2,
     Twig,
-    Smarty,
     Freemarker,
     Velocity,
     Jade
