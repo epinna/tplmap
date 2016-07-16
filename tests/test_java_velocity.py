@@ -14,7 +14,7 @@ class VelocityTest(unittest.TestCase, BaseTest):
         'language': 'java',
         'engine': 'velocity',
         'trailer_tag': '\n#set($t=%(trailer)s)\n${t}',
-        'header_tag': '#set($h=%(header)s)\n${h}\n',
+        'header_tag': '\n#set($h=%(header)s)\n${h}\n',
         'render_tag': '#set($p=%(payload)s)\n${p}\n',
     }
 
@@ -23,8 +23,12 @@ class VelocityTest(unittest.TestCase, BaseTest):
     plugin = Velocity
 
     reflection_tests = [
-        (1, '%s', {}),
-        (1, 'AAA%sAAA', {})
+        (1, 1, '%s', {}),
+        (1, 1, 'AAA%sAAA', {}),
+        (1, 1, '#set( $a = "%s" )', { 'prefix' : '1")', 'suffix': ''}),
+        (1, 1, '## comment %s', { }),
+        (5, 1, '#* %s *#', { }),
+        
     ]
 
     def test_download(self):

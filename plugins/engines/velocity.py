@@ -1,14 +1,18 @@
-from core.check import Check
 from utils.loggers import log
+from core.plugin import Plugin
+from core import closures
 from utils import rand
 from utils.strings import quote
 
-class Velocity(Check):
+class Velocity(Plugin):
 
     render_tag = '#set($p=%(payload)s)\n${p}\n'
-    header_tag = '#set($h=%(header)s)\n${h}\n'
+    header_tag = '\n#set($h=%(header)s)\n${h}\n'
     trailer_tag = '\n#set($t=%(trailer)s)\n${t}'
-    contexts = [ ]
+    contexts = [
+            { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+            { 'level': 1, 'prefix': '*#', 'suffix' : '#*' },
+    ]
 
     def detect_engine(self):
 

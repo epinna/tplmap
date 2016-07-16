@@ -104,10 +104,16 @@ class Plugin(object):
 
             # The suffix is fixed
             suffix = ctx.get('suffix', '') % ()
+            
+            # Generate closures whether prefix has closure format string and 'closure' element
+            if '%(closure)s' in ctx.get('prefix') and ctx.get('closures'):
+                closures = self._generate_closures(ctx)
+                prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )
+            # Else, inject a fake element to perform a single run
+            else:
+                closures = [ '' ]
+                prefix = '%(closure)s' + ctx.get('prefix')
 
-            closures = self._generate_closures(ctx)
-
-            prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )
             log.info('Testing code context escape %s*%s with %i closures%s' % (
                             repr(prefix).strip("'"),
                             repr(suffix).strip("'"),

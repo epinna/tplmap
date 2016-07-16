@@ -17,7 +17,7 @@ class Freemarker(Plugin):
         
         # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
         { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
-        { 'level': 5, 'prefix': '-->', 'suffix' : '<#--', 'closures' : closures.java_ctx_closures },
+        { 'level': 5, 'prefix': '-->', 'suffix' : '<#--' },
         { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
     ]
 

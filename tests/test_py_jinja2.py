@@ -123,7 +123,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (5, 5, '# if {1:"""%s"""}==1:\n# endif', { 'prefix' : '1"}\n', 'suffix' : '\n' }), # if {1:"""%s""":1}: -> if {1:"""1"}:
 
         # Comment blocks
-        (5, 1, '{# %s #}', { 'prefix' : '1#}', 'suffix' : '{#' }),
+        (5, 1, '{# %s #}', { 'prefix' : '#}', 'suffix' : '{#' }),
 
     ]
 

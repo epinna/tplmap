@@ -24,7 +24,7 @@ class Jinja2(Plugin):
         { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : closures.python_ctx_closures },
 
         # Comment blocks
-        { 'level': 5, 'prefix' : '%(closure)s#}', 'suffix' : '{#', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
 
     ]
 

@@ -15,7 +15,7 @@ plugins = [
     Twig,
     Smarty,
     Freemarker,
-#    Velocity,
+    Velocity,
     Jade
 ]
 
