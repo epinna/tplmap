@@ -18,7 +18,8 @@ $webserver_log
 # Run  webserver
 function run_webserver()
 {
-    echo "$api_string"
+    echo "$webserver_banner"
+
     cd env_py_tests/
     mkdir tpl/ 2> /dev/null
     python webserver.py &> $webserver_log
