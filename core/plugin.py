@@ -19,21 +19,16 @@ class Plugin(object):
 
         # Start detection
         self._detect_render()
-
-        # Return if render_fmt or header or trailer is not set
-        if self.get('render_fmt') == None or self.get('header_fmt') == None or self.get('trailer_fmt') == None:
-            
-            # If render_fmt is set and it's the first unrealiable detection, handle this as unreliable
-            if not self.get('unreliable') and self.get('render_fmt') != None:
-                self.set('unreliable', self.plugin)
-                log.info('%s plugin has detected unreliable reflection with tag %s, skipping' % (
-                    self.plugin, 
-                    repr(self.get('render_fmt') % ({'payload' : '*' })).strip("'"))
-                )
-                            
-            return
         
-        # Here the reflection is confirmed
+        # If render_fmt is not set, check unreliable render
+        if self.get('render_fmt') == None:
+            self._detect_unreliable_render()
+
+            # Return if unreliable is set
+            if self.get('unreliable'):
+                return
+            
+        # If here, the rendering is confirmed
         prefix = self.get('prefix', '')
         render_fmt = self.get('render_fmt', '%(payload)s') % ({'payload' : '*' })
         suffix = self.get('suffix', '')
@@ -73,7 +68,11 @@ class Plugin(object):
             # The suffix is fixed
             suffix = ctx.get('suffix', '') % ()
             
-            closures = self._generate_closures(ctx)
+            # If the context has no closures, generate one closure with a zero-length string
+            if ctx.get('closures'):
+                closures = self._generate_closures(ctx)
+            else:
+                closures = [ '' ]
             
             log.info('%s plugin is testing %s*%s code context escape with %i variations%s' % (
                             self.plugin,
@@ -92,6 +91,51 @@ class Plugin(object):
                 yield prefix, suffix
 
     """
+    Detection of unreliabe rendering tag with no header and trailer.
+    """
+    def _detect_unreliable_render(self):
+        
+        render_action = self.actions.get('render')
+        if not render_action:
+            return        
+
+        # Print what it's going to be tested
+        log.info('%s plugin is testing unreliable rendering on text context with tag %s' % (
+                self.plugin,
+                repr(render_action.get('payload') % ({'payload' : '*' })).strip("'"),
+            )
+        )
+
+        # Prepare base operation to be evalued server-side
+        randA = rand.randint_n(1)
+        randB = rand.randint_n(1)
+        expected = str(randA*randB)
+        payload = render_action.get('payload') % ({ 'payload': '%s*%s' % (randA, randB) })
+        
+        # First probe with payload wrapped by header and trailer, no suffex or prefix
+        if expected == self.inject(
+                payload = payload,
+                header = '',
+                trailer = '',
+                header_rand = None,
+                trailer_rand = None,
+                prefix = '',
+                suffix = ''
+            ):
+            
+            self.set('render_fmt', render_action.get('payload'))
+            
+            # Print if the first found unreliable render
+            if not self.get('unreliable'):
+                log.info('%s plugin has detected unreliable rendering with tag %s, skipping' % (
+                    self.plugin, 
+                    repr(self.get('render_fmt') % ({'payload' : '*' })).strip("'"))
+                )
+            
+            self.set('unreliable', self.plugin)
+            return    
+
+    """
     Detection of the rendering tag and context.
     """
     def _detect_render(self):
@@ -101,7 +145,7 @@ class Plugin(object):
             return
         
         # Print what it's going to be tested
-        log.info('%s plugin is testing reflection on text context with tag %s' % (
+        log.info('%s plugin is testing rendering with tag %s' % (
                 self.plugin,
                 repr(render_action.get('payload') % ({'payload' : '*' })).strip("'"),
             )
@@ -216,6 +260,10 @@ class Plugin(object):
 
         result_raw = self.channel.req(injection)
         result = None
+        
+        # Return result_raw if header and trailer are not specified
+        if not header and not trailer:
+            return result_raw
 
         # Cut the result using the header and trailer if specified
         if header:
@@ -236,7 +284,7 @@ class Plugin(object):
 
         closures_dict = ctx.get('closures', { '0' : [] })
     
-        closures = [ '' ]
+        closures = [ ]
     
         # Loop all the closure names
         for ctx_closure_level, ctx_closure_matrix in closures_dict.items():
