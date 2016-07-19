@@ -10,13 +10,13 @@ from utils.loggers import log
 from core.clis import Shell, MultilineShell
 
 plugins = [
-    Smarty,
+#    Smarty,
     Mako,
-    Jinja2,
-    Twig,
-    Freemarker,
-    Velocity,
-    Jade
+#    Jinja2,
+#    Twig,
+#    Freemarker,
+#    Velocity,
+#    Jade
 ]
 
 def _print_injection_summary(channel):
@@ -64,7 +64,6 @@ def check_template_injection(channel):
             continue
 
         current_plugin.detect()
-
         if channel.data.get('engine'):
             break
 

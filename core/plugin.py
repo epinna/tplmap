@@ -17,15 +17,8 @@ class Plugin(object):
 
         context_num = len([c for c in self.contexts if (c.get('level') <= self.channel.args.get('level'))])
 
-        # Print what it's going to be tested
-        log.info('%s plugin is testing reflection on text context with tag %s' % (
-                self.plugin,
-                repr(self.render_fmt % ({'payload' : '*' })).strip("'"),
-            )
-        )
-
         # Start detection
-        self._detect_context()
+        self._detect_render()
 
         # Return if render_fmt or header or trailer is not set
         if self.get('render_fmt') == None or self.get('header_fmt') == None or self.get('trailer_fmt') == None:
@@ -64,42 +57,8 @@ class Plugin(object):
         self.detect_read()
 
 
-    """
-    First detection of the injection and the context.
-    """
-    def _detect_context(self):
-
-        # Prepare base operation to be evalued server-side
-        randA = rand.randint_n(1)
-        randB = rand.randint_n(1)
-        expected = str(randA*randB)
-
-        # Prepare first detection payload and header
-        payload = self.render_fmt % ({ 'payload': '%s*%s' % (randA, randB) })
-        header_rand = rand.randint_n(10)
-        header = self.header_fmt % ({ 'header' : header_rand })
-        trailer_rand = rand.randint_n(10)
-        trailer = self.trailer_fmt % ({ 'trailer' : trailer_rand })
-
-        log.debug('%s: Trying to inject in text context' % self.plugin)
-
-        # First probe with payload wrapped by header and trailer, no suffex or prefix
-        if expected == self.inject(
-                payload = payload,
-                header = header,
-                trailer = trailer,
-                header_rand = header_rand,
-                trailer_rand = trailer_rand,
-                prefix = '',
-                suffix = ''
-            ):
-            self.set('render_fmt', self.render_fmt)
-            self.set('header_fmt', self.header_fmt)
-            self.set('trailer_fmt', self.trailer_fmt)
-            return
-
-        log.debug('%s: Injection in text context failed, trying to inject in code context' % self.plugin)
-
+    def _generate_contexts(self):
+        
         # Loop all the contexts
         for ctx in self.contexts:
 
@@ -114,18 +73,11 @@ class Plugin(object):
             # The suffix is fixed
             suffix = ctx.get('suffix', '') % ()
             
-            # Generate closures whether prefix has closure format string and 'closure' element
-            if '%(closure)s' in ctx.get('prefix') and ctx.get('closures'):
-                closures = self._generate_closures(ctx)
-                prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )
-            # Else, inject a fake element to perform a single run
-            else:
-                closures = [ '' ]
-                prefix = '%(closure)s' + ctx.get('prefix')
-
-            log.info('%s plugin is testing %s*%s code context escape with %i mutations%s' % (
+            closures = self._generate_closures(ctx)
+            
+            log.info('%s plugin is testing %s*%s code context escape with %i variations%s' % (
                             self.plugin,
-                            repr(prefix).strip("'"),
+                            repr(ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )).strip("'"),
                             repr(suffix).strip("'"),
                             len(closures),
                             ' (level %i)' % (ctx.get('level', 1)) if self.get('level') else ''
@@ -133,34 +85,59 @@ class Plugin(object):
             )
 
             for closure in closures:
-
+                
                 # Format the prefix with closure
                 prefix = ctx.get('prefix', '%(closure)s') % ( { 'closure' : closure } )
-                if expected == self.inject(
-                        payload = payload,
-                        header = header,
-                        trailer = trailer,
-                        header_rand = header_rand,
-                        trailer_rand = trailer_rand,
-                        prefix = prefix,
-                        suffix = suffix
-                    ):
-                    self.set('render_fmt', self.render_fmt)
-                    self.set('header_fmt', self.header_fmt)
-                    self.set('trailer_fmt', self.trailer_fmt)
-                    self.set('prefix', prefix)
-                    self.set('suffix', suffix)
+                
+                yield prefix, suffix
 
-                    return
-
-        log.debug('%s: Injection in code context failed, trying raw payload with no header and trailer' % self.plugin)
-
-        # As last resort, just inject without header and trailer and
-        # see if expected is contained in the response page
-        result = self.channel.req(payload)
-        if result and expected in result:
-            self.set('render_fmt', self.render_fmt)
+    """
+    Detection of the rendering tag and context.
+    """
+    def _detect_render(self):
+        
+        render_action = self.actions.get('render')
+        if not render_action:
             return
+        
+        # Print what it's going to be tested
+        log.info('%s plugin is testing reflection on text context with tag %s' % (
+                self.plugin,
+                repr(render_action.get('payload') % ({'payload' : '*' })).strip("'"),
+            )
+        )
+        
+        for prefix, suffix in self._generate_contexts():
+        
+            # Prepare base operation to be evalued server-side
+            randA = rand.randint_n(1)
+            randB = rand.randint_n(1)
+            expected = str(randA*randB)
+            
+            payload = render_action.get('payload') % ({ 'payload': '%s*%s' % (randA, randB) })
+            header_rand = rand.randint_n(10)
+            header = render_action.get('header') % ({ 'header' : header_rand })
+            trailer_rand = rand.randint_n(10)
+            trailer = render_action.get('trailer') % ({ 'trailer' : trailer_rand })
+
+            # First probe with payload wrapped by header and trailer, no suffex or prefix
+            if expected == self.inject(
+                    payload = payload,
+                    header = header,
+                    trailer = trailer,
+                    header_rand = header_rand,
+                    trailer_rand = trailer_rand,
+                    prefix = prefix,
+                    suffix = suffix
+                ):
+                
+                self.set('render_fmt', render_action.get('payload'))
+                self.set('header_fmt', render_action.get('header'))
+                self.set('trailer_fmt', render_action.get('trailer'))
+                self.set('prefix', prefix)
+                self.set('suffix', suffix)
+                return
+
 
     """
     Detect engine and language used.
@@ -254,14 +231,15 @@ class Plugin(object):
     def get(self, key, default = None):
         return self.channel.data.get(key, default)
 
+
     def _generate_closures(self, ctx):
 
-        closures_list_of_lists = ctx.get('closures', {})
-
-        closures = []
+        closures_dict = ctx.get('closures', { '0' : [] })
+    
+        closures = [ '' ]
     
         # Loop all the closure names
-        for ctx_closure_level, ctx_closure_matrix in closures_list_of_lists.items():
+        for ctx_closure_level, ctx_closure_matrix in closures_dict.items():
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')

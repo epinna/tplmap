@@ -7,12 +7,20 @@ import base64
 
 
 class Mako(Plugin):
-
-    render_fmt = '${%(payload)s}'
-    header_fmt = '${%(header)s}'
-    trailer_fmt = '${%(trailer)s}'
+    
+    actions = {
+        'render' : {
+            'payload': '${%(payload)s}',
+            'header': '${%(header)s}',
+            'trailer': '${%(trailer)s}'
+        }
+    
+    }
 
     contexts = [
+    
+        # Text context, no closures
+        { 'level': 1 },
 
         # Normal reflecting tag ${}
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
