@@ -1,4 +1,3 @@
-from utils.strings import quote, chunkit, md5
 from core import closures
 from core.plugin import Plugin
 from utils.loggers import log
@@ -12,15 +11,15 @@ class Smarty(Plugin):
     header_fmt = '{%(header)s}'
     trailer_fmt = '{%(trailer)s}'
     contexts = [
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : closures.php_ctx_closures },        
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : closures.php_ctx_closures },
 
         # {config_load file="missing_file"} raises an exception
-        
+
         # Escape Ifs
-        { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : closures.php_ctx_closures },        
+        { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
 
         # Escape {assign var="%s" value="%s"}
-        { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : closures.php_ctx_closures },        
+        { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
 
 
     ]

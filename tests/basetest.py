@@ -33,21 +33,21 @@ class BaseTest(object):
 
 
     def test_detection(self):
-        
+
         channel = Channel({
             'url' : self.url,
             'level': 5
         })
         check_template_injection(channel)
-        
+
         # Delete OS to make the tests portable
         if 'os' in channel.data:
             del channel.data['os']
-            
+
         # Delete any unreliable engine detected
         if 'unreliable' in channel.data:
             del channel.data['unreliable']
-            
+
         self.assertEqual(
             channel.data,
             self.expected_data,
@@ -101,22 +101,22 @@ class BaseTest(object):
         # Send long binary
         data = open('/bin/ls', 'rb').read()
         obj.write(data, remote_temp_path)
-        self.assertEqual(obj._md5(remote_temp_path), strings.md5(data))
+        self.assertEqual(obj.md5(remote_temp_path), strings.md5(data))
         obj.execute('rm %s' % (remote_temp_path))
 
         remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
         # Send short ASCII data, without removing it
         data = 'SHORT ASCII DATA'
         obj.write(data, remote_temp_path)
-        self.assertEqual(obj._md5(remote_temp_path), strings.md5(data))
+        self.assertEqual(obj.md5(remote_temp_path), strings.md5(data))
 
         # Try to append data without --force-overwrite and re-check the previous md5
         obj.write('APPENDED DATA', remote_temp_path)
-        self.assertEqual(obj._md5(remote_temp_path), strings.md5(data))
+        self.assertEqual(obj.md5(remote_temp_path), strings.md5(data))
 
         # Now set --force-overwrite and rewrite new data on the same file
         obj.channel.args['force_overwrite'] = True
         data = 'NEW DATA'
         obj.write(data, remote_temp_path)
-        self.assertEqual(obj._md5(remote_temp_path), strings.md5(data))
+        self.assertEqual(obj.md5(remote_temp_path), strings.md5(data))
         obj.execute('rm %s' % (remote_temp_path))

