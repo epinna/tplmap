@@ -9,7 +9,7 @@ class Mako(Plugin):
 
     actions = {
         'render' : {
-            'payload': '${%(payload)s}',
+            'render': '${%(code)s}',
             'header': '${%(header)s}',
             'trailer': '${%(trailer)s}'
         },

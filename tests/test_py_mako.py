@@ -24,7 +24,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'suffix' : '',
         'trailer_fmt': '${%(trailer)s}',
         'header_fmt': '${%(header)s}',
-        'render_fmt': '${%(payload)s}',
+        'render_fmt': '${%(code)s}',
     }
 
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'

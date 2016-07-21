@@ -32,7 +32,7 @@ class Plugin(object):
 
         # If here, the rendering is confirmed
         prefix = self.get('prefix', '')
-        render_fmt = self.get('render_fmt', '%(payload)s') % ({'payload' : '*' })
+        render_fmt = self.get('render_fmt', '%(code)s') % ({'code' : '*' })
         suffix = self.get('suffix', '')
         log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
             self.plugin,
@@ -104,7 +104,7 @@ class Plugin(object):
         # Print what it's going to be tested
         log.info('%s plugin is testing unreliable rendering on text context with tag %s' % (
                 self.plugin,
-                repr(render_action.get('payload') % ({'payload' : '*' })).strip("'"),
+                repr(render_action.get('render') % ({'code' : '*' })).strip("'"),
             )
         )
 
@@ -112,7 +112,7 @@ class Plugin(object):
         randA = rand.randint_n(1)
         randB = rand.randint_n(1)
         expected = str(randA*randB)
-        payload = render_action.get('payload') % ({ 'payload': '%s*%s' % (randA, randB) })
+        payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
 
         # First probe with payload wrapped by header and trailer, no suffex or prefix
         if expected == self.inject(
@@ -125,13 +125,13 @@ class Plugin(object):
                 suffix = ''
             ):
 
-            self.set('render_fmt', render_action.get('payload'))
+            self.set('render_fmt', render_action.get('render'))
 
-            # Print if the first found unreliable render
+            # Print if the first found unreliable renode
             if not self.get('unreliable'):
                 log.info('%s plugin has detected unreliable rendering with tag %s, skipping' % (
                     self.plugin,
-                    repr(self.get('render_fmt') % ({'payload' : '*' })).strip("'"))
+                    repr(self.get('render_fmt') % ({'code' : '*' })).strip("'"))
                 )
 
             self.set('unreliable', self.plugin)
@@ -149,7 +149,7 @@ class Plugin(object):
         # Print what it's going to be tested
         log.info('%s plugin is testing rendering with tag %s' % (
                 self.plugin,
-                repr(render_action.get('payload') % ({'payload' : '*' })).strip("'"),
+                repr(render_action.get('render') % ({'code' : '*' })).strip("'"),
             )
         )
 
@@ -160,7 +160,7 @@ class Plugin(object):
             randB = rand.randint_n(1)
             expected = str(randA*randB)
 
-            payload = render_action.get('payload') % ({ 'payload': '%s*%s' % (randA, randB) })
+            payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
             header_rand = rand.randint_n(10)
             header = render_action.get('header') % ({ 'header' : header_rand })
             trailer_rand = rand.randint_n(10)
@@ -177,7 +177,7 @@ class Plugin(object):
                     suffix = suffix
                 ):
 
-                self.set('render_fmt', render_action.get('payload'))
+                self.set('render_fmt', render_action.get('render'))
                 self.set('header_fmt', render_action.get('header'))
                 self.set('trailer_fmt', render_action.get('trailer'))
                 self.set('prefix', prefix)

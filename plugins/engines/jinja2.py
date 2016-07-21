@@ -9,7 +9,7 @@ class Jinja2(Plugin):
 
     actions = {
         'render' : {
-            'payload': '{{%(payload)s}}',
+            'render': '{{%(code)s}}',
             'header': '{{%(header)s}}',
             'trailer': '{{%(trailer)s}}'
         },
