@@ -5,6 +5,7 @@ import re
 import itertools
 import base64
 import datetime
+import threading
 
 class Plugin(object):
 
@@ -18,48 +19,43 @@ class Plugin(object):
 
     def detect(self):
 
+        # Start blind injection thread
+        blindthread = threading.Thread(target=self._detect_blind)
+        #blindthread.start()
+        
         # Start detection
         self._detect_render()
-
-        # If render is not set, check blind injections
-        if self.get('render') == None:
-            self._detect_blind()
-
-            if self.get('blind'):
-
-                log.info('%s plugin has confirmed blind injection' % (self.plugin))
-                return
 
         # If render is not set, check unreliable render
         if self.get('render') == None:
             self._detect_unreliable_render()
 
-            # Return if unreliable is set
-            if self.get('unreliable'):
-                return
-
-        # If here, the rendering is confirmed
-        prefix = self.get('prefix', '')
-        render = self.get('render', '%(code)s') % ({'code' : '*' })
-        suffix = self.get('suffix', '')
-        log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
-            self.plugin,
-            repr(prefix).strip("'"),
-            repr(render).strip("'"),
-            repr(suffix).strip("'"),
+        if self.get('render') == None:
+            # If here, the rendering is confirmed
+            prefix = self.get('prefix', '')
+            render = self.get('render', '%(code)s') % ({'code' : '*' })
+            suffix = self.get('suffix', '')
+            log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
+                self.plugin,
+                repr(prefix).strip("'"),
+                repr(render).strip("'"),
+                repr(suffix).strip("'"),
+                )
             )
-        )
 
-        self.detect_engine()
+            self.detect_engine()
 
-        # Return if engine is still unset
-        if not self.get('engine'):
-            return
+            # If engine is set
+            if self.get('engine'):
+                self.detect_eval()
+                self.detect_exec()
+                self.detect_write()
+                self.detect_read()
 
-        self.detect_eval()
-        self.detect_exec()
-        self.detect_write()
-        self.detect_read()
+        # Wait 5 second the blindthread end
+        #blindthread.join(timeout=5)
+        if self.get('blind'):
+            log.info('%s plugin has confirmed blind injection' % (self.plugin))
 
 
     def _generate_contexts(self):
