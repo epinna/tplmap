@@ -394,5 +394,15 @@ class Plugin(object):
         if expected_rand == self.execute('echo %s' % expected_rand):
             self.set('exec', True)
 
-    def execute(self):
-        pass
+    def execute(self, code):
+
+        action = self.actions.get('execute', {})
+        payload = action.get('execute')
+        call_name = action.get('call', 'inject')
+
+        # Skip if something is missing or call function is not set
+        if not action or not payload or not call_name or not hasattr(self, call_name):
+            return
+
+        execution_code = payload % ({ 'code' : code })
+        return getattr(self, call_name)(execution_code)

@@ -20,6 +20,8 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'exec' : True,
         'read' : True,
         'write' : True,
+        'prefix': '',
+        'suffix': '',
         'trailer_fmt': '{{%(trailer)s}}',
         'header_fmt': '{{%(header)s}}',
         'render_fmt': '{{%(payload)s}}',
