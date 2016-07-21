@@ -18,9 +18,9 @@ class JadeTest(unittest.TestCase, BaseTest):
         'exec' : True,
         'read' : True,
         'write' : True,
-        'trailer_fmt': '\n= %(trailer)s\n',
-        'header_fmt': '\n= %(header)s\n',
-        'render_fmt': '\n= %(payload)s\n',
+        'trailer': '\n= %(trailer)s\n',
+        'header': '\n= %(header)s\n',
+        'render': '\n= %(payload)s\n',
     }
 
     url = 'http://127.0.0.1:15004/jade?inj=*&tpl=%s'

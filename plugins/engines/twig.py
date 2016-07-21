@@ -5,9 +5,9 @@ from core import closures
 
 class Twig(Plugin):
 
-    render_fmt = '{{%(payload)s}}'
-    header_fmt = '{{%(header)s}}'
-    trailer_fmt = '{{%(trailer)s}}'
+    render = '{{%(payload)s}}'
+    header = '{{%(header)s}}'
+    trailer = '{{%(trailer)s}}'
     contexts = [
         { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : closures.php_ctx_closures },
         { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },

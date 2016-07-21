@@ -17,9 +17,9 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         'exec' : True,
         'write': True,
         'read': True,
-        'trailer_fmt': '{%(trailer)s}',
-        'header_fmt': '{%(header)s}',
-        'render_fmt': '{%(payload)s}',
+        'trailer': '{%(trailer)s}',
+        'header': '{%(header)s}',
+        'render': '{%(payload)s}',
     }
     
     url = 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*&tpl=%s'

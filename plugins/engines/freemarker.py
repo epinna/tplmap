@@ -8,9 +8,9 @@ import base64
 
 class Freemarker(Plugin):
 
-    render_fmt = '${%(payload)s}'
-    header_fmt = '${%(header)s?c}'
-    trailer_fmt = '${%(trailer)s?c}'
+    render = '${%(payload)s}'
+    header = '${%(header)s?c}'
+    trailer = '${%(trailer)s?c}'
     
     contexts = [
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },

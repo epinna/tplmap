@@ -7,9 +7,9 @@ import base64
 
 class Jade(Plugin):
 
-    render_fmt = '\n= %(payload)s\n'
-    header_fmt = '\n= %(header)s\n'
-    trailer_fmt = '\n= %(trailer)s\n'
+    render = '\n= %(payload)s\n'
+    header = '\n= %(header)s\n'
+    trailer = '\n= %(trailer)s\n'
     contexts = [
         # Attribute close a(href=\'%s\')
         { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: closures.javascript_ctx_closures[1] } },

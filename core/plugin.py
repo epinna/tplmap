@@ -23,8 +23,8 @@ class Plugin(object):
         # Start detection
         self._detect_render()
 
-        # If render_fmt is not set, check blind injections
-        if self.get('render_fmt') == None:
+        # If render is not set, check blind injections
+        if self.get('render') == None:
             self._detect_blind()
 
             if self.get('blind'):
@@ -32,8 +32,8 @@ class Plugin(object):
                 log.info('%s plugin has confirmed blind injection' % (self.plugin))
                 return
 
-        # If render_fmt is not set, check unreliable render
-        if self.get('render_fmt') == None:
+        # If render is not set, check unreliable render
+        if self.get('render') == None:
             self._detect_unreliable_render()
 
             # Return if unreliable is set
@@ -42,12 +42,12 @@ class Plugin(object):
 
         # If here, the rendering is confirmed
         prefix = self.get('prefix', '')
-        render_fmt = self.get('render_fmt', '%(code)s') % ({'code' : '*' })
+        render = self.get('render', '%(code)s') % ({'code' : '*' })
         suffix = self.get('suffix', '')
         log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
             self.plugin,
             repr(prefix).strip("'"),
-            repr(render_fmt).strip("'"),
+            repr(render).strip("'"),
             repr(suffix).strip("'"),
             )
         )
@@ -135,13 +135,13 @@ class Plugin(object):
                 suffix = ''
             ):
 
-            self.set('render_fmt', render_action.get('render'))
+            self.set('render', render_action.get('render'))
 
             # Print if the first found unreliable renode
             if not self.get('unreliable'):
                 log.info('%s plugin has detected unreliable rendering with tag %s, skipping' % (
                     self.plugin,
-                    repr(self.get('render_fmt') % ({'code' : '*' })).strip("'"))
+                    repr(self.get('render') % ({'code' : '*' })).strip("'"))
                 )
 
             self.set('unreliable', self.plugin)
@@ -229,9 +229,9 @@ class Plugin(object):
                     suffix = suffix
                 ):
 
-                self.set('render_fmt', render_action.get('render'))
-                self.set('header_fmt', render_action.get('header'))
-                self.set('trailer_fmt', render_action.get('trailer'))
+                self.set('render', render_action.get('render'))
+                self.set('header', render_action.get('header'))
+                self.set('trailer', render_action.get('trailer'))
                 self.set('prefix', prefix)
                 self.set('suffix', suffix)
                 return
@@ -261,10 +261,10 @@ class Plugin(object):
     def render(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
 
         header_rand = rand.randint_n(10) if header_rand == None else header_rand
-        header = self.get('header_fmt', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
+        header = self.get('header', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
 
         trailer_rand = rand.randint_n(10) if trailer_rand == None else trailer_rand
-        trailer = self.get('trailer_fmt', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
+        trailer = self.get('trailer', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
 
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix

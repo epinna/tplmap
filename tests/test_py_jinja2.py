@@ -22,9 +22,9 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'write' : True,
         'prefix': '',
         'suffix': '',
-        'trailer_fmt': '{{%(trailer)s}}',
-        'header_fmt': '{{%(header)s}}',
-        'render_fmt': '{{%(code)s}}',
+        'trailer': '{{%(trailer)s}}',
+        'header': '{{%(header)s}}',
+        'render': '{{%(code)s}}',
     }
 
     url = 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*'
@@ -133,7 +133,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
 
         obj, data = self._get_detection_obj_data('http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*&limit=8' % '')
 
-        expected_data = { 'render_fmt' : self.expected_data['render_fmt'], 'unreliable' : 'Jinja2' }
+        expected_data = { 'render' : self.expected_data['render'], 'unreliable' : 'Jinja2' }
 
         self.assertEqual(data, expected_data)
 
