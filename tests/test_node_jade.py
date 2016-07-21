@@ -34,10 +34,10 @@ class JadeTest(unittest.TestCase, BaseTest):
 
         (1, 1, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
         (1, 1, 'a(href="%s")', { 'prefix' : '1")', 'suffix' : '//' }),
-        (2, 1, '#container.%s', {  }),
+        (1, 1, '#container.%s', {  }),
         (2, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' }),
 
         (2, 2, '- var %s = true', { 'prefix' : 'a\n', 'suffix' : '//' }),
-        (2, 1, '- var a = %s', { }),
+        (2, 1, '- var a = %s', { 'prefix': '1\n', 'suffix' : '//' }),
 
     ]
