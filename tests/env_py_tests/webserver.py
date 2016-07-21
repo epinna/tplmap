@@ -87,6 +87,22 @@ def limited(engine):
     elif engine == 'jinja2':
         return Jinja2Env.from_string(template % injection).render()
 
+@app.route("/blind/<engine>")
+def blind(engine):
+
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+
+    injection = request.values.get('inj')
+
+    if engine == 'mako':
+        MakoTemplates(template % injection, lookup=mylookup).render()
+    elif engine == 'jinja2':
+        Jinja2Env.from_string(template % injection).render()
+
+    return ''
+
 @app.route('/shutdown')
 def shutdown():
     shutdown_server()

