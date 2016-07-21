@@ -23,7 +23,7 @@ class Jade(Plugin):
             'read' : """global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
         },
         'md5' : {
-            'call': 'render',
+            'call': 'inject',
             'md5': """- var x = global.process
 - x = x.mainModule.require
 = x('crypto').createHash('md5').update(x('fs').readFileSync('%(path)s')).digest("hex")
@@ -64,3 +64,7 @@ class Jade(Plugin):
         self.set('language', 'javascript')
         self.set('eval', 'javascript')
         self.set('engine', 'jade')
+
+    def execute(self, code):
+        # Quote code before submitting it
+        return super(Jade, self).execute(quote(code))
