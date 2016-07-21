@@ -15,22 +15,22 @@ class Jade(Plugin):
         },
         'write' : {
             'call' : 'evaluate',
-            'write' : """global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk)s', 'base64')""",
+            'write' : """global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk)s', 'base64'), 'binary')""",
             'truncate' : """global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
         },
         'read' : {
             'call': 'render',
-            'read' : """global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
+            'read' : """= global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
         },
         'md5' : {
-            'call': 'inject',
+            'call': 'render',
             'md5': """- var x = global.process
 - x = x.mainModule.require
 = x('crypto').createHash('md5').update(x('fs').readFileSync('%(path)s')).digest("hex")
 """
         },
         'evaluate' : {
-            'call': 'inject',
+            'call': 'render',
             'evaluate': '- %(code)s'
         },
         'blind' : {
