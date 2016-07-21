@@ -34,7 +34,7 @@ if [[ "$1" == "--test" ]]; then
   # Wait until the port is open
   while ! echo exit | nc localhost 15001; do sleep 1; done
   # Launch python engines tests
-  python -m unittest discover . 'test_py_jinja2.py'
+  python -m unittest discover . 'test_py_*.py'
   # Shutdown python webserver
   curl http://localhost:15001/shutdown
 else

