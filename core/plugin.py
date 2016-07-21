@@ -447,3 +447,6 @@ class Plugin(object):
 
         execution_code = payload % ({ 'code' : code })
         return getattr(self, call_name)(execution_code)
+
+    def detect_eval(self):
+        pass

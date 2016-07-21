@@ -16,7 +16,7 @@ plugins = [
 #    Twig,
 #    Freemarker,
 #    Velocity,
-#    Jade
+    Jade
 ]
 
 def _print_injection_summary(channel):
