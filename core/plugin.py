@@ -18,8 +18,6 @@ class Plugin(object):
 
     def detect(self):
 
-        context_num = len([c for c in self.contexts if (c.get('level') <= self.channel.args.get('level'))])
-
         # Start detection
         self._detect_render()
 
