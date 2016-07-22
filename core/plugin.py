@@ -6,7 +6,6 @@ import re
 import itertools
 import base64
 import datetime
-import threading
 import collections
 
 class Plugin(object):
@@ -28,8 +27,8 @@ class Plugin(object):
     def detect(self):
 
         # Start thread to check blind injection
-        blindthread = threading.Thread(target=self._detect_blind)
-        blindthread.start()
+        #blindthread = threading.Thread(target=self._detect_blind)
+        #blindthread.start()
 
         # Start detection
         self._detect_render()
@@ -61,10 +60,12 @@ class Plugin(object):
                 self.detect_write()
                 self.detect_read()
 
-        blindthread.join(timeout=(float(sum(self.render_req_tm))/len(self.render_req_tm))/1000)
+        #blindthread.join(timeout=(float(sum(self.render_req_tm))/len(self.render_req_tm))/1000)
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
+            
+            self._detect_blind()
 
             if self.get('blind'):
 
@@ -521,7 +522,7 @@ class Plugin(object):
 
     def detect_blind_eval(self):
 
-        # Assume blind render capabilities only if blind
+        # Assume blind render capabilities only if exec is not set, blind
         # is set and self.actions['blind_render'] exits
         if not self.get('blind') or not self.actions.get('blind_evaluate'):
             return
