@@ -16,7 +16,7 @@ utils.loggers.stream_handler.setLevel(logging.FATAL)
 
 class BaseTest(object):
 
-    def _get_detection_obj_data(self, url, level = 1, closure_level = 1):
+    def _get_detection_obj_data(self, url, level = 0, closure_level = 0):
 
         channel = Channel({
             'url' : url,
@@ -67,7 +67,7 @@ class BaseTest(object):
             self.assertEqual(
                 data,
                 expected_data,
-                msg = '\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
+                msg = '\nreflection\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
             )
 
     def test_blind(self):
@@ -84,7 +84,7 @@ class BaseTest(object):
             self.assertEqual(
                 data,
                 expected_data,
-                msg = '\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
+                msg = '\nblind\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
             )
 
     def test_download(self):
