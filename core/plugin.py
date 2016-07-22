@@ -1,6 +1,4 @@
-
-
-from utils.strings import quote, chunkit, md5
+from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
 import threading
@@ -278,7 +276,7 @@ class Plugin(object):
 
             result = delta.seconds >= expected_delay
 
-            log.debug('[blind %s] code %s took %s. %s was requested' % (self.plugin, injection, str(delta.seconds), str(expected_delay)))
+            log.debug('[blind %s] code above took %s. %s was requested' % (self.plugin, str(delta.seconds), str(expected_delay)))
 
             return result
             
@@ -378,7 +376,9 @@ class Plugin(object):
 
         execution_code = payload % ({ 'path' : remote_path })
 
-        return getattr(self, call_name)(execution_code)
+        return getattr(self, call_name)(
+            code = execution_code, 
+        )
 
     """ Overridable function to detect read capabilities. """
     def detect_read(self):
@@ -410,7 +410,9 @@ class Plugin(object):
 
         execution_code = payload % ({ 'path' : remote_path })
 
-        data_b64encoded = getattr(self, call_name)(execution_code)
+        data_b64encoded = getattr(self, call_name)(
+            code = execution_code, 
+        )
         data = base64.b64decode(data_b64encoded)
 
         if not md5(data) == md5_remote:
@@ -447,7 +449,9 @@ class Plugin(object):
                 return
             else:
                 execution_code = payload_truncate % ({ 'path' : remote_path })
-                getattr(self, call_name)(execution_code)
+                getattr(self, call_name)(
+                    code = execution_code
+                )
 
         # Upload file in chunks of 500 characters
         for chunk in chunkit(data, 500):
@@ -455,7 +459,9 @@ class Plugin(object):
             chunk_b64 = base64.urlsafe_b64encode(chunk)
 
             execution_code = payload_write % ({ 'path' : remote_path, 'chunk' : chunk_b64 })
-            getattr(self, call_name)(execution_code)
+            getattr(self, call_name)(
+                code = execution_code
+            )
 
         if not md5(data) == self.md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
@@ -489,7 +495,7 @@ class Plugin(object):
         if expected_rand == self.execute('echo %s' % expected_rand):
             self.set('exec', True)
 
-    def execute(self, code):
+    def execute(self, code, prefix = '', suffix = '', blind = False):
 
         action = self.actions.get('execute', {})
         payload = action.get('execute')
@@ -500,7 +506,14 @@ class Plugin(object):
             return
 
         execution_code = payload % ({ 'code' : code })
-        return getattr(self, call_name)(execution_code)
+        result = getattr(self, call_name)(
+            code = execution_code, 
+            prefix = prefix, 
+            suffix = suffix, 
+            blind = blind
+        )
+        return result
+
 
     def detect_eval(self):
         pass
