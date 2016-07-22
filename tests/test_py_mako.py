@@ -43,15 +43,15 @@ class MakoTest(unittest.TestCase, BaseTest):
     plugin = Mako
 
     blind_tests = [
-        (1, 1, 'AAA%sAAA', {}),
+        (0, 0, 'AAA%sAAA', {}),
         (1, 5, '<%% a=set(["""%s"""]) %%>', { 'prefix' : '1"""])%>', 'suffix' : '<%#' }),
     ]
 
     reflection_tests = [
 
         # Text context
-        (1, 1, '%s', {}),
-        (1, 1, 'AAA%sAAA', {}),
+        (0, 0, '%s', {}),
+        (0, 0, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
         (1, 1, '${ %s = 1 }', {  'prefix': '1}', 'suffix' : ''  }),
