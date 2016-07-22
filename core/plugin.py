@@ -1,6 +1,7 @@
 from utils.strings import quote, chunkit, md5
 from utils import rand
 from utils.loggers import log
+import threading
 import re
 import itertools
 import base64
@@ -18,49 +19,55 @@ class Plugin(object):
 
     def detect(self):
 
+        # Start thread to check blind injection
+        blindthread = threading.Thread(target=self._detect_blind)
+        blindthread.start()
+
         # Start detection
         self._detect_render()
-
-        # If render is not set, check blind injections
-        if self.get('render') == None:
-            self._detect_blind()
-
-            if self.get('blind'):
-
-                log.info('%s plugin has confirmed blind injection' % (self.plugin))
-                return
 
         # If render is not set, check unreliable render
         if self.get('render') == None:
             self._detect_unreliable_render()
 
-            # Return if unreliable is set
-            if self.get('unreliable'):
-                return
+        if self.get('render') != None:
 
-        # If here, the rendering is confirmed
-        prefix = self.get('prefix', '')
-        render = self.get('render', '%(code)s') % ({'code' : '*' })
-        suffix = self.get('suffix', '')
-        log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
-            self.plugin,
-            repr(prefix).strip("'"),
-            repr(render).strip("'"),
-            repr(suffix).strip("'"),
+            # If here, the rendering is confirmed
+            prefix = self.get('prefix', '')
+            render = self.get('render', '%(code)s') % ({'code' : '*' })
+            suffix = self.get('suffix', '')
+            log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
+                self.plugin,
+                repr(prefix).strip("'"),
+                repr(render).strip("'"),
+                repr(suffix).strip("'"),
+                )
             )
-        )
 
-        self.detect_engine()
+            self.detect_engine()
 
-        # Return if engine is still unset
+            # Return if engine is still unset
+            if self.get('engine'):
+                self.detect_eval()
+                self.detect_exec()
+                self.detect_write()
+                self.detect_read()
+
+
+        # Manage blind injection only if render detection has failed
         if not self.get('engine'):
-            return
 
-        self.detect_eval()
-        self.detect_exec()
-        self.detect_write()
-        self.detect_read()
+            blindthread.join(timeout=6)
 
+            if self.get('blind'):
+
+                log.info('%s plugin has confirmed blind injection' % (self.plugin))
+
+                self.detect_blind_engine()
+                self.detect_blind_eval()
+                self.detect_blind_exec()
+                self.detect_blind_read()
+                self.detect_blind_write()
 
     def _generate_contexts(self):
 
@@ -151,11 +158,12 @@ class Plugin(object):
     def _detect_blind(self):
 
         action = self.actions.get('blind', {})
-        payload = action.get('blind')
+        payload_true = action.get('bool_true')
+        payload_false = action.get('bool_false')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set
-        if not action or not payload or not call_name or not hasattr(self, call_name):
+        if not action or not payload_true or not payload_false or not call_name or not hasattr(self, call_name):
             return
 
         # Print what it's going to be tested
@@ -164,25 +172,22 @@ class Plugin(object):
             )
         )
 
-        expected_delay = 10
-
-        execution_code = payload % ({ 'code' : '1', 'delay' : expected_delay })
+        expected_delay = 5
 
         for prefix, suffix in self._generate_contexts():
 
-            start = datetime.datetime.now()
+            # Conduct a true-false test
 
-            # First probe with payload wrapped by header and trailer, no suffex or prefix
-            getattr(self, call_name)(
-                payload = execution_code,
+            if getattr(self, call_name)(
+                payload = payload_true,
                 prefix = prefix,
                 suffix = suffix
-            )
-
-            end = datetime.datetime.now()
-            delta = end - start
-
-            if delta.seconds >= expected_delay:
+            ) and not getattr(self, call_name)(
+                payload = payload_false,
+                prefix = prefix,
+                suffix = suffix
+            ):
+                # We can assume here blind is true
                 self.set('blind', True)
                 return
 
@@ -449,4 +454,53 @@ class Plugin(object):
         return getattr(self, call_name)(execution_code)
 
     def detect_eval(self):
+        pass
+
+
+    def detect_blind_eval(self):
+
+        # Assume blind render capabilities only if blind
+        # is set and self.actions['blind_render'] exits
+        if not self.get('blind') or not self.actions.get('blind_evaluate'):
+            return
+
+        self.set('blind_evaluate', True)
+        self.set('eval', 'python')
+
+    def blind_evaluate(self, payload, prefix = '', suffix = ''):
+
+        action = self.actions.get('blind_evaluate_bool', {})
+        payload_action = action.get('blind_evaluate_bool')
+        call_name = action.get('call', 'inject')
+
+        # Skip if something is missing or call function is not set
+        if not action or not payload_action or not call_name or not hasattr(self, call_name):
+            return
+
+        expected_delay = 5
+
+        start = datetime.datetime.now()
+
+        execution_code = payload_action % ({ 'code' : payload, 'delay' : expected_delay })
+
+        getattr(self, call_name)(execution_code, prefix, suffix)
+
+        end = datetime.datetime.now()
+        delta = end - start
+
+        return delta.seconds >= expected_delay
+
+    def detect_blind_eval(self):
+        pass
+
+    def detect_blind_exec(self):
+        pass
+
+    def detect_blind_engine(self):
+        pass
+
+    def detect_blind_read(self):
+        pass
+
+    def detect_blind_write(self):
         pass

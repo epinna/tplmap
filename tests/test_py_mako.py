@@ -22,6 +22,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'write': True,
         'prefix' : '',
         'suffix' : '',
+        'blind': True,
         'trailer': '${%(trailer)s}',
         'header': '${%(header)s}',
         'render': '${%(code)s}',

