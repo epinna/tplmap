@@ -26,15 +26,28 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'header': '{{%(header)s}}',
         'render': '{{%(code)s}}',
     }
+    
+    expected_data_blind = {
+        'language': 'python',
+        'engine': 'jinja2',
+        'eval' : 'python',
+        'blind': True,
+        'prefix' : '',
+        'suffix' : '',
+    }
 
     url = 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*'
+    url_blind = 'http://127.0.0.1:15001/blind/jinja2?tpl=%s&inj=*'
+
     plugin = Jinja2
 
-    blind_tests = []
-
+    blind_tests = [
+        (0, 0, 'AAA%sAAA', {}),
+        (1, 2, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '"1"%}', 'suffix' : '' }),
+    ]
     reflection_tests = [
-        (1, 1, '%s', {}),
-        (1, 1, 'AAA%sAAA', {}),
+        (0, 1, '%s', {}),
+        (0, 1, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
         (1, 1, '{{%s}}', { 'prefix': '1}}', 'suffix' : '' }),
