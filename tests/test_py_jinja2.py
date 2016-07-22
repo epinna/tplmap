@@ -17,6 +17,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'jinja2',
         'eval' : 'python' ,
+        'blind': True,
         'exec' : True,
         'read' : True,
         'write' : True,
@@ -46,8 +47,8 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         (1, 2, '{%% for a in %s: %%}\n{%% endfor %%}', { 'prefix' : '"1"%}', 'suffix' : '' }),
     ]
     reflection_tests = [
-        (0, 1, '%s', {}),
-        (0, 1, 'AAA%sAAA', {}),
+        (0, 0, '%s', {}),
+        (1, 1, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
         (1, 1, '{{%s}}', { 'prefix': '1}}', 'suffix' : '' }),
