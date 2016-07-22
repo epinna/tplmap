@@ -140,7 +140,7 @@ class Plugin(object):
 
         # First probe with payload wrapped by header and trailer, no suffex or prefix
         if expected == self.render(
-                payload = payload,
+                code = payload,
                 header = '',
                 trailer = '',
                 header_rand = None,
@@ -231,7 +231,7 @@ class Plugin(object):
 
             # First probe with payload wrapped by header and trailer, no suffex or prefix
             if expected == self.render(
-                    payload = payload,
+                    code = payload,
                     header = header,
                     trailer = trailer,
                     header_rand = header_rand,
@@ -251,12 +251,12 @@ class Plugin(object):
     Raw inject of the payload.
     """
 
-    def inject(self, payload, prefix = None, suffix = None, blind = False):
+    def inject(self, code, prefix = None, suffix = None, blind = False):
 
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix
 
-        injection = prefix + payload + suffix
+        injection = prefix + code + suffix
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
         
         # If the request is blind
@@ -299,7 +299,7 @@ class Plugin(object):
     All the passed parameter must be already rendered. The parameters which are not passed, will be
     picked from self.channel.data dictionary and rendered at the moment.
     """
-    def render(self, payload, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None):
+    def render(self, code, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None, blind = False):
 
         header_rand = rand.randint_n(10) if header_rand == None else header_rand
         header = self.get('header', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
@@ -310,24 +310,28 @@ class Plugin(object):
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix
 
-        injection = header + payload + trailer
-
+        injection = header + code + trailer
+        
         # Save the average HTTP request time of rendering in order
         # to better tone the blind request timeouts.
-        result_raw = self.inject(injection, prefix, suffix)
-        result = None
-
-        # Return result_raw if header and trailer are not specified
-        if not header and not trailer:
+        result_raw = self.inject(injection, prefix, suffix, blind)
+        
+        if blind:
             return result_raw
+        else:
+            result = None
 
-        # Cut the result using the header and trailer if specified
-        if header:
-            before,_,result_after = result_raw.partition(str(header_rand))
-        if trailer and result_after:
-            result,_,after = result_after.partition(str(trailer_rand))
+            # Return result_raw if header and trailer are not specified
+            if not header and not trailer:
+                return result_raw
 
-        return result.strip() if result else result
+            # Cut the result using the header and trailer if specified
+            if header:
+                before,_,result_after = result_raw.partition(str(header_rand))
+            if trailer and result_after:
+                result,_,after = result_after.partition(str(trailer_rand))
+
+            return result.strip() if result else result
 
     def set(self, key, value):
         self.channel.data[key] = value
@@ -459,7 +463,7 @@ class Plugin(object):
             log.warn('File uploaded correctly')
 
 
-    def evaluate(self, code):
+    def evaluate(self, code, prefix = '', suffix = '', blind = False):
 
         action = self.actions.get('evaluate', {})
         payload = action.get('evaluate')
@@ -471,7 +475,12 @@ class Plugin(object):
 
         execution_code = payload % ({ 'code' : code })
 
-        return getattr(self, call_name)(execution_code)
+        return getattr(self, call_name)(
+            code = execution_code, 
+            prefix = prefix, 
+            suffix = suffix, 
+            blind = blind
+        )
 
     def detect_exec(self):
 
@@ -529,7 +538,12 @@ class Plugin(object):
             'delay' : expected_delay 
         })
 
-        return getattr(self, call_name)(execution_code, prefix, suffix, blind=True)
+        return getattr(self, call_name)(
+            code = execution_code, 
+            prefix = prefix, 
+            suffix = suffix, 
+            blind=True
+        )
 
     def detect_blind_eval(self):
         pass
