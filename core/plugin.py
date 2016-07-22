@@ -1,3 +1,5 @@
+
+
 from utils.strings import quote, chunkit, md5
 from utils import rand
 from utils.loggers import log
@@ -7,6 +9,7 @@ import itertools
 import base64
 import datetime
 import threading
+import collections
 
 class Plugin(object):
 
@@ -17,6 +20,12 @@ class Plugin(object):
 
         # Plugin name
         self.plugin = self.__class__.__name__
+        
+        # Collect the HTTP response time into a deque to be used to
+        # tune the average response time for blind values.
+        
+        # Estimate 0.5s for a safe start.
+        self.render_req_tm = collections.deque([ 500 ], maxlen=5)
 
     def detect(self):
 
@@ -54,11 +63,10 @@ class Plugin(object):
                 self.detect_write()
                 self.detect_read()
 
+        blindthread.join(timeout=(float(sum(self.render_req_tm))/len(self.render_req_tm))/1000)
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
-
-            blindthread.join(timeout=6)
 
             if self.get('blind'):
 
@@ -173,12 +181,9 @@ class Plugin(object):
             )
         )
 
-        expected_delay = 5
-
         for prefix, suffix in self._generate_contexts():
 
             # Conduct a true-false test
-
             if getattr(self, call_name)(
                 payload = payload_true,
                 prefix = prefix,
@@ -246,17 +251,47 @@ class Plugin(object):
     Raw inject of the payload.
     """
 
-    def inject(self, payload, prefix = None, suffix = None):
+    def inject(self, payload, prefix = None, suffix = None, blind = False):
 
         prefix = self.get('prefix', '') if prefix == None else prefix
         suffix = self.get('suffix', '') if suffix == None else suffix
 
         injection = prefix + payload + suffix
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
+        
+        # If the request is blind
+        if blind:  
+            
+            # Get current average timing for render() HTTP requests
+            average = sum(self.render_req_tm)/len(self.render_req_tm)
 
-        result = self.channel.req(injection)
+            # Set delay to 2 second over the average timing
+            # Change to one decimal seconds
+            expected_delay = (average + 2000)/1000
+                      
+            start = datetime.datetime.now()
 
-        return result.strip() if result else result
+            self.channel.req(injection)
+
+            end = datetime.datetime.now()
+            delta = end - start
+
+            result = delta.seconds >= expected_delay
+
+            log.debug('[blind %s] code %s took %s. %s was requested' % (self.plugin, injection, str(delta.seconds), str(expected_delay)))
+
+            return result
+            
+        else:
+            start = datetime.datetime.now()
+            result = self.channel.req(injection)
+            end = datetime.datetime.now()
+            
+            # Append the execution time to a buffer
+            delta = end - start
+            self.render_req_tm.append(delta.seconds)
+
+            return result.strip() if result else result
 
     """
     Inject the rendering payload and get the result.
@@ -277,6 +312,8 @@ class Plugin(object):
 
         injection = header + payload + trailer
 
+        # Save the average HTTP request time of rendering in order
+        # to better tone the blind request timeouts.
         result_raw = self.inject(injection, prefix, suffix)
         result = None
 
@@ -479,19 +516,20 @@ class Plugin(object):
         # Skip if something is missing or call function is not set
         if not action or not payload_action or not call_name or not hasattr(self, call_name):
             return
+            
+        # Get current average timing for render() HTTP requests
+        average = float(sum(self.render_req_tm))/len(self.render_req_tm)
 
-        expected_delay = 5
+        # Set delay to 2 second over the average timing
+        # Change to one decimal seconds
+        expected_delay = (average + 2000)/1000
+    
+        execution_code = payload_action % ({ 
+            'code' : payload, 
+            'delay' : expected_delay 
+        })
 
-        start = datetime.datetime.now()
-
-        execution_code = payload_action % ({ 'code' : payload, 'delay' : expected_delay })
-
-        getattr(self, call_name)(execution_code, prefix, suffix)
-
-        end = datetime.datetime.now()
-        delta = end - start
-
-        return delta.seconds >= expected_delay
+        return getattr(self, call_name)(execution_code, prefix, suffix, blind=True)
 
     def detect_blind_eval(self):
         pass
