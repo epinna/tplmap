@@ -95,6 +95,10 @@ class Jinja2(Plugin):
         # Quote code before submitting it
         return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
 
+    def execute(self, code, prefix = '', suffix = '', blind = False):
+        # Quote code before submitting it
+        return super(Jinja2, self).execute(quote(code), prefix, suffix, blind)
+
     def detect_blind_engine(self):
 
         if not self.get('blind'):
