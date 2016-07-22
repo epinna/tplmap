@@ -57,8 +57,8 @@ detection = OptionGroup(parser, "Detection" , "These options can be used to cust
 detection.add_option("--level",
                     dest="level",
                     type="int",
-                    default=1,
-                    help="Level of tests to perform (1-5, Default: 1).")
+                    default=0,
+                    help="Level of code context escape to perform (1-5, Default: 1).")
 
 detection.add_option("-e", "--engine",
                     dest="engine",

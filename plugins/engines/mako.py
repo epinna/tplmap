@@ -45,7 +45,7 @@ class Mako(Plugin):
     contexts = [
 
         # Text context, no closures
-        { 'level': 1 },
+        { 'level': 0 },
 
         # Normal reflecting tag ${}
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
