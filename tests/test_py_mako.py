@@ -17,7 +17,6 @@ class MakoTest(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'mako',
         'eval' : 'python' ,
-        'blind': True,
         'exec' : True,
         'read': True,
         'write': True,

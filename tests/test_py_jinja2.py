@@ -17,7 +17,6 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'jinja2',
         'eval' : 'python' ,
-        'blind': True,
         'exec' : True,
         'read' : True,
         'write' : True,
