@@ -189,6 +189,8 @@ class Plugin(object):
             ):
                 # We can assume here blind is true
                 self.set('blind', True)
+                self.set('prefix', prefix)
+                self.set('suffix', suffix)
                 return
 
 

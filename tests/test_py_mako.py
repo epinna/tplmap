@@ -17,19 +17,35 @@ class MakoTest(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'mako',
         'eval' : 'python' ,
+        'blind': True,
         'exec' : True,
         'read': True,
         'write': True,
         'prefix' : '',
         'suffix' : '',
-        'blind': True,
         'trailer': '${%(trailer)s}',
         'header': '${%(header)s}',
         'render': '${%(code)s}',
     }
 
+    expected_data_blind = {
+        'language': 'python',
+        'engine': 'mako',
+        'eval' : 'python',
+        'blind': True,
+        'prefix' : '',
+        'suffix' : '',
+    }
+
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'
+    url_blind = 'http://127.0.0.1:15001/blind/mako?tpl=%s&inj=*'
+
     plugin = Mako
+
+    blind_tests = [
+        (1, 1, 'AAA%sAAA', {}),
+        (1, 5, '<%% a=set(["""%s"""]) %%>', { 'prefix' : '1"""])%>', 'suffix' : '<%#' }),
+    ]
 
     reflection_tests = [
 
