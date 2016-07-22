@@ -70,6 +70,23 @@ class BaseTest(object):
                 msg = '\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
             )
 
+    def test_blind(self):
+
+        for blind_test in self.blind_tests:
+
+            level, clevel, template, channel_updates = blind_test
+
+            expected_data = self.expected_data_blind.copy()
+            expected_data.update(channel_updates)
+
+            obj, data = self._get_detection_obj_data(self.url_blind % template, level, clevel)
+
+            self.assertEqual(
+                data,
+                expected_data,
+                msg = '\ntemplate: %s\nlevels: %i %i\nreturned data: %s\nexpected data: %s' % (repr(template).strip("'"), level, clevel, str(data), str(expected_data))
+            )
+
     def test_download(self):
 
         obj, data = self._get_detection_obj_data(self.url % '')

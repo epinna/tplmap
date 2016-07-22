@@ -30,6 +30,8 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     url = 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*'
     plugin = Jinja2
 
+    blind_tests = []
+
     reflection_tests = [
         (1, 1, '%s', {}),
         (1, 1, 'AAA%sAAA', {}),
