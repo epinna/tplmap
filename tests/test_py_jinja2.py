@@ -48,7 +48,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     ]
     reflection_tests = [
         (0, 0, '%s', {}),
-        (1, 1, 'AAA%sAAA', {}),
+        (0, 0, 'AAA%sAAA', {}),
 
         # Reflecting tag ${} context
         (1, 1, '{{%s}}', { 'prefix': '1}}', 'suffix' : '' }),
