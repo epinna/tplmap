@@ -91,11 +91,11 @@ class Jinja2(Plugin):
         self.set('os', self.evaluate(payload))
         self.set('eval', 'python')
 
-    def evaluate(self, code, prefix = '', suffix = '', blind = False):
+    def evaluate(self, code, prefix = None, suffix = None, blind = False):
         # Quote code before submitting it
         return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
 
-    def execute(self, code, prefix = '', suffix = '', blind = False):
+    def execute(self, code, prefix = None, suffix = None, blind = False):
         # Quote code before submitting it
         return super(Jinja2, self).execute(quote(code), prefix, suffix, blind)
 

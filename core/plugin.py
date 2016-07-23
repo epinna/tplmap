@@ -72,7 +72,7 @@ class Plugin(object):
                 log.info('%s plugin has confirmed blind injection' % (self.plugin))
 
                 self.detect_blind_engine()
-                self.detect_blind_eval()
+                self.detect_blind_evaluate()
                 self.detect_blind_exec()
                 self.detect_blind_read()
                 self.detect_blind_write()
@@ -137,7 +137,7 @@ class Plugin(object):
         expected = str(randA*randB)
         payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
 
-        # First probe with payload wrapped by header and trailer, no suffex or prefix
+        # Probe with payload wrapped by header and trailer, no suffex or prefix
         if expected == self.render(
                 code = payload,
                 header = '',
@@ -181,16 +181,18 @@ class Plugin(object):
         )
 
         for prefix, suffix in self._generate_contexts():
-
+            
             # Conduct a true-false test
             if getattr(self, call_name)(
                 payload = payload_true,
                 prefix = prefix,
-                suffix = suffix
+                suffix = suffix,
+                blind = True
             ) and not getattr(self, call_name)(
                 payload = payload_false,
                 prefix = prefix,
-                suffix = suffix
+                suffix = suffix,
+                blind = True
             ):
                 # We can assume here blind is true
                 self.set('blind', True)
@@ -216,7 +218,7 @@ class Plugin(object):
         )
 
         for prefix, suffix in self._generate_contexts():
-
+            
             # Prepare base operation to be evalued server-side
             randA = rand.randint_n(1)
             randB = rand.randint_n(1)
@@ -238,7 +240,6 @@ class Plugin(object):
                     prefix = prefix,
                     suffix = suffix
                 ):
-
                 self.set('render', render_action.get('render'))
                 self.set('header', render_action.get('header'))
                 self.set('trailer', render_action.get('trailer'))
@@ -257,7 +258,7 @@ class Plugin(object):
 
         injection = prefix + code + suffix
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
-        
+
         # If the request is blind
         if blind:  
             
@@ -470,7 +471,7 @@ class Plugin(object):
             log.warn('File uploaded correctly')
 
 
-    def evaluate(self, code, prefix = '', suffix = '', blind = False):
+    def evaluate(self, code, prefix = None, suffix = None, blind = False):
 
         action = self.actions.get('evaluate', {})
         payload = action.get('evaluate')
@@ -496,7 +497,7 @@ class Plugin(object):
         if expected_rand == self.execute('echo %s' % expected_rand):
             self.set('exec', True)
 
-    def execute(self, code, prefix = '', suffix = '', blind = False):
+    def execute(self, code, prefix = None, suffix = None, blind = False):
 
         action = self.actions.get('execute', {})
         payload = action.get('execute')
@@ -520,7 +521,7 @@ class Plugin(object):
         pass
 
 
-    def detect_blind_eval(self):
+    def detect_blind_evaluate(self):
 
         # Assume blind render capabilities only if exec is not set, blind
         # is set and self.actions['blind_render'] exits
@@ -530,7 +531,7 @@ class Plugin(object):
         self.set('blind_evaluate', True)
         self.set('eval', 'python')
 
-    def blind_evaluate(self, payload, prefix = '', suffix = ''):
+    def blind_evaluate(self, payload, prefix = None, suffix = None, blind = True):
 
         action = self.actions.get('blind_evaluate_bool', {})
         payload_action = action.get('blind_evaluate_bool')
@@ -558,9 +559,6 @@ class Plugin(object):
             suffix = suffix, 
             blind=True
         )
-
-    def detect_blind_eval(self):
-        pass
 
     def detect_blind_exec(self):
         pass
