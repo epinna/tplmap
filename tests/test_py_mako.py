@@ -34,6 +34,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'blind': True,
         'prefix' : '',
         'suffix' : '',
+        'blind_eval': True
     }
 
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'

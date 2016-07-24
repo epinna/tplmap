@@ -30,6 +30,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         'engine': 'jade',
         'eval' : 'javascript',
         'blind': True,
+        'blind_exec' : True,
         'exec': True,
         'prefix' : '',
         'suffix' : '',

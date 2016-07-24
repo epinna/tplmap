@@ -72,8 +72,8 @@ class Plugin(object):
                 log.info('%s plugin has confirmed blind injection' % (self.plugin))
 
                 self.detect_blind_engine()
-                self.detect_blind_evaluate()
-                self.detect_blind_execute()
+                self.detect_evaluate_blind()
+                self.detect_execute_blind()
                 self.detect_blind_read()
                 self.detect_blind_write()
 
@@ -175,8 +175,9 @@ class Plugin(object):
             return
 
         # Print what it's going to be tested
-        log.info('%s plugin is testing blind injection' % (
-                self.plugin
+        log.info('%s plugin is testing blind injection with \'%s\'' % (
+                self.plugin,
+                call_name
             )
         )
 
@@ -521,20 +522,20 @@ class Plugin(object):
         pass
 
 
-    def detect_blind_evaluate(self):
+    def detect_evaluate_blind(self):
 
         # Assume blind render capabilities only if exec is not set, blind
         # is set and self.actions['blind_render'] exits
-        if not self.get('blind') or not self.actions.get('blind_evaluate'):
+        if not self.get('blind') or not self.actions.get('evaluate_blind'):
             return
 
-        self.set('blind_evaluate', True)
+        self.set('blind_eval', True)
         self.set('eval', 'python')
 
-    def blind_evaluate(self, payload, prefix = None, suffix = None, blind = True):
+    def evaluate_blind(self, payload, prefix = None, suffix = None, blind = True):
 
-        action = self.actions.get('blind_evaluate_bool', {})
-        payload_action = action.get('blind_evaluate_bool')
+        action = self.actions.get('evaluate_blind', {})
+        payload_action = action.get('evaluate_blind')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set
@@ -560,20 +561,20 @@ class Plugin(object):
             blind=True
         )
 
-    def detect_blind_execute(self):
+    def detect_execute_blind(self):
 
         # Assume blind render capabilities only if exec is not set, blind
         # is set and self.actions['blind_render'] exits
-        if not self.get('blind') or not self.actions.get('blind_execute'):
+        if not self.get('blind') or not self.actions.get('execute_blind'):
             return
 
         self.set('blind_exec', True)
         
         
-    def blind_execute(self, payload, prefix = None, suffix = None, blind = True):
+    def execute_blind(self, payload, prefix = None, suffix = None, blind = True):
 
-        action = self.actions.get('blind_execute_bool', {})
-        payload_action = action.get('blind_execute_bool')
+        action = self.actions.get('execute_blind', {})
+        payload_action = action.get('execute_blind')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set
