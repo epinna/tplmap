@@ -14,8 +14,8 @@ class JadeTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'javascript',
         'engine': 'jade',
-        'eval' : 'javascript' ,
-        'exec' : True,
+        'evaluate' : 'javascript' ,
+        'execute' : True,
         'read' : True,
         'write' : True,
         'prefix' : '',
@@ -28,10 +28,10 @@ class JadeTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'javascript',
         'engine': 'jade',
-        'eval' : 'javascript',
+        'evaluate' : 'javascript',
         'blind': True,
-        'blind_exec' : True,
-        'exec': True,
+        'blind_execute' : True,
+        'execute': True,
         'prefix' : '',
         'suffix' : '',
     }

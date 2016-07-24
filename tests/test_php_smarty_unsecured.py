@@ -13,8 +13,8 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'php',
         'engine': 'smarty',
-        'eval' : 'php' ,
-        'exec' : True,
+        'evaluate' : 'php' ,
+        'execute' : True,
         'write': True,
         'read': True,
         'trailer': '{%(trailer)s}',

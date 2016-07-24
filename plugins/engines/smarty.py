@@ -45,7 +45,7 @@ class Smarty(Plugin):
 
         # If {php} is sent back means is in secure mode
         if expected_rand == result_php_tag:
-            self.set('eval', 'php')
+            self.set('evaluate', 'php')
             self.set('os', self.evaluate('echo PHP_OS;'))
 
 
@@ -57,13 +57,13 @@ class Smarty(Plugin):
         expected_rand = str(rand.randint_n(2))
 
         if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('exec', True)
+            self.set('execute', True)
 
     def execute(self, command):
         return self.evaluate("""system("%s");""" % (quote(command)))
 
     def detect_read(self):
-        if self.get('eval'):
+        if self.get('evaluate'):
             self.set('read', True)
 
     def _md5(self, remote_path):
@@ -89,7 +89,7 @@ class Smarty(Plugin):
         return data
 
     def detect_write(self):
-        if self.get('eval'):
+        if self.get('evaluate'):
             self.set('write', True)
 
     def write(self, data, remote_path):

@@ -388,7 +388,7 @@ class Plugin(object):
 
         # Assume read capabilities only if evaluation
         # has been alredy detected and if self.actions['read'] exits
-        if not self.get('eval') or not self.actions.get('read'):
+        if not self.get('evaluate') or not self.actions.get('read'):
             return
 
         self.set('read', True)
@@ -429,7 +429,7 @@ class Plugin(object):
 
         # Assume write capabilities only if evaluation
         # has been alredy detected and if self.actions['write'] exits
-        if not self.get('eval') or not self.actions.get('write'):
+        if not self.get('evaluate') or not self.actions.get('write'):
             return
 
         self.set('write', True)
@@ -496,7 +496,7 @@ class Plugin(object):
         expected_rand = str(rand.randint_n(2))
 
         if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('exec', True)
+            self.set('execute', True)
 
     def execute(self, code, prefix = None, suffix = None, blind = False):
 
@@ -529,8 +529,8 @@ class Plugin(object):
         if not self.get('blind') or not self.actions.get('evaluate_blind'):
             return
 
-        self.set('blind_eval', True)
-        self.set('eval', 'python')
+        self.set('blind_evaluate', True)
+        self.set('evaluate', 'python')
 
     def evaluate_blind(self, payload, prefix = None, suffix = None, blind = True):
 
@@ -568,7 +568,7 @@ class Plugin(object):
         if not self.get('blind') or not self.actions.get('execute_blind'):
             return
 
-        self.set('blind_exec', True)
+        self.set('blind_execute', True)
         
         
     def execute_blind(self, payload, prefix = None, suffix = None, blind = True):

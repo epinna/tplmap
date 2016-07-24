@@ -78,7 +78,7 @@ class Mako(Plugin):
         if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'mako')
-            self.set('eval', 'python')
+            self.set('evaluate', 'python')
 
     def detect_eval(self):
 
@@ -87,7 +87,7 @@ class Mako(Plugin):
             return
 
         payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
-        self.set('eval', 'python')
+        self.set('evaluate', 'python')
         self.set('os', self.render(payload))
 
     def execute(self, command):
@@ -101,4 +101,4 @@ class Mako(Plugin):
 
         self.set('language', 'python')
         self.set('engine', 'mako')
-        self.set('eval', 'python')
+        self.set('evaluate', 'python')

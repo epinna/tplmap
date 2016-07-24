@@ -68,7 +68,7 @@ class Jade(Plugin):
         execution_code = """= global.process.mainModule.require('os').platform()"""
         self.set('os', self.render(execution_code))
         self.set('language', 'javascript')
-        self.set('eval', 'javascript')
+        self.set('evaluate', 'javascript')
         self.set('engine', 'jade')
 
     def execute(self, code, prefix = None, suffix = None, blind = False):
@@ -81,6 +81,6 @@ class Jade(Plugin):
             return
 
         self.set('language', 'javascript')
-        self.set('exec', True)
+        self.set('execute', True)
         self.set('engine', 'jade')
-        self.set('eval', 'javascript')
+        self.set('evaluate', 'javascript')

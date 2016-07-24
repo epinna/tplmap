@@ -35,7 +35,7 @@ class Velocity(Plugin):
         expected_rand = str(rand.randint_n(2))
 
         if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('exec', True)
+            self.set('execute', True)
             self.set('os', self.execute("uname"))
 
     def execute(self, command):

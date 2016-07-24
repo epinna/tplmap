@@ -33,8 +33,8 @@ def _print_injection_summary(channel):
   OS: %(os)s
   Injection type: %(injtype)s
   Capabilities:
-    Code evaluation: %(eval)s
-    OS command execution: %(exec)s
+    Code evaluation: %(evaluate)s
+    OS command execution: %(execute)s
     File write: %(write)s
     File read: %(read)s
 """ % ({
@@ -45,8 +45,8 @@ def _print_injection_summary(channel):
     'engine': channel.data.get('engine').capitalize(),
     'os': channel.data.get('os', 'undetected'),
     'injtype' : 'blind' if channel.data.get('blind') else 'rendered',
-    'eval': 'no' if not channel.data.get('eval') else 'yes, %s code' % (channel.data.get('eval')),
-    'exec': 'no' if not channel.data.get('exec') else 'yes',
+    'evaluate': 'no' if not channel.data.get('evaluate') else 'yes, %s code' % (channel.data.get('evaluate')),
+    'execute': 'no' if not channel.data.get('execute') else 'yes',
     'write': 'no' if not channel.data.get('write') else 'yes',
     'read': 'no' if not channel.data.get('read') else 'yes',
 }))
@@ -86,9 +86,9 @@ def check_template_injection(channel):
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:%(exec)s%(write)s%(read)s""" % (
+            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s""" % (
                 {
-                 'exec' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('exec') else '',
+                 'execute' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') else '',
                  'write' : '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
                  'read' : '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else ''
                  }
@@ -98,7 +98,7 @@ def check_template_injection(channel):
         return
 
     # Execute operating system commands
-    if channel.data.get('exec'):
+    if channel.data.get('execute'):
 
         if channel.args.get('os_cmd'):
             print current_plugin.execute(channel.args.get('os_cmd'))

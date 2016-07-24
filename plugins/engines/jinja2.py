@@ -83,13 +83,13 @@ class Jinja2(Plugin):
         if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'jinja2')
-            self.set('eval', 'python')
+            self.set('evaluate', 'python')
 
     def detect_eval(self):
 
         payload = """'-'.join([__import__('os').name, __import__('sys').platform])"""
         self.set('os', self.evaluate(payload))
-        self.set('eval', 'python')
+        self.set('evaluate', 'python')
 
     def evaluate(self, code, prefix = None, suffix = None, blind = False):
         # Quote code before submitting it
@@ -106,4 +106,4 @@ class Jinja2(Plugin):
 
         self.set('language', 'python')
         self.set('engine', 'jinja2')
-        self.set('eval', 'python')
+        self.set('evaluate', 'python')

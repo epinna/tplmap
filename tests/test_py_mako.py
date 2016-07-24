@@ -16,8 +16,8 @@ class MakoTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'python',
         'engine': 'mako',
-        'eval' : 'python' ,
-        'exec' : True,
+        'evaluate' : 'python' ,
+        'execute' : True,
         'read': True,
         'write': True,
         'prefix' : '',
@@ -30,11 +30,11 @@ class MakoTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'python',
         'engine': 'mako',
-        'eval' : 'python',
+        'evaluate' : 'python',
         'blind': True,
         'prefix' : '',
         'suffix' : '',
-        'blind_eval': True
+        'blind_evaluate': True
     }
 
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'

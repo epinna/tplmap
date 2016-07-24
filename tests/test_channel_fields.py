@@ -17,8 +17,8 @@ class ChannelTest(unittest.TestCase):
     expected_data = {
         'language': 'python',
         'engine': 'mako',
-        'eval' : 'python' ,
-        'exec' : True,
+        'evaluate' : 'python' ,
+        'execute' : True,
         'write' : True,
         'read' : True,
         'trailer': '${%(trailer)s}',

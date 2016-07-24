@@ -16,8 +16,8 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'python',
         'engine': 'jinja2',
-        'eval' : 'python' ,
-        'exec' : True,
+        'evaluate' : 'python' ,
+        'execute' : True,
         'read' : True,
         'write' : True,
         'prefix': '',
@@ -30,8 +30,8 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'python',
         'engine': 'jinja2',
-        'eval' : 'python',
-        'blind_eval': True,
+        'evaluate' : 'python',
+        'blind_evaluate': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',

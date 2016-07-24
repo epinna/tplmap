@@ -13,7 +13,7 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'java',
         'engine': 'freemarker',
-        'exec' : True,
+        'execute' : True,
         'trailer': '${%(trailer)s?c}',
         'header': '${%(header)s?c}',
         'render': '${%(payload)s}',
