@@ -146,7 +146,7 @@ class Plugin(object):
             if not self.get('unreliable'):
                 log.info('%s plugin has detected unreliable rendering with tag %s, skipping' % (
                     self.plugin,
-                    repr(self.get('render') % ({'code' : '*' })).strip("'"))
+                    repr(self.get('render') % ({'code' : '*' })))
                 )
 
             self.set('unreliable', self.plugin)
@@ -205,7 +205,7 @@ class Plugin(object):
         # Print what it's going to be tested
         log.info('%s plugin is testing rendering with tag %s' % (
                 self.plugin,
-                repr(render_action.get('render') % ({'code' : '*' })).strip("'"),
+                repr(render_action.get('render') % ({'code' : '*' })),
             )
         )
 

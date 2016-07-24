@@ -28,10 +28,10 @@ def _print_injection_summary(channel):
     log.info("""Tplmap identified the following injection point:
 
   Engine: %(engine)s
-  Template: %(prefix)s%(render)s%(suffix)s
+  Injection: %(prefix)s%(render)s%(suffix)s
   Context: %(context)s
   OS: %(os)s
-  Injection type: %(injtype)s
+  Technique: %(injtype)s
   Capabilities:
     Code evaluation: %(evaluate)s
     OS command execution: %(execute)s
@@ -44,7 +44,7 @@ def _print_injection_summary(channel):
     'context': 'text' if (not prefix and not suffix) else 'code',
     'engine': channel.data.get('engine').capitalize(),
     'os': channel.data.get('os', 'undetected'),
-    'injtype' : 'blind' if channel.data.get('blind') else 'rendered',
+    'injtype' : 'blind' if channel.data.get('blind') else 'render',
     'evaluate': 'no' if not channel.data.get('evaluate') else 'yes, %s code' % (channel.data.get('evaluate')),
     'execute': 'no' if not channel.data.get('execute') else 'yes',
     'write': 'no' if not channel.data.get('write') else 'yes',
