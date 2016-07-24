@@ -1,7 +1,6 @@
 from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
-import threading
 import re
 import itertools
 import base64
@@ -25,10 +24,6 @@ class Plugin(object):
         self.render_req_tm = collections.deque([ 500 ], maxlen=5)
 
     def detect(self):
-
-        # Start thread to check blind injection
-        #blindthread = threading.Thread(target=self._detect_blind)
-        #blindthread.start()
 
         # Start detection
         self._detect_render()
@@ -59,8 +54,6 @@ class Plugin(object):
                 self.detect_exec()
                 self.detect_write()
                 self.detect_read()
-
-        #blindthread.join(timeout=(float(sum(self.render_req_tm))/len(self.render_req_tm))/1000)
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
