@@ -23,7 +23,9 @@ class ChannelTest(unittest.TestCase):
         'read' : True,
         'trailer': '${%(trailer)s}',
         'header': '${%(header)s}',
-        'render': '${%(payload)s}',
+        'render': '${%(code)s}',
+        'prefix': '',
+        'suffix': ''
     }
 
     def test_post_reflection(self):
@@ -32,6 +34,7 @@ class ChannelTest(unittest.TestCase):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/post/mako',
+            'force_level': [ 0, 0 ],
             'post_data' : [ 'inj=*' ]
         })
         Mako(channel).detect()
@@ -44,6 +47,7 @@ class ChannelTest(unittest.TestCase):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/header/mako',
+            'force_level': [ 0, 0 ],
             'headers' : [ 'User-Agent: *' ]
         })
         Mako(channel).detect()
@@ -57,7 +61,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/put/mako',
             'post_data' : [ 'inj=*' ],
-            'method' : 'PUT'
+            'method' : 'PUT',
+            'force_level': [ 0, 0 ],
         })
         Mako(channel).detect()
         del channel.data['os']
