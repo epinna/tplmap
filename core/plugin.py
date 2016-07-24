@@ -89,17 +89,17 @@ class Plugin(object):
             # If the context has no closures, generate one closure with a zero-length string
             if ctx.get('closures'):
                 closures = self._generate_closures(ctx)
+                
+                log.info('%s plugin is testing %s*%s code context escape with %i variations%s' % (
+                                self.plugin,
+                                repr(ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )).strip("'"),
+                                repr(suffix).strip("'"),
+                                len(closures),
+                                ' (level %i)' % (ctx.get('level', 1)) if self.get('level') else ''
+                        )
+                )
             else:
                 closures = [ '' ]
-
-            log.info('%s plugin is testing %s*%s code context escape with %i variations%s' % (
-                            self.plugin,
-                            repr(ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )).strip("'"),
-                            repr(suffix).strip("'"),
-                            len(closures),
-                            ' (level %i)' % (ctx.get('level', 1)) if self.get('level') else ''
-                    )
-            )
 
             for closure in closures:
 
@@ -118,9 +118,8 @@ class Plugin(object):
             return
 
         # Print what it's going to be tested
-        log.info('%s plugin is testing unreliable rendering on text context with tag %s' % (
-                self.plugin,
-                repr(render_action.get('render') % ({'code' : '*' })).strip("'"),
+        log.debug('%s plugin is testing unreliable rendering on text context' % (
+                self.plugin
             )
         )
 
@@ -168,10 +167,9 @@ class Plugin(object):
             return
 
         # Print what it's going to be tested
-        log.info('%s plugin is testing blind injection with \'%s\'' % (
-                self.plugin,
-                call_name
-            )
+        log.info('%s plugin is testing blind injection' % (
+                    self.plugin
+                )
         )
 
         for prefix, suffix in self._generate_contexts():
