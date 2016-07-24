@@ -530,7 +530,6 @@ class Plugin(object):
             return
 
         self.set('blind_evaluate', True)
-        self.set('evaluate', 'python')
 
     def evaluate_blind(self, payload, prefix = None, suffix = None, blind = True):
 

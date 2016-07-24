@@ -11,5 +11,7 @@ else {
   $tpl=$inj;
 }
 
-echo($smarty->fetch('string:'.$tpl));
+$rendered = $smarty->fetch('string:'.$tpl);
+if(!$_GET["blind"])
+  echo($rendered);
 ?>

@@ -10,7 +10,7 @@ from utils.loggers import log
 from core.clis import Shell, MultilineShell
 
 plugins = [
-#    Smarty,
+    Smarty,
     Mako,
     Jinja2,
 #    Twig,

@@ -16,17 +16,34 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
         'engine': 'smarty',
         'trailer': '{%(trailer)s}',
         'header': '{%(header)s}',
-        'render': '{%(payload)s}',
+        'render': '{%(code)s}',
+        'prefix' : '',
+        'suffix' : '',
+    }
+
+    expected_data_blind = {
+        'language': 'php',
+        'engine': 'smarty',
+        'blind_evaluate': True,
+        'blind': True,
+        'prefix' : '',
+        'suffix' : '',
     }
     
     url = 'http://127.0.0.1:15002/smarty-3.1.29-secured.php?inj=*&tpl=%s'
+    url_blind = 'http://127.0.0.1:15002/smarty-3.1.29-secured.php?inj=*&tpl=%s&blind=1'
     plugin = Smarty
-    
+
+    # The secured Smarty can't executes any PHP hence no sleep(1) hence no 
+    # blind tests for now
+    blind_tests = [
+    ]
+
     reflection_tests = [
-        (1, 1, '%s', { }),
-        (1, 1, 'AAA%sAAA', {}), 
-        (1, 1, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
-        (1, 1, '{* %s *}', {}),
+        (0, 0, '%s', { }),
+        (0, 0, 'AAA%sAAA', {}), 
+        (0, 0, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
+        (0, 0, '{* %s *}', {}),
         (5, 1, '{if %s}\n{/if}', { 'prefix': '1}{/if}{if 1}', 'suffix' : ''}),
         (5, 1, '{if (%s)}\n{/if}', { 'prefix': '1)}{/if}{if 1}', 'suffix' : ''}),
         (1, 1, '{html_select_date display_days=%s}', { 'prefix': '1}', 'suffix' : '{'}),
