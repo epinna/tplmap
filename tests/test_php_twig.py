@@ -16,22 +16,28 @@ class TwigTest(unittest.TestCase, BaseTest):
         'engine': 'twig',
         'trailer': '{{%(trailer)s}}',
         'header': '{{%(header)s}}',
-        'render': '{{%(payload)s}}',
+        'render': '{{%(code)s}}',
+        'prefix' : '',
+        'suffix' : '',
     }
     
     url = 'http://127.0.0.1:15002/twig-1.24.1-secured.php?tpl=%s&inj=*'
     
     plugin = Twig
     
+    blind_tests = [
+    
+    ]
+    
     reflection_tests = [
-        (1, 1, "%s", {}),
-        (1, 1, "AAA%sAAA", {}),
-        (1, 1, "{{ %s }}", { 'prefix': '1}}', 'suffix' : '{{1' }),
-        (1, 1, "{% block title %}%s{% endblock %}", {}),
-        (1, 1, "{% set foo = '%s' %}", {  'prefix': "1' %}", 'suffix' : '' }),
+        (0, 0, "%s", {}),
+        (0, 0, "AAA%sAAA", {}),
+        (0, 0, "{{ %s }}", { 'prefix': '1}}', 'suffix' : '{{1' }),
+        (0, 0, "{% block title %}%s{% endblock %}", {}),
+        (0, 0, "{% set foo = '%s' %}", {  'prefix': "1' %}", 'suffix' : '' }),
         (5, 2, "{% set %s = 1 %}", {  'prefix': 'a = 1 %}', 'suffix' : '' }),
         (5, 1, "{% for item in %s %}{% endfor %}", {'prefix': '1 %}{% endfor %}{% for a in [1] %}', 'suffix' : ''}),
-        (1, 1, "{% if %s == 1 %}{% endif %}", {'prefix': '1 %}', 'suffix' : ''}),
+        (0, 0, "{% if %s == 1 %}{% endif %}", {'prefix': '1 %}', 'suffix' : ''}),
         (1, 2, "{% if 1 in %s %}{% endif %}", {'prefix': '"1" %}', 'suffix' : ''}),
         (1, 3, "{% if 1 in [%s] %}{% endif %}", {'prefix': '1] %}', 'suffix' : ''}),
         #(1, 4, "{{ \"iterpo#{%s}lation\" }}", { 'prefix': '1}}}', 'suffix' : '' }),

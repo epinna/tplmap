@@ -13,7 +13,7 @@ plugins = [
     Smarty,
     Mako,
     Jinja2,
-#    Twig,
+    Twig,
 #    Freemarker,
 #    Velocity,
     Jade
