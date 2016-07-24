@@ -11,6 +11,7 @@ webserver_log=$(mktemp)
 webserver_banner="Exposed testing APIs:
 
 http://localhost:15004/jade?inj=*
+http://localhost:15004/blind/jade?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log

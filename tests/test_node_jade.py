@@ -25,16 +25,33 @@ class JadeTest(unittest.TestCase, BaseTest):
         'render': '\n= %(code)s\n',
     }
 
+    expected_data_blind = {
+        'language': 'javascript',
+        'engine': 'jade',
+        'eval' : 'javascript',
+        'blind': True,
+        'exec': True,
+        'prefix' : '',
+        'suffix' : '',
+    }
+
     url = 'http://127.0.0.1:15004/jade?inj=*&tpl=%s'
+    url_blind = 'http://127.0.0.1:15004/blind/jade?inj=*&tpl=%s'
     plugin = Jade
 
-    reflection_tests = [
-        (1, 1, '%s', {}),
-        (1, 1, 'AAA%sAAA', {}),
 
-        (1, 1, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
-        (1, 1, 'a(href="%s")', { 'prefix' : '1")', 'suffix' : '//' }),
-        (1, 1, '#container.%s', {  }),
+    blind_tests = [
+        (0, 0, 'AAA%sAAA', {}),
+        (2, 2, '- var %s = true', { 'prefix' : 'a\n', 'suffix' : '//' }),
+    ]
+    
+    reflection_tests = [
+        (0, 0, '%s', {}),
+        (0, 0, 'AAA%sAAA', {}),
+
+        (0, 0, 'a(href=\'%s\')', { 'prefix' : '1\')', 'suffix' : '//' }),
+        (0, 0, 'a(href="%s")', { 'prefix' : '1")', 'suffix' : '//' }),
+        (0, 0, '#container.%s', {  }),
         (2, 1, '#{%s}', { 'prefix' : '1}', 'suffix' : '//' }),
 
         (2, 2, '- var %s = true', { 'prefix' : 'a\n', 'suffix' : '//' }),
