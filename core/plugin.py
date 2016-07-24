@@ -73,7 +73,7 @@ class Plugin(object):
 
                 self.detect_blind_engine()
                 self.detect_blind_evaluate()
-                self.detect_blind_exec()
+                self.detect_blind_execute()
                 self.detect_blind_read()
                 self.detect_blind_write()
 
@@ -193,7 +193,7 @@ class Plugin(object):
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
-            ):
+            ):  
                 # We can assume here blind is true
                 self.set('blind', True)
                 self.set('prefix', prefix)
@@ -560,8 +560,44 @@ class Plugin(object):
             blind=True
         )
 
-    def detect_blind_exec(self):
-        pass
+    def detect_blind_execute(self):
+
+        # Assume blind render capabilities only if exec is not set, blind
+        # is set and self.actions['blind_render'] exits
+        if not self.get('blind') or not self.actions.get('blind_execute'):
+            return
+
+        self.set('blind_exec', True)
+        
+        
+    def blind_execute(self, payload, prefix = None, suffix = None, blind = True):
+
+        action = self.actions.get('blind_execute_bool', {})
+        payload_action = action.get('blind_execute_bool')
+        call_name = action.get('call', 'inject')
+
+        # Skip if something is missing or call function is not set
+        if not action or not payload_action or not call_name or not hasattr(self, call_name):
+            return
+            
+        # Get current average timing for render() HTTP requests
+        average = float(sum(self.render_req_tm))/len(self.render_req_tm)
+
+        # Set delay to 2 second over the average timing
+        # Change to one decimal seconds
+        expected_delay = (average + 2000)/1000
+    
+        execution_code = payload_action % ({ 
+            'code' : payload, 
+            'delay' : expected_delay 
+        })
+
+        return getattr(self, call_name)(
+            code = execution_code, 
+            prefix = prefix, 
+            suffix = suffix, 
+            blind=True
+        )
 
     def detect_blind_engine(self):
         pass
