@@ -37,7 +37,7 @@ request = OptionGroup(parser, "Request", "These options have how to connect and 
 request.add_option("-d","--data",
                 action="store",
                 dest="data",
-                help="Data string to be sent through POST.",
+                help="Data string to be sent through POST. It must be as query string:\n param1=value1&param2=value2",
                 default=[])
 
 request.add_option("-H","--headers",
