@@ -16,19 +16,38 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'execute' : True,
         'trailer': '${%(trailer)s?c}',
         'header': '${%(header)s?c}',
-        'render': '${%(payload)s}',
+        'render': '${%(code)s}',
         'write': True,
-        'read': True
+        'read': True,
+        'prefix' : '',
+        'suffix' : '',
+    }
+
+    expected_data_blind = {
+        'language': 'java',
+        'engine': 'freemarker',
+        'execute' : True,
+        'blind': True,
+        'blind_execute' : True,
+        'execute': True,
+        'prefix' : '',
+        'suffix' : '',
     }
 
     url = 'http://127.0.0.1:15003/freemarker?inj=*&tpl=%s'
+    url_blind = 'http://127.0.0.1:15003/freemarker?inj=*&tpl=%s&blind=1'
 
     plugin = Freemarker
     
+    blind_tests = [
+        (0, 0, 'AAA%sAAA', {}),
+        (5, 5, '<#list %s as a></#list>', { 'prefix' : '[1] as a></#list><#list [1] as a>', 'suffix' : ''}),
+    ]
+    
     reflection_tests = [
-        (1, 1, '%s', {}),
-        (1, 1, 'AAA%sAAA', {}),
-        (1, 1, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
+        (0, 0, '%s', {}),
+        (0, 0, 'AAA%sAAA', {}),
+        (0, 0, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
         
         (2, 1, '<#assign s = %s>', { 'prefix': '1>', 'suffix': '' }),
         (5, 1, '<#-- %s -->', { 'prefix': '-->', 'suffix': '<#--' }),

@@ -46,6 +46,8 @@ public static Object velocity(Request request, Response response) {
     // Keep the formatting a-la-python
     tpl = tpl.replace("%s", inj);
   }
+  
+  String blind = request.queryParams("blind");
 
   LogChute velocityLogChute = new NullLogChute() ;
   VelocityEngine velocity;
@@ -68,8 +70,13 @@ public static Object velocity(Request request, Response response) {
     return "";
   }
 
-  // Return out string
-  return w.toString();
+  // Return out string if not blind
+  if(blind == null){
+    return w.toString();
+  }
+  else {
+    return "";
+  }
 }
 
 public static Object freemarker(Request request, Response response) {
@@ -90,6 +97,9 @@ public static Object freemarker(Request request, Response response) {
     tpl = tpl.replace("%s", inj);
   }
 
+  // Get blind parameter
+  String blind = request.queryParams("blind");
+
   // Generate template from "inj"
   Template template;
   try{
@@ -109,7 +119,12 @@ public static Object freemarker(Request request, Response response) {
     return "";
   }
 
-  // Return out string
-  return out.toString();
+  // Return out string if not blind
+  if(blind == null){
+    return out.toString();
+  }
+  else {
+    return "";
+  }
 }
 }

