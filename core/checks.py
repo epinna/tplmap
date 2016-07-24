@@ -15,7 +15,7 @@ plugins = [
     Jinja2,
     Twig,
     Freemarker,
-#    Velocity,
+    Velocity,
     Jade
 ]
 

@@ -42,7 +42,7 @@ if [[ "$1" == "--test" ]]; then
   while ! echo exit | nc localhost 15003; do sleep 3; done
 
 
-  python -m unittest discover . 'test_java_freemarker.py'
+  python -m unittest discover . 'test_java_*.py'
 
   # Shutdown Java webserver
   kill ${GRADLEPID}
