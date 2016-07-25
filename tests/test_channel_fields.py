@@ -35,7 +35,7 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/post/mako',
             'force_level': [ 0, 0 ],
-            'post_data' : [ 'inj=*' ]
+            'data' : 'inj=*&othervar=1'
         })
         Mako(channel).detect()
         del channel.data['os']
@@ -60,8 +60,8 @@ class ChannelTest(unittest.TestCase):
 
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/put/mako',
-            'post_data' : [ 'inj=*' ],
-            'method' : 'PUT',
+            'data' : 'inj=*&othervar=1',
+            'request' : 'PUT',
             'force_level': [ 0, 0 ],
         })
         Mako(channel).detect()
