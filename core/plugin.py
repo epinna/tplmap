@@ -592,7 +592,7 @@ class Plugin(object):
     def _get_expected_delay(self):
 
         # Get current average timing for render() HTTP requests
-        average = sum(self.render_req_tm)/len(self.render_req_tm)
+        average = int(sum(self.render_req_tm)/len(self.render_req_tm))
 
         # Set delay to 2 second over the average timing
         return average + self.tm_delay
