@@ -1,4 +1,4 @@
-from utils.strings import chunkit, md5
+from utils.strings import quote, chunkit, md5
 from utils import rand
 from utils.loggers import log
 import re
@@ -187,12 +187,12 @@ class Plugin(object):
 
             # Conduct a true-false test
             if getattr(self, call_name)(
-                payload = payload_true,
+                code = payload_true,
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
             ) and not getattr(self, call_name)(
-                payload = payload_false,
+                code = payload_false,
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
@@ -505,7 +505,8 @@ class Plugin(object):
         if not action or not payload or not call_name or not hasattr(self, call_name):
             return
 
-        execution_code = payload % ({ 'code' : code })
+        execution_code = payload % ({ 'code' : quote(code) })
+
         result = getattr(self, call_name)(
             code = execution_code,
             prefix = prefix,
@@ -528,7 +529,7 @@ class Plugin(object):
 
         self.set('evaluate_blind', True)
 
-    def evaluate_blind(self, payload, prefix = None, suffix = None, blind = True):
+    def evaluate_blind(self, code, prefix = None, suffix = None, blind = True):
 
         action = self.actions.get('evaluate_blind', {})
         payload_action = action.get('evaluate_blind')
@@ -541,7 +542,7 @@ class Plugin(object):
         expected_delay = self._get_expected_delay()
 
         execution_code = payload_action % ({
-            'code' : payload,
+            'code' : code,
             'delay' : expected_delay
         })
 
@@ -562,7 +563,7 @@ class Plugin(object):
         self.set('execute_blind', True)
 
 
-    def execute_blind(self, payload, prefix = None, suffix = None, blind = True):
+    def execute_blind(self, code, prefix = None, suffix = None, blind = True):
 
         action = self.actions.get('execute_blind', {})
         payload_action = action.get('execute_blind')
@@ -575,7 +576,7 @@ class Plugin(object):
         expected_delay = self._get_expected_delay()
 
         execution_code = payload_action % ({
-            'code' : payload,
+            'code' : code,
             'delay' : expected_delay
         })
 
