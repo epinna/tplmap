@@ -24,17 +24,22 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'suffix': '',
         'trailer': '{{%(trailer)s}}',
         'header': '{{%(header)s}}',
-        'render': '{{%(code)s}}'
+        'render': '{{%(code)s}}',
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True
     }
 
     expected_data_blind = {
         'language': 'python',
         'engine': 'jinja2',
         'evaluate' : 'python',
+        'execute' : True,
         'evaluate_blind': True,
         'blind': True,
         'prefix' : '',
-        'suffix' : ''
+        'suffix' : '',
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True
     }
 
     url = 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*'
@@ -160,5 +165,3 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         result = obj.execute('echo 1"2"')
         self.assertEqual(result, '12')
 
-        result = obj.execute('echo 1\\"2')
-        self.assertEqual(result, '1"2')
