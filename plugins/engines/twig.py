@@ -1,7 +1,7 @@
 from utils.loggers import log
 from core.plugin import Plugin
 from utils import rand
-from core import closures
+from core import languages
 
 class Twig(Plugin):
 
@@ -17,15 +17,15 @@ class Twig(Plugin):
         # Text context, no closures
         { 'level': 0 },
     
-        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : closures.php_ctx_closures },
-        { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
-        { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : languages.php_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
         # This escapes string "inter#{"asd"}polation"
-        #{ 'level': 5, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        #{ 'level': 5, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
         # This escapes string {% set %s = 1 %}
-        { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
     ]
 

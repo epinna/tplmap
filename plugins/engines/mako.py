@@ -1,4 +1,4 @@
-from core import closures
+from core import languages
 from core.plugin import Plugin
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
@@ -48,22 +48,22 @@ class Mako(Plugin):
         { 'level': 0 },
 
         # Normal reflecting tag ${}
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
 
         # Code blocks
         # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : closures.python_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : languages.python_ctx_closures },
 
         # If and for blocks
         # % if %s:\n% endif
         # % for a in %s:\n% endfor
-        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : languages.python_ctx_closures },
 
         # Mako blocks
         { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>' },
-        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : closures.python_ctx_closures },
-        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : closures.python_ctx_closures },
-        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : closures.python_ctx_closures},
+        { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : languages.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : languages.python_ctx_closures },
+        { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : languages.python_ctx_closures},
 
     ]
 

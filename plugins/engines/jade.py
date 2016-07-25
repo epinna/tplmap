@@ -1,6 +1,6 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
-from core import closures
+from core import languages
 from core.plugin import Plugin
 from utils import rand
 import base64
@@ -76,11 +76,11 @@ class Jade(Plugin):
         { 'level': 0 },
 
         # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: closures.javascript_ctx_closures[1] } },
+        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: languages.javascript_ctx_closures[1] } },
         # String interpolation #{
-        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : closures.javascript_ctx_closures },
+        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
         # Code context
-        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : closures.javascript_ctx_closures },
+        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
     ]
 
     def detect_engine(self):

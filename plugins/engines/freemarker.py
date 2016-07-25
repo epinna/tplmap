@@ -2,7 +2,7 @@ from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from utils import rand
 from core.plugin import Plugin
-from core import closures
+from core import languages
 import re
 import base64
 
@@ -57,12 +57,12 @@ class Freemarker(Plugin):
         # Text context, no closures
         { 'level': 0 },
 
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.java_ctx_closures },
 
         # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
-        { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
         { 'level': 5, 'prefix': '-->', 'suffix' : '<#--' },
-        { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
     ]
 
     def detect_engine(self):

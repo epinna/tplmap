@@ -1,6 +1,6 @@
 from utils.strings import quote
 from core.plugin import Plugin
-from core import closures
+from core import languages
 from utils.loggers import log
 from utils import rand
 import base64
@@ -57,15 +57,15 @@ class Jinja2(Plugin):
         { 'level': 0 },
 
         # This covers {{%s}}
-        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
 
         # This covers {% %s %}
-        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : closures.python_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
 
         # If and for blocks
         # # if %s:\n# endif
         # # for a in %s:\n# endfor
-        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : closures.python_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : languages.python_ctx_closures },
 
         # Comment blocks
         { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },

@@ -1,4 +1,4 @@
-from core import closures
+from core import languages
 from core.plugin import Plugin
 from utils.loggers import log
 from utils import rand
@@ -51,15 +51,15 @@ class Smarty(Plugin):
         # Text context, no closures
         { 'level': 0 },
     
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : closures.php_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : languages.php_ctx_closures },
 
         # {config_load file="missing_file"} raises an exception
 
         # Escape Ifs
-        { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
         # Escape {assign var="%s" value="%s"}
-        { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : closures.php_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
 
     ]
