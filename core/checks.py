@@ -108,7 +108,7 @@ def check_template_injection(channel):
         log.info(
             """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(tcp_shell)s%(reverse_tcp_shell)s%(execute_blind)s""" % (
                 {
-                 'execute': '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') else '',
+                 'execute': '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
                  'write': '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
                  'read': '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '',
                  'tcp_shell': '\n    --tcp-shell PORT to run an out-of-bound TCP shell on the remote PORT and connect to it' if channel.data.get('tcp_shell') else '',
