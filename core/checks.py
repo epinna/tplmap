@@ -25,6 +25,23 @@ def _print_injection_summary(channel):
     render = channel.data.get('render', '%(code)s').replace('\n', '\\n') % ({'code' : '*' })
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
+    idiom = channel.data.get('evaluate')
+    if idiom:
+        evaluation = 'yes, %s code' % (idiom)
+        if channel.data.get('evaluate_blind'):
+            evaluation += ' (blind)'
+    else:
+        evaluation = 'no'
+
+    # Handle execute_blind first since even if it's blind, execute is set as well
+    # TODO: fix this? less ambiguity
+    if channel.data.get('execute_blind'):
+        execution = 'yes (blind)'
+    elif channel.data.get('execute'):
+        execution = 'yes'
+    else:
+        execution = 'no'
+
     log.info("""Tplmap identified the following injection point:
 
   Engine: %(engine)s
@@ -45,8 +62,8 @@ def _print_injection_summary(channel):
     'engine': channel.data.get('engine').capitalize(),
     'os': channel.data.get('os', 'undetected'),
     'injtype' : 'blind' if channel.data.get('blind') else 'render',
-    'evaluate': 'no' if not channel.data.get('evaluate') else 'yes, %s code' % (channel.data.get('evaluate')),
-    'execute': 'no' if not channel.data.get('execute') else 'yes',
+    'evaluate': evaluation,
+    'execute': execution,
     'write': 'no' if not channel.data.get('write') else 'yes',
     'read': 'no' if not channel.data.get('read') else 'yes',
 }))
