@@ -7,6 +7,7 @@ import base64
 import datetime
 import collections
 import threading
+import time
 
 class Plugin(object):
 
@@ -612,19 +613,21 @@ class Plugin(object):
     def tcp_shell(self, port, shell = "/bin/sh"):
 
         action = self.actions.get('tcp_shell', {})
-        payload_actions = [ c for k,c in action.items() if k.startswith('tcp_shell_') ]
+        payload_actions = action.get('tcp_shell')
         call_name = action.get('call', 'inject')
 
-        payload_action = payload_actions[0]
-
         # Skip if something is missing or call function is not set
-        if not action or not payload_action or not call_name or not hasattr(self, call_name):
+        if not action or not isinstance(payload_actions, list) or not call_name or not hasattr(self, call_name):
             return
 
-        execution_code = payload_action % ({
-            'port' : port,
-            'shell' : shell,
-        })
+        for payload_action in payload_actions:
 
-        reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
-        reqthread.start()
+            execution_code = payload_action % ({
+                'port' : port,
+                'shell' : shell,
+            })
+
+            reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
+            reqthread.start()
+
+            # TODO: handle the logic here
