@@ -5,11 +5,12 @@ import select
 
 class TcpServer:
 
-    def __init__(self, port):
+    def __init__(self, port, timeout):
         self.connect = False
         self.hostname = '0.0.0.0'
         self.port = port
 
+        self.timeout = timeout
         self.socket_state = False
 
         self.socket = None
@@ -42,7 +43,7 @@ class TcpServer:
 
             server.listen(1)
 
-            server.settimeout(3)
+            server.settimeout(self.timeout)
 
             try:
                 self.socket, address = server.accept()

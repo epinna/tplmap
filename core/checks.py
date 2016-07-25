@@ -247,6 +247,7 @@ def check_template_injection(channel):
     reverse_tcp_shell_host_port = channel.args.get('reverse_tcp_shell')
     if reverse_tcp_shell_host_port:
         host, port = reverse_tcp_shell_host_port
+        timeout = 5
 
         if channel.data.get('reverse_tcp_shell'):
 
@@ -254,9 +255,9 @@ def check_template_injection(channel):
                 
             # Run tcp server
             try:
-                tcpserver = TcpServer(int(port))
+                tcpserver = TcpServer(int(port), timeout)
             except socket.timeout as e:
-                    log.error("Timeout")
+                    log.error("No incoming TCP shells after %is, quitting." % (timeout))
                 
 
         else:
