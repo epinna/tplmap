@@ -24,9 +24,9 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'suffix': '',
         'trailer': '{{%(trailer)s}}',
         'header': '{{%(header)s}}',
-        'render': '{{%(code)s}}',
+        'render': '{{%(code)s}}'
     }
-    
+
     expected_data_blind = {
         'language': 'python',
         'engine': 'jinja2',
@@ -34,7 +34,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'evaluate_blind': True,
         'blind': True,
         'prefix' : '',
-        'suffix' : '',
+        'suffix' : ''
     }
 
     url = 'http://127.0.0.1:15001/reflect/jinja2?tpl=%s&inj=*'

@@ -16,7 +16,7 @@ class MakoTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'python',
         'engine': 'mako',
-        'evaluate' : 'python' ,
+        'evaluate' : 'python',
         'execute' : True,
         'read': True,
         'write': True,
@@ -24,7 +24,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'suffix' : '',
         'trailer': '${%(trailer)s}',
         'header': '${%(header)s}',
-        'render': '${%(code)s}',
+        'render': '${%(code)s}'
     }
 
     expected_data_blind = {

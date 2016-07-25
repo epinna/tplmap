@@ -23,6 +23,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         'trailer': '\n= %(trailer)s\n',
         'header': '\n= %(header)s\n',
         'render': '\n= %(code)s\n',
+        'tcp_shell' : True
     }
 
     expected_data_blind = {
@@ -34,6 +35,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         'execute': True,
         'prefix' : '',
         'suffix' : '',
+        'tcp_shell' : True
     }
 
     url = 'http://127.0.0.1:15004/jade?inj=*&tpl=%s'
@@ -45,7 +47,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         (0, 0, 'AAA%sAAA', {}),
         (2, 2, '- var %s = true', { 'prefix' : 'a\n', 'suffix' : '//' }),
     ]
-    
+
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
