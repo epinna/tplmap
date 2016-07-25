@@ -35,6 +35,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'evaluate' : 'python',
         'execute' : True,
         'evaluate_blind': True,
+        'execute_blind': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',
