@@ -16,12 +16,12 @@ class Plugin(object):
 
         # Plugin name
         self.plugin = self.__class__.__name__
-        
+
         # Collect the HTTP response time into a deque to be used to
         # tune the average response time for blind values.
-        
+
         # Estimate 0.5s for a safe start.
-        self.render_req_tm = collections.deque([ 500 ], maxlen=5)
+        self.render_req_tm = collections.deque([ 0.5 ], maxlen=5)
 
     def detect(self):
 
@@ -57,7 +57,7 @@ class Plugin(object):
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
-            
+
             self._detect_blind()
 
             if self.get('blind'):
@@ -89,7 +89,7 @@ class Plugin(object):
             # If the context has no closures, generate one closure with a zero-length string
             if ctx.get('closures'):
                 closures = self._generate_closures(ctx)
-                
+
                 log.info('%s plugin is testing %s*%s code context escape with %i variations%s' % (
                                 self.plugin,
                                 repr(ctx.get('prefix', '%(closure)s') % ( { 'closure' : '' } )).strip("'"),
@@ -173,7 +173,7 @@ class Plugin(object):
         )
 
         for prefix, suffix in self._generate_contexts():
-            
+
             # Conduct a true-false test
             if getattr(self, call_name)(
                 payload = payload_true,
@@ -185,7 +185,7 @@ class Plugin(object):
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
-            ):  
+            ):
                 # We can assume here blind is true
                 self.set('blind', True)
                 self.set('prefix', prefix)
@@ -210,7 +210,7 @@ class Plugin(object):
         )
 
         for prefix, suffix in self._generate_contexts():
-            
+
             # Prepare base operation to be evalued server-side
             randA = rand.randint_n(1)
             randB = rand.randint_n(1)
@@ -252,15 +252,15 @@ class Plugin(object):
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
 
         # If the request is blind
-        if blind:  
-            
+        if blind:
+
             # Get current average timing for render() HTTP requests
             average = sum(self.render_req_tm)/len(self.render_req_tm)
 
             # Set delay to 2 second over the average timing
             # Change to one decimal seconds
             expected_delay = (average + 2000)/1000
-                      
+
             start = datetime.datetime.now()
 
             self.channel.req(injection)
@@ -273,12 +273,12 @@ class Plugin(object):
             log.debug('[blind %s] code above took %s. %s was requested' % (self.plugin, str(delta.seconds), str(expected_delay)))
 
             return result
-            
+
         else:
             start = datetime.datetime.now()
             result = self.channel.req(injection)
             end = datetime.datetime.now()
-            
+
             # Append the execution time to a buffer
             delta = end - start
             self.render_req_tm.append(delta.seconds)
@@ -303,11 +303,11 @@ class Plugin(object):
         suffix = self.get('suffix', '') if suffix == None else suffix
 
         injection = header + code + trailer
-        
+
         # Save the average HTTP request time of rendering in order
         # to better tone the blind request timeouts.
         result_raw = self.inject(injection, prefix, suffix, blind)
-        
+
         if blind:
             return result_raw
         else:
@@ -371,7 +371,7 @@ class Plugin(object):
         execution_code = payload % ({ 'path' : remote_path })
 
         return getattr(self, call_name)(
-            code = execution_code, 
+            code = execution_code,
         )
 
     """ Overridable function to detect read capabilities. """
@@ -405,7 +405,7 @@ class Plugin(object):
         execution_code = payload % ({ 'path' : remote_path })
 
         data_b64encoded = getattr(self, call_name)(
-            code = execution_code, 
+            code = execution_code,
         )
         data = base64.b64decode(data_b64encoded)
 
@@ -476,9 +476,9 @@ class Plugin(object):
         execution_code = payload % ({ 'code' : code })
 
         return getattr(self, call_name)(
-            code = execution_code, 
-            prefix = prefix, 
-            suffix = suffix, 
+            code = execution_code,
+            prefix = prefix,
+            suffix = suffix,
             blind = blind
         )
 
@@ -501,9 +501,9 @@ class Plugin(object):
 
         execution_code = payload % ({ 'code' : code })
         result = getattr(self, call_name)(
-            code = execution_code, 
-            prefix = prefix, 
-            suffix = suffix, 
+            code = execution_code,
+            prefix = prefix,
+            suffix = suffix,
             blind = blind
         )
         return result
@@ -531,23 +531,23 @@ class Plugin(object):
         # Skip if something is missing or call function is not set
         if not action or not payload_action or not call_name or not hasattr(self, call_name):
             return
-            
+
         # Get current average timing for render() HTTP requests
-        average = float(sum(self.render_req_tm))/len(self.render_req_tm)
+        average = sum(self.render_req_tm)/len(self.render_req_tm)
 
         # Set delay to 2 second over the average timing
         # Change to one decimal seconds
-        expected_delay = (average + 2000)/1000
-    
-        execution_code = payload_action % ({ 
-            'code' : payload, 
-            'delay' : expected_delay 
+        expected_delay = average + 2
+
+        execution_code = payload_action % ({
+            'code' : payload,
+            'delay' : expected_delay
         })
 
         return getattr(self, call_name)(
-            code = execution_code, 
-            prefix = prefix, 
-            suffix = suffix, 
+            code = execution_code,
+            prefix = prefix,
+            suffix = suffix,
             blind=True
         )
 
@@ -559,8 +559,8 @@ class Plugin(object):
             return
 
         self.set('blind_execute', True)
-        
-        
+
+
     def execute_blind(self, payload, prefix = None, suffix = None, blind = True):
 
         action = self.actions.get('execute_blind', {})
@@ -570,23 +570,23 @@ class Plugin(object):
         # Skip if something is missing or call function is not set
         if not action or not payload_action or not call_name or not hasattr(self, call_name):
             return
-            
+
         # Get current average timing for render() HTTP requests
-        average = float(sum(self.render_req_tm))/len(self.render_req_tm)
+        average = sum(self.render_req_tm)/len(self.render_req_tm)
 
         # Set delay to 2 second over the average timing
         # Change to one decimal seconds
-        expected_delay = (average + 2000)/1000
-    
-        execution_code = payload_action % ({ 
-            'code' : payload, 
-            'delay' : expected_delay 
+        expected_delay = average + 2
+
+        execution_code = payload_action % ({
+            'code' : payload,
+            'delay' : expected_delay
         })
 
         return getattr(self, call_name)(
-            code = execution_code, 
-            prefix = prefix, 
-            suffix = suffix, 
+            code = execution_code,
+            prefix = prefix,
+            suffix = suffix,
             blind=True
         )
 
