@@ -23,6 +23,11 @@ class Plugin(object):
         # Estimate 0.5s for a safe start.
         self.render_req_tm = collections.deque([ 0.5 ], maxlen=5)
 
+        # The number of seconds to delay the response when testing for
+        # time-based blind injection. This will be added to the average
+        # response time for render values.
+        self.tm_delay = 2
+
     def detect(self):
 
         # Start detection
@@ -254,12 +259,7 @@ class Plugin(object):
         # If the request is blind
         if blind:
 
-            # Get current average timing for render() HTTP requests
-            average = sum(self.render_req_tm)/len(self.render_req_tm)
-
-            # Set delay to 2 second over the average timing
-            # Change to one decimal seconds
-            expected_delay = (average + 2000)/1000
+            expected_delay = self._get_expected_delay()
 
             start = datetime.datetime.now()
 
@@ -532,12 +532,7 @@ class Plugin(object):
         if not action or not payload_action or not call_name or not hasattr(self, call_name):
             return
 
-        # Get current average timing for render() HTTP requests
-        average = sum(self.render_req_tm)/len(self.render_req_tm)
-
-        # Set delay to 2 second over the average timing
-        # Change to one decimal seconds
-        expected_delay = average + 2
+        expected_delay = self._get_expected_delay()
 
         execution_code = payload_action % ({
             'code' : payload,
@@ -571,12 +566,7 @@ class Plugin(object):
         if not action or not payload_action or not call_name or not hasattr(self, call_name):
             return
 
-        # Get current average timing for render() HTTP requests
-        average = sum(self.render_req_tm)/len(self.render_req_tm)
-
-        # Set delay to 2 second over the average timing
-        # Change to one decimal seconds
-        expected_delay = average + 2
+        expected_delay = self._get_expected_delay()
 
         execution_code = payload_action % ({
             'code' : payload,
@@ -598,3 +588,11 @@ class Plugin(object):
 
     def detect_blind_write(self):
         pass
+
+    def _get_expected_delay(self):
+
+        # Get current average timing for render() HTTP requests
+        average = sum(self.render_req_tm)/len(self.render_req_tm)
+
+        # Set delay to 2 second over the average timing
+        return average + self.tm_delay
