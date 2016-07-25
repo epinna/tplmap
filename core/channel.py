@@ -58,19 +58,16 @@ class Channel:
                 log.warn('Found placeholder in Header \'%s\'' % param)
 
     def _parse_post(self):
+        
+        datas = urlparse.parse_qs(self.args.get('data', ''))
 
-        for param_value in self.args.get('post_data', '[]'):
+        for param_key, param_value in datas.iteritems() :          
 
-            if '=' not in param_value:
-                continue
+            self.post_params[param_key] = param_value
 
-            param, value = param_value.split('=')
-
-            self.post_params[param] = value
-
-            if '*' in value:
-                self.post_placeholders.append(param)
-                log.warn('Found placeholder in POST parameter \'%s\'' % param)
+            if '*' in param_value:
+                self.post_placeholders.append(param_key)
+                log.warn('Found placeholder in POST parameter \'%s\'' % param_key)
 
     def _parse_get(self):
 
