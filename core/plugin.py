@@ -629,5 +629,4 @@ class Plugin(object):
 
             reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
             reqthread.start()
-
-            # TODO: handle the logic here
+            yield

