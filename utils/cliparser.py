@@ -35,10 +35,9 @@ target.add_option("-u","--url",
 request = OptionGroup(parser, "Request", "These options have how to connect and where to inject to the target URL.")
 
 request.add_option("-d","--data",
-                action="store",
                 dest="data",
                 help="Data string to be sent through POST. It must be as query string:\n param1=value1&param2=value2",
-                default=[])
+                )
 
 request.add_option("-H","--headers",
                 action="store",
@@ -102,6 +101,15 @@ oscmd.add_option("--download", dest="download",
                     help="Download REMOTE to LOCAL files",
                     nargs=2)
 
+oscmd.add_option("--tcp-shell", dest="tcp_shell",
+                    nargs=1,
+                    type=int,
+                    help="Spawn a system shell on a TCP PORT of the target and connect to it")
+
+oscmd.add_option("--reverse-tcp-shell", dest="reverse_tcp_shell",
+                    nargs=2,
+                    help="Run a system shell and back-connect to local HOST PORT")
+
 # OS access options
 general = OptionGroup(parser, "General", "These "
                        "options can be used to set some general working parameters")
@@ -109,7 +117,7 @@ general = OptionGroup(parser, "General", "These "
 general.add_option("--force-level", dest="force_level",
                     help="Force a LEVEL and CLEVEL to test",
                     nargs=2)
-                    
+
 parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)

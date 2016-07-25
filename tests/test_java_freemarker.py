@@ -28,7 +28,7 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'engine': 'freemarker',
         'execute' : True,
         'blind': True,
-        'blind_execute' : True,
+        'execute_blind' : True,
         'execute': True,
         'prefix' : '',
         'suffix' : '',
