@@ -34,8 +34,8 @@ class Channel:
 
     def _parse_method(self):
 
-        if self.args.get('method'):
-            self.http_method = self.args.get('method')
+        if self.args.get('request'):
+            self.http_method = self.args.get('request')
         elif self.post_params:
             self.http_method = 'POST'
         else:
@@ -58,10 +58,10 @@ class Channel:
                 log.warn('Found placeholder in Header \'%s\'' % param)
 
     def _parse_post(self):
-        
+
         datas = urlparse.parse_qs(self.args.get('data', ''))
 
-        for param_key, param_value in datas.iteritems() :          
+        for param_key, param_value in datas.iteritems():
 
             self.post_params[param_key] = param_value
 
@@ -114,6 +114,6 @@ class Channel:
             headers = header_params
             ).text
 
-        log.debug('\n> %s\n  < %s' % (repr(injection), repr(result)) )
+        log.debug('\n> %s\n  <%s' % (repr(injection), repr(result)) )
 
         return result
