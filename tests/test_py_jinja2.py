@@ -31,7 +31,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'jinja2',
         'evaluate' : 'python',
-        'blind_evaluate': True,
+        'evaluate_blind': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',

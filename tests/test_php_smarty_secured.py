@@ -24,7 +24,7 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'php',
         'engine': 'smarty',
-        'blind_evaluate': True,
+        'evaluate_blind': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',

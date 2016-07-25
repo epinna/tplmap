@@ -28,7 +28,7 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         'language': 'php',
         'engine': 'smarty',
         'evaluate' : 'php' ,
-        'blind_evaluate': True,
+        'evaluate_blind': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',
