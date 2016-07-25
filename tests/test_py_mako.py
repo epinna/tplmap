@@ -37,6 +37,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'prefix' : '',
         'suffix' : '',
         'evaluate_blind': True,
+        'execute_blind': True,
         'tcp_shell' : True,
         'reverse_tcp_shell': True,
         'execute': True,
