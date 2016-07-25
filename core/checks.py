@@ -216,7 +216,7 @@ def check_template_injection(channel):
                 
             for idx, thread in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
                 
-                log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx))
+                log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx+1))
                 
                 thread.join(timeout=1)
 
