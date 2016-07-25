@@ -553,7 +553,7 @@ class Plugin(object):
         if not self.get('blind') or not self.actions.get('execute_blind'):
             return
 
-        self.set('blind_execute', True)
+        self.set('execute_blind', True)
 
 
     def execute_blind(self, payload, prefix = None, suffix = None, blind = True):
