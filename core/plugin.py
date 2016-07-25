@@ -603,7 +603,7 @@ class Plugin(object):
     def detect_tcp_shell(self):
 
         # Assume tcp shell capabilities only if execute or execute_blind are set
-        if not self.actions.get('execute') and not self.actions.get('execute_blind'):
+        if not self.get('execute') or not self.get('execute_blind') or not self.actions.get('tcp_shell'):
             return
 
         self.set('tcp_shell', True)
