@@ -59,15 +59,17 @@ class Channel:
 
     def _parse_post(self):
 
-        datas = urlparse.parse_qs(self.args.get('data', ''))
+        if self.args.get('data'):
 
-        for param_key, param_value in datas.iteritems():
+            datas = urlparse.parse_qs(self.args.get('data'))
 
-            self.post_params[param_key] = param_value
+            for param_key, param_value in datas.iteritems():
 
-            if '*' in param_value:
-                self.post_placeholders.append(param_key)
-                log.warn('Found placeholder in POST parameter \'%s\'' % param_key)
+                self.post_params[param_key] = param_value
+
+                if '*' in param_value:
+                    self.post_placeholders.append(param_key)
+                    log.warn('Found placeholder in POST parameter \'%s\'' % param_key)
 
     def _parse_get(self):
 
