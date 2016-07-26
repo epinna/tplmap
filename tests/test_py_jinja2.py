@@ -32,9 +32,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'python',
         'engine': 'jinja2',
-        'evaluate' : 'python',
-        'execute' : True,
-        'evaluate_blind': True,
+        'evaluate_blind': 'python',
         'execute_blind': True,
         'blind': True,
         'prefix' : '',
@@ -165,4 +163,3 @@ class Jinja2Test(unittest.TestCase, BaseTest):
 
         result = obj.execute('echo 1"2"')
         self.assertEqual(result, '12')
-

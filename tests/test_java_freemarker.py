@@ -26,10 +26,8 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'java',
         'engine': 'freemarker',
-        'execute' : True,
         'blind': True,
         'execute_blind' : True,
-        'execute': True,
         'prefix' : '',
         'suffix' : '',
     }
@@ -38,17 +36,17 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
     url_blind = 'http://127.0.0.1:15003/freemarker?inj=*&tpl=%s&blind=1'
 
     plugin = Freemarker
-    
+
     blind_tests = [
         (0, 0, 'AAA%sAAA', {}),
         (5, 5, '<#list %s as a></#list>', { 'prefix' : '[1] as a></#list><#list [1] as a>', 'suffix' : ''}),
     ]
-    
+
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
         (0, 0, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
-        
+
         (2, 1, '<#assign s = %s>', { 'prefix': '1>', 'suffix': '' }),
         (5, 1, '<#-- %s -->', { 'prefix': '-->', 'suffix': '<#--' }),
         (2, 1, '<#if 1 == %s></#if>', { 'prefix': '1>', 'suffix' : ''}),
@@ -60,4 +58,3 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         #(1, 5, '${[1,2]%3Fjoin(%s)}', { 'prefix' : '[1])}', 'suffix' : ''}),
 
     ]
-    

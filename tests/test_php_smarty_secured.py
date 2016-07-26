@@ -24,24 +24,24 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'php',
         'engine': 'smarty',
-        'evaluate_blind': True,
+        'evaluate_blind': 'php',
         'blind': True,
         'prefix' : '',
         'suffix' : '',
     }
-    
+
     url = 'http://127.0.0.1:15002/smarty-3.1.29-secured.php?inj=*&tpl=%s'
     url_blind = 'http://127.0.0.1:15002/smarty-3.1.29-secured.php?inj=*&tpl=%s&blind=1'
     plugin = Smarty
 
-    # The secured Smarty can't executes any PHP hence no sleep(1) hence no 
+    # The secured Smarty can't executes any PHP hence no sleep(1) hence no
     # blind tests for now
     blind_tests = [
     ]
 
     reflection_tests = [
         (0, 0, '%s', { }),
-        (0, 0, 'AAA%sAAA', {}), 
+        (0, 0, 'AAA%sAAA', {}),
         (0, 0, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
         (0, 0, '{* %s *}', {}),
         (5, 1, '{if %s}\n{/if}', { 'prefix': '1}{/if}{if 1}', 'suffix' : ''}),
@@ -55,6 +55,6 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
 
     def test_download(self):
         pass
-        
+
     def test_upload(self):
         pass

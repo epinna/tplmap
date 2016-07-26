@@ -47,24 +47,19 @@ class Velocity(Plugin):
 
     ]
 
-    def detect_engine(self):
+    language = 'java'
 
-        # TODO: remove this as already performed on discovery phase
-        expected_rand = str(rand.randint_n(1))
-        payload = '#set($p=%(payload)s)\n$p\n' % ({ 'payload': expected_rand })
+    def rendered_detected(self):
 
-        if expected_rand == self.render(payload):
-            self.set('language', 'java')
-            self.set('engine', 'velocity')
-
-    def detect_exec(self):
+        # Since the render format is pretty peculiar assume
+        # engine name if render has been detected.
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
 
         expected_rand = str(rand.randint_n(2))
-
         if expected_rand == self.execute('echo %s' % expected_rand):
             self.set('execute', True)
-            self.set('os', self.execute("uname"))
 
-    def execute(self, code, **kwargs):
-        # Quote code before submitting it
-        return super(Velocity, self).execute(quote(code), **kwargs)
+            os = self.execute("""uname""")
+            if os and re.search('^[\w-]+$', os):
+                self.set('os', os)

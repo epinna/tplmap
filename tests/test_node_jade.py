@@ -30,10 +30,8 @@ class JadeTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'javascript',
         'engine': 'jade',
-        'evaluate' : 'javascript',
         'blind': True,
         'execute_blind' : True,
-        'execute': True,
         'prefix' : '',
         'suffix' : '',
         'tcp_shell' : True,

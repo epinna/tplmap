@@ -13,10 +13,10 @@ class Twig(Plugin):
         }
     }
     contexts = [
-    
+
         # Text context, no closures
         { 'level': 0 },
-    
+
         { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : languages.php_ctx_closures },
         { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
         { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
@@ -29,7 +29,9 @@ class Twig(Plugin):
 
     ]
 
-    def detect_engine(self):
+    language = 'php'
+
+    def rendered_detected(self):
 
         randA = rand.randint_n(1)
         randB = rand.randint_n(1)
@@ -37,7 +39,7 @@ class Twig(Plugin):
         # {{7*'7'}} and a{#b#}c work in freemarker as well
         payload = '{%% set a=%i*%i %%}{{a}}' % (randA, randB)
         expected = str(randA * randB)
-        
+
         if expected == self.render(payload):
-            self.set('language', 'php')
-            self.set('engine', 'twig')
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)

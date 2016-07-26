@@ -30,6 +30,36 @@ class Plugin(object):
         # response time for render values.
         self.tm_delay = 2
 
+    def rendered_detected(self):
+
+        # To be overriden. This can define the following
+        # capabilities:
+        #self.set('engine', self.plugin.lower())
+        #self.set('language', 'language')
+        #self.set('evaluate', 'language')
+        #self.set('execute', True)
+        #self.set('write', True)
+        #self.set('read', True)
+        #self.set('tcp_shell', True)
+        #self.set('reverse_tcp_shell', True)
+
+        pass
+
+    def blind_detected(self):
+
+        # To be overriden. This can define the following
+        # capabilities:
+        #self.set('engine', self.plugin.lower())
+        #self.set('language', 'language')
+        #self.set('evaluate_blind', True)
+        #self.set('execute_blind', True)
+        #self.set('write_blind', True)
+        #self.set('read_blind', True)
+        #self.set('tcp_shell', True)
+        #self.set('reverse_tcp_shell', True)
+
+        pass
+
     def detect(self):
 
         # Start detection
@@ -39,7 +69,8 @@ class Plugin(object):
         if self.get('render') == None:
             self._detect_unreliable_render()
 
-        if self.get('render') != None:
+        # Else, print and execute rendered_detected()
+        else:
 
             # If here, the rendering is confirmed
             prefix = self.get('prefix', '')
@@ -53,16 +84,8 @@ class Plugin(object):
                 )
             )
 
-            self.detect_engine()
-
-            # Return if engine is still unset
-            if self.get('engine'):
-                self.detect_eval()
-                self.detect_exec()
-                self.detect_write()
-                self.detect_read()
-                self.detect_tcp_shell()
-                self.detect_reverse_tcp_shell()
+            # Set the environment
+            self.rendered_detected()
 
         # Manage blind injection only if render detection has failed
         if not self.get('engine'):
@@ -73,13 +96,8 @@ class Plugin(object):
 
                 log.info('%s plugin has confirmed blind injection' % (self.plugin))
 
-                self.detect_blind_engine()
-                self.detect_evaluate_blind()
-                self.detect_execute_blind()
-                self.detect_blind_read()
-                self.detect_blind_write()
-                self.detect_tcp_shell()
-                self.detect_reverse_tcp_shell()
+                # Set the environment
+                self.blind_detected()
 
     def _generate_contexts(self):
 
@@ -430,15 +448,6 @@ class Plugin(object):
 
         return data
 
-    def detect_write(self):
-
-        # Assume write capabilities only if evaluation
-        # has been alredy detected and if self.actions['write'] exits
-        if not self.get('evaluate') or not self.actions.get('write'):
-            return
-
-        self.set('write', True)
-
     def write(self, data, remote_path):
 
         action = self.actions.get('write', {})
@@ -500,13 +509,6 @@ class Plugin(object):
             blind = blind
         )
 
-    def detect_exec(self):
-
-        expected_rand = str(rand.randint_n(2))
-
-        if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('execute', True)
-
     def execute(self, code, **kwargs):
 
         prefix = kwargs.get('prefix', self.get('prefix', ''))
@@ -531,19 +533,6 @@ class Plugin(object):
         )
         return result
 
-
-    def detect_eval(self):
-        pass
-
-
-    def detect_evaluate_blind(self):
-
-        # Assume blind render capabilities only if exec is not set, blind
-        # is set and self.actions['blind_render'] exits
-        if not self.get('blind') or not self.actions.get('evaluate_blind'):
-            return
-
-        self.set('evaluate_blind', True)
 
     def evaluate_blind(self, code, **kwargs):
 
@@ -573,16 +562,6 @@ class Plugin(object):
             blind=True
         )
 
-    def detect_execute_blind(self):
-
-        # Assume blind render capabilities only if exec is not set, blind
-        # is set and self.actions['blind_render'] exits
-        if not self.get('blind') or not self.actions.get('execute_blind'):
-            return
-
-        self.set('execute_blind', True)
-
-
     def execute_blind(self, code, **kwargs):
 
         prefix = kwargs.get('prefix', self.get('prefix', ''))
@@ -611,15 +590,6 @@ class Plugin(object):
             blind=True
         )
 
-    def detect_blind_engine(self):
-        pass
-
-    def detect_blind_read(self):
-        pass
-
-    def detect_blind_write(self):
-        pass
-
     def _get_expected_delay(self):
 
         # Get current average timing for render() HTTP requests
@@ -627,14 +597,6 @@ class Plugin(object):
 
         # Set delay to 2 second over the average timing
         return average + self.tm_delay
-
-    def detect_tcp_shell(self):
-
-        # Assume tcp shell capabilities only if execute or execute_blind are set
-        if not (self.get('execute') or self.get('execute_blind')) or not self.actions.get('tcp_shell'):
-            return
-
-        self.set('tcp_shell', True)
 
 
     def tcp_shell(self, port, shell = "/bin/sh"):
@@ -657,14 +619,6 @@ class Plugin(object):
             reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
             reqthread.start()
             yield reqthread
-
-    def detect_reverse_tcp_shell(self):
-
-        # Assume tcp shell capabilities only if execute or execute_blind are set
-        if not (self.get('execute') or self.get('execute_blind')) or not self.actions.get('reverse_tcp_shell'):
-            return
-
-        self.set('reverse_tcp_shell', True)
 
 
     def reverse_tcp_shell(self, host, port, shell = "/bin/sh"):

