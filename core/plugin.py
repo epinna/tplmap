@@ -502,7 +502,11 @@ class Plugin(object):
         if not action or not payload or not call_name or not hasattr(self, call_name):
             return
 
-        execution_code = payload % ({ 'code' : code })
+        if '%(code_b64)s' in payload:
+            log.debug('[b64 encoding] %s' % code)
+            execution_code = payload % ({ 'code_b64' : base64.urlsafe_b64encode(code) })
+        else:
+            execution_code = payload % ({ 'code' : code })
 
         return getattr(self, call_name)(
             code = execution_code,
@@ -525,7 +529,11 @@ class Plugin(object):
         if not action or not payload or not call_name or not hasattr(self, call_name):
             return
 
-        execution_code = payload % ({ 'code' : quote(code) })
+        if '%(code_b64)s' in payload:
+            log.debug('[b64 encoding] %s' % code)
+            execution_code = payload % ({ 'code_b64' : base64.urlsafe_b64encode(code) })
+        else:
+            execution_code = payload % ({ 'code' : code })
 
         result = getattr(self, call_name)(
             code = execution_code,
@@ -552,10 +560,17 @@ class Plugin(object):
 
         expected_delay = self._get_expected_delay()
 
-        execution_code = payload_action % ({
-            'code' : code,
-            'delay' : expected_delay
-        })
+        if '%(code_b64)s' in payload_action:
+            log.debug('[b64 encoding] %s' % code)
+            execution_code = payload_action % ({
+                'code_b64' : base64.urlsafe_b64encode(code),
+                'delay' : expected_delay
+            })
+        else:
+            execution_code = payload_action % ({
+                'code' : code,
+                'delay' : expected_delay
+            })
 
         return getattr(self, call_name)(
             code = execution_code,
@@ -580,10 +595,17 @@ class Plugin(object):
 
         expected_delay = self._get_expected_delay()
 
-        execution_code = payload_action % ({
-            'code' : code,
-            'delay' : expected_delay
-        })
+        if '%(code_b64)s' in payload_action:
+            log.debug('[b64 encoding] %s' % code)
+            execution_code = payload_action % ({
+                'code_b64' : base64.urlsafe_b64encode(code),
+                'delay' : expected_delay
+            })
+        else:
+            execution_code = payload_action % ({
+                'code' : code,
+                'delay' : expected_delay
+            })
 
         return getattr(self, call_name)(
             code = execution_code,
