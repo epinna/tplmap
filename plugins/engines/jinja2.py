@@ -15,7 +15,7 @@ class Jinja2(Plugin):
         },
         'write' : {
             'call' : 'evaluate',
-            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk)s'))""",
+            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
             'truncate' : """open("%(path)s", 'w').close()"""
         },
         'read' : {

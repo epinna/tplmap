@@ -458,7 +458,7 @@ class Plugin(object):
 
             chunk_b64 = base64.urlsafe_b64encode(chunk)
 
-            execution_code = payload_write % ({ 'path' : remote_path, 'chunk' : chunk_b64 })
+            execution_code = payload_write % ({ 'path' : remote_path, 'chunk_b64' : chunk_b64 })
             getattr(self, call_name)(
                 code = execution_code
             )

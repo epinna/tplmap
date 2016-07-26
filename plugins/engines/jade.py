@@ -15,7 +15,7 @@ class Jade(Plugin):
         },
         'write' : {
             'call' : 'evaluate',
-            'write' : """global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk)s', 'base64'), 'binary')""",
+            'write' : """global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
             'truncate' : """global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
         },
         'read' : {

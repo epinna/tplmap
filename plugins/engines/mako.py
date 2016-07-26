@@ -14,7 +14,7 @@ class Mako(Plugin):
         },
         'write' : {
             'call' : 'evaluate',
-            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk)s'))""",
+            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
             'truncate' : """open("%(path)s", 'w').close()"""
         },
         'read' : {
@@ -93,7 +93,7 @@ class Mako(Plugin):
         if expected == self.render(payload):
             self.set('language', 'python')
             self.set('engine', 'mako')
-            self.set('evaluate', 'python')        
+            self.set('evaluate', 'python')
             self.set('execute', True)
 
 

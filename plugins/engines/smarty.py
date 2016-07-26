@@ -15,7 +15,7 @@ class Smarty(Plugin):
         },
         'write' : {
             'call' : 'evaluate',
-            'write' : """$d="%(chunk)s"; file_put_contents("%(path)s", base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)),FILE_APPEND);""",
+            'write' : """$d="%(chunk_b64)s"; file_put_contents("%(path)s", base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)),FILE_APPEND);""",
             'truncate' : """file_put_contents("%(path)s", "");"""
         },
         'read' : {

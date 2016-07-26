@@ -16,7 +16,7 @@ class Freemarker(Plugin):
         },
         'write' : {
             'call' : 'execute',
-            'write' : """bash -c {base64,--decode}<<<{tr,/+,_-}<<<%(chunk)s>>%(path)s""",
+            'write' : """bash -c {base64,--decode}<<<{tr,/+,_-}<<<%(chunk_b64)s>>%(path)s""",
             'truncate' : """bash -c {echo,-n,}>%(path)s"""
         },
         'read' : {
