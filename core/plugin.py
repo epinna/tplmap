@@ -42,6 +42,7 @@ class Plugin(object):
         #self.set('read', True)
         #self.set('tcp_shell', True)
         #self.set('reverse_tcp_shell', True)
+        #self.set('os', 'undefined')
 
         pass
 
@@ -51,12 +52,13 @@ class Plugin(object):
         # capabilities:
         #self.set('engine', self.plugin.lower())
         #self.set('language', 'language')
-        #self.set('evaluate_blind', True)
+        #self.set('evaluate_blind', 'language')
         #self.set('execute_blind', True)
         #self.set('write_blind', True)
         #self.set('read_blind', True)
         #self.set('tcp_shell', True)
         #self.set('reverse_tcp_shell', True)
+        #self.set('os', 'undefined')
 
         pass
 
