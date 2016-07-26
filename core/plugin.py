@@ -254,10 +254,11 @@ class Plugin(object):
     Raw inject of the payload.
     """
 
-    def inject(self, code, prefix = None, suffix = None, blind = False):
+    def inject(self, code, **kwargs):
 
-        prefix = self.get('prefix', '') if prefix == None else prefix
-        suffix = self.get('suffix', '') if suffix == None else suffix
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+        blind = kwargs.get('blind', False)
 
         injection = prefix + code + suffix
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
@@ -297,22 +298,29 @@ class Plugin(object):
     All the passed parameter must be already rendered. The parameters which are not passed, will be
     picked from self.channel.data dictionary and rendered at the moment.
     """
-    def render(self, code, header = None, header_rand = None, trailer = None, trailer_rand = None, prefix = None, suffix = None, blind = False):
+    def render(self, code, **kwargs):
 
-        header_rand = rand.randint_n(10) if header_rand == None else header_rand
-        header = self.get('header', '%(header)s') % ({ 'header' : header_rand }) if header == None else header
+        header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
+        header = kwargs.get('header', self.get('header', '%(header)s') % ({ 'header' : header_rand }))
 
-        trailer_rand = rand.randint_n(10) if trailer_rand == None else trailer_rand
-        trailer = self.get('trailer', '%(trailer)s') % ({ 'trailer' : trailer_rand }) if trailer == None else trailer
+        trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
+        trailer = kwargs.get('trailer', self.get('trailer', '%(trailer)s') % ({ 'trailer' : trailer_rand }))
 
-        prefix = self.get('prefix', '') if prefix == None else prefix
-        suffix = self.get('suffix', '') if suffix == None else suffix
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+
+        blind = kwargs.get('blind', False)
 
         injection = header + code + trailer
 
         # Save the average HTTP request time of rendering in order
         # to better tone the blind request timeouts.
-        result_raw = self.inject(injection, prefix, suffix, blind)
+        result_raw = self.inject(
+            code = injection,
+            prefix = prefix,
+            suffix = suffix,
+            blind = blind
+        )
 
         if blind:
             return result_raw
@@ -469,7 +477,11 @@ class Plugin(object):
             log.warn('File uploaded correctly')
 
 
-    def evaluate(self, code, prefix = None, suffix = None, blind = False):
+    def evaluate(self, code,  **kwargs):
+
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+        blind = kwargs.get('blind', False)
 
         action = self.actions.get('evaluate', {})
         payload = action.get('evaluate')
@@ -495,7 +507,11 @@ class Plugin(object):
         if expected_rand == self.execute('echo %s' % expected_rand):
             self.set('execute', True)
 
-    def execute(self, code, prefix = None, suffix = None, blind = False):
+    def execute(self, code, **kwargs):
+
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+        blind = kwargs.get('blind', False)
 
         action = self.actions.get('execute', {})
         payload = action.get('execute')
@@ -529,7 +545,11 @@ class Plugin(object):
 
         self.set('evaluate_blind', True)
 
-    def evaluate_blind(self, code, prefix = None, suffix = None, blind = True):
+    def evaluate_blind(self, code, **kwargs):
+
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+        blind = kwargs.get('blind', False)
 
         action = self.actions.get('evaluate_blind', {})
         payload_action = action.get('evaluate_blind')
@@ -563,7 +583,11 @@ class Plugin(object):
         self.set('execute_blind', True)
 
 
-    def execute_blind(self, code, prefix = None, suffix = None, blind = True):
+    def execute_blind(self, code, **kwargs):
+
+        prefix = kwargs.get('prefix', self.get('prefix', ''))
+        suffix = kwargs.get('suffix', self.get('suffix', ''))
+        blind = kwargs.get('blind', False)
 
         action = self.actions.get('execute_blind', {})
         payload_action = action.get('execute_blind')

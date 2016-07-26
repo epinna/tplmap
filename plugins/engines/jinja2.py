@@ -109,9 +109,9 @@ class Jinja2(Plugin):
         self.set('os', self.evaluate(payload))
         self.set('evaluate', 'python')
 
-    def evaluate(self, code, prefix = None, suffix = None, blind = False):
+    def evaluate(self, code, **kwargs):
         # Quote code before submitting it
-        return super(Jinja2, self).evaluate(quote(code), prefix, suffix, blind)
+        return super(Jinja2, self).evaluate(quote(code), **kwargs)
 
     def detect_blind_engine(self):
 
