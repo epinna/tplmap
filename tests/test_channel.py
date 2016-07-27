@@ -26,8 +26,8 @@ class ChannelTest(unittest.TestCase):
         'render': '${%(code)s}',
         'prefix': '',
         'suffix': '',
-        'tcp_shell' : True,
-        'reverse_tcp_shell': True
+        'bind_shell' : True,
+        'reverse_shell': True
     }
 
     def test_post_reflection(self):

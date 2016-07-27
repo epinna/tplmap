@@ -21,8 +21,8 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'read': True,
         'prefix' : '',
         'suffix' : '',
-        'tcp_shell' : True,
-        'reverse_tcp_shell': True
+        'bind_shell' : True,
+        'reverse_shell': True
     }
 
     expected_data_blind = {
@@ -33,8 +33,8 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'write': True,
         'prefix' : '',
         'suffix' : '',
-        'tcp_shell' : True,
-        'reverse_tcp_shell': True
+        'bind_shell' : True,
+        'reverse_shell': True
     }
 
     url = 'http://127.0.0.1:15003/freemarker?inj=*&tpl=%s'

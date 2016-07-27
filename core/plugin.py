@@ -40,8 +40,8 @@ class Plugin(object):
         #self.set('execute', True)
         #self.set('write', True)
         #self.set('read', True)
-        #self.set('tcp_shell', True)
-        #self.set('reverse_tcp_shell', True)
+        #self.set('bind_shell', True)
+        #self.set('reverse_shell', True)
         #self.set('os', 'undefined')
 
         pass
@@ -57,8 +57,8 @@ class Plugin(object):
         #self.set('write', True)
         #self.set('write_blind', True)
         #self.set('read_blind', True)
-        #self.set('tcp_shell', True)
-        #self.set('reverse_tcp_shell', True)
+        #self.set('bind_shell', True)
+        #self.set('reverse_shell', True)
         #self.set('os', 'undefined')
 
         pass
@@ -630,10 +630,10 @@ class Plugin(object):
         return average + self.tm_delay
 
 
-    def tcp_shell(self, port, shell = "/bin/sh"):
+    def bind_shell(self, port, shell = "/bin/sh"):
 
-        action = self.actions.get('tcp_shell', {})
-        payload_actions = action.get('tcp_shell')
+        action = self.actions.get('bind_shell', {})
+        payload_actions = action.get('bind_shell')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set
@@ -652,10 +652,10 @@ class Plugin(object):
             yield reqthread
 
 
-    def reverse_tcp_shell(self, host, port, shell = "/bin/sh"):
+    def reverse_shell(self, host, port, shell = "/bin/sh"):
 
-        action = self.actions.get('reverse_tcp_shell', {})
-        payload_actions = action.get('reverse_tcp_shell')
+        action = self.actions.get('reverse_shell', {})
+        payload_actions = action.get('reverse_shell')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set

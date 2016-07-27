@@ -101,12 +101,12 @@ oscmd.add_option("--download", dest="download",
                     help="Download REMOTE to LOCAL files",
                     nargs=2)
 
-oscmd.add_option("--tcp-shell", dest="tcp_shell",
+oscmd.add_option("--bind-shell", dest="bind_shell",
                     nargs=1,
                     type=int,
                     help="Spawn a system shell on a TCP PORT of the target and connect to it")
 
-oscmd.add_option("--reverse-tcp-shell", dest="reverse_tcp_shell",
+oscmd.add_option("--reverse-shell", dest="reverse_shell",
                     nargs=2,
                     help="Run a system shell and back-connect to local HOST PORT")
 
