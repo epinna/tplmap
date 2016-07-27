@@ -475,6 +475,7 @@ class Plugin(object):
         # Upload file in chunks of 500 characters
         for chunk in chunkit(data, 500):
 
+            log.debug('[b64 encoding] %s' % chunk)
             chunk_b64 = base64.urlsafe_b64encode(chunk)
 
             execution_code = payload_write % ({ 'path' : remote_path, 'chunk_b64' : chunk_b64 })
