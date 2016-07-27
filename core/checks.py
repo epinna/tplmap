@@ -43,6 +43,14 @@ def _print_injection_summary(channel):
         execution = 'yes'
     else:
         execution = 'no'
+        
+    if channel.data.get('write'):
+        if channel.data.get('blind'):
+            writing = 'yes (blind)'
+        else:
+            writing = 'yes'
+    else:
+        writing = 'no'
 
     log.info("""Tplmap identified the following injection point:
 
@@ -52,10 +60,12 @@ def _print_injection_summary(channel):
   OS: %(os)s
   Technique: %(injtype)s
   Capabilities:
-    Code evaluation: %(evaluate)s
-    OS command execution: %(execute)s
-    File write: %(write)s
-    File read: %(read)s
+  
+   Code evaluation: %(evaluate)s
+   Shell command execution: %(execute)s
+   File write: %(write)s
+   File read: %(read)s
+   Bind and reverse shell: %(tcp_shell)s
 """ % ({
     'prefix': prefix,
     'render': render,
@@ -66,8 +76,9 @@ def _print_injection_summary(channel):
     'injtype' : 'blind' if channel.data.get('blind') else 'render',
     'evaluate': evaluation,
     'execute': execution,
-    'write': 'no' if not channel.data.get('write') else 'yes',
+    'write': writing,
     'read': 'no' if not channel.data.get('read') else 'yes',
+    'tcp_shell': 'no' if not channel.data.get('tcp_shell') else 'yes',
 }))
 
 def check_template_injection(channel):
