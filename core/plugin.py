@@ -1,4 +1,4 @@
-from utils.strings import quote, chunkit, md5
+from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
 import re
