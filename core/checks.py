@@ -31,9 +31,9 @@ def _print_injection_summary(channel):
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
     if channel.data.get('evaluate_blind'):
-        evaluation = 'yes (blind)'
+        evaluation = 'yes, %s code (blind)' % (channel.data.get('language'))
     elif channel.data.get('evaluate'):
-        evaluation = 'yes'
+        evaluation = 'yes, %s code' % (channel.data.get('language'))
     else:
         evaluation = 'no'
 
@@ -116,7 +116,7 @@ def check_template_injection(channel):
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:%(execute)s%(write)s%(read)s%(bind_shell)s%(reverse_shell)s%(execute_blind)s""" % (
+            """Rerun tplmap providing one of the following options:\n%(execute)s%(write)s%(read)s%(bind_shell)s%(reverse_shell)s%(execute_blind)s""" % (
                 {
                  'execute': '\n    --os-shell or --os-cmd to execute shell commands via the injection' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
                  'bind_shell': '\n    --bind-shell PORT to bind a shell on a port and connect to it' if channel.data.get('bind_shell') else '',
