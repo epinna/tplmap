@@ -29,15 +29,14 @@ function run_webserver()
   fi
 
   cd ./env_java_tests/lib/spark-app/
-  gradle run &> $webserver_log
-  GRADLEPID=$!
-  cd ../../../
+  exec gradle run &> $webserver_log
 }
 
 
 if [[ "$1" == "--test" ]]; then
   echo 'Run web server and launch tests'
   run_webserver &
+  GRADLEPID=$!
 
   while ! echo exit | nc localhost 15003; do sleep 3; done
 
