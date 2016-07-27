@@ -113,5 +113,6 @@ class Mako(Plugin):
 
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
+            self.set('write', True)
             self.set('tcp_shell', True)
             self.set('reverse_tcp_shell', True)

@@ -30,6 +30,7 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'engine': 'freemarker',
         'blind': True,
         'execute_blind' : True,
+        'write': True,
         'prefix' : '',
         'suffix' : '',
         'tcp_shell' : True,

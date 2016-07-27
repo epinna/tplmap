@@ -33,6 +33,7 @@ class MakoTest(unittest.TestCase, BaseTest):
         'language': 'python',
         'engine': 'mako',
         'blind': True,
+        'write': True,
         'prefix' : '',
         'suffix' : '',
         'evaluate_blind': 'python',

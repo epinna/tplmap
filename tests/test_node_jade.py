@@ -32,6 +32,7 @@ class JadeTest(unittest.TestCase, BaseTest):
         'engine': 'jade',
         'blind': True,
         'execute_blind' : True,
+        'write': True,
         'prefix' : '',
         'suffix' : '',
         'tcp_shell' : True,

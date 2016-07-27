@@ -54,6 +54,7 @@ class Plugin(object):
         #self.set('language', 'language')
         #self.set('evaluate_blind', 'language')
         #self.set('execute_blind', True)
+        #self.set('write', True)
         #self.set('write_blind', True)
         #self.set('read_blind', True)
         #self.set('tcp_shell', True)
@@ -455,16 +456,19 @@ class Plugin(object):
         action = self.actions.get('write', {})
         payload_write = action.get('write')
         payload_truncate = action.get('truncate')
-        call_name = action.get('call', 'render')
+        call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set
         if not action or not payload_write or not payload_truncate or not call_name or not hasattr(self, call_name):
             return
 
         # Check existance and overwrite with --force-overwrite
-        if self.md5(remote_path):
+        if self.get('blind') or self.md5(remote_path):
             if not self.channel.args.get('force_overwrite'):
-                log.warn('Remote path already exists, use --force-overwrite for overwrite')
+                if self.get('blind'):
+                    log.warn('Blind upload will rewrite any file, rerun with --force-overwrite for upload')
+                else:
+                    log.warn('Remote path already exists, rerun with --force-overwrite for upload')
                 return
             else:
                 execution_code = payload_truncate % ({ 'path' : remote_path })
@@ -483,7 +487,9 @@ class Plugin(object):
                 code = execution_code
             )
 
-        if not md5(data) == self.md5(remote_path):
+        if self.get('blind'):
+            log.warn('Blind upload can\'t check the upload correctness, check manually')
+        elif not md5(data) == self.md5(remote_path):
             log.warn('Remote file md5 mismatch, check manually')
         else:
             log.warn('File uploaded correctly')

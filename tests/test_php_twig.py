@@ -51,3 +51,6 @@ class TwigTest(unittest.TestCase, BaseTest):
     # Defuse upload tests, capabilities not available
     def test_upload(self):
         pass    
+        
+    def test_upload_blind(self):
+        pass

@@ -109,5 +109,6 @@ class Freemarker(Plugin):
         # Since execution has been used to detect blind injection,
         # let's assume execute_blind as set.
         self.set('execute_blind', True)
+        self.set('write', True)
         self.set('tcp_shell', True)
         self.set('reverse_tcp_shell', True)

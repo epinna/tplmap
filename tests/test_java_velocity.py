@@ -51,3 +51,6 @@ class VelocityTest(unittest.TestCase, BaseTest):
 
     def test_upload(self):
         pass
+
+    def test_upload_blind(self):
+        pass

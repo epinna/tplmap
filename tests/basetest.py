@@ -152,3 +152,37 @@ class BaseTest(object):
         obj, data = self._get_detection_obj_data(self.url_blind % '')    
         if obj.get('execute_blind'):
             self.assertTrue(obj.execute_blind("""echo 1"2"'3'\\"\\'"""))
+            
+            
+    def test_upload_blind(self):
+
+        obj, data = self._get_detection_obj_data(
+            self.url_blind % ''
+        )
+        self.assertEqual(data, self.expected_data_blind)
+
+        # Send file without --force-overwrite, should fail
+        remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
+        obj.write('AAAA', remote_temp_path)
+        self.assertFalse(os.path.exists(remote_temp_path))
+
+        # Now set --force-overwrite and retry
+        obj.channel.args['force_overwrite'] = True
+
+        # Send long binary
+        data = open('/bin/ls', 'rb').read()
+        obj.write(data, remote_temp_path)
+        
+        # Since it's blind, read md5 from disk
+        checkdata = open(remote_temp_path, 'rb').read()
+        self.assertEqual(strings.md5(checkdata), strings.md5(data))
+        os.unlink(remote_temp_path)
+        
+        remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
+        # Send short ASCII data
+        data = 'SHORT ASCII DATA'
+        obj.write(data, remote_temp_path)
+        
+        checkdata = open(remote_temp_path, 'rb').read()
+        self.assertEqual(strings.md5(checkdata), strings.md5(data))
+        os.unlink(remote_temp_path)    

