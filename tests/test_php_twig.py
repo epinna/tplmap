@@ -22,6 +22,7 @@ class TwigTest(unittest.TestCase, BaseTest):
     }
     
     url = 'http://127.0.0.1:15002/twig-1.24.1-secured.php?tpl=%s&inj=*'
+    url_blind = ''
     
     plugin = Twig
     

@@ -61,3 +61,18 @@ class JadeTest(unittest.TestCase, BaseTest):
         (2, 1, '- var a = %s', { 'prefix': '1\n', 'suffix' : '//' }),
 
     ]
+
+    def test_reflection_quotes(self):
+
+        obj, data = self._get_detection_obj_data(self.url % '')
+
+        if obj.get('execute'):
+            result = obj.execute("""echo 1"2"'3'\\"\\'""")
+            self.assertEqual(result, """123&quot;'""")
+
+        if not self.url_blind:
+            return
+
+        obj, data = self._get_detection_obj_data(self.url_blind % '')    
+        if obj.get('execute_blind'):
+            self.assertTrue(obj.execute_blind("""echo 1"2"'3'\\"\\'"""))

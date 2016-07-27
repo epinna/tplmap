@@ -21,6 +21,7 @@ class VelocityTest(unittest.TestCase, BaseTest):
     }
 
     url = 'http://127.0.0.1:15003/velocity?inj=*&tpl=%s'
+    url_blind = ''
 
     plugin = Velocity
 

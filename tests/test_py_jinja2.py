@@ -156,10 +156,3 @@ class Jinja2Test(unittest.TestCase, BaseTest):
         expected_data = { 'render' : self.expected_data['render'], 'unreliable' : 'Jinja2' }
 
         self.assertEqual(data, expected_data)
-
-    def test_reflection_quotes(self):
-
-        obj, data = self._get_detection_obj_data(self.url % '')
-
-        result = obj.execute('echo 1"2"')
-        self.assertEqual(result, '12')
