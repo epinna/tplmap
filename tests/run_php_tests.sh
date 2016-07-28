@@ -38,14 +38,14 @@ function run_webserver()
   fi
 
   # Run PHP webserver
-  php -S 127.0.0.1:15002 -t env_php_tests/ &> $webserver_log
-  PHPPID=$!
+  exec php -S 127.0.0.1:15002 -t env_php_tests/ &> $webserver_log
 }
 
 
 if [[ "$1" == "--test" ]]; then
   echo 'Run web server and launch tests'
   run_webserver &
+  PHPPID=$!
 
   while ! echo exit | nc localhost 15002; do sleep 3; done
 

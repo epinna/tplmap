@@ -32,15 +32,14 @@ function run_webserver()
 
   cp ../connect-app.js connect-app.js
 
-  node connect-app.js &> $webserver_log
-  NODEPID=$!
+  exec node connect-app.js &> $webserver_log
 
-  cd ../../
 }
 
 if [[ "$1" == "--test" ]]; then
   echo 'Run web server and launch tests'
   run_webserver &
+  NODEPID=$!
 
   while ! echo exit | nc localhost 15004; do sleep 3; done
 
