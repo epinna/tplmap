@@ -20,11 +20,11 @@ class Freemarker(Plugin):
         },
         'read' : {
             'call': 'execute',
-            'read' : """bash -c base64<%(path)s"""
+            'read' : """base64<%(path)s"""
         },
         'md5' : {
             'call': 'execute',
-            'md5': """bash -c md5<%(path)s"""
+            'md5': """$(type -p md5 md5sum)<%(path)s"""
         },
         'evaluate' : {
             'call': 'render',
