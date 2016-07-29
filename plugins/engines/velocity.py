@@ -51,15 +51,19 @@ class Velocity(Plugin):
 
     def rendered_detected(self):
 
-        # Since the render format is pretty peculiar assume
-        # engine name if render has been detected.
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
+        payload = '#* comm *#'
 
-        expected_rand = str(rand.randint_n(2))
-        if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('execute', True)
+        if '' == self.render(payload):
 
-            os = self.execute("""uname""")
-            if os and re.search('^[\w-]+$', os):
-                self.set('os', os)
+            # Since the render format is pretty peculiar assume
+            # engine name if render has been detected.
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
+
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+
+                os = self.execute("""uname""")
+                if os and re.search('^[\w-]+$', os):
+                    self.set('os', os)

@@ -2,6 +2,7 @@ from utils.loggers import log
 from core.plugin import Plugin
 from utils import rand
 from core import languages
+import string
 
 class Twig(Plugin):
 
@@ -33,12 +34,12 @@ class Twig(Plugin):
 
     def rendered_detected(self):
 
-        randA = rand.randint_n(1)
-        randB = rand.randint_n(1)
+        randA = rand.randstr_n(3)
 
         # {{7*'7'}} and a{#b#}c work in freemarker as well
-        payload = '{%% set a=%i*%i %%}{{a}}' % (randA, randB)
-        expected = str(randA * randB)
+        # {%% set a=%i*%i %%}{{a}} works in Nunjucks as well
+        payload = '{{"%s\n"|nl2br}}' % (randA)
+        expected = "%s<br />" % (randA)
 
         if expected == self.render(payload):
             self.set('engine', self.plugin.lower())
