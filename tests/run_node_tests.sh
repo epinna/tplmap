@@ -12,6 +12,8 @@ webserver_banner="Exposed testing APIs:
 
 http://localhost:15004/jade?inj=*
 http://localhost:15004/blind/jade?inj=*
+http://localhost:15004/nunjucks?inj=*
+http://localhost:15004/blind/nunjucks?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
@@ -28,6 +30,7 @@ function run_webserver()
   if [ ! -d ./node_modules/ ]; then
     npm install connect
     npm install jade
+    npm install nunjucks
   fi
 
   cp ../connect-app.js connect-app.js
