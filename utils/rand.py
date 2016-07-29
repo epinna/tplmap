@@ -15,7 +15,7 @@ def randint_n(n):
     range_end = (10**n)-1
     return random.randint(range_start, range_end)
 
-def randstr_n(n):
+def randstr_n(n, chars=string.letters + string.digits):
     return ''.join(
-        random.choice(string.letters + string.digits) for _ in range(n)
+        random.choice(chars) for _ in range(n)
     )
