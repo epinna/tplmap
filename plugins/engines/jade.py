@@ -78,21 +78,29 @@ class Jade(Plugin):
 
     def rendered_detected(self):
 
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
+        randA = rand.randstr_n(2)
 
-        os = self.evaluate("""global.process.mainModule.require('os').platform()""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
+        # Check this to avoid false positives
+        payload = 'p %s' % randA
+        expected = '<p>%s</p>' % randA
 
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
+        if expected == self.render(payload):
+
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
+
+            os = self.evaluate("""global.process.mainModule.require('os').platform()""")
+            if os and re.search('^[\w-]+$', os):
+                self.set('os', os)
+                self.set('evaluate', self.language)
+                self.set('write', True)
+                self.set('read', True)
+
+                expected_rand = str(rand.randint_n(2))
+                if expected_rand == self.execute('echo %s' % expected_rand):
+                    self.set('execute', True)
+                    self.set('bind_shell', True)
+                    self.set('reverse_shell', True)
 
 
     def blind_detected(self):
