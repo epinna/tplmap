@@ -5,6 +5,7 @@ from plugins.engines.twig import Twig
 from plugins.engines.freemarker import Freemarker
 from plugins.engines.velocity import Velocity
 from plugins.engines.jade import Jade
+from plugins.engines.nunjucks import Nunjucks
 from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
@@ -21,7 +22,8 @@ plugins = [
     Twig,
     Freemarker,
     Velocity,
-    Jade
+    Jade,
+    Nunjucks
 ]
 
 def _print_injection_summary(channel):
@@ -43,7 +45,7 @@ def _print_injection_summary(channel):
         execution = 'yes'
     else:
         execution = 'no'
-        
+
     if channel.data.get('write'):
         if channel.data.get('blind'):
             writing = 'yes (blind)'
@@ -60,7 +62,7 @@ def _print_injection_summary(channel):
   OS: %(os)s
   Technique: %(injtype)s
   Capabilities:
-  
+
    Code evaluation: %(evaluate)s
    Shell command execution: %(execute)s
    File write: %(write)s
