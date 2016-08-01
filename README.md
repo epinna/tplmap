@@ -70,6 +70,7 @@ Supported template engines
 |--------------------|--------------------|-------------------|-----------------|-----------|------------|
 | Mako               |  render+blind      | yes               | python          | yes       | yes        |
 | Jinja2             |  render+blind      | yes               | python          | yes       | yes        |
+| Nunjucks           |  render+blind      | yes               | javascript      | yes       | yes        |
 | Jade               |  render+blind      | yes               | javascript      | yes       | yes        |
 | Smarty (unsecured) |  render+blind      | yes               | PHP             | yes       | yes        |
 | Freemarker         |  render+blind      | yes               | no              | yes       | yes        |
