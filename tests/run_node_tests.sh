@@ -45,7 +45,7 @@ if [[ "$1" == "--test" ]]; then
   run_webserver &
   NODEPID=$!
 
-  while ! echo exit | nc localhost 15004; do sleep 3; done
+  while ! echo | nc localhost 15004; do sleep 1; done
 
   python -m unittest discover . 'test_node_*.py'
 

@@ -47,7 +47,7 @@ if [[ "$1" == "--test" ]]; then
   run_webserver &
   PHPPID=$!
 
-  while ! echo exit | nc localhost 15002; do sleep 3; done
+  while ! echo | nc localhost 15002; do sleep 1; done
 
   python -m unittest discover . 'test_php_*.py'
 

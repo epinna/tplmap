@@ -39,8 +39,7 @@ if [[ "$1" == "--test" ]]; then
   run_webserver &
   GRADLEPID=$!
 
-  while ! echo exit | nc localhost 15003; do sleep 3; done
-
+  while ! echo | nc localhost 15003; do sleep 1; done
 
   python -m unittest discover . 'test_java_*.py'
 
