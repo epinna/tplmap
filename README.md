@@ -1,24 +1,20 @@
 Tplmap
 ======
 
-Tplmap (short for _Template Mapper_) is a tool that automate the process of detecting and exploiting Server-Side Template Injection vulnerabilities (SSTI).
+Tplmap (short for _Template Mapper_) is a tool that automate the process of detecting and exploiting Server-Side Template Injection vulnerabilities (SSTI). This assists SSTI exploitation to compromise the application and achieve remote command execution on the operating system. 
 
-This can be used by developers, penetration testers, and security researchers to detect and exploit vulnerabilities related to the template injection attacks.
+The tool can be used by security researches and penetration testers, to detect and exploit vulnerabilities and study the template injection flaws.
 
-The technique can be used to compromise web servers' internals and often obtain Remote Code Execution (RCE), turning every vulnerable application into a potential pivot point.
+Tplmap template engines support an capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and other researches.
 
-The modular approach allows any contributor to extend the support to other templating engines or introduce new exploitation techniques. The majority of the techniques currently implemented came from the amazing research done by [James Kett, PortSwigger][1].
-
-Tplmap is able to detect and exploit rendered and blind SSTI and exploit injections in text and code contexts.
-
-> The application is currently under heavy development and misses some functionalities.
+As advanced features Tplmap detects and achieve command execution in case of blind injections and is able to inject in code context.
 
 Example
 --------
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=*' 
-[+] Tplmap 0.1d
+[+] Tplmap 0.1
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Found placeholder in GET parameter 'inj'
