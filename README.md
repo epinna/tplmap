@@ -5,7 +5,7 @@ Tplmap (short for _Template Mapper_) is a tool that automate the process of dete
 
 The tool can be used by security researches and penetration testers, to detect and exploit vulnerabilities and study the template injection flaws.
 
-Tplmap template engines support an capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and other original researches.
+Tplmap template capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and other original researches.
 
 As advanced features Tplmap detects and achieves command execution in case of blind injections and is able to inject in code context.
 
