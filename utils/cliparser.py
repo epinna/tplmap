@@ -50,6 +50,11 @@ target.add_option("-X","--request",
                 dest="request",
                 help="Force usage of given HTTP method (e.g. PUT).")
 
+request.add_option("-A","--user-agent",
+                dest="user_agent",
+                help="HTTP User-Agent header value"
+                )
+
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
 

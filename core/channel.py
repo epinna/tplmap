@@ -59,12 +59,12 @@ class Channel:
                 log.warn('Found placeholder in Header \'%s\'' % param)
                 
         # Set user agent if not set already
-        if not 'User-Agent' in self.header_params:
+        user_agent = self.args.get('user_agent')
+        if not user_agent:
+            user_agent = 'tplmap/%s' % self.args.get('version')
             
-            self.header_params['User-Agent'] = self.args.get(
-                'user_agent', 
-                'tplmap/%s' % self.args.get('version')
-            )
+        if not 'User-Agent' in self.header_params:
+            self.header_params['User-Agent'] = user_agent
 
     def _parse_post(self):
 

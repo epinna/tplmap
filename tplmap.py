@@ -12,6 +12,9 @@ def main():
     
     if not args.get('url'):
         cliparser.parser.error('URL is required. Run with -h for help.')
+        
+    # Add version
+    args['version'] = version
     
     checks.check_template_injection(Channel(args))
     
