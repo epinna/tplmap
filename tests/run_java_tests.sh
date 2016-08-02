@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# This requires at least java 1.8
 gradle -v >/dev/null 2>&1 || { echo >&2 "Gradle required but it's not installed.  Aborting."; exit 1; }
 type nc >/dev/null 2>&1 || { echo >&2 "Netcat required but it's not installed.  Aborting."; exit 1; }
 

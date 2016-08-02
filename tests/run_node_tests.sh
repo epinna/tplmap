@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Jade Plugin exploits execSync() which as been introduced in node 0.11. Node >=0.11
 node -v >/dev/null 2>&1 || { echo >&2 "Node required but it's not installed.  Aborting."; exit 1; }
 npm -v >/dev/null 2>&1 || { echo >&2 "NPM required but it's not installed.  Aborting."; exit 1; }
 
