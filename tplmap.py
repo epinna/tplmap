@@ -4,7 +4,7 @@ from core import checks
 from core.channel import Channel
 from utils.loggers import log
 
-version = '0.1d'
+version = '0.1'
 
 def main():
     
