@@ -42,6 +42,7 @@ class Channel:
             self.http_method = 'GET'
 
     def _parse_header(self):
+        
         for param_value in self.args.get('headers', '[]'):
 
             if ':' not in param_value:
@@ -56,6 +57,14 @@ class Channel:
             if '*' in value:
                 self.header_placeholders.append(param)
                 log.warn('Found placeholder in Header \'%s\'' % param)
+                
+        # Set user agent if not set already
+        if not 'User-Agent' in self.header_params:
+            
+            self.header_params['User-Agent'] = self.args.get(
+                'user_agent', 
+                'tplmap/%s' % self.args.get('version')
+            )
 
     def _parse_post(self):
 
@@ -86,26 +95,23 @@ class Channel:
     def req(self, injection):
 
         # Inject
-        get_params = {}
+        get_params = self.get_params.copy()
         if self.get_placeholders:
             get_placeholder = self.get_placeholders[0]
-            get_params = self.get_params.copy()
             get_params[get_placeholder] = injection
 
-        post_params = {}
+        post_params = self.post_params.copy()
         if self.post_placeholders:
             post_placeholder = self.post_placeholders[0]
-            post_params = self.post_params.copy()
             post_params[post_placeholder] = injection
 
-        header_params = {}
+        header_params = self.header_params.copy()
         if self.header_placeholders:
 
             if '\n' in injection:
                 log.debug('Skip payload with not compatible character for headers')
             else:
                 header_placeholder = self.header_placeholders[0]
-                header_params = self.header_params.copy()
                 header_params[header_placeholder] = injection
 
         result = requests.request(
