@@ -4,6 +4,7 @@ type nc >/dev/null 2>&1 || { echo >&2 "Netcat required but it's not installed.  
 curl --version >/dev/null 2>&1 || { echo >&2 "Curl required but it's not installed.  Aborting."; exit 1; }
 python -c 'import mako' 2>&1 || { echo >&2 "Python Mako required but it's not installed.  Aborting."; exit 1; }
 python -c 'import jinja2' 2>&1 || { echo >&2 "Python Jinja2 required but it's not installed.  Aborting."; exit 1; }
+python -c 'import flask' 2>&1 || { echo >&2 "Python Flask required but it's not installed.  Aborting."; exit 1; }
 
 webserver_log=$(mktemp)
 webserver_banner="Exposed testing APIs:
