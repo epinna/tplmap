@@ -7,7 +7,7 @@ The tool can be used by security researches and penetration testers, to detect a
 
 Tplmap template engines support an capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and other researches.
 
-As advanced features Tplmap detects and achieve command execution in case of blind injections and is able to inject in code context.
+As advanced features Tplmap detects and achieves command execution in case of blind injections and is able to inject in code context.
 
 Example
 --------
