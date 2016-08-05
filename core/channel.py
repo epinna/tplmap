@@ -43,7 +43,7 @@ class Channel:
 
     def _parse_header(self):
         
-        for param_value in self.args.get('headers').split('\r\n'):
+        for param_value in self.args.get('headers').split('\\r\\n'):
 
             if ':' not in param_value:
                 continue
