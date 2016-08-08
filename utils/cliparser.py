@@ -42,7 +42,7 @@ request.add_option("-d","--data",
 request.add_option("-H","--headers",
                 action="append",
                 dest="headers",
-                help="Extra headers (e.g. 'Header1: Value1').",
+                help="Extra headers (e.g. 'Header1: Value1'). Use multiple times to add new headers.",
                 default=[])
 
 target.add_option("-X","--request",
