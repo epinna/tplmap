@@ -40,7 +40,7 @@ request.add_option("-d","--data",
                 )
 
 request.add_option("-H","--headers",
-                action="store",
+                action="append",
                 dest="headers",
                 help="Extra headers (e.g. 'Header1: Value1').",
                 default=[])
