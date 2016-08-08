@@ -43,7 +43,7 @@ request.add_option("-H","--headers",
                 action="store",
                 dest="headers",
                 help="Extra headers (e.g. 'Header1: Value1\\r\\nHeader2: Value2').",
-                default=[])
+                default="")
 
 target.add_option("-X","--request",
                 action="store",
