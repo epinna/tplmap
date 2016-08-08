@@ -36,7 +36,7 @@ request = OptionGroup(parser, "Request", "These options have how to connect and 
 
 request.add_option("-d","--data",
                 dest="data",
-                help="Data string to be sent through POST. It must be as query string:\n param1=value1&param2=value2",
+                help="Data string to be sent through POST. It must be as query string: param1=value1&param2=value2.",
                 )
 
 request.add_option("-H","--headers",
@@ -52,7 +52,7 @@ target.add_option("-X","--request",
 
 request.add_option("-A","--user-agent",
                 dest="user_agent",
-                help="HTTP User-Agent header value"
+                help="HTTP User-Agent header value."
                 )
 
 # Detection options
@@ -71,56 +71,56 @@ detection.add_option("-e", "--engine",
 # Template inspection options
 tplcmd = OptionGroup(parser, "Template inspection", "These "
                        "options can be used to inspect the "
-                       "template engine")
+                       "template engine.")
 
 tplcmd.add_option("--tpl-shell", dest="tpl_shell",
                     action="store_true",
                     help="Prompt for an interactive shell "
-                         "on the template engine")
+                         "on the template engine.")
 
 tplcmd.add_option("--tpl-code", dest="tpl_code",
-                    help="Inject code in the template engine")
+                    help="Inject code in the template engine.")
 
 # OS access options
 oscmd = OptionGroup(parser, "Operating system access", "These "
                        "options can be used to access the underlying "
-                       "operating system")
+                       "operating system.")
 
 oscmd.add_option("--os-cmd", dest="os_cmd",
-                    help="Execute an operating system command")
+                    help="Execute an operating system command.")
 
 oscmd.add_option("--os-shell", dest="os_shell",
                     action="store_true",
                     help="Prompt for an interactive operating "
-                         "system shell")
+                         "system shell.")
 
 oscmd.add_option("--upload", dest="upload",
-                    help="Upload LOCAL to REMOTE files",
+                    help="Upload LOCAL to REMOTE files.",
                     nargs=2)
 
 oscmd.add_option("--force-overwrite", dest="force_overwrite",
                     action="store_true",
-                    help="Force file overwrite when uploading")
+                    help="Force file overwrite when uploading.")
 
 oscmd.add_option("--download", dest="download",
-                    help="Download REMOTE to LOCAL files",
+                    help="Download REMOTE to LOCAL files.",
                     nargs=2)
 
 oscmd.add_option("--bind-shell", dest="bind_shell",
                     nargs=1,
                     type=int,
-                    help="Spawn a system shell on a TCP PORT of the target and connect to it")
+                    help="Spawn a system shell on a TCP PORT of the target and connect to it.")
 
 oscmd.add_option("--reverse-shell", dest="reverse_shell",
                     nargs=2,
-                    help="Run a system shell and back-connect to local HOST PORT")
+                    help="Run a system shell and back-connect to local HOST PORT.")
 
 # OS access options
 general = OptionGroup(parser, "General", "These "
-                       "options can be used to set some general working parameters")
+                       "options can be used to set some general working parameters.")
 
 general.add_option("--force-level", dest="force_level",
-                    help="Force a LEVEL and CLEVEL to test",
+                    help="Force a LEVEL and CLEVEL to test.",
                     nargs=2)
 
 parser.add_option_group(target)
