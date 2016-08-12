@@ -13,19 +13,38 @@ class VelocityTest(unittest.TestCase, BaseTest):
     expected_data = {
         'language': 'java',
         'engine': 'velocity',
+        'execute' : True,
         'trailer': '\n#set($t=%(trailer)s)\n${t}\n',
         'header': '\n#set($h=%(header)s)\n${h}\n',
         'render': '#set($c=%(code)s)\n${c}\n',
-        'prefix': '',
-        'suffix': '',
+        'write': True,
+        'read': True,
+        'prefix' : '',
+        'suffix' : '',
+        'bind_shell' : True,
+        'reverse_shell': True
     }
 
+    expected_data_blind = {
+        'language': 'java',
+        'engine': 'velocity',
+        'blind': True,
+        'execute_blind' : True,
+        'write': True,
+        'prefix' : '',
+        'suffix' : '',
+        'bind_shell' : True,
+        'reverse_shell': True
+    }
+    
     url = 'http://127.0.0.1:15003/velocity?inj=*&tpl=%s'
-    url_blind = ''
+    url_blind = 'http://127.0.0.1:15003/velocity?inj=*&tpl=%s&blind=1'
 
     plugin = Velocity
 
     blind_tests = [
+        (0, 0, 'AAA%sAAA', {}),
+        (3, 1, '#macro(d)%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
     ]
 
     reflection_tests = [
@@ -45,12 +64,3 @@ class VelocityTest(unittest.TestCase, BaseTest):
         (3, 1, '#define( $asd )%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
         (3, 1, '#macro(d)%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
     ]
-
-    def test_download(self):
-        pass
-
-    def test_upload(self):
-        pass
-
-    def test_upload_blind(self):
-        pass

