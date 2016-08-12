@@ -13,7 +13,9 @@ webserver_log=$(mktemp)
 webserver_banner="Exposed testing APIs:
 
 http://localhost:15003/velocity?inj=*
+http://localhost:15003/velocity?inj=*&blind=1
 http://localhost:15003/freemarker?inj=*
+http://localhost:15003/freemarker?inj=*&blind=1
 
 Web server standard output and error are redirected to file
 $webserver_log
