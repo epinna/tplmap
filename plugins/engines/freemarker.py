@@ -26,10 +26,6 @@ class Freemarker(Plugin):
             'call': 'execute',
             'md5': """$(type -p md5 md5sum)<'%(path)s'|head -c 32"""
         },
-        'evaluate' : {
-            'call': 'render',
-            'evaluate': '- %(code)s'
-        },
         # Prepared to used only for blind detection. Not useful for time-boolean
         # tests (since && characters can\'t be used) but enough for the detection phase.
         'blind' : {
