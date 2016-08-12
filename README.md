@@ -5,7 +5,7 @@ Tplmap (short for _Template Mapper_) is a tool that automate the process of dete
 
 The tool can be used by security researches and penetration testers, to detect and exploit vulnerabilities and study the template injection flaws.
 
-Tplmap template capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and other original [researches](http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine).
+Tplmap template capabilities can be extended via plugins. Several sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and [other][2] original [researches][3].
 
 As advanced features Tplmap detects and achieves command execution in case of blind injections and is able to inject in code context.
 
@@ -71,9 +71,11 @@ Supported template engines
 | Jade               |  render+blind      | yes               | javascript      | yes       | yes        |
 | Smarty (unsecured) |  render+blind      | yes               | PHP             | yes       | yes        |
 | Freemarker         |  render+blind      | yes               | no              | yes       | yes        |
-| Velocity           |  render            | no                | no              | no        | no         |
+| Velocity           |  render+blind      | yes               | no              | yes       | yes        |
 | Twig               |  render            | no                | no              | no        | no         |
 | Smarty (secured)   |  render            | no                | no              | no        | no         |
 
 
 [1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
+[2]: https://github.com/epinna/tplmap/issues/9
+[3]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
