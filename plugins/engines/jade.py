@@ -28,8 +28,7 @@ class Jade(Plugin):
         },
         'md5' : {
             'call': 'render',
-            'md5': """- var x = global.process
-- x = x.mainModule.require
+            'md5': """- x = global.process.mainModule.require
 = x('crypto').createHash('md5').update(x('fs').readFileSync('%(path)s')).digest("hex")
 """
         },
