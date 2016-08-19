@@ -26,13 +26,13 @@ function run_webserver()
 
   echo "$webserver_banner"
 
-  cd ./env_node_tests/lib/
-
   if [ ! -d ./node_modules/ ]; then
     npm install connect
     npm install jade
     npm install nunjucks
   fi
+
+  cd ./env_node_tests/lib/
 
   cp ../connect-app.js connect-app.js
 
