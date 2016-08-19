@@ -94,7 +94,7 @@ app.use('/javascript', function(req, res){
     else {
       tpl = inj;
     }
-    res.end(JSON.stringify(eval(tpl)));
+    res.end(String(eval(tpl)));
   }
 });
 
