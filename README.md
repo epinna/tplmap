@@ -17,7 +17,7 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*'
 [+] Tplmap 0.1
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
-[+] Found placeholder in GET parameter 'inj'
+[+] Found placeholder in GET parameter 'id'
 [+] Smarty plugin is testing rendering with tag '{*}'
 [+] Smarty plugin is testing blind injection
 [+] Mako plugin is testing rendering with tag '${*}'
