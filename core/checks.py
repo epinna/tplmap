@@ -6,6 +6,7 @@ from plugins.engines.freemarker import Freemarker
 from plugins.engines.velocity import Velocity
 from plugins.engines.jade import Jade
 from plugins.engines.nunjucks import Nunjucks
+from plugins.languages.javascript import Javascript
 from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
@@ -23,7 +24,8 @@ plugins = [
     Freemarker,
     Velocity,
     Jade,
-    Nunjucks
+    Nunjucks,
+    Javascript
 ]
 
 def _print_injection_summary(channel):
