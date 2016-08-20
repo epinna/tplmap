@@ -65,7 +65,16 @@ class Javascript(Plugin):
         # Text context, no closures
         { 'level': 0 },
 
-        { 'level': 1, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+        # This terminates the statement with ;
+        { 'level': 1, 'prefix' : '%(closure)s;', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+
+        # This does not need termination e.g. if(%s) {}
+        { 'level': 2, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+
+        # Comment blocks
+        # TODO: Can't be tested since * is considered as placeholder. Fix this.
+        #{ 'level': 5, 'prefix' : '*/', 'suffix' : '//' },
+
     ]
 
     language = 'javascript'
