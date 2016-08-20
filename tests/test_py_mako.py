@@ -170,6 +170,6 @@ class MakoTest(unittest.TestCase, BaseTest):
 
         Mako(channel).detect()
 
-        expected_data = { 'render' : self.expected_data['render'], 'unreliable' : 'Mako' }
+        expected_data = { 'unreliable_render' : self.expected_data['render'], 'unreliable' : 'Mako' }
 
         self.assertEqual(channel.data, expected_data)
