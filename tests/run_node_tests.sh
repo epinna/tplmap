@@ -32,6 +32,7 @@ function run_webserver()
     npm install connect
     npm install jade
     npm install nunjucks
+    npm install --save --production dustjs-linkedin
   fi
 
   cd ./env_node_tests/lib/
