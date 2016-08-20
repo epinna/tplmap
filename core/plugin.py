@@ -113,7 +113,7 @@ class Plugin(object):
 
             # If --force-level skip any other level
             force_level = self.channel.args.get('force_level')
-            if force_level and force_level[0] and ctx.get('level') != int(force_level[0]):
+            if force_level and force_level[0] != None and ctx.get('level') != int(force_level[0]):
                 continue
             # Skip any context which is above the required level
             if not force_level and ctx.get('level') > self.channel.args.get('level'):
