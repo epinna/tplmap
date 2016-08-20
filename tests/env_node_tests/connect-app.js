@@ -3,10 +3,11 @@ var http = require('http');
 var url = require('url');
 var jade = require('jade');
 var nunjucks = require('nunjucks');
+var dust = require('dustjs-linkedin');
 
 var app = connect();
 
-// respond to all requests
+// Jade
 app.use('/jade', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -24,7 +25,7 @@ app.use('/jade', function(req, res){
   }
 });
 
-// blind endpoint
+// Jade blind endpoint
 app.use('/blind/jade', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -43,7 +44,7 @@ app.use('/blind/jade', function(req, res){
   }
 });
 
-// respond to all requests
+// Nunjucks
 app.use('/nunjucks', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -61,7 +62,7 @@ app.use('/nunjucks', function(req, res){
   }
 });
 
-// blind endpoint
+// Nunjucks blind endpoint
 app.use('/blind/nunjucks', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -80,7 +81,7 @@ app.use('/blind/nunjucks', function(req, res){
   }
 });
 
-// respond to all requests
+// Javascript
 app.use('/javascript', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -98,7 +99,7 @@ app.use('/javascript', function(req, res){
   }
 });
 
-// blind endpoint
+// Javascript blind endpoint
 app.use('/blind/javascript', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
@@ -113,6 +114,53 @@ app.use('/blind/javascript', function(req, res){
       tpl = inj;
     }
     eval(tpl);
+    res.end();
+  }
+});
+
+// Dust
+app.use('/dust', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    
+
+    output = '';
+    var compiled = dust.compile(tpl, "compiled");
+    dust.loadSource(compiled);
+    dust.render("compiled", {}, function(err, outp) { output = outp })
+    res.end(output);
+  }
+});
+
+// Dust blind endpoint
+app.use('/blind/dust', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    
+    var compiled = dust.compile(tpl, "compiled");
+    dust.loadSource(compiled);
+    dust.render("compiled", {}, function(err, outp) { })
+    
     res.end();
   }
 });
