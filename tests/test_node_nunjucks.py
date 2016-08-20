@@ -51,12 +51,12 @@ class NunjucksTests(unittest.TestCase, BaseTest):
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
-        (0, 0, "{{ %s }}", { 'prefix': '1}}', 'suffix' : '{{1' }),
+        (1, 0, "{{ %s }}", { 'prefix': '1}}', 'suffix' : '{{1' }),
         (0, 0, "{% block title %}%s{% endblock %}", {}),
-        (0, 0, "{% set foo = '%s' %}", {  'prefix': "1' %}", 'suffix' : '' }),
+        (1, 0, "{% set foo = '%s' %}", {  'prefix': "1' %}", 'suffix' : '' }),
         (5, 2, "{% set %s = 1 %}", {  'prefix': 'a = 1 %}', 'suffix' : '' }),
         (5, 1, "{% for item in %s %}{% endfor %}", {'prefix': '1 %}{% endfor %}{% for a in [1] %}', 'suffix' : ''}),
-        (0, 0, "{% if %s == 1 %}{% endif %}", {'prefix': '1 %}', 'suffix' : ''}),
+        (1, 0, "{% if %s == 1 %}{% endif %}", {'prefix': '1 %}', 'suffix' : ''}),
         (1, 2, "{% if 1 in %s %}{% endif %}", {'prefix': '"1" %}', 'suffix' : ''}),
         (1, 3, "{% if 1 in [%s] %}{% endif %}", {'prefix': '1} %}', 'suffix' : ''}),
         

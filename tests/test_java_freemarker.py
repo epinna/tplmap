@@ -50,7 +50,7 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
-        (0, 0, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
+        (1, 0, '${ %s }', { 'prefix': '1}', 'suffix': '' }),
 
         (2, 1, '<#assign s = %s>', { 'prefix': '1>', 'suffix': '' }),
         (5, 1, '<#-- %s -->', { 'prefix': '-->', 'suffix': '<#--' }),

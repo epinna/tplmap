@@ -42,7 +42,7 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
     reflection_tests = [
         (0, 0, '%s', { }),
         (0, 0, 'AAA%sAAA', {}),
-        (0, 0, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
+        (1, 0, '{%s}', { 'prefix': '1}', 'suffix' : '{'}),
         (0, 0, '{* %s *}', {}),
         (5, 1, '{if %s}\n{/if}', { 'prefix': '1}{/if}{if 1}', 'suffix' : ''}),
         (5, 1, '{if (%s)}\n{/if}', { 'prefix': '1)}{/if}{if 1}', 'suffix' : ''}),

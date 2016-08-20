@@ -50,8 +50,8 @@ class VelocityTest(unittest.TestCase, BaseTest):
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
-        (0, 0, '#set( $a = "%s" )', { 'prefix' : '1")', 'suffix': ''}),
-        (0, 0, '#if(1 == %s)\n#end', { 'prefix' : '1)', 'suffix': ''}),
+        (1, 0, '#set( $a = "%s" )', { 'prefix' : '1")', 'suffix': ''}),
+        (1, 0, '#if(1 == %s)\n#end', { 'prefix' : '1)', 'suffix': ''}),
         (3, 1, '#if(%s == 1)\n#end', { 'prefix' : '1)#end#if(1==1)', 'suffix': ''}),
         (3, 1, '#foreach($item in %s)\n#end', { 'prefix' : '1)#end#if(1==1)', 'suffix': ''}),
         (0, 0, '## comment %s', { }),
