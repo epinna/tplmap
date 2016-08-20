@@ -86,6 +86,10 @@ class Plugin(object):
                 repr(suffix).strip("'"),
                 )
             )
+            
+            # Clean up any previous unreliable render data
+            self.delete('unreliable_render')
+            self.delete('unreliable')
 
             # Set the environment
             self.rendered_detected()
@@ -172,16 +176,16 @@ class Plugin(object):
                 suffix = ''
             ):
 
-            self.set('render', render_action.get('render'))
-
             # Print if the first found unreliable renode
-            if not self.get('unreliable'):
+            if not self.get('unreliable_render'):
                 log.info('%s plugin has detected unreliable rendering with tag %s, skipping' % (
                     self.plugin,
-                    repr(self.get('render') % ({'code' : '*' })))
+                    repr(render_action.get('render') % ({'code' : '*' })))
                 )
 
+            self.set('unreliable_render', render_action.get('render'))
             self.set('unreliable', self.plugin)
+
             return
 
     """
@@ -365,6 +369,10 @@ class Plugin(object):
 
     def get(self, key, default = None):
         return self.channel.data.get(key, default)
+        
+    def delete(self, key):
+        if key in self.channel.data:
+            del self.channel.data[key]
 
     def _generate_closures(self, ctx):
 
