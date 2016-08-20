@@ -65,12 +65,7 @@ class Javascript(Plugin):
         # Text context, no closures
         { 'level': 0 },
 
-        # Attribute close a(href=\'%s\')
-        { 'level': 1, 'prefix' : '%(closure)s)', 'suffix' : '//', 'closures' : { 1: languages.javascript_ctx_closures[1] } },
-        # String interpolation #{
-        { 'level': 2, 'prefix' : '%(closure)s}', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
-        # Code context
-        { 'level': 2, 'prefix' : '%(closure)s\n', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+        { 'level': 1, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
     ]
 
     language = 'javascript'
