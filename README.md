@@ -63,17 +63,18 @@ linux $
 Supported template engines
 --------------------------
 
-| Template engine    | Detection          | Command execution | Code evaluation | File read | File write |
-|--------------------|--------------------|-------------------|-----------------|-----------|------------|
-| Mako               |  render+blind      | yes               | python          | yes       | yes        |
-| Jinja2             |  render+blind      | yes               | python          | yes       | yes        |
-| Nunjucks           |  render+blind      | yes               | javascript      | yes       | yes        |
-| Jade               |  render+blind      | yes               | javascript      | yes       | yes        |
-| Smarty (unsecured) |  render+blind      | yes               | PHP             | yes       | yes        |
-| Freemarker         |  render+blind      | yes               | no              | yes       | yes        |
-| Velocity           |  render+blind      | yes               | no              | yes       | yes        |
-| Twig               |  render            | no                | no              | no        | no         |
-| Smarty (secured)   |  render            | no                | no              | no        | no         |
+| Template engine      | Detection          | Command execution | Code evaluation | File read | File write |
+|----------------------|--------------------|-------------------|-----------------|-----------|------------|
+| Mako                 |  render+blind      | yes               | python          | yes       | yes        |
+| Jinja2               |  render+blind      | yes               | python          | yes       | yes        |
+| Nunjucks             |  render+blind      | yes               | javascript      | yes       | yes        |
+| Jade                 |  render+blind      | yes               | javascript      | yes       | yes        |
+| JavaScript (generic) |  render+blind      | yes               | javascript      | yes       | yes        |
+| Smarty (unsecured)   |  render+blind      | yes               | PHP             | yes       | yes        |
+| Freemarker           |  render+blind      | yes               | no              | yes       | yes        |
+| Velocity             |  render+blind      | yes               | no              | yes       | yes        |
+| Twig                 |  render            | no                | no              | no        | no         |
+| Smarty (secured)     |  render            | no                | no              | no        | no         |
 
 
 [1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
