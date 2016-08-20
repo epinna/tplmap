@@ -25,7 +25,7 @@ plugins = [
     Velocity,
     Jade,
     Nunjucks,
-#    Javascript
+    Javascript
 ]
 
 def _print_injection_summary(channel):
