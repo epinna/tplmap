@@ -65,11 +65,11 @@ Supported template engines
 
 | Template engine      | Detection          | Command execution | Code evaluation | File read | File write |
 |----------------------|--------------------|-------------------|-----------------|-----------|------------|
-| Mako                 |  render+blind      | yes               | python          | yes       | yes        |
-| Jinja2               |  render+blind      | yes               | python          | yes       | yes        |
-| Nunjucks             |  render+blind      | yes               | javascript      | yes       | yes        |
-| Jade                 |  render+blind      | yes               | javascript      | yes       | yes        |
-| JavaScript (generic) |  render+blind      | yes               | javascript      | yes       | yes        |
+| Mako                 |  render+blind      | yes               | Python          | yes       | yes        |
+| Jinja2               |  render+blind      | yes               | Python          | yes       | yes        |
+| Nunjucks             |  render+blind      | yes               | JavaScript      | yes       | yes        |
+| Jade                 |  render+blind      | yes               | JavaScript      | yes       | yes        |
+| JavaScript (generic) |  render+blind      | yes               | JavaScript      | yes       | yes        |
 | Smarty (unsecured)   |  render+blind      | yes               | PHP             | yes       | yes        |
 | Freemarker           |  render+blind      | yes               | no              | yes       | yes        |
 | Velocity             |  render+blind      | yes               | no              | yes       | yes        |
