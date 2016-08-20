@@ -15,6 +15,8 @@ http://localhost:15004/jade?inj=*
 http://localhost:15004/blind/jade?inj=*
 http://localhost:15004/nunjucks?inj=*
 http://localhost:15004/blind/nunjucks?inj=*
+http://localhost:15004/javascript?inj=*
+http://localhost:15004/blind/javascript?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
