@@ -103,6 +103,10 @@ class Plugin(object):
 
                 log.info('%s plugin has confirmed blind injection' % (self.plugin))
 
+                # Clean up any previous unreliable render data
+                self.delete('unreliable_render')
+                self.delete('unreliable')
+
                 # Set the environment
                 self.blind_detected()
 
@@ -165,8 +169,9 @@ class Plugin(object):
         expected = str(randA*randB)
         payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
 
-        # Probe with payload wrapped by header and trailer, no suffex or prefix
-        if expected == self.render(
+        # Probe with payload wrapped by header and trailer, no suffex or prefix.
+        # Test if contained, since the page contains other garbage
+        if expected in self.render(
                 code = payload,
                 header = '',
                 trailer = '',
