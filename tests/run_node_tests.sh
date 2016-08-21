@@ -27,15 +27,19 @@ function run_webserver()
 {
 
   echo "$webserver_banner"
-
+  
+  cd ./env_node_tests/lib/
+    
   if [ ! -d ./node_modules/ ]; then
     npm install connect
     npm install jade
     npm install nunjucks
-    npm install --save --production dustjs-linkedin
+    # Install deprecated dustjs-helpers to have an exploitable
+    # if function.
+    # See https://github.com/linkedin/dustjs-helpers/pull/110 
+    npm install dustjs-linkedin@2.6
+    npm install dustjs-helpers@1.5.0
   fi
-
-  cd ./env_node_tests/lib/
 
   cp ../connect-app.js connect-app.js
 

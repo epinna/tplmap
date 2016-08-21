@@ -4,6 +4,7 @@ var url = require('url');
 var jade = require('jade');
 var nunjucks = require('nunjucks');
 var dust = require('dustjs-linkedin');
+var dusthelpers = require('dustjs-helpers');
 
 var app = connect();
 
@@ -133,7 +134,8 @@ app.use('/dust', function(req, res){
       tpl = inj;
     }
     
-
+    console.log('PAYLOAD: ' + tpl);
+    dust.debugLevel = "DEBUG"
     output = '';
     var compiled = dust.compile(tpl, "compiled");
     dust.loadSource(compiled);
@@ -157,6 +159,8 @@ app.use('/blind/dust', function(req, res){
       tpl = inj;
     }
     
+    console.log('PAYLOAD: ' + tpl);
+    dust.debugLevel = "DEBUG"
     var compiled = dust.compile(tpl, "compiled");
     dust.loadSource(compiled);
     dust.render("compiled", {}, function(err, outp) { })
