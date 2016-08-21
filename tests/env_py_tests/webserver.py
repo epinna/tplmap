@@ -3,6 +3,8 @@ app = Flask(__name__)
 from mako.template import Template as MakoTemplates
 from mako.lookup import TemplateLookup
 from jinja2 import Environment as Jinja2Environment
+import random
+import string
 
 mylookup = TemplateLookup(directories=['/tpl'])
 
@@ -14,6 +16,9 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
+def randomword(length = 8):
+   return ''.join(random.choice(string.lowercase) for i in range(length))
+
 @app.route("/reflect/<engine>")
 def reflect(engine):
 
@@ -24,9 +29,9 @@ def reflect(engine):
     injection = request.values.get('inj')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection, lookup=mylookup).render()
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
-        return Jinja2Env.from_string(template % injection).render()
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
@@ -38,9 +43,9 @@ def postfunc(engine):
     injection = request.values.get('inj')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection, lookup=mylookup).render()
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
-        return Jinja2Env.from_string(template % injection).render()
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
 
 @app.route("/header/<engine>")
@@ -53,9 +58,9 @@ def headerfunc(engine):
     injection = request.headers.get('User-Agent')
 
     if engine == 'mako':
-        return MakoTemplates(template % injection, lookup=mylookup).render()
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
-        return Jinja2Env.from_string(template % injection).render()
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
 @app.route("/put/<engine>", methods = [ "PUT" ])
 def putfunc(engine):
@@ -66,9 +71,9 @@ def putfunc(engine):
 
     injection = request.values.get('inj')
     if engine == 'mako':
-        return MakoTemplates(template % injection, lookup=mylookup).render()
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
-        return Jinja2Env.from_string(template % injection).render()
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
 @app.route("/limit/<engine>")
 def limited(engine):
@@ -83,9 +88,9 @@ def limited(engine):
         return 'Inj too long'
 
     if engine == 'mako':
-        return MakoTemplates(template % injection, lookup=mylookup).render()
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
-        return Jinja2Env.from_string(template % injection).render()
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
 @app.route("/blind/<engine>")
 def blind(engine):
@@ -101,7 +106,7 @@ def blind(engine):
     elif engine == 'jinja2':
         Jinja2Env.from_string(template % injection).render()
 
-    return ''
+    return randomword()
 
 @app.route('/shutdown')
 def shutdown():
