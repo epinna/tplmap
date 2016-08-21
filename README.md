@@ -5,9 +5,9 @@ Tplmap (short for _Template Mapper_) is a tool that automate the process of dete
 
 The tool can be used by security researches and penetration testers, to detect and exploit vulnerabilities and study the template injection vulnerability class.
 
-The plugin architecture makes easy to extend the tool and support new template engines and techniques. The sandbox break-out methodologies came from James Kett's research [Server-Side Template Injection: RCE For The Modern Web App][1] and [other][2] original [techniques][3] found during the development of Tplmap.
+The plugin architecture makes easy to extend the tool and support new template engines and sandbox break-out techniques. Part of the implemented techniques came from public research papers as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other [works][4] while others have been [discovered][2] to [extend][3] this tool exploitation capabilities.
 
-Tplmap is able to detect and achieve arbitrary command execution in several exploitation scenarios as blind injections and code contexts injections.
+Tplmap is able to detect and achieve arbitrary command execution in several scenarios as injections in code context and blind injections.
 
 Example
 -------
@@ -63,20 +63,22 @@ linux $
 Supported template engines
 --------------------------
 
-| Template engine      | Detection          | Command execution | Code evaluation | File read | File write |
+| Template engine      | Techniques         | Command execution | Code evaluation | File read | File write |
 |----------------------|--------------------|-------------------|-----------------|-----------|------------|
-| Mako                 |  render+blind      | yes               | Python          | yes       | yes        |
-| Jinja2               |  render+blind      | yes               | Python          | yes       | yes        |
-| Nunjucks             |  render+blind      | yes               | JavaScript      | yes       | yes        |
-| Jade                 |  render+blind      | yes               | JavaScript      | yes       | yes        |
-| JavaScript (generic) |  render+blind      | yes               | JavaScript      | yes       | yes        |
-| Smarty (unsecured)   |  render+blind      | yes               | PHP             | yes       | yes        |
-| Freemarker           |  render+blind      | yes               | no              | yes       | yes        |
-| Velocity             |  render+blind      | yes               | no              | yes       | yes        |
+| Mako                 |  render/blind      | yes               | Python          | yes       | yes        |
+| Jinja2               |  render/blind      | yes               | Python          | yes       | yes        |
+| Nunjucks             |  render/blind      | yes               | JavaScript      | yes       | yes        |
+| Jade                 |  render/blind      | yes               | JavaScript      | yes       | yes        |
+| JavaScript (generic) |  render/blind      | yes               | JavaScript      | yes       | yes        |
+| Dust (<= dustjs-helpers@1.5.0) |  render/blind      | yes               | JavaScript      | yes       | yes        |
+| Smarty (unsecured)   |  render/blind      | yes               | PHP             | yes       | yes        |
+| Freemarker           |  render/blind      | yes               | no              | yes       | yes        |
+| Velocity             |  render/blind      | yes               | no              | yes       | yes        |
 | Twig                 |  render            | no                | no              | no        | no         |
 | Smarty (secured)     |  render            | no                | no              | no        | no         |
-
+| Dust (> dustjs-helpers@1.5.0)  |  render            | no                | no              | no        | no         |
 
 [1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
 [2]: https://github.com/epinna/tplmap/issues/9
 [3]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
+[4]: https://artsploit.blogspot.co.uk/2016/08/pprce2.html
