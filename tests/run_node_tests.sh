@@ -31,6 +31,7 @@ function run_webserver()
   cd ./env_node_tests/lib/
     
   if [ ! -d ./node_modules/ ]; then
+    npm install randomstring
     npm install connect
     npm install jade
     npm install nunjucks

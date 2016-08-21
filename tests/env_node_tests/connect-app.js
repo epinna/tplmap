@@ -5,6 +5,7 @@ var jade = require('jade');
 var nunjucks = require('nunjucks');
 var dust = require('dustjs-linkedin');
 var dusthelpers = require('dustjs-helpers');
+var randomstring = require("randomstring");
 
 var app = connect();
 
@@ -22,7 +23,7 @@ app.use('/jade', function(req, res){
     else {
       tpl = inj;
     }
-    res.end(jade.render(tpl));
+    res.end(randomstring.generate() + jade.render(tpl) + randomstring.generate());
   }
 });
 
@@ -41,7 +42,7 @@ app.use('/blind/jade', function(req, res){
       tpl = inj;
     }
     jade.render(tpl)
-    res.end();
+    res.end(randomstring.generate());
   }
 });
 
@@ -59,7 +60,7 @@ app.use('/nunjucks', function(req, res){
     else {
       tpl = inj;
     }
-    res.end(nunjucks.renderString(tpl));
+    res.end(randomstring.generate() + nunjucks.renderString(tpl) + randomstring.generate());
   }
 });
 
@@ -78,7 +79,7 @@ app.use('/blind/nunjucks', function(req, res){
       tpl = inj;
     }
     nunjucks.renderString(tpl);
-    res.end();
+    res.end(randomstring.generate());
   }
 });
 
@@ -96,7 +97,7 @@ app.use('/javascript', function(req, res){
     else {
       tpl = inj;
     }
-    res.end(String(eval(tpl)));
+    res.end(randomstring.generate() + String(eval(tpl)) + randomstring.generate());
   }
 });
 
@@ -115,7 +116,7 @@ app.use('/blind/javascript', function(req, res){
       tpl = inj;
     }
     eval(tpl);
-    res.end();
+    res.end(randomstring.generate());
   }
 });
 
@@ -140,7 +141,7 @@ app.use('/dust', function(req, res){
     var compiled = dust.compile(tpl, "compiled");
     dust.loadSource(compiled);
     dust.render("compiled", {}, function(err, outp) { output = outp })
-    res.end(output);
+    res.end(randomstring.generate() + output + randomstring.generate());
   }
 });
 
@@ -165,7 +166,7 @@ app.use('/blind/dust', function(req, res){
     dust.loadSource(compiled);
     dust.render("compiled", {}, function(err, outp) { })
     
-    res.end();
+    res.end(randomstring.generate());
   }
 });
 
