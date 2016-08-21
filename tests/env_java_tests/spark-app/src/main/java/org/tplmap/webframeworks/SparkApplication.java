@@ -17,6 +17,7 @@ import org.apache.velocity.exception.ResourceNotFoundException ;
 import org.apache.velocity.runtime.RuntimeConstants ;
 import org.apache.velocity.runtime.log.LogChute ;
 import org.apache.velocity.runtime.log.NullLogChute ;
+import java.util.UUID;
 
 import static spark.Spark.*;
 
@@ -72,10 +73,10 @@ public static Object velocity(Request request, Response response) {
 
   // Return out string if not blind
   if(blind == null){
-    return w.toString();
+    return UUID.randomUUID().toString() + w.toString() + UUID.randomUUID().toString();
   }
   else {
-    return "";
+    return UUID.randomUUID().toString();
   }
 }
 
@@ -121,10 +122,10 @@ public static Object freemarker(Request request, Response response) {
 
   // Return out string if not blind
   if(blind == null){
-    return out.toString();
+    return UUID.randomUUID().toString() + out.toString() + UUID.randomUUID().toString();
   }
   else {
-    return "";
+    return UUID.randomUUID().toString();
   }
 }
 }
