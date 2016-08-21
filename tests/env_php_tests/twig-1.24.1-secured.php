@@ -1,4 +1,9 @@
 <?php
+
+function generateRandomString($length = 10) {
+    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+}
+
 require_once './lib/Twig-1.24.1/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
@@ -22,5 +27,5 @@ $loader = new Twig_Loader_Array(array(
 ));
 $twig = new Twig_Environment($loader);
 
-echo $twig->render('tpl');
+echo generateRandomString() . $twig->render('tpl') . generateRandomString();
  ?>

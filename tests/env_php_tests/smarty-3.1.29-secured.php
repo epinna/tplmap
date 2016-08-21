@@ -1,4 +1,9 @@
 <?php
+
+function generateRandomString($length = 10) {
+    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+}
+
 require('lib/smarty-3.1.29/libs/Smarty.class.php');
 $smarty = new Smarty;
 
@@ -12,6 +17,10 @@ else {
 }
 
 $rendered = $smarty->fetch('string:'.$tpl);
-if(!$_GET["blind"])
-  echo($rendered);
+if(!$_GET["blind"]) {
+  echo generateRandomString() . $rendered . generateRandomString();
+}
+else {
+  echo generateRandomString();
+}
 ?>
