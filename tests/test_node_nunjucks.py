@@ -46,6 +46,8 @@ class NunjucksTests(unittest.TestCase, BaseTest):
 
     blind_tests = [
         (0, 0, 'AAA%sAAA', {}),
+        (5, 1, "{% for item in %s %}{% endfor %}", {'prefix': '1 %}{% endfor %}{% for a in [1] %}', 'suffix' : ''}),
+        (1, 3, "{% if 1 in [%s] %}{% endif %}", {'prefix': '1} %}', 'suffix' : ''}),
     ]
 
     reflection_tests = [
