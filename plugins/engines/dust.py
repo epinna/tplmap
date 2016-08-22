@@ -43,8 +43,13 @@ class Dust(Plugin):
 
     contexts = [
 
-        # Text context, no closures
+        # Text context, no closures. This covers also {%s} e.g. {{payload}} seems working.
         { 'level': 0 },
+        
+        # Block as {#key}{/key} and similar needs tag key name to be bypassed.
+        
+        # Comment blocks
+        { 'level': 1, 'prefix' : '!}', 'suffix' : '{!' },
     ]
 
     language = 'javascript'
