@@ -46,11 +46,15 @@ class DustTests(unittest.TestCase, BaseTest):
 
     blind_tests = [
         (0, 0, 'AAA%sAAA', {}),
+        (0, 0, '{%s|s}', { }),
     ]
 
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
+        (0, 0, '{%s}', { }),
+        (0, 0, '{%s|s}', { }),
+        (1, 0, '{!%s!}', { 'prefix' : '!}', 'suffix' : '{!' })
     ]
     
     def test_upload(self):
