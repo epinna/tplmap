@@ -73,3 +73,17 @@ class ChannelTest(unittest.TestCase):
         Mako(channel).detect()
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
+
+    def test_custom_injection_tag(self):
+
+        template = '%s'
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=~',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '~'
+        })
+        Mako(channel).detect()
+        
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)
