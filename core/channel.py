@@ -28,6 +28,10 @@ class Channel:
         self._parse_post()
         self._parse_header()
         self._parse_method()
+        
+        if not self.injs:
+            # TODO: this will start discovery on every parameter
+            log.error("No injection points found, use '%s' in URL, post data or headers." % self.tag)
 
     def _parse_method(self):
 
