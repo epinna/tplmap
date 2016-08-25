@@ -90,7 +90,7 @@ class Channel:
                 
                 if self.tag in param:
                     self.injs.append({
-                        'field' : 'post',
+                        'field' : 'POST',
                         'part' : 'param',
                         'param' : param,
                     })
@@ -98,7 +98,7 @@ class Channel:
                 for idx, value in enumerate(value_list):
                     if self.tag in value:
                         self.injs.append({
-                            'field' : 'post',
+                            'field' : 'POST',
                             'part' : 'value',
                             'value' : value,
                             'param' : param,
@@ -115,7 +115,7 @@ class Channel:
             
             if self.tag in param:
                 self.injs.append({
-                    'field' : 'get',
+                    'field' : 'GET',
                     'part' : 'param',
                     'param': param
                 })
@@ -123,7 +123,7 @@ class Channel:
             for idx, value in enumerate(value_list):
                 if self.tag in value:
                     self.injs.append({
-                        'field' : 'get',
+                        'field' : 'GET',
                         'part': 'value',
                         'param': param,
                         'value' : value,
@@ -139,7 +139,7 @@ class Channel:
         # Pick current injection by index
         inj = self.injs[self.inj_idx]
         
-        if inj['field'] == 'post':
+        if inj['field'] == 'POST':
         
             if inj.get('part') == 'param':
                 # If injection replaces param, save the value 
@@ -152,7 +152,7 @@ class Channel:
                 # If injection in value, replace value by index    
                 post_params[inj.get('param')][inj.get('idx')] = injection
 
-        elif inj['field'] == 'get':
+        elif inj['field'] == 'GET':
                 
             if inj.get('part') == 'param':
                 # If injection replaces param, save the value 
