@@ -165,7 +165,8 @@ class MakoTest(unittest.TestCase, BaseTest):
         template = '%s'
 
         channel = Channel({
-            'url' : 'http://127.0.0.1:15001/limit/mako?tpl=%s&inj=*&limit=6' % template
+            'url' : 'http://127.0.0.1:15001/limit/mako?tpl=%s&inj=*&limit=6' % template,
+            'injection_tag': '*'
         })
 
         Mako(channel).detect()

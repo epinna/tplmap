@@ -37,7 +37,9 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/post/mako',
             'force_level': [ 0, 0 ],
-            'data' : 'inj=*&othervar=1'
+            'data' : 'inj=*&othervar=1',
+            'injection_tag': '*'
+
         })
         Mako(channel).detect()
         del channel.data['os']
@@ -50,7 +52,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/header/mako',
             'force_level': [ 0, 0 ],
-            'headers' : [ 'User-Agent: *' ]
+            'headers' : [ 'User-Agent: *' ],
+            'injection_tag': '*'
         })
         Mako(channel).detect()
         del channel.data['os']
@@ -65,6 +68,7 @@ class ChannelTest(unittest.TestCase):
             'data' : 'inj=*&othervar=1',
             'request' : 'PUT',
             'force_level': [ 0, 0 ],
+            'injection_tag': '*'
         })
         Mako(channel).detect()
         del channel.data['os']
