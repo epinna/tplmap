@@ -7,6 +7,7 @@ import random
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.mako import Mako
 from core.channel import Channel
+from core.checks import detect_template_injection
 import utils.loggers
 import logging
 
@@ -41,7 +42,7 @@ class ChannelTest(unittest.TestCase):
             'injection_tag': '*'
 
         })
-        Mako(channel).detect()
+        detect_template_injection(channel, [ Mako ])
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
@@ -55,7 +56,7 @@ class ChannelTest(unittest.TestCase):
             'headers' : [ 'User-Agent: *' ],
             'injection_tag': '*'
         })
-        Mako(channel).detect()
+        detect_template_injection(channel, [ Mako ])
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
@@ -70,7 +71,7 @@ class ChannelTest(unittest.TestCase):
             'force_level': [ 0, 0 ],
             'injection_tag': '*'
         })
-        Mako(channel).detect()
+        detect_template_injection(channel, [ Mako ])
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
@@ -83,7 +84,22 @@ class ChannelTest(unittest.TestCase):
             'force_level': [ 0, 0 ],
             'injection_tag': '~'
         })
-        Mako(channel).detect()
+        detect_template_injection(channel, [ Mako ])
+        
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)
+        
+        
+    def test_reflection_multiple_point(self):
+
+        template = '%s'
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&asd=1&asd2=*&inj=*&inj2=*&inj3=*',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
         
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
