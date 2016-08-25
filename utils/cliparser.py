@@ -123,6 +123,10 @@ general.add_option("--force-level", dest="force_level",
                     help="Force a LEVEL and CLEVEL to test.",
                     nargs=2)
 
+general.add_option("--injection-tag", dest="injection_tag",
+                    help="Use string as injection tag (default '*').",
+                    default='*')
+
 parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)
