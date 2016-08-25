@@ -1,6 +1,7 @@
 import requests
 from utils.loggers import log
 import urlparse
+from copy import deepcopy
 
 class Channel:
 
@@ -132,25 +133,27 @@ class Channel:
             
     def req(self, injection):
 
-        get_params = self.get_params.copy()
-        post_params = self.post_params.copy()
-        header_params = self.header_params.copy()
+        get_params = deepcopy(self.get_params)
+        post_params = deepcopy(self.post_params)
+        header_params = deepcopy(self.header_params)
         
         # Pick current injection by index
-        inj = self.injs[self.inj_idx]
+        inj = deepcopy(self.injs[self.inj_idx])
         
         if inj['field'] == 'POST':
         
             if inj.get('part') == 'param':
-                # If injection replaces param, save the value 
-                # with a new param
+                # Inject injection within param
                 old_value = post_params[inj.get('param')]
                 del post_params[inj.get('param')]
-                post_params[injection] = old_value
+                
+                new_param = inj.get('param').replace(self.tag, injection)
+                post_params[new_param] = old_value
                 
             if inj.get('part') == 'value':
                 # If injection in value, replace value by index    
-                post_params[inj.get('param')][inj.get('idx')] = injection
+                post_params[inj.get('param')][inj.get('idx')] = post_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
+                
 
         elif inj['field'] == 'GET':
                 
@@ -159,12 +162,15 @@ class Channel:
                 # with a new param
                 old_value = get_params[inj.get('param')]
                 del get_params[inj.get('param')]
-                get_params[injection] = old_value
+                
+                new_param = inj.get('param').replace(self.tag, injection)
+                get_params[new_param] = old_value
                 
             if inj.get('part') == 'value':
-                # If injection in value, replace value by index    
-                get_params[inj.get('param')][inj.get('idx')] = injection
-
+                # If injection in value, inject value in the correct index    
+                get_params[inj.get('param')][inj.get('idx')] = get_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
+                
+                
         elif inj['field'] == 'header':
                 
             if inj.get('part') == 'param':
@@ -172,11 +178,13 @@ class Channel:
                 # with a new param
                 old_value = get_params[inj.get('param')]
                 del header_params[inj.get('param')]
-                header_params[injection] = old_value
-                
+
+                new_param = inj.get('param').replace(self.tag, injection)
+                header_params[new_param] = old_value                
+                            
             if inj.get('part') == 'value':
                 # If injection in value, replace value by index    
-                header_params[inj.get('param')] = injection
+                header_params[inj.get('param')] = header_params[inj.get('param')].replace(self.tag, injection)
 
         result = requests.request(
             method = self.http_method,
