@@ -87,24 +87,39 @@ def _print_injection_summary(channel):
     'bind_shell': 'no' if not channel.data.get('bind_shell') else 'yes',
 }))
 
+def detect_template_injection(channel, plugins = plugins):
+
+    # Loop manually the channel.injs modifying channel's inj_idx
+    for i in xrange(len(channel.injs)):
+
+        log.info("Testing %s parameter '%s'" % (
+            channel.injs[channel.inj_idx]['field'],
+            channel.injs[channel.inj_idx]['param']
+            )
+        )
+
+        current_plugin = None
+
+        # Iterate all the available plugins until
+        # the first template engine is detected.
+        for plugin in plugins:
+
+            current_plugin = plugin(channel)
+
+            # Skip if user specify a specific --engine
+            if channel.args.get('engine') and channel.args.get('engine').lower() != current_plugin.plugin.lower():
+                continue
+
+            current_plugin.detect()
+
+            if channel.data.get('engine'):
+                return current_plugin
+
+        channel.inj_idx += 1
+
 def check_template_injection(channel):
 
-    current_plugin = None
-
-    # Iterate all the available plugins until
-    # the first template engine is detected.
-    for plugin in plugins:
-
-        current_plugin = plugin(channel)
-
-        # Skip if user specify a specific --engine
-        if channel.args.get('engine') and channel.args.get('engine').lower() != current_plugin.plugin.lower():
-            continue
-
-        current_plugin.detect()
-
-        if channel.data.get('engine'):
-            break
+    detect_template_injection(channel)
 
     # Kill execution if no engine have been found
     if not channel.data.get('engine'):
