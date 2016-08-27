@@ -106,8 +106,6 @@ class ChannelTest(unittest.TestCase):
         
     def test_reflection_multiple_point_no_tag(self):
 
-        template = '%s'
-
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj=asd&inj2=asd2',
             'force_level': [ 0, 0 ],
@@ -117,3 +115,14 @@ class ChannelTest(unittest.TestCase):
         
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
+        
+    def test_no_reflection(self):
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/reflect/mako?inj2=asd2',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
+        
+        self.assertEqual(channel.data, {})
