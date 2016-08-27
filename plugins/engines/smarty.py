@@ -74,6 +74,9 @@ class Smarty(Plugin):
         # Escape {assign var="%s" value="%s"}
         { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
+        # Comments
+        { 'level': 5, 'prefix': '*}', 'suffix' : '{*' },
+    
 
     ]
 
