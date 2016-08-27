@@ -6,6 +6,8 @@ import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.velocity import Velocity
+from core.channel import Channel
+from core.checks import detect_template_injection
 from basetest import BaseTest
 
 class VelocityTest(unittest.TestCase, BaseTest):
@@ -56,7 +58,6 @@ class VelocityTest(unittest.TestCase, BaseTest):
         (3, 1, '#foreach($item in %s)\n#end', { 'prefix' : '1)#end#if(1==1)', 'suffix': ''}),
         (0, 0, '## comment %s', { }),
         # TODO: fix those, they used to work
-        #(5, 0, '#* %s *#', { }),
         #(5, 0, '#[[%s]]# ', { }),        
         (0, 0, '${%s}', {}),
         (0, 0, '${(%s)}', {}),
@@ -64,3 +65,23 @@ class VelocityTest(unittest.TestCase, BaseTest):
         (3, 1, '#define( $asd )%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
         (3, 1, '#macro(d)%s#end', { 'prefix': '1#end#if(1==1)', 'suffix' : ''}),
     ]
+
+
+    def test_custom_injection_tag(self):
+
+        template = '#* %s *#'
+
+        channel = Channel({
+            'url' : self.url.replace('*', '~') % template,
+            'force_level': [ 5, 0 ],
+            'injection_tag': '~'
+        })
+        
+        detect_template_injection(channel, [ self.plugin ])
+        
+        expected_data = self.expected_data.copy()
+        expected_data.update({ 'prefix': '*#', 'suffix' : '#*'})
+        
+        del channel.data['os']
+        
+        self.assertEqual(channel.data, expected_data)
