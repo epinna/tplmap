@@ -59,6 +59,10 @@ class Channel:
             param = param.strip()
             value = value.strip()
 
+            # If all_injectable, consider all values injectables
+            if all_injectable:
+                value = self.tag
+
             self.header_params[param] = value
 
             if self.tag in param:
@@ -75,7 +79,6 @@ class Channel:
                     'value': value,
                     'param' : param
                 })
-            
                 
         # Set user agent if not set already
         user_agent = self.args.get('user_agent')
@@ -92,6 +95,10 @@ class Channel:
             params_dict_list = urlparse.parse_qs(self.args.get('data'))
 
             for param, value_list in params_dict_list.items():
+
+                # If all_injectable, consider all values injectables
+                if all_injectable:
+                    value_list = [ self.tag for x in range(len(value_list)) ]
 
                 self.post_params[param] = value_list
                 
@@ -117,6 +124,10 @@ class Channel:
         params_dict_list = urlparse.parse_qs(urlparse.urlsplit(self.url).query)
 
         for param, value_list in params_dict_list.items():
+
+            # If all_injectable, consider all values injectables
+            if all_injectable:
+                value_list = [ self.tag for x in range(len(value_list)) ]
 
             self.get_params[param] = value_list
             
