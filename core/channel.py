@@ -31,8 +31,6 @@ class Channel:
         
         if not self.injs:
 
-            log.error("Testing all the parameters values.")
-
             self._parse_get(True)
             self._parse_post(True)
             self._parse_header(True)

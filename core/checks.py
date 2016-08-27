@@ -92,7 +92,7 @@ def detect_template_injection(channel, plugins = plugins):
     # Loop manually the channel.injs modifying channel's inj_idx
     for i in xrange(len(channel.injs)):
 
-        log.info("Testing %s parameter '%s'" % (
+        log.info("Testing if %s parameter '%s' is injectable" % (
             channel.injs[channel.inj_idx]['field'],
             channel.injs[channel.inj_idx]['param']
             )
