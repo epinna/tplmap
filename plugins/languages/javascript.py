@@ -73,7 +73,7 @@ class Javascript(Plugin):
 
         # Comment blocks
         # TODO: Can't be tested since * is considered as placeholder. Fix this.
-        #{ 'level': 5, 'prefix' : '*/', 'suffix' : '//' },
+        { 'level': 5, 'prefix' : '*/', 'suffix' : '/*' },
 
     ]
 
