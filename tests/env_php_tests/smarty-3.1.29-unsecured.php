@@ -22,7 +22,10 @@ else {
   $tpl=$inj;
 }
 
+error_log('DEBUG< : ' . $tpl);
 $rendered = $smarty->fetch('string:'.$tpl);
+error_log('DEBUG> : ' . $rendered);
+
 if(!$_GET["blind"]) {
   echo generateRandomString() . $rendered . generateRandomString();
 }

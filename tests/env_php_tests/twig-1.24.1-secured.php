@@ -22,6 +22,8 @@ else {
   $tpl=$inj;
 }
 
+error_log('DEBUG: ' . $tpl);
+
 $loader = new Twig_Loader_Array(array(
     'tpl' => $tpl,
 ));
