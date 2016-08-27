@@ -92,6 +92,24 @@ def limited(engine):
     elif engine == 'jinja2':
         return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
 
+@app.route("/startswith/<engine>")
+def startswithtest(engine):
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+
+    str_startswith = request.values.get('startswith')
+
+    injection = request.values.get('inj', '')
+    if not injection.startswith(str_startswith):
+        return 'Missing startswith'
+
+    if engine == 'mako':
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
+    elif engine == 'jinja2':
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
+
+
 @app.route("/blind/<engine>")
 def blind(engine):
 

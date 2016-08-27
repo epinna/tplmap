@@ -126,3 +126,29 @@ class ChannelTest(unittest.TestCase):
         detect_template_injection(channel, [ Mako ])
         
         self.assertEqual(channel.data, {})
+
+    def test_reflection_point_startswith(self):
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/startswith/mako?inj=thismustexists*&startswith=thismustexists',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
+        
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)    
+
+    def test_reflection_point_dont_startswith(self):
+        
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/startswith/mako?inj=*&startswith=thismustexists',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
+        
+        self.assertEqual(channel.data, {})    
+        
+            
+
