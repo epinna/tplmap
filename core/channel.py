@@ -28,12 +28,17 @@ class Channel:
         self._parse_get()
         self._parse_post()
         self._parse_header()
-        self._parse_method()
         
         if not self.injs:
-            # TODO: this will start discovery on every parameter
-            log.error("No injection points found, use '%s' in URL, post data or headers." % self.tag)
 
+            log.error("Testing all the parameters values.")
+
+            self._parse_get(True)
+            self._parse_post(True)
+            self._parse_header(True)
+
+        self._parse_method()
+        
     def _parse_method(self):
 
         if self.args.get('request'):
@@ -43,7 +48,7 @@ class Channel:
         else:
             self.http_method = 'GET'
 
-    def _parse_header(self):
+    def _parse_header(self, all_injectable = False):
         
         for param_value in self.args.get('headers', []):
 
@@ -62,7 +67,8 @@ class Channel:
                     'part' : 'param',
                     'param' : param
                 })
-            if self.tag in value:
+                
+            if self.tag in value or all_injectable:
                 self.injs.append({
                     'field' : 'header',
                     'part' : 'value',
@@ -79,7 +85,7 @@ class Channel:
         if not 'user-agent' in [ p.lower() for p in self.header_params.keys() ]:
             self.header_params['User-Agent'] = user_agent
 
-    def _parse_post(self):
+    def _parse_post(self, all_injectable = False):
 
         if self.args.get('data'):
 
@@ -97,7 +103,7 @@ class Channel:
                     })
                 
                 for idx, value in enumerate(value_list):
-                    if self.tag in value:
+                    if self.tag in value or all_injectable:
                         self.injs.append({
                             'field' : 'POST',
                             'part' : 'value',
@@ -106,7 +112,7 @@ class Channel:
                             'idx' : idx
                         })  
             
-    def _parse_get(self):
+    def _parse_get(self, all_injectable = False):
 
         params_dict_list = urlparse.parse_qs(urlparse.urlsplit(self.url).query)
 
@@ -122,7 +128,7 @@ class Channel:
                 })
             
             for idx, value in enumerate(value_list):
-                if self.tag in value:
+                if self.tag in value or all_injectable:
                     self.injs.append({
                         'field' : 'GET',
                         'part': 'value',
