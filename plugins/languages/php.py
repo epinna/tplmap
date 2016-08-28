@@ -64,6 +64,15 @@ class Php(Plugin):
 
         # Text context, no closures
         { 'level': 0 },
+        
+        # This terminates the statement with ;
+        { 'level': 1, 'prefix' : '%(closure)s;', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+
+        # This does not need termination e.g. if(%s) {}
+        { 'level': 2, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+
+        # Comment blocks
+        { 'level': 5, 'prefix' : '*/', 'suffix' : '/*' },
 
     ]
 
