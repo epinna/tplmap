@@ -162,25 +162,25 @@ def check_template_injection(channel):
 
         # Check the status of command execution capabilities
         if channel.data.get('execute_blind'):
-            log.info("""Only blind injection has been found, command execution will not produce any output.""")
-            log.info("""A delay string as '&& sleep <delay>' will be appended to your command to return True or False whether it returns successfully or not.""")
+            log.info("""Blind injection has been found and command execution will not produce any output.""")
+            log.info("""Delay is introduced appending '&& sleep <delay>' to the shell commands. True or False is returned whether it returns successfully or not.""")
 
             if channel.args.get('os_cmd'):
                 print current_plugin.execute_blind(channel.args.get('os_cmd'))
             elif channel.args.get('os_shell'):
-                log.info('Run commands on the operating system')
+                log.info('Run commands on the operating system.')
                 Shell(current_plugin.execute_blind, '%s (blind) $ ' % (channel.data.get('os', ''))).cmdloop()
 
         elif channel.data.get('execute'):
             if channel.args.get('os_cmd'):
                 print current_plugin.execute(channel.args.get('os_cmd'))
             elif channel.args.get('os_shell'):
-                log.info('Run commands on the operating system')
+                log.info('Run commands on the operating system.')
 
                 Shell(current_plugin.execute, '%s $ ' % (channel.data.get('os', ''))).cmdloop()
 
         else:
-            log.error('No system command execution capabilities have been detected on the target')
+            log.error('No system command execution capabilities have been detected on the target.')
 
 
     # Execute template commands
