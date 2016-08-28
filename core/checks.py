@@ -27,7 +27,7 @@ plugins = [
     Jade,
     Nunjucks,
     Javascript,
-    Dust
+    Dust,
 ]
 
 def _print_injection_summary(channel):
@@ -122,7 +122,7 @@ def detect_template_injection(channel, plugins = plugins):
 
 def check_template_injection(channel):
 
-    detect_template_injection(channel)
+    current_plugin = detect_template_injection(channel)
 
     # Kill execution if no engine have been found
     if not channel.data.get('engine'):
