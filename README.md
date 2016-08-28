@@ -71,6 +71,7 @@ Supported template engines
 | JavaScript (generic) |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | Dust (<= dustjs-helpers@1.5.0) |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | Smarty (unsecured)   |  render/blind      | yes               | PHP             | yes       | yes        |
+| PHP (generic)        |  render/blind      | yes               | PHP             | yes       | yes        |
 | Freemarker           |  render/blind      | yes               | no              | yes       | yes        |
 | Velocity             |  render/blind      | yes               | no              | yes       | yes        |
 | Twig                 |  render            | no                | no              | no        | no         |
