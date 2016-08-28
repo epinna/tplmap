@@ -14,6 +14,7 @@ http://localhost:15002/smarty-3.1.29-secured.php?inj=*
 http://localhost:15002/smarty-3.1.29-unsecured.php?inj=*
 http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*&blind=1
 http://localhost:15002/twig-1.24.1-secured.php?inj=*
+http://localhost:15002/eval.php?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
