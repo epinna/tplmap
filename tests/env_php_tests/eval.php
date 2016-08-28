@@ -13,14 +13,19 @@ else {
   $tpl=$inj;
 }
 
-error_log('DEBUG< : ' . $tpl);
-$rendered = eval($tpl);
-error_log('DEBUG> : ' . $rendered);
-
 if(!$_GET["blind"]) {
-  echo generateRandomString() . $rendered . generateRandomString();
+  echo generateRandomString();
+  error_log('DEBUG< : ' . $tpl);
+  $rendered = eval($tpl);
+  error_log('DEBUG> : ' . $rendered);
+  echo generateRandomString();
 }
 else {
+  error_log('DEBUG< : ' . $tpl);
+  ob_start();
+  $rendered = eval($tpl);
+  ob_end_clean();
+  error_log('DEBUG> : ' . $rendered);
   echo generateRandomString();
 }
 ?>
