@@ -72,7 +72,6 @@ class Javascript(Plugin):
         { 'level': 2, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
 
         # Comment blocks
-        # TODO: Can't be tested since * is considered as placeholder. Fix this.
         { 'level': 5, 'prefix' : '*/', 'suffix' : '/*' },
 
     ]

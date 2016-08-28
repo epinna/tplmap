@@ -48,6 +48,7 @@ class JavascriptTests(unittest.TestCase, BaseTest):
 
     blind_tests = [
         (0, 0, '%s', {}),
+        (2, 0, 'if("%s"=="2"){}', { 'prefix' : '1")', 'suffix' : '//'}),
     ]
 
     reflection_tests = [
