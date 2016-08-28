@@ -65,14 +65,14 @@ class Channel:
 
             if self.tag in param:
                 self.injs.append({
-                    'field' : 'header',
+                    'field' : 'Header',
                     'part' : 'param',
                     'param' : param
                 })
                 
             if self.tag in value or all_injectable:
                 self.injs.append({
-                    'field' : 'header',
+                    'field' : 'Header',
                     'part' : 'value',
                     'value': value,
                     'param' : param
@@ -186,7 +186,7 @@ class Channel:
                 get_params[inj.get('param')][inj.get('idx')] = get_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
                 
                 
-        elif inj['field'] == 'header':
+        elif inj['field'] == 'Header':
                 
             if inj.get('part') == 'param':
                 # If injection replaces param, save the value 

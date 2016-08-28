@@ -60,6 +60,7 @@ def _print_injection_summary(channel):
 
     log.info("""Tplmap identified the following injection point:
 
+  %(method)s parameter: %(parameter)s
   Engine: %(engine)s
   Injection: %(prefix)s%(render)s%(suffix)s
   Context: %(context)s
@@ -85,6 +86,8 @@ def _print_injection_summary(channel):
     'write': writing,
     'read': 'no' if not channel.data.get('read') else 'yes',
     'bind_shell': 'no' if not channel.data.get('bind_shell') else 'yes',
+    'method': channel.injs[channel.inj_idx]['field'],
+    'parameter': channel.injs[channel.inj_idx]['param']
 }))
 
 def detect_template_injection(channel, plugins = plugins):
