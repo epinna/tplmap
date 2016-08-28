@@ -49,10 +49,13 @@ class PhpTests(unittest.TestCase, BaseTest):
 
     blind_tests = [
         (0, 0, '%s', {}),
+        (1, 3, '["%s"]', { 'prefix': '1"];', 'suffix' : '//' }),
     ]
 
     reflection_tests = [
         (0, 0, '%s', {}),
+        (2, 0, 'if("%s"=="2"){}', { 'prefix' : '1")', 'suffix' : '//'}),
+        (1, 3, '["%s"]', { 'prefix': '1"];', 'suffix' : '//' }),
     ]
     
     def test_download(self):
