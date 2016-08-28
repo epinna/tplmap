@@ -8,6 +8,7 @@ from plugins.engines.jade import Jade
 from plugins.engines.nunjucks import Nunjucks
 from plugins.engines.dust import Dust
 from plugins.languages.javascript import Javascript
+from plugins.languages.php import Php
 from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
@@ -28,6 +29,7 @@ plugins = [
     Nunjucks,
     Javascript,
     Dust,
+    Php
 ]
 
 def _print_injection_summary(channel):
