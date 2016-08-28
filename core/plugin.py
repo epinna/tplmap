@@ -330,17 +330,27 @@ class Plugin(object):
     """
     def render(self, code, **kwargs):
 
-        header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
-        header = kwargs.get('header', self.get('header', '%(header)s') % ({ 'header' : header_rand }))
+        header_template = kwargs.get('header', self.get('header'))
+        if header_template:
+            header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
+            header = header_template % ({ 'header' : header_rand })
+        else:
+            header_rand = 0
+            header = ''
 
-        trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
-        trailer = kwargs.get('trailer', self.get('trailer', '%(trailer)s') % ({ 'trailer' : trailer_rand }))
-
+        trailer_template = kwargs.get('trailer', self.get('trailer'))
+        if trailer_template:
+            trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
+            trailer = trailer_template % ({ 'trailer' : trailer_rand })
+        else:
+            trailer_rand = 0
+            trailer = ''
+            
         prefix = kwargs.get('prefix', self.get('prefix', ''))
         suffix = kwargs.get('suffix', self.get('suffix', ''))
 
         blind = kwargs.get('blind', False)
-
+        
         injection = header + code + trailer
 
         # Save the average HTTP request time of rendering in order
