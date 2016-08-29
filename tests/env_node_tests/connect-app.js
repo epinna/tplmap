@@ -6,6 +6,7 @@ var nunjucks = require('nunjucks');
 var dust = require('dustjs-linkedin');
 var dusthelpers = require('dustjs-helpers');
 var randomstring = require("randomstring");
+var doT=require('dot');
 
 var app = connect();
 
@@ -169,6 +170,44 @@ app.use('/blind/dust', function(req, res){
     res.end(randomstring.generate());
   }
 });
+
+// doT
+app.use('/dot', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    res.end(randomstring.generate() + doT.template(tpl)({}) + randomstring.generate());
+  }
+});
+
+// Jade blind endpoint
+app.use('/blind/dot', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    doT.template(tpl)({});
+    res.end(randomstring.generate());
+  }
+});
+
 
 //create node.js http server and listen on port
 http.createServer(app).listen(15004);
