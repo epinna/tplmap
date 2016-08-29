@@ -489,7 +489,7 @@ class Plugin(object):
         if self.get('blind') or self.md5(remote_path):
             if not self.channel.args.get('force_overwrite'):
                 if self.get('blind'):
-                    log.warn('Blind upload will overwrite any file, rerun with --force-overwrite for upload')
+                    log.warn('Blind upload can overwrite files, rerun with --force-overwrite to confirm')
                 else:
                     log.warn('Remote path already exists, rerun with --force-overwrite for upload')
                 return
