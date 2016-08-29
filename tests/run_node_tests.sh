@@ -17,6 +17,8 @@ http://localhost:15004/nunjucks?inj=*
 http://localhost:15004/blind/nunjucks?inj=*
 http://localhost:15004/javascript?inj=*
 http://localhost:15004/blind/javascript?inj=*
+http://localhost:15004/dot?inj=*
+http://localhost:15004/blind/dot?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
@@ -40,6 +42,7 @@ function run_webserver()
     # See https://github.com/linkedin/dustjs-helpers/pull/110 
     npm install dustjs-linkedin@2.6
     npm install dustjs-helpers@1.5.0
+    npm install dot
   fi
 
   cp ../connect-app.js connect-app.js
