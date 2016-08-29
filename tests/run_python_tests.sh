@@ -13,6 +13,8 @@ http://localhost:15001/reflect/mako?inj=*
 http://localhost:15001/blind/mako?inj=*
 http://localhost:15001/reflect/jinja2?inj=*
 http://localhost:15001/blind/jinja2?inj=*
+http://localhost:15001/reflect/eval?inj=*
+http://localhost:15001/blind/eval?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log

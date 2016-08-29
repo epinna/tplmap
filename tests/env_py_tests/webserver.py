@@ -32,6 +32,9 @@ def reflect(engine):
         return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
     elif engine == 'jinja2':
         return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
+    elif engine == 'eval':
+        return randomword() + str(eval(template % injection)) + randomword()
+
 
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
@@ -123,7 +126,9 @@ def blind(engine):
         MakoTemplates(template % injection, lookup=mylookup).render()
     elif engine == 'jinja2':
         Jinja2Env.from_string(template % injection).render()
-
+    elif engine == 'eval':
+        eval(template % injection)
+        
     return randomword()
 
 @app.route('/shutdown')
