@@ -14,7 +14,7 @@ Example
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/app?id=7'
-[+] Tplmap 0.1
+[+] Tplmap 0.2
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Testing if GET parameter 'id' is injectable
