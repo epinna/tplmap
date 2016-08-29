@@ -7,6 +7,7 @@ from plugins.engines.velocity import Velocity
 from plugins.engines.jade import Jade
 from plugins.engines.nunjucks import Nunjucks
 from plugins.engines.dust import Dust
+from plugins.engines.dot import Dot
 from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
 from plugins.languages.python import Python
@@ -28,10 +29,11 @@ plugins = [
     Velocity,
     Jade,
     Nunjucks,
-    Javascript,
+    Dot,
     Dust,
+    Javascript,
     Php,
-    Python
+    Python,
 ]
 
 def _print_injection_summary(channel):
