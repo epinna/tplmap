@@ -28,7 +28,7 @@ class Python(Plugin):
             'md5': """__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest()"""
         },
         'evaluate' : {
-            'call': 'inject',
+            'call': 'render',
             'evaluate': """%(code)s"""
         },
         'execute' : {
