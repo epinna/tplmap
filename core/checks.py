@@ -8,6 +8,7 @@ from plugins.engines.jade import Jade
 from plugins.engines.nunjucks import Nunjucks
 from plugins.engines.dust import Dust
 from plugins.engines.dot import Dot
+from plugins.engines.marko import Marko
 from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
 from plugins.languages.python import Python
@@ -31,6 +32,7 @@ plugins = [
     Nunjucks,
     Dot,
     Dust,
+    Marko,
     Javascript,
     Php,
     Python,
