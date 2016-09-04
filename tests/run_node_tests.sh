@@ -19,6 +19,8 @@ http://localhost:15004/javascript?inj=*
 http://localhost:15004/blind/javascript?inj=*
 http://localhost:15004/dot?inj=*
 http://localhost:15004/blind/dot?inj=*
+http://localhost:15004/marko?inj=*
+http://localhost:15004/blind/marko?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
@@ -43,6 +45,7 @@ function run_webserver()
     npm install dustjs-linkedin@2.6
     npm install dustjs-helpers@1.5.0
     npm install dot
+    npm install marko
   fi
 
   cp ../connect-app.js connect-app.js
