@@ -51,4 +51,5 @@ class MarkoTests(unittest.TestCase, BaseTest):
     reflection_tests = [
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
+        (1, 0, '${%s}', { 'prefix': '1}', 'suffix' : '${"1"' }),
     ]

@@ -57,7 +57,10 @@ class Marko(Plugin):
     contexts = [
 
         # Text context, no closures
-        { 'level': 0 }
+        { 'level': 0 },
+        
+        # Empty ${}, integer ${} does not work, so --level 2 is required to have at least "1" as closure
+        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '${"1"', 'closures' : languages.javascript_ctx_closures },
 
     ]
 
