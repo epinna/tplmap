@@ -71,6 +71,7 @@ Supported template engines
 | Nunjucks             |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | Jade                 |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | doT                  |  render/blind      | yes               | JavaScript      | yes       | yes        |
+| Marko                |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | JavaScript (generic) |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | Dust (<= dustjs-helpers@1.5.0) |  render/blind      | yes               | JavaScript      | yes       | yes        |
 | Smarty (unsecured)   |  render/blind      | yes               | PHP             | yes       | yes        |
