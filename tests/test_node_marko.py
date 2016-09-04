@@ -52,4 +52,6 @@ class MarkoTests(unittest.TestCase, BaseTest):
         (0, 0, '%s', {}),
         (0, 0, 'AAA%sAAA', {}),
         (1, 0, '${%s}', { 'prefix': '1}', 'suffix' : '${"1"' }),
+        (2, 0, '<var name=%s/>', { 'prefix': '1/>', 'suffix' : '' }),
+        (2, 0, '<assign name=%s/>', { 'prefix': '1/>', 'suffix' : '' }),
     ]

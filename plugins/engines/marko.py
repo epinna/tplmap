@@ -59,8 +59,13 @@ class Marko(Plugin):
         # Text context, no closures
         { 'level': 0 },
         
-        # Empty ${}, integer ${} does not work, so --level 2 is required to have at least "1" as closure
         { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '${"1"', 'closures' : languages.javascript_ctx_closures },
+
+        # If escapes require to know the ending tag e.g. <div if(%s)></div>
+        
+        # This to escape from <var name=data/> and <assign name=data/>
+        { 'level': 2, 'prefix': '1/>', 'suffix' : '' },
+
 
     ]
 
