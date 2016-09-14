@@ -1,13 +1,13 @@
 Tplmap
 ======
 
-Tplmap (short for _Template Mapper_) is a tool that automate the process of detecting and exploiting Server-Side Template Injection vulnerabilities (SSTI). This assists SSTI exploitation to compromise the application and achieve remote command execution on the operating system. 
+Tplmap (short for _Template Mapper_) automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the remote operating system. 
 
-The tool can be used by security researchers and penetration testers, to detect and exploit vulnerabilities and study the template injection vulnerability class.
+The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
-The plugin architecture makes easy to extend the tool and support new template engines and sandbox break-out techniques. Part of the implemented techniques came from public research papers as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other [works][4] while others have been [discovered][2] to [extend][3] this tool exploitation capabilities. 
+The sandbox break-out techniques came from public [researches][4] as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other original piece of [works][2] to [extend][3] this tool capabilities.
 
-Tplmap is able to detect and achieve arbitrary command execution in several scenarios as injections in code context and blind injections. The tool also detects code injections in several languages (e.g. Server-Side JavaScript Injection) exploiting _eval()_-like injections and generic template engines accepting arbitrary code.
+It achieves full compromise in rendered context, several code context and blind injection scenarios. It also exploits _eval()_-like injections in several languages and generic unsandboxed template engines.
 
 Example
 -------
@@ -30,7 +30,7 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=7'
   Engine: Jade
   Injection: \n= *\n
   Context: text
-  OS: darwin
+  OS: linux
   Technique: render
   Capabilities:
 
