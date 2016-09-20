@@ -37,6 +37,10 @@ class Channel:
 
         self._parse_method()
         
+        # Disable requests warning in case of 
+        # skipped SSL certificate check
+        requests.packages.urllib3.disable_warnings()
+        
     def _parse_method(self):
 
         if self.args.get('request'):
@@ -206,7 +210,10 @@ class Channel:
             url = self.base_url,
             params = get_params,
             data = post_params,
-            headers = header_params
+            headers = header_params,
+            # By default, SSL check is skipped.
+            # TODO: add a -k curl-like option to set this.
+            verify = False
             ).text
 
         log.debug('\n> """%s"""\n< """%s"""' % (injection, result) )
