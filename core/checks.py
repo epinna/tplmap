@@ -150,12 +150,12 @@ def check_template_injection(channel):
         log.info(
             """Rerun tplmap providing one of the following options:\n%(execute)s%(write)s%(read)s%(bind_shell)s%(reverse_shell)s%(execute_blind)s""" % (
                 {
-                 'execute': '\n    --os-shell or --os-cmd to execute shell commands via the injection' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
-                 'bind_shell': '\n    --bind-shell PORT to bind a shell on a port and connect to it' if channel.data.get('bind_shell') else '',
-                 'reverse_shell': '\n    --reverse-shell HOST PORT to run a shell back to the attacker\'s HOST PORT' if channel.data.get('reverse_shell') else '',
-                 'write': '\n    --upload LOCAL REMOTE to upload files to the server' if channel.data.get('write') else '',
-                 'read': '\n    --download REMOTE LOCAL to download remote files' if channel.data.get('read') else '',
-                 'execute_blind': '\n    --os-cmd or --os-shell to execute blind shell commands on the underlying operating system' if channel.data.get('execute_blind') else '',
+                 'execute': '\n    --os-shell\t\t\tRun shell on the target\n    --os-cmd\t\t\tExecute shell commands' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
+                 'bind_shell': '\n    --bind-shell PORT\t\tConnect to a shell bind to a target port' if channel.data.get('bind_shell') else '',
+                 'reverse_shell': '\n    --reverse-shell HOST PORT\tSend a shell back to the attacker\'s port' if channel.data.get('reverse_shell') else '',
+                 'write': '\n    --upload LOCAL REMOTE\tUpload files to the server' if channel.data.get('write') else '',
+                 'read': '\n    --download REMOTE LOCAL\tDownload remote files' if channel.data.get('read') else '',
+                 'execute_blind': '\n    --os-shell\tRun shell on the target\n    --os-cmd Execute shell commands' if channel.data.get('execute_blind') else '',
                  }
             )
         )
