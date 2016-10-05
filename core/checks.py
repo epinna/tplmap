@@ -76,11 +76,11 @@ def _print_injection_summary(channel):
   Technique: %(injtype)s
   Capabilities:
 
-   Code evaluation: %(evaluate)s
    Shell command execution: %(execute)s
+   Bind and reverse shell: %(bind_shell)s
    File write: %(write)s
    File read: %(read)s
-   Bind and reverse shell: %(bind_shell)s
+   Code evaluation: %(evaluate)s
 """ % ({
     'prefix': prefix,
     'render': render,
@@ -148,7 +148,7 @@ def check_template_injection(channel):
         ):
 
         log.info(
-            """Rerun tplmap providing one of the following options:\n%(execute)s%(execute_blind)s%(write)s%(read)s%(bind_shell)s%(reverse_shell)s""" % (
+            """Rerun tplmap providing one of the following options:\n%(execute)s%(execute_blind)s%(bind_shell)s%(reverse_shell)s%(write)s%(read)s""" % (
                 {
                  'execute': '\n    --os-shell\t\t\tRun shell on the target\n    --os-cmd\t\t\tExecute shell commands' if channel.data.get('execute') and not channel.data.get('execute_blind') else '',
                  'execute_blind': '\n    --os-shell\t\t\tRun shell on the target\n    --os-cmd\t\t\tExecute shell commands' if channel.data.get('execute_blind') else '',
