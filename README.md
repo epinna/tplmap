@@ -113,7 +113,7 @@ Supported template engines
 
 Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed engines and generic _eval()_-like injections. Blind injections and injections in code contexts are supported.
 
-| Template engine    | Remote Command Execution |  Blind RCE | Code evaluation | File read | File write |
+| Template engine    | Remote Command Execution |  Blind | Code evaluation | File read | File write |
 |----------------------|-------|-------------------|-----------------|-----------|------------|
 | Mako                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Jinja2               | ✓ |  ✓                | Python          |  ✓        |  ✓         |
