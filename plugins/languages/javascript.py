@@ -14,7 +14,14 @@ class Javascript(Plugin):
             'call': 'inject',
             'render': """%(code)s""",
             'header': """'%(header)s'+""",
-            'trailer': """+'%(trailer)s'"""
+            'trailer': """+'%(trailer)s'""",
+            'render_test': 'typeof(%(r1)s)+%(r2)s' % { 
+                'r1' : rand.randints[0],
+                'r2' : rand.randints[1]
+            },
+            'render_expected': 'number%(r2)s' % { 
+                'r2' : rand.randints[1]
+            }
         },
         # No evaluate_blind here, since we've no sleep, we'll use inject
         'write' : {
@@ -80,9 +87,6 @@ class Javascript(Plugin):
 
     def rendered_detected(self):
 
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
         os = self.evaluate("""require('os').platform()""")
         if os and re.search('^[\w-]+$', os):
             self.set('os', os)
@@ -99,9 +103,6 @@ class Javascript(Plugin):
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
