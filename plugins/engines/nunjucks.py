@@ -12,7 +12,14 @@ class Nunjucks(Plugin):
         'render' : {
             'render': '{{%(code)s}}',
             'header': '{{%(header)s}}',
-            'trailer': '{{%(trailer)s}}'
+            'trailer': '{{%(trailer)s}}',
+            'render_test': '%(n1)s*%(n2)s' % { 
+                'n1' : rand.randints[0], 
+                'n2' : rand.randints[1]
+            },
+            'render_expected': '%(res)s' % { 
+                'res' : rand.randints[0]*rand.randints[1] 
+            }
         },
         'write' : {
             'call' : 'inject',
@@ -75,9 +82,6 @@ class Nunjucks(Plugin):
 
     def rendered_detected(self):
 
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
         os = self.evaluate("""global.process.mainModule.require('os').platform()""")
         if os and re.search('^[\w-]+$', os):
             self.set('os', os)
@@ -93,9 +97,6 @@ class Nunjucks(Plugin):
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         if self.execute_blind('echo %s' % str(rand.randint_n(2))):
             self.set('execute_blind', True)
