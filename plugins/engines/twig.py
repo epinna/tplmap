@@ -10,7 +10,15 @@ class Twig(Plugin):
         'render' : {
             'render': '{{%(code)s}}',
             'header': '{{%(header)s}}',
-            'trailer': '{{%(trailer)s}}'
+            'trailer': '{{%(trailer)s}}',
+            # {{7*'7'}} and a{#b#}c work in freemarker as well
+            # {%% set a=%i*%i %%}{{a}} works in Nunjucks as well
+            'render_test': '"%(s1)s\n"|nl2br' % { 
+                's1' : rand.randstrings[0]
+            },
+            'render_expected': '%(res)s<br />' % { 
+                'res' : rand.randstrings[0]
+            }
         }
     }
     contexts = [
@@ -31,16 +39,3 @@ class Twig(Plugin):
     ]
 
     language = 'php'
-
-    def rendered_detected(self):
-
-        randA = rand.randstr_n(3)
-
-        # {{7*'7'}} and a{#b#}c work in freemarker as well
-        # {%% set a=%i*%i %%}{{a}} works in Nunjucks as well
-        payload = '{{"%s\n"|nl2br}}' % (randA)
-        expected = "%s<br />" % (randA)
-
-        if expected == self.render(payload):
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
