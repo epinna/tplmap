@@ -11,7 +11,16 @@ class Freemarker(Plugin):
         'render' : {
             'render': '${%(code)s}',
             'header': '${%(header)s?c}',
-            'trailer': '${%(trailer)s?c}'
+            'trailer': '${%(trailer)s?c}',
+            'render_test': """%(r1)s}<#--%(comment)s-->${%(r2)s""" % { 
+                'r1' : rand.randints[0],
+                'comment' : rand.randints[1],
+                'r2' : rand.randints[2]
+            },
+            'render_expected': '%(r1)s%(r2)s' % { 
+                'r1' : rand.randints[0],
+                'r2' : rand.randints[2]
+            }
         },
         'write' : {
             'call' : 'inject',
@@ -73,32 +82,19 @@ class Freemarker(Plugin):
 
     def rendered_detected(self):
 
-        randA = rand.randstr_n(1)
-        randB = rand.randstr_n(1)
+        expected_rand = str(rand.randint_n(2))
+        if expected_rand == self.execute('echo %s' % expected_rand):
+            self.set('execute', True)
+            self.set('write', True)
+            self.set('read', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)
 
-        payload = '%s<#--%s-->%s' % (randA, rand.randstr_n(1), randB)
-        expected = randA + randB
-
-        if expected == self.render(payload):
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('write', True)
-                self.set('read', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-
-                os = self.execute("""uname""")
-                if os and re.search('^[\w-]+$', os):
-                    self.set('os', os)
+            os = self.execute("""uname""")
+            if os and re.search('^[\w-]+$', os):
+                self.set('os', os)
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # No blind code evaluation is possible here, only execution
 
