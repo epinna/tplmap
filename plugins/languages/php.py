@@ -14,7 +14,13 @@ class Php(Plugin):
             'call': 'inject',
             'render': """print_r(%(code)s);""",
             'header': """print_r('%(header)s');""",
-            'trailer': """print_r('%(trailer)s');"""
+            'trailer': """print_r('%(trailer)s');""",
+            'render_test': '%(r1)s' % { 
+                'r1' : rand.randints[0]
+            },
+            'render_expected': '%(r1)s' % { 
+                'r1' : rand.randints[0]
+            }
         },
         'write' : {
             'call' : 'evaluate',
@@ -80,9 +86,6 @@ class Php(Plugin):
 
     def rendered_detected(self):
 
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
         os = self.evaluate("""echo PHP_OS;""")
         if os and re.search('^[\w-]+$', os):
             self.set('os', os)
@@ -98,9 +101,6 @@ class Php(Plugin):
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # Blind has been detected so code has been already evaluated
         self.set('evaluate_blind', self.language)
