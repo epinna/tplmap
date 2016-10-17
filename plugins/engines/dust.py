@@ -107,7 +107,7 @@ class Dust(Plugin):
             # Clean up any previous unreliable render data
             self.delete('unreliable_render')
             self.delete('unreliable')
-            
+
             # Further exploitation requires if helper, which has
             # been deprecated in version dustjs-helpers@1.5.0 .
             # Check if helper presence here.
@@ -135,14 +135,15 @@ class Dust(Plugin):
             self.delete('unreliable_render')
             self.delete('unreliable')
 
+            # Set basic info
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
+
             # Set the environment
             self.blind_detected()
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # Blind has been detected so code has been already evaluated
         self.set('evaluate_blind', self.language)
