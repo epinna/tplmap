@@ -41,7 +41,7 @@ plugins = [
 def _print_injection_summary(channel):
 
     prefix = channel.data.get('prefix', '').replace('\n', '\\n')
-    render = channel.data.get('render', '%(code)s').replace('\n', '\\n') % ({'code' : 'blind' })
+    render = channel.data.get('render', '%(code)s').replace('\n', '\\n') % ({'code' : '*' })
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
     if channel.data.get('evaluate_blind'):
