@@ -34,8 +34,6 @@ class Plugin(object):
 
         # To be overriden. This can define the following
         # capabilities:
-        #self.set('engine', self.plugin.lower())
-        #self.set('language', 'language')
         #self.set('evaluate', 'language')
         #self.set('execute', True)
         #self.set('write', True)
@@ -50,8 +48,6 @@ class Plugin(object):
 
         # To be overriden. This can define the following
         # capabilities:
-        #self.set('engine', self.plugin.lower())
-        #self.set('language', 'language')
         #self.set('evaluate_blind', 'language')
         #self.set('execute_blind', True)
         #self.set('write', True)
@@ -91,6 +87,10 @@ class Plugin(object):
             self.delete('unreliable_render')
             self.delete('unreliable')
 
+            # Set basic info
+            self.set('engine', self.plugin.lower())
+            self.set('language', self.language)
+
             # Set the environment
             self.rendered_detected()
 
@@ -106,6 +106,10 @@ class Plugin(object):
                 # Clean up any previous unreliable render data
                 self.delete('unreliable_render')
                 self.delete('unreliable')
+
+                # Set basic info
+                self.set('engine', self.plugin.lower())
+                self.set('language', self.language)
 
                 # Set the environment
                 self.blind_detected()
@@ -164,10 +168,9 @@ class Plugin(object):
         )
 
         # Prepare base operation to be evalued server-side
-        randA = rand.randint_n(1)
-        randB = rand.randint_n(1)
-        expected = str(randA*randB)
-        payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
+        expected = render_action.get('render_expected')
+
+        payload = render_action.get('render') % ({ 'code': render_action.get('render_test') })
 
         # Probe with payload wrapped by header and trailer, no suffex or prefix.
         # Test if contained, since the page contains other garbage
@@ -253,11 +256,9 @@ class Plugin(object):
         for prefix, suffix in self._generate_contexts():
 
             # Prepare base operation to be evalued server-side
-            randA = rand.randint_n(1)
-            randB = rand.randint_n(1)
-            expected = str(randA*randB)
+            expected = render_action.get('render_expected')
 
-            payload = render_action.get('render') % ({ 'code': '%s*%s' % (randA, randB) })
+            payload = render_action.get('render') % ({ 'code': render_action.get('render_test') })
             header_rand = rand.randint_n(10)
             header = render_action.get('header') % ({ 'header' : header_rand })
             trailer_rand = rand.randint_n(10)

@@ -19,3 +19,15 @@ def randstr_n(n, chars=string.letters + string.digits):
     return ''.join(
         random.choice(chars) for _ in range(n)
     )
+
+# Generate static random integers
+# to help filling actions['render']
+randints = [
+    randint_n(2) for n in range(2)
+]
+
+# Generate static random integers
+# to help filling actions['render']
+randstrings = [
+    randstr_n(2) for n in range(2)
+]
