@@ -10,7 +10,14 @@ class Mako(Plugin):
         'render' : {
             'render': '${%(code)s}',
             'header': '${%(header)s}',
-            'trailer': '${%(trailer)s}'
+            'trailer': '${%(trailer)s}',
+            'render_test': """'%(s1)s'.join('%(s2)s')""" % { 
+                's1' : rand.randstrings[0], 
+                's2' : rand.randstrings[1]
+            },
+            'render_expected': '%(res)s' % { 
+                'res' : rand.randstrings[0].join(rand.randstrings[1])
+            }
         },
         'write' : {
             'call' : 'evaluate',
@@ -86,9 +93,6 @@ class Mako(Plugin):
 
     def rendered_detected(self):
 
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
         os = self.render("""<% import sys, os; x=os.name; y=sys.platform; %>${x}-${y}""")
         if os and re.search('^[\w-]+$', os):
             self.set('os', os)
@@ -104,9 +108,6 @@ class Mako(Plugin):
 
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # Blind has been detected so code has been already evaluated
         self.set('evaluate_blind', self.language)
