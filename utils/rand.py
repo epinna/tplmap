@@ -23,11 +23,11 @@ def randstr_n(n, chars=string.letters + string.digits):
 # Generate static random integers
 # to help filling actions['render']
 randints = [
-    randint_n(2) for n in range(2)
+    randint_n(2) for n in range(3)
 ]
 
 # Generate static random integers
 # to help filling actions['render']
 randstrings = [
-    randstr_n(2) for n in range(2)
+    randstr_n(2) for n in range(3)
 ]
