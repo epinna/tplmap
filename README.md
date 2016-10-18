@@ -52,7 +52,7 @@ Hello 49!
 Exploitation
 ------------
 
-Tplmap is able to detect and exploit SSTI in a range of template engine, including Jinja2, to get access to the underlying file system and operating system. Run it against the URL to test if the parameters are vulnerable.
+Tplmap is able to detect and exploit SSTI in a range of template engines, including Jinja2, to get access to the underlying file system and operating system. Run it against the URL to test if the parameters are vulnerable.
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/page?name=John'
