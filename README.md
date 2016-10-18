@@ -40,7 +40,7 @@ if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
 ```
 
-From a black box testing perspective, the page reflects the value similarly to a XXS vulnerability, but also computes basic operation at runtime disclosing its SSTI nature.
+From a black box testing perspective, the page reflects the value similarly to a XSS vulnerability, but also computes basic operation at runtime disclosing its SSTI nature.
 
 ```
 $ curl -g 'http://www.target.com/page?name=John'
