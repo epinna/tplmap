@@ -152,7 +152,7 @@ class Jinja2Test(unittest.TestCase, BaseTest):
 
     def test_reflection_limit(self):
 
-        obj, data = self._get_detection_obj_data('http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*&limit=8' % '')
+        obj, data = self._get_detection_obj_data('http://127.0.0.1:15001/limit/jinja2?tpl=%s&inj=*&limit=20' % '')
 
         expected_data = { 'unreliable_render' : self.expected_data['render'], 'unreliable' : 'Jinja2' }
 
