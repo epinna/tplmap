@@ -3,6 +3,7 @@ app = Flask(__name__)
 from mako.template import Template as MakoTemplates
 from mako.lookup import TemplateLookup
 from jinja2 import Environment as Jinja2Environment
+import tornado.template
 import random
 import string
 
@@ -34,7 +35,8 @@ def reflect(engine):
         return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
     elif engine == 'eval':
         return randomword() + str(eval(template % injection)) + randomword()
-
+    elif engine == 'tornado':
+        return randomword() + tornado.template.Template(template % injection).generate() + randomword()
 
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
