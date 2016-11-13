@@ -28,7 +28,7 @@ class Plugin(object):
         # The number of seconds to delay the response when testing for
         # time-based blind injection. This will be added to the average
         # response time for render values.
-        self.tm_delay = 2
+        self.tm_delay = 4
 
     def rendered_detected(self):
 
