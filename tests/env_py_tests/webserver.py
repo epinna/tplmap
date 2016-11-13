@@ -130,6 +130,8 @@ def blind(engine):
         Jinja2Env.from_string(template % injection).render()
     elif engine == 'eval':
         eval(template % injection)
+    elif engine == 'tornado':
+        tornado.template.Template(template % injection).generate()
         
     return randomword()
 
