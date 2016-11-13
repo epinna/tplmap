@@ -139,22 +139,6 @@ class BaseTest(object):
         obj.write(data, remote_temp_path)
         self.assertEqual(obj.md5(remote_temp_path), strings.md5(data))
         obj.execute('rm %s' % (remote_temp_path))
-
-    def test_reflection_quotes(self):
-
-        obj, data = self._get_detection_obj_data(self.url % '')
-
-        if obj.get('execute'):
-            result = obj.execute("""echo 1"2"'3'\\"\\'""")
-            self.assertEqual(result, """123"'""")
-
-        if not self.url_blind:
-            return
-
-        obj, data = self._get_detection_obj_data(self.url_blind % '')    
-        if obj.get('execute_blind'):
-            self.assertTrue(obj.execute_blind("""echo 1"2"'3'\\"\\'"""))
-            
             
     def test_upload_blind(self):
 

@@ -150,5 +150,26 @@ class ChannelTest(unittest.TestCase):
         
         self.assertEqual(channel.data, {})    
         
-            
+
+    def test_quotes(self):
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/reflect/mako?inj=asd',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        obj = detect_template_injection(channel, [ Mako ])
+
+        result = obj.execute("""echo 1"2"'3'\\"\\'""")
+        self.assertEqual(result, """123"'""")
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/blind/mako?inj=asd',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+        })
+        obj = detect_template_injection(channel, [ Mako ])
+  
+        self.assertTrue(obj.execute_blind("""echo 1"2"'3'\\"\\'"""))
+                        
 
