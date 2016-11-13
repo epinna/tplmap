@@ -5,7 +5,7 @@ Tplmap (short for _Template Mapper_) automates the detection and exploitation of
 
 The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
-The sandbox break-out techniques came from public [researches][4] as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other original piece of [works][2] to [extend][3] this tool capabilities.
+The sandbox break-out techniques came from [public][7] [researches][4] as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other original piece of [works][2] conducted to [extend][3] this tool capabilities.
 
 It achieves full compromise in rendered context, several code context and blind injection scenarios. It also exploits _eval()_-like injections in several languages and generic unsandboxed template engines.
 
@@ -118,6 +118,7 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 | Mako                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Jinja2               | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Python (generic)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
+| Tornado              | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Nunjucks             | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | Jade                 | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | doT                  | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
@@ -138,3 +139,4 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 [4]: https://artsploit.blogspot.co.uk/2016/08/pprce2.html
 [5]: http://jinja.pocoo.org/
 [6]: http://flask.pocoo.org/
+[7]: https://opsecx.com/index.php/2016/07/03/server-side-template-injection-in-tornado/
