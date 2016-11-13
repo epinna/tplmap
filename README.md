@@ -5,14 +5,14 @@ Tplmap (short for _Template Mapper_) automates the detection and exploitation of
 
 The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
-The sandbox break-out techniques came from [public][7] [researches][4] as James Kett's [Server-Side Template Injection: RCE For The Modern Web App][1] and other original piece of [works][2] conducted to [extend][3] this tool capabilities.
+The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10], other public researches [\[1\]][1] [\[2\]][2] and original works to extend this tool capabilities [\[3\]][3] [\[4\]][4].
 
-It achieves full compromise in rendered context, several code context and blind injection scenarios. It also exploits _eval()_-like injections in several languages and generic unsandboxed template engines.
+It can achieve full compromise in several code context and blind injection scenarios. It also exploits _eval()_-like code injections in different languages and generic unsandboxed template engines.
 
 Server-Side Template Injection
 ------------------------------
 
-Assume that you are auditing a web site that generates dynamic pages using templates composed with user-provided values, such as this web application written in Python and [Flask][6] that uses [Jinja2][5] template engine in an unsafe way.
+Assume that you are auditing a web site that generates dynamic pages using templates composed with user-provided values, such as this web application written in Python and [Flask][12] that uses [Jinja2][11] template engine in an unsafe way.
 
 ```python
 from flask import Flask, request
@@ -133,10 +133,10 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 | Smarty (secured)     | × | ×                 | ×               | ×         | ×          |
 | Dust (> dustjs-helpers@1.5.0)  | × | ×                 | ×               | ×         | ×          |
 
-[1]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
-[2]: https://github.com/epinna/tplmap/issues/9
-[3]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
-[4]: https://artsploit.blogspot.co.uk/2016/08/pprce2.html
-[5]: http://jinja.pocoo.org/
-[6]: http://flask.pocoo.org/
-[7]: https://opsecx.com/index.php/2016/07/03/server-side-template-injection-in-tornado/
+[10]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
+[3]: https://github.com/epinna/tplmap/issues/9
+[4]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
+[1]: https://artsploit.blogspot.co.uk/2016/08/pprce2.html
+[11]: http://jinja.pocoo.org/
+[12]: http://flask.pocoo.org/
+[2]: https://opsecx.com/index.php/2016/07/03/server-side-template-injection-in-tornado/
