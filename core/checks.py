@@ -8,6 +8,7 @@ from plugins.engines.jade import Jade
 from plugins.engines.nunjucks import Nunjucks
 from plugins.engines.dust import Dust
 from plugins.engines.dot import Dot
+from plugins.engines.tornado import Tornado
 from plugins.engines.marko import Marko
 from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
@@ -24,6 +25,8 @@ import socket
 plugins = [
     Smarty,
     Mako,
+    Python,
+    Tornado,
     Jinja2,
     Twig,
     Freemarker,
@@ -35,7 +38,6 @@ plugins = [
     Marko,
     Javascript,
     Php,
-    Python,
 ]
 
 def _print_injection_summary(channel):
