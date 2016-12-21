@@ -54,6 +54,10 @@ request.add_option("-A","--user-agent",
                 dest="user_agent",
                 help="HTTP User-Agent header value."
                 )
+request.add_option("--proxy",
+                dest="proxy",
+                help="Use a proxy to connect to the target URL"
+                )
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
