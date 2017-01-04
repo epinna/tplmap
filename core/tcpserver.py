@@ -38,7 +38,7 @@ class TcpServer:
             try:
                 server.bind(('0.0.0.0', self.port))
             except socket.error as e:
-                log.error(messages.module_backdoor_reversetcp.error_binding_socket_s % str(e))
+                log.error("Port bind on 0.0.0.0:%s has failed: %s" % (self.port, str(e)))
                 return
 
             server.listen(1)
