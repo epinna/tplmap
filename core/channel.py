@@ -21,6 +21,15 @@ class Channel:
         self.injs = []
         self.inj_idx = 0
 
+        proxy = self.args.get('proxy')
+        if proxy:
+            self.proxies = {
+                'http': proxy,
+                'https': proxy
+            }
+        else:
+            self.proxies = {}
+
         self.get_params = {}
         self.post_params = {}
         self.header_params = {}
@@ -211,6 +220,7 @@ class Channel:
             params = get_params,
             data = post_params,
             headers = header_params,
+            proxies = self.proxies,
             # By default, SSL check is skipped.
             # TODO: add a -k curl-like option to set this.
             verify = False
