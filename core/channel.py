@@ -228,7 +228,14 @@ class Channel:
             # TODO: add a -k curl-like option to set this.
             verify = False
             ).text
-
-        log.debug('\n> """%s"""\n< """%s"""' % (injection, result) )
+        
+        if get_params:
+            log.debug('[GET] %s' % get_params)
+        if post_params:
+            log.debug('[POST] %s' % post_params)
+        if len(header_params) > 1:
+            log.debug('[HEDR] %s' % header_params)
+            
+        log.debug("""< %s""" % (result) )
 
         return result
