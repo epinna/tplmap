@@ -172,4 +172,27 @@ class ChannelTest(unittest.TestCase):
   
         self.assertTrue(obj.execute_blind("""echo 1"2"'3'\\"\\'"""))
                         
+    def test_auth_reflection(self):
 
+        channel = Channel({
+            'url' : 'http://localhost:15001/reflect_cookieauth/mako?inj=asd*',
+            'force_level': [ 0, 0 ],
+            'headers' : [ 'Cookie: SID=SECRET' ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
+        
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)
+
+    def test_wrong_auth_reflection(self):
+
+        channel = Channel({
+            'url' : 'http://localhost:15001/reflect_cookieauth/mako?inj=asd*',
+            'force_level': [ 0, 0 ],
+            'headers' : [ 'Cookie: SID=WRONGSECRET' ],
+            'injection_tag': '*'
+        })
+        detect_template_injection(channel, [ Mako ])
+        
+        self.assertEqual(channel.data, {})
