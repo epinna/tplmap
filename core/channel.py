@@ -200,6 +200,9 @@ class Channel:
                 
                 
         elif inj['field'] == 'Header':
+            
+            # Headers can't contain \r or \n, sanitize
+            injection = injection.replace('\n', '').replace('\r', '')
                 
             if inj.get('part') == 'param':
                 # If injection replaces param, save the value 
