@@ -70,10 +70,6 @@ class Channel:
             param = param.strip()
             value = value.strip()
 
-            # If all_injectable, consider all values injectables
-            if all_injectable:
-                value = self.tag
-
             self.header_params[param] = value
 
             if self.tag in param:
@@ -107,10 +103,6 @@ class Channel:
 
             for param, value_list in params_dict_list.items():
 
-                # If all_injectable, consider all values injectables
-                if all_injectable:
-                    value_list = [ self.tag for x in range(len(value_list)) ]
-
                 self.post_params[param] = value_list
                 
                 if self.tag in param:
@@ -135,10 +127,6 @@ class Channel:
         params_dict_list = urlparse.parse_qs(urlparse.urlsplit(self.url).query)
 
         for param, value_list in params_dict_list.items():
-
-            # If all_injectable, consider all values injectables
-            if all_injectable:
-                value_list = [ self.tag for x in range(len(value_list)) ]
 
             self.get_params[param] = value_list
             
@@ -175,13 +163,20 @@ class Channel:
                 old_value = post_params[inj.get('param')]
                 del post_params[inj.get('param')]
                 
-                new_param = inj.get('param').replace(self.tag, injection)
+                if self.tag in inj.get('param'):
+                    new_param = inj.get('param').replace(self.tag, injection)
+                else:
+                    new_param = injection
+                    
                 post_params[new_param] = old_value
                 
             if inj.get('part') == 'value':
-                # If injection in value, replace value by index    
-                post_params[inj.get('param')][inj.get('idx')] = post_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
                 
+                # If injection in value, replace value by index    
+                if self.tag in post_params[inj.get('param')][inj.get('idx')]:
+                    post_params[inj.get('param')][inj.get('idx')] = post_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
+                else:
+                    post_params[inj.get('param')][inj.get('idx')] = injection
 
         elif inj['field'] == 'GET':
                 
@@ -191,13 +186,19 @@ class Channel:
                 old_value = get_params[inj.get('param')]
                 del get_params[inj.get('param')]
                 
-                new_param = inj.get('param').replace(self.tag, injection)
+                if self.tag in inj.get('param'):
+                    new_param = inj.get('param').replace(self.tag, injection)
+                else:
+                    new_param = injection
+                    
                 get_params[new_param] = old_value
                 
             if inj.get('part') == 'value':
-                # If injection in value, inject value in the correct index    
-                get_params[inj.get('param')][inj.get('idx')] = get_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
-                
+                # If injection in value, inject value in the correct index
+                if self.tag in get_params[inj.get('param')][inj.get('idx')]:
+                    get_params[inj.get('param')][inj.get('idx')] = get_params[inj.get('param')][inj.get('idx')].replace(self.tag, injection)
+                else:
+                    get_params[inj.get('param')][inj.get('idx')] = injection
                 
         elif inj['field'] == 'Header':
             
@@ -209,13 +210,21 @@ class Channel:
                 # with a new param
                 old_value = get_params[inj.get('param')]
                 del header_params[inj.get('param')]
-
-                new_param = inj.get('param').replace(self.tag, injection)
+                
+                if self.tag in inj.get('param'):
+                    new_param = inj.get('param').replace(self.tag, injection)
+                else:
+                    new_param = injection
+                    
                 header_params[new_param] = old_value                
                             
             if inj.get('part') == 'value':
                 # If injection in value, replace value by index    
-                header_params[inj.get('param')] = header_params[inj.get('param')].replace(self.tag, injection)
+                
+                if self.tag in header_params[inj.get('param')]:
+                    header_params[inj.get('param')] = header_params[inj.get('param')].replace(self.tag, injection)
+                else:
+                    header_params[inj.get('param')] = injection
 
         result = requests.request(
             method = self.http_method,
