@@ -5,7 +5,7 @@ Tplmap (short for _Template Mapper_) automates the detection and exploitation of
 
 The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
-The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10], other public researches [\[1\]][1] [\[2\]][2] and original works to extend this tool capabilities [\[3\]][3] [\[4\]][4].
+The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10] and other public researches [\[1\]][1] [\[2\]][2] and original works to extend this tool capabilities [\[3\]][3] [\[4\]][4].
 
 It can achieve full compromise in several code context and blind injection scenarios. It also exploits _eval()_-like code injections in different languages and generic unsandboxed template engines.
 
