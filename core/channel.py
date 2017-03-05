@@ -66,8 +66,14 @@ class Channel:
         # the parsing code. Concatenate to avoid headers with
         # the same key.
         
-        cookie_string = 'Cookie: %s' % ';'.join(self.args.get('cookies', []))
-        self.args['headers'].append(cookie_string)
+        cookies = self.args.get('cookies', [])
+        
+        if cookies:
+            cookie_string = 'Cookie: %s' % ';'.join(cookies)
+            
+            if not self.args.get('headers'):
+                self.args['headers'] = []
+            self.args['headers'].append(cookie_string)
 
     def _parse_header(self, all_injectable = False):
 
