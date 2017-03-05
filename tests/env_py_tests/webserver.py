@@ -135,6 +135,28 @@ def blind(engine):
         
     return randomword()
 
+@app.route("/reflect_cookieauth/<engine>")
+def reflect_cookieauth(engine):
+
+    if not request.cookies.get('SID') == 'SECRET':
+        return randomword()
+
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+
+    injection = request.values.get('inj')
+
+    if engine == 'mako':
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
+    elif engine == 'jinja2':
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
+    elif engine == 'eval':
+        return randomword() + str(eval(template % injection)) + randomword()
+    elif engine == 'tornado':
+        return randomword() + tornado.template.Template(template % injection).generate() + randomword()
+
+
 @app.route('/shutdown')
 def shutdown():
     shutdown_server()
