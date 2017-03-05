@@ -43,6 +43,7 @@ class Channel:
 
             self._parse_get(True)
             self._parse_post(True)
+            self._parse_cookies()
             self._parse_header(True)
 
         self._parse_method()
