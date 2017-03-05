@@ -36,6 +36,7 @@ class Channel:
 
         self._parse_get()
         self._parse_post()
+        self._parse_cookies()
         self._parse_header()
         
         if not self.injs:
@@ -59,8 +60,17 @@ class Channel:
         else:
             self.http_method = 'GET'
 
-    def _parse_header(self, all_injectable = False):
+    def _parse_cookies(self):
         
+        # Just add cookies as headers, to avoid duplicating
+        # the parsing code. Concatenate to avoid headers with
+        # the same key.
+        
+        cookie_string = 'Cookie: %s' % ';'.join(self.args.get('cookies', []))
+        self.args['headers'].append(cookie_string)
+
+    def _parse_header(self, all_injectable = False):
+
         for param_value in self.args.get('headers', []):
 
             if ':' not in param_value:

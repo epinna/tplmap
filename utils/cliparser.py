@@ -45,6 +45,12 @@ request.add_option("-H","--headers",
                 help="Extra headers (e.g. 'Header1: Value1'). Use multiple times to add new headers.",
                 default=[])
 
+request.add_option("-c","--cookie",
+                action="append",
+                dest="cookies",
+                help="Cookies (e.g. 'Field1=Value1'). Use multiple times to add new cookies.",
+                default=[])
+                
 target.add_option("-X","--request",
                 action="store",
                 dest="request",
