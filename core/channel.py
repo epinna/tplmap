@@ -34,17 +34,20 @@ class Channel:
         self.post_params = {}
         self.header_params = {}
 
+        self._parse_url()
+        self._parse_cookies()
+
         self._parse_get()
         self._parse_post()
-        self._parse_cookies()
         self._parse_header()
         
+        # If there are not injection, inject
+        # all the passed GET, POST, and Headers
         if not self.injs:
 
-            self._parse_get(True)
-            self._parse_post(True)
-            self._parse_cookies()
-            self._parse_header(True)
+            self._parse_get(all_injectable = True)
+            self._parse_post(all_injectable = True)
+            self._parse_header(all_injectable = True)
 
         self._parse_method()
         
@@ -60,6 +63,19 @@ class Channel:
             self.http_method = 'POST'
         else:
             self.http_method = 'GET'
+
+        
+    def _parse_url(self):
+
+        for index in [ 
+            i for i in range(len(self.url)) if self.url[i] == self.tag 
+        ]:
+            self.injs.append({
+                'field' : 'URL',
+                'param' : 'url',
+                'position': index
+            })
+                
 
     def _parse_cookies(self):
         
@@ -169,11 +185,18 @@ class Channel:
         get_params = deepcopy(self.get_params)
         post_params = deepcopy(self.post_params)
         header_params = deepcopy(self.header_params)
+        url_params = self.base_url
         
         # Pick current injection by index
         inj = deepcopy(self.injs[self.inj_idx])
         
-        if inj['field'] == 'POST':
+        if inj['field'] == 'URL':
+            
+            position = inj['position']
+            
+            url_params = self.base_url[:position] + injection + self.base_url[position+1:]
+        
+        elif inj['field'] == 'POST':
         
             if inj.get('part') == 'param':
                 # Inject injection within param
@@ -242,10 +265,10 @@ class Channel:
                     header_params[inj.get('param')] = header_params[inj.get('param')].replace(self.tag, injection)
                 else:
                     header_params[inj.get('param')] = injection
-
+        
         result = requests.request(
             method = self.http_method,
-            url = self.base_url,
+            url = url_params,
             params = get_params,
             data = post_params,
             headers = header_params,
@@ -255,6 +278,8 @@ class Channel:
             verify = False
             ).text
         
+        if self.tag in self.base_url:
+            log.debug('[URL] %s' % url_params)
         if get_params:
             log.debug('[GET] %s' % get_params)
         if post_params:
