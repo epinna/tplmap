@@ -38,6 +38,23 @@ def reflect(engine):
     elif engine == 'tornado':
         return randomword() + tornado.template.Template(template % injection).generate() + randomword()
 
+@app.route("/url/<engine>/<injection>")
+def url_reflect(engine, injection):
+
+    template = request.values.get('tpl')
+    if not template:
+        template = '%s'
+
+    if engine == 'mako':
+        return randomword() + MakoTemplates(template % injection, lookup=mylookup).render() + randomword()
+    elif engine == 'jinja2':
+        return randomword() + Jinja2Env.from_string(template % injection).render() + randomword()
+    elif engine == 'eval':
+        return randomword() + str(eval(template % injection)) + randomword()
+    elif engine == 'tornado':
+        return randomword() + tornado.template.Template(template % injection).generate() + randomword()
+
+
 @app.route("/post/<engine>", methods = [ "POST" ])
 def postfunc(engine):
 

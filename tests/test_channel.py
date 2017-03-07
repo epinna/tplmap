@@ -46,6 +46,20 @@ class ChannelTest(unittest.TestCase):
         del channel.data['os']
         self.assertEqual(channel.data, self.expected_data)
 
+    def test_url_reflection(self):
+
+        template = '%s'
+
+        channel = Channel({
+            'url' : 'http://127.0.0.1:15001/url/mako/AA*AA',
+            'force_level': [ 0, 0 ],
+            'injection_tag': '*'
+
+        })
+        detect_template_injection(channel, [ Mako ])
+        del channel.data['os']
+        self.assertEqual(channel.data, self.expected_data)
+
     def test_header_reflection(self):
 
         template = '%s'
