@@ -1,7 +1,7 @@
 Tplmap
 ======
 
-Tplmap (short for _Template Mapper_) automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the remote operating system. 
+Tplmap automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the remote operating system. 
 
 The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
@@ -27,12 +27,12 @@ def page():
     name = request.values.get('name')
     
     # SSTI VULNERABILITY
-    
-    # The user-controllable GET parameter `name` is
-    # concatenated to the template string instead of
-    # being passed as context to the `render()` method. 
-    
+    # The vulnerability is introduced concatenating the
+    # user-provided `name` variable to the template string.
     output = Jinja2.from_string('Hello ' + name + '!').render()
+    
+    # Instead, the variable should be passed to the template context.
+    # Jinja2.from_string('Hello {{name}}!').render(name = name)
 
     return output
 
