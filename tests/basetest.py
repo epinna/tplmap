@@ -14,9 +14,14 @@ import logging
 
 utils.loggers.stream_handler.setLevel(logging.FATAL)
 
-# Limit tests levels
+# Test levels limits
 LEVEL_LIMIT = 0
 CLEVEL_LIMIT = 0
+
+# Extra tests
+EXTRA_UPLOAD = False
+EXTRA_DOWNLOAD = False
+EXTRA_UPLOAD_BLIND = False
 
 class BaseTest(object):
 
@@ -105,6 +110,9 @@ class BaseTest(object):
         obj, data = self._get_detection_obj_data(self.url % '')
         self.assertEqual(data, self.expected_data)
 
+        if not EXTRA_DOWNLOAD:
+            return
+
         # Normal ASCII file
         readable_file = '/etc/resolv.conf'
         content = open(readable_file, 'r').read()
@@ -126,6 +134,9 @@ class BaseTest(object):
 
         obj, data = self._get_detection_obj_data(self.url % '')
         self.assertEqual(data, self.expected_data)
+        
+        if not EXTRA_UPLOAD:
+            return
 
         remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
         # Send long binary
@@ -157,6 +168,9 @@ class BaseTest(object):
             self.url_blind % ''
         )
         self.assertEqual(data, self.expected_data_blind)
+
+        if not EXTRA_UPLOAD_BLIND:
+            return
 
         # Send file without --force-overwrite, should fail
         remote_temp_path = '/tmp/tplmap_%s.tmp' % rand.randstr_n(10)
