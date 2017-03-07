@@ -14,6 +14,9 @@ import logging
 
 utils.loggers.stream_handler.setLevel(logging.FATAL)
 
+# Limit tests levels
+LEVEL_LIMIT = 0
+CLEVEL_LIMIT = 0
 
 class BaseTest(object):
 
@@ -61,6 +64,10 @@ class BaseTest(object):
 
             level, clevel, template, channel_updates = reflection_test
 
+            # Honour global level limit
+            if level > LEVEL_LIMIT or clevel > CLEVEL_LIMIT:
+                continue
+
             expected_data = self.expected_data.copy()
             expected_data.update(channel_updates)
 
@@ -78,6 +85,10 @@ class BaseTest(object):
 
             level, clevel, template, channel_updates = blind_test
 
+            # Honour global level limit
+            if level > LEVEL_LIMIT or clevel > CLEVEL_LIMIT:
+                continue
+                
             expected_data = self.expected_data_blind.copy()
             expected_data.update(channel_updates)
 
