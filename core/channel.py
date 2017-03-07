@@ -68,14 +68,14 @@ class Channel:
     def _parse_url(self):
 
         url_path = urlparse.urlparse(self.url).path
-        
+
         if not self.tag in url_path:
             return
             
         url_path_base_index = self.url.find(url_path)
         
         for index in [ 
-            i for i in range(url_path_base_index, len(url_path)) if self.url[i] == self.tag 
+            i for i in range(url_path_base_index, url_path_base_index + len(url_path)) if self.url[i] == self.tag 
         ]:
             self.injs.append({
                 'field' : 'URL',
