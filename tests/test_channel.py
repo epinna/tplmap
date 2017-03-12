@@ -39,7 +39,8 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/post/mako',
             'force_level': [ 0, 0 ],
             'data' : 'inj=*&othervar=1',
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
 
         })
         detect_template_injection(channel, [ Mako ])
@@ -51,7 +52,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/url/mako/AA*AA',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
 
         })
 
@@ -67,7 +69,8 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://127.0.0.1:15001/header/mako',
             'force_level': [ 0, 0 ],
             'headers' : [ 'User-Agent: *' ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         del channel.data['os']
@@ -82,7 +85,8 @@ class ChannelTest(unittest.TestCase):
             'data' : 'inj=*&othervar=1',
             'request' : 'PUT',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         del channel.data['os']
@@ -95,7 +99,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&inj=~',
             'force_level': [ 0, 0 ],
-            'injection_tag': '~'
+            'injection_tag': '~',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -110,7 +115,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?tpl=%s&asd=1&asd2=*&inj=*&inj2=*&inj3=*',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -122,7 +128,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj=asd&inj2=asd2',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -134,7 +141,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj2=asd2',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'RT'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -145,7 +153,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/startswith/mako?inj=thismustexists*&startswith=thismustexists',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -157,7 +166,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/startswith/mako?inj=*&startswith=thismustexists',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -169,7 +179,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/reflect/mako?inj=asd',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'RT'
         })
         obj = detect_template_injection(channel, [ Mako ])
 
@@ -179,7 +190,8 @@ class ChannelTest(unittest.TestCase):
         channel = Channel({
             'url' : 'http://127.0.0.1:15001/blind/mako?inj=asd',
             'force_level': [ 0, 0 ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'RT'
         })
         obj = detect_template_injection(channel, [ Mako ])
   
@@ -191,7 +203,8 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://localhost:15001/reflect_cookieauth/mako?inj=asd*',
             'force_level': [ 0, 0 ],
             'headers' : [ 'Cookie: SID=SECRET' ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         
@@ -204,7 +217,8 @@ class ChannelTest(unittest.TestCase):
             'url' : 'http://localhost:15001/reflect_cookieauth/mako?inj=asd*',
             'force_level': [ 0, 0 ],
             'headers' : [ 'Cookie: SID=WRONGSECRET' ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'R'
         })
         detect_template_injection(channel, [ Mako ])
         

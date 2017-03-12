@@ -74,7 +74,8 @@ class VelocityTest(unittest.TestCase, BaseTest):
         channel = Channel({
             'url' : self.url.replace('*', '~') % template,
             'force_level': [ 5, 0 ],
-            'injection_tag': '~'
+            'injection_tag': '~',
+            'technique': 'RT'
         })
         
         detect_template_injection(channel, [ self.plugin ])

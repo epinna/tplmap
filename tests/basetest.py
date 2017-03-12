@@ -30,7 +30,8 @@ class BaseTest(object):
         channel = Channel({
             'url' : url,
             'force_level': [ level, closure_level ],
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'RT'
         })
         obj = detect_template_injection(channel, [ self.plugin ])
 
@@ -46,7 +47,8 @@ class BaseTest(object):
         channel = Channel({
             'url' : self.url,
             'level': 5,
-            'injection_tag': '*'
+            'injection_tag': '*',
+            'technique': 'RT'
         })
         check_template_injection(channel)
 
