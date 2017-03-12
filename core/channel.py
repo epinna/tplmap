@@ -274,6 +274,15 @@ class Channel:
                 else:
                     header_params[inj.get('param')] = injection
         
+        if self.tag in self.base_url:
+            log.debug('[URL] %s' % url_params)
+        if get_params:
+            log.debug('[GET] %s' % get_params)
+        if post_params:
+            log.debug('[POST] %s' % post_params)
+        if len(header_params) > 1:
+            log.debug('[HEDR] %s' % header_params)
+        
         result = requests.request(
             method = self.http_method,
             url = url_params,
@@ -285,16 +294,7 @@ class Channel:
             # TODO: add a -k curl-like option to set this.
             verify = False
             ).text
-        
-        if self.tag in self.base_url:
-            log.debug('[URL] %s' % url_params)
-        if get_params:
-            log.debug('[GET] %s' % get_params)
-        if post_params:
-            log.debug('[POST] %s' % post_params)
-        if len(header_params) > 1:
-            log.debug('[HEDR] %s' % header_params)
-        
+
         if utils.config.log_response:
             log.debug("""< %s""" % (result) )
 
