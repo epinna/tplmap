@@ -3,6 +3,7 @@ from utils import cliparser
 from core import checks
 from core.channel import Channel
 from utils.loggers import log
+import traceback
 
 version = '0.3'
 
@@ -28,4 +29,4 @@ if __name__ == '__main__':
         log.info('Exiting.')
     except Exception as e:
         log.critical('Exiting: %s' % e)
-        raise
+        log.debug(traceback.format_exc())
