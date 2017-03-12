@@ -25,13 +25,13 @@ EXTRA_UPLOAD_BLIND = False
 
 class BaseTest(object):
 
-    def _get_detection_obj_data(self, url, level = 0, closure_level = 0):
+    def _get_detection_obj_data(self, url, level = 0, closure_level = 0, technique = 'RT'):
 
         channel = Channel({
             'url' : url,
             'force_level': [ level, closure_level ],
             'injection_tag': '*',
-            'technique': 'RT'
+            'technique': technique
         })
         obj = detect_template_injection(channel, [ self.plugin ])
 
@@ -78,7 +78,7 @@ class BaseTest(object):
             expected_data = self.expected_data.copy()
             expected_data.update(channel_updates)
 
-            obj, data = self._get_detection_obj_data(self.url % template, level, clevel)
+            obj, data = self._get_detection_obj_data(self.url % template, level, clevel, technique = 'R')
 
             self.assertEqual(
                 data,
@@ -99,7 +99,7 @@ class BaseTest(object):
             expected_data = self.expected_data_blind.copy()
             expected_data.update(channel_updates)
 
-            obj, data = self._get_detection_obj_data(self.url_blind % template, level, clevel)
+            obj, data = self._get_detection_obj_data(self.url_blind % template, level, clevel, technique = 'T')
 
             self.assertEqual(
                 data,
@@ -167,7 +167,8 @@ class BaseTest(object):
     def test_upload_blind(self):
 
         obj, data = self._get_detection_obj_data(
-            self.url_blind % ''
+            self.url_blind % '',
+            technique = 'T'
         )
         self.assertEqual(data, self.expected_data_blind)
 
