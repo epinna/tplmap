@@ -2,6 +2,7 @@ import requests
 from utils.loggers import log
 import urlparse
 from copy import deepcopy
+import utils.config
 
 class Channel:
 
@@ -293,7 +294,8 @@ class Channel:
             log.debug('[POST] %s' % post_params)
         if len(header_params) > 1:
             log.debug('[HEDR] %s' % header_params)
-            
-        log.debug("""< %s""" % (result) )
+        
+        if utils.config.log_response:
+            log.debug("""< %s""" % (result) )
 
         return result
