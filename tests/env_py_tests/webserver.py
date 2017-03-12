@@ -6,6 +6,7 @@ from jinja2 import Environment as Jinja2Environment
 import tornado.template
 import random
 import string
+import time
 
 mylookup = TemplateLookup(directories=['/tpl'])
 
@@ -173,6 +174,12 @@ def reflect_cookieauth(engine):
     elif engine == 'tornado':
         return randomword() + tornado.template.Template(template % injection).generate() + randomword()
 
+@app.route("/delay/<int:seconds>")
+def delay(seconds = 1):
+
+    time.sleep(seconds)
+
+    return randomword() 
 
 @app.route('/shutdown')
 def shutdown():
