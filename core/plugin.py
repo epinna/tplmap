@@ -317,7 +317,7 @@ class Plugin(object):
 
             result = delta.seconds >= expected_delay
 
-            log.debug('[blind %s] code above took %s. %s was requested' % (self.plugin, str(delta.seconds), str(expected_delay)))
+            log.debug('[blind %s] code above took %s. %s is the threshold, returning %s' % (self.plugin, str(delta.seconds), str(expected_delay), str(result)))
 
             return result
 
