@@ -283,17 +283,24 @@ class Channel:
         if len(header_params) > 1:
             log.debug('[HEDR] %s' % header_params)
         
-        result = requests.request(
-            method = self.http_method,
-            url = url_params,
-            params = get_params,
-            data = post_params,
-            headers = header_params,
-            proxies = self.proxies,
-            # By default, SSL check is skipped.
-            # TODO: add a -k curl-like option to set this.
-            verify = False
-            ).text
+        try:
+            result = requests.request(
+                method = self.http_method,
+                url = url_params,
+                params = get_params,
+                data = post_params,
+                headers = header_params,
+                proxies = self.proxies,
+                # By default, SSL check is skipped.
+                # TODO: add a -k curl-like option to set this.
+                verify = False
+                ).text
+        except requests.exceptions.ConnectionError as e:
+            if e and e[0] and e[0][0] == 'Connection aborted.':
+                log.info('Error: connection aborted, bad status line.')
+                result = None
+            else:
+                raise
 
         if utils.config.log_response:
             log.debug("""< %s""" % (result) )
