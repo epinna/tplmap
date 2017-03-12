@@ -61,48 +61,34 @@ class Plugin(object):
 
     def detect(self):
 
-        # Start detection
-        self._detect_render()
+        # Get user-provided techniques
+        techniques = self.channel.args.get('technique')
 
-        # If render is not set, check unreliable render
-        if self.get('render') == None:
-            self._detect_unreliable_render()
+        # Render technique
+        if 'R' in techniques:
 
-        # Else, print and execute rendered_detected()
-        else:
+            # Start detection
+            self._detect_render()
 
-            # If here, the rendering is confirmed
-            prefix = self.get('prefix', '')
-            render = self.get('render', '%(code)s') % ({'code' : '*' })
-            suffix = self.get('suffix', '')
-            log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
-                self.plugin,
-                repr(prefix).strip("'"),
-                repr(render).strip("'"),
-                repr(suffix).strip("'"),
+            # If render is not set, check unreliable render
+            if self.get('render') == None:
+                self._detect_unreliable_render()
+
+            # Else, print and execute rendered_detected()
+            else:
+
+                # If here, the rendering is confirmed
+                prefix = self.get('prefix', '')
+                render = self.get('render', '%(code)s') % ({'code' : '*' })
+                suffix = self.get('suffix', '')
+                log.info('%s plugin has confirmed injection with tag \'%s%s%s\'' % (
+                    self.plugin,
+                    repr(prefix).strip("'"),
+                    repr(render).strip("'"),
+                    repr(suffix).strip("'"),
+                    )
                 )
-            )
-            
-            # Clean up any previous unreliable render data
-            self.delete('unreliable_render')
-            self.delete('unreliable')
-
-            # Set basic info
-            self.set('engine', self.plugin.lower())
-            self.set('language', self.language)
-
-            # Set the environment
-            self.rendered_detected()
-
-        # Manage blind injection only if render detection has failed
-        if not self.get('engine'):
-
-            self._detect_blind()
-
-            if self.get('blind'):
-
-                log.info('%s plugin has confirmed blind injection' % (self.plugin))
-
+                
                 # Clean up any previous unreliable render data
                 self.delete('unreliable_render')
                 self.delete('unreliable')
@@ -112,7 +98,30 @@ class Plugin(object):
                 self.set('language', self.language)
 
                 # Set the environment
-                self.blind_detected()
+                self.rendered_detected()
+
+        # Time-based blind technique
+        if 'T' in techniques:
+
+            # Manage blind injection only if render detection has failed
+            if not self.get('engine'):
+
+                self._detect_blind()
+
+                if self.get('blind'):
+
+                    log.info('%s plugin has confirmed blind injection' % (self.plugin))
+
+                    # Clean up any previous unreliable render data
+                    self.delete('unreliable_render')
+                    self.delete('unreliable')
+
+                    # Set basic info
+                    self.set('engine', self.plugin.lower())
+                    self.set('language', self.language)
+
+                    # Set the environment
+                    self.blind_detected()
 
     def _generate_contexts(self):
 

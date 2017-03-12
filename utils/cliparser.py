@@ -78,6 +78,11 @@ detection.add_option("-e", "--engine",
                     dest="engine",
                     help="Force back-end template engine to this value.")
 
+detection.add_option("-t", "--technique",
+                    dest="technique",
+                    help="Techniques R(endered) T(ime-based blind). Default: RT.",
+                    default="RT")
+
 # Template inspection options
 tplcmd = OptionGroup(parser, "Template inspection", "These "
                        "options can be used to inspect the "
