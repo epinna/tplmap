@@ -3,3 +3,8 @@ base_path: ~/.tplmap/
 
 # Log HTTP responses under tplmap.log
 log_response: False
+
+# The number of seconds to delay the response when testing for
+# time-based blind injection. This will be added to the average
+# response time for render values.
+time_based_blind_delay: 4

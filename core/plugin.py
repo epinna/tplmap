@@ -8,6 +8,8 @@ import datetime
 import collections
 import threading
 import time
+import utils.config
+
 
 class Plugin(object):
 
@@ -25,10 +27,9 @@ class Plugin(object):
         # Estimate 0.5s for a safe start.
         self.render_req_tm = collections.deque([ 0.5 ], maxlen=5)
 
-        # The number of seconds to delay the response when testing for
-        # time-based blind injection. This will be added to the average
-        # response time for render values.
-        self.tm_delay = 4
+        # The delay fortime-based blind injection. This will be added 
+        # to the average response time for render values.
+        self.tm_delay = utils.config.time_based_blind_delay
 
     def rendered_detected(self):
 
