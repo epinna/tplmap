@@ -113,25 +113,26 @@ Supported template engines
 
 Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed template engines and generic _eval()_-like injections. Blind injections and injections in code contexts are also supported.
 
-| Template engine    | Remote Command Execution |  Blind | Code evaluation | File read | File write |
-|----------------------|-------|-------------------|-----------------|-----------|------------|
-| Mako                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
-| Jinja2               | ✓ |  ✓                | Python          |  ✓        |  ✓         |
-| Python (generic)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
-| Tornado              | ✓ |  ✓                | Python          |  ✓        |  ✓         |
-| Nunjucks             | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| Jade                 | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| doT                  | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| Marko                | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| JavaScript (generic) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| Dust (<= dustjs-helpers@1.5.0) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| Smarty (unsecured)   | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
-| PHP (generic)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
-| Freemarker           | ✓ |  ✓                | ×               |  ✓        |  ✓         |
-| Velocity             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
-| Twig                 | × | ×                 | ×               | ×         | ×          |
-| Smarty (secured)     | × | ×                 | ×               | ×         | ×          |
-| Dust (> dustjs-helpers@1.5.0)  | × | ×                 | ×               | ×         | ×          |
+| Template engine        | Remote Command Execution |  Blind | Code evaluation | File read | File write |
+|------------------------|-------|-------------------|-----------------|-----------|------------|
+| Mako                   | ✓ |  ✓                | Python          |  ✓        |  ✓         |
+| Jinja2                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
+| Python (code eval)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
+| Tornado                | ✓ |  ✓                | Python          |  ✓        |  ✓         |
+| Nunjucks               | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| Jade                   | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| doT                    | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| Marko                  | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| JavaScript (code eval) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| Dust (<= dustjs-helpers@1.5.0) | ✓ |  ✓        | JavaScript      |  ✓        |  ✓         |
+| Ruby (code eval)       | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
+| Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
+| PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
+| Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
+| Velocity               | ✓ |  ✓                | ×               |  ✓        |  ✓         |
+| Twig                   | × | ×                 | ×               | ×         | ×          |
+| Smarty (secured)       | × | ×                 | ×               | ×         | ×          |
+| Dust (> dustjs-helpers@1.5.0) | × | ×          | ×               | ×         | ×          |
 
 [10]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
 [3]: https://github.com/epinna/tplmap/issues/9
