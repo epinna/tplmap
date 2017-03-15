@@ -9,7 +9,7 @@ rackup --version >/dev/null 2>&1 || { echo >&2 "Ruby Rackup is required but it's
 webserver_log=$(mktemp)
 webserver_banner="Exposed testing APIs:
 
-http://localhost:15005/reflect/ruby?inj=*
+http://localhost:15005/reflect/eval?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
