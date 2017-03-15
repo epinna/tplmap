@@ -10,7 +10,7 @@ class Ruby(Plugin):
 
     actions = {
         'render' : {
-            'render': """(%(code)s).to_s""",
+            'render': '"#{%(code)s}"',
             'header': """'%(header)s'+""",
             'trailer': """+'%(trailer)s'""",
             'render_test': """%(s1)i*%(s2)i""" % { 

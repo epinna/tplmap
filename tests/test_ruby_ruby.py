@@ -22,7 +22,7 @@ class RubyTests(unittest.TestCase, BaseTest):
         'write' : True,
         'prefix' : '',
         'suffix': '',
-        'render': """(%(code)s).to_s""",
+        'render': '"#{%(code)s}"',
         'header': """'%(header)s'+""",
         'trailer': """+'%(trailer)s'""",
         'bind_shell' : True,
