@@ -10,6 +10,7 @@ webserver_log=$(mktemp)
 webserver_banner="Exposed testing APIs:
 
 http://localhost:15005/reflect/eval?inj=*
+http://localhost:15005/blind/eval?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
