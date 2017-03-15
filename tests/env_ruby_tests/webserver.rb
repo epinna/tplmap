@@ -20,6 +20,21 @@ Cuba.define do
         
       end
     end
+    on "blind/:engine" do |engine|
+      # Keep the formatting a-la-python
+      on param("inj"), param("tpl", "%s") do |inj, tpl|
+        
+        tpl = tpl.gsub('%s', inj)
+        
+        case engine
+        when "eval"
+          eval(tpl)
+        else
+          res.write "blind #{engine} #{inj} #{tpl}" 
+        end
+        
+      end
+    end
     on 'shutdown' do
       exit!
     end
