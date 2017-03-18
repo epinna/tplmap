@@ -344,7 +344,11 @@ class Plugin(object):
         header_template = kwargs.get('header', self.get('header'))
         if header_template:
             header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
-            header = header_template % ({ 'header' : header_rand })
+            
+            if '%(header)s' in header_template:
+                header = header_template % ({ 'header' : header_rand })
+            else:
+                header = header_template
         else:
             header_rand = 0
             header = ''
@@ -352,7 +356,12 @@ class Plugin(object):
         trailer_template = kwargs.get('trailer', self.get('trailer'))
         if trailer_template:
             trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
-            trailer = trailer_template % ({ 'trailer' : trailer_rand })
+
+            if '%(trailer)s' in trailer_template:
+                trailer = trailer_template % ({ 'trailer' : trailer_rand })
+            else:
+                trailer = trailer_template
+
         else:
             trailer_rand = 0
             trailer = ''
