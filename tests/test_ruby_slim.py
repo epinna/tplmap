@@ -45,7 +45,8 @@ class SlimTests(unittest.TestCase, BaseTest):
     url = 'http://localhost:15005/reflect/slim?inj=*&tpl=%s'
     url_blind = 'http://localhost:15005/blind/slim?inj=*&tpl=%s'
     plugin = Slim
-
+    
+    #TODO: write context escape tests
     blind_tests = [
         (0, 0, '%s', {}),
     ]
