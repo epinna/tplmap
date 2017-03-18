@@ -3,6 +3,7 @@ require "cuba/safe"
 
 require 'tilt'
 require 'slim'
+require 'erb'
 
 Cuba.plugin Cuba::Safe
 
@@ -21,7 +22,9 @@ Cuba.define do
 
           template = Tilt['slim'].new() {|x| tpl}
           res.write template.render
-          
+        when "erb"
+          template = Tilt['erb'].new() {|x| tpl}
+          res.write template.render
         else
           res.write "#{engine} #{inj} #{tpl}" 
         end
@@ -39,6 +42,9 @@ Cuba.define do
           eval(tpl)
         when "slim"
           template = Tilt['slim'].new() {|x| tpl}
+          template.render
+        when "erb"
+          template = Tilt['erb'].new() {|x| tpl}
           template.render
         else
           res.write "blind #{engine} #{inj} #{tpl}" 

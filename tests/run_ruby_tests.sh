@@ -15,6 +15,8 @@ http://localhost:15005/reflect/eval?inj=*
 http://localhost:15005/blind/eval?inj=*
 http://localhost:15005/reflect/slim?inj=*
 http://localhost:15005/blind/slim?inj=*
+http://localhost:15005/reflect/erb?inj=*
+http://localhost:15005/blind/erb?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
