@@ -128,6 +128,7 @@ Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed
 | Dust (<= dustjs-helpers@1.5.0) | ✓ |  ✓        | JavaScript      |  ✓        |  ✓         |
 | Ruby (code eval)       | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Slim                   | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
+| ERB                    | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
