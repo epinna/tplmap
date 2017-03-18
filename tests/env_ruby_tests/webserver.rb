@@ -1,6 +1,9 @@
 require "cuba"
 require "cuba/safe"
 
+require 'tilt'
+require 'slim'
+
 Cuba.plugin Cuba::Safe
 
 Cuba.define do
@@ -14,6 +17,11 @@ Cuba.define do
         case engine
         when "eval"
           res.write eval(tpl)
+        when "slim"
+
+          template = Tilt['slim'].new() {|x| tpl}
+          res.write template.render
+          
         else
           res.write "#{engine} #{inj} #{tpl}" 
         end
@@ -29,6 +37,9 @@ Cuba.define do
         case engine
         when "eval"
           eval(tpl)
+        when "slim"
+          template = Tilt['slim'].new() {|x| tpl}
+          template.render
         else
           res.write "blind #{engine} #{inj} #{tpl}" 
         end

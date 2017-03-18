@@ -3,6 +3,8 @@
 curl --version >/dev/null 2>&1 || { echo >&2 "Curl required but it's not installed.  Aborting."; exit 1; }
 ruby --version >/dev/null 2>&1 || { echo >&2 "Ruby is required but it's not installed.  Aborting."; exit 1; }
 gem list -i "cuba" >/dev/null 2>&1 || { echo >&2 "'cuba' ruby gem is required but it's not installed.  Aborting."; exit 1; }
+gem list -i "tilt" >/dev/null 2>&1 || { echo >&2 "'tilt' ruby gem is required but it's not installed.  Aborting."; exit 1; }
+gem list -i "slim" >/dev/null 2>&1 || { echo >&2 "'slim' ruby gem is required but it's not installed.  Aborting."; exit 1; }
 rackup --version >/dev/null 2>&1 || { echo >&2 "Ruby Rackup is required but it's not installed.  Aborting."; exit 1; }
 
 
@@ -11,6 +13,8 @@ webserver_banner="Exposed testing APIs:
 
 http://localhost:15005/reflect/eval?inj=*
 http://localhost:15005/blind/eval?inj=*
+http://localhost:15005/reflect/slim?inj=*
+http://localhost:15005/blind/slim?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
