@@ -11,6 +11,7 @@ from plugins.engines.dot import Dot
 from plugins.engines.tornado import Tornado
 from plugins.engines.marko import Marko
 from plugins.engines.slim import Slim
+from plugins.engines.erb import Erb
 from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
 from plugins.languages.python import Python
@@ -34,6 +35,7 @@ plugins = [
     Freemarker,
     Velocity,
     Slim,
+    Erb,
     Jade,
     Nunjucks,
     Dot,
