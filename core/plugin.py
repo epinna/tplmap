@@ -1,6 +1,7 @@
 from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
+import collections
 import re
 import itertools
 import base64
@@ -10,6 +11,20 @@ import threading
 import time
 import utils.config
 
+def _recursive_update(d, u):
+    # Update value of a nested dictionary of varying depth
+    
+    for k, v in u.iteritems():
+        if isinstance(d, collections.Mapping):
+            if isinstance(v, collections.Mapping):
+                r = _recursive_update(d.get(k, {}), v)
+                d[k] = r
+            else:
+                d[k] = u[k]
+        else:
+            d = {k: u[k]}
+            
+    return d
 
 class Plugin(object):
     
@@ -74,15 +89,6 @@ class Plugin(object):
 
         pass
 
-    def update_actions(self, actions):
-
-        # Update actions on the instance
-        self.actions.update(actions)
-
-    def set_contexts(self, contexts):
-
-        # Update contexts on the instance
-        self.contexts = contexts
 
     def detect(self):
 
@@ -739,3 +745,16 @@ class Plugin(object):
 
             reqthread = threading.Thread(target=getattr(self, call_name), args=(execution_code,))
             reqthread.start()
+
+    def update_actions(self, actions):
+
+        # Recurrsively update actions on the instance
+        self.actions = _recursive_update(
+            self.actions, actions
+        )
+
+    def set_contexts(self, contexts):
+
+        # Update contexts on the instance
+        self.contexts = contexts
+
