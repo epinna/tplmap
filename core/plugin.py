@@ -12,6 +12,11 @@ import utils.config
 
 
 class Plugin(object):
+    
+    
+    # Declare object empty attributes
+    actions = {}
+    contexts = []
 
     def __init__(self, channel):
 
@@ -30,6 +35,15 @@ class Plugin(object):
         # The delay fortime-based blind injection. This will be added 
         # to the average response time for render values.
         self.tm_delay = utils.config.time_based_blind_delay
+        
+        # Call user-defined init
+        self.init()
+
+    def init(self):
+        # To be overriden. This can call self.update_actions
+        # and self.set_contexts
+        
+        pass 
 
     def rendered_detected(self):
 
@@ -59,6 +73,16 @@ class Plugin(object):
         #self.set('os', 'undefined')
 
         pass
+
+    def update_actions(self, actions):
+
+        # Update actions on the instance
+        self.actions.update(actions)
+
+    def set_contexts(self, contexts):
+
+        # Update contexts on the instance
+        self.contexts = contexts
 
     def detect(self):
 

