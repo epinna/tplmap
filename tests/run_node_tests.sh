@@ -55,13 +55,20 @@ function run_webserver()
 }
 
 if [[ "$1" == "--test" ]]; then
+  
+  if [ "$#" -gt 1 ]; then
+    TESTS="$2"
+  else
+    TESTS="*"
+  fi
+  
   echo 'Run web server and launch tests'
   run_webserver &
   NODEPID=$!
 
   while ! echo | nc localhost 15004; do sleep 1; done
 
-  python -m unittest discover . 'test_node_*.py'
+  python -m unittest discover . "test_node_$TESTS.py"
 
   # Shutdown node webserver
   kill ${NODEPID}
