@@ -27,11 +27,6 @@ def _recursive_update(d, u):
     return d
 
 class Plugin(object):
-    
-    
-    # Declare object empty attributes
-    actions = {}
-    contexts = []
 
     def __init__(self, channel):
 
@@ -51,8 +46,20 @@ class Plugin(object):
         # to the average response time for render values.
         self.tm_delay = utils.config.time_based_blind_delay
         
-        # Call user-defined init
+        # Declare object attributes
+        self.actions = {}
+        self.contexts = []
+        
+        # Call user-defined inits
+        self.language_init()
         self.init()
+
+    def language_init(self):
+        # To be overriden. This can call self.update_actions
+        # and self.set_contexts
+        
+        pass 
+
 
     def init(self):
         # To be overriden. This can call self.update_actions
@@ -209,8 +216,7 @@ class Plugin(object):
 
         # Prepare base operation to be evalued server-side
         expected = render_action.get('render_expected')
-
-        payload = render_action.get('render') % ({ 'code': render_action.get('render_test') })
+        payload = render_action.get('render_test')
 
         # Probe with payload wrapped by header and trailer, no suffex or prefix.
         # Test if contained, since the page contains other garbage
@@ -218,8 +224,8 @@ class Plugin(object):
                 code = payload,
                 header = '',
                 trailer = '',
-                header_rand = None,
-                trailer_rand = None,
+                header_rand = 0,
+                trailer_rand = 0,
                 prefix = '',
                 suffix = ''
             ):
@@ -298,7 +304,7 @@ class Plugin(object):
             # Prepare base operation to be evalued server-side
             expected = render_action.get('render_expected')
 
-            payload = render_action.get('render') % ({ 'code': render_action.get('render_test') })
+            payload = render_action.get('render_test')
             header_rand = rand.randint_n(10)
             header = render_action.get('header') % ({ 'header' : header_rand })
             trailer_rand = rand.randint_n(10)
@@ -364,45 +370,70 @@ class Plugin(object):
             return result.strip() if result else result
 
     """
-    Inject the rendering payload and get the result.
-
-    All the passed parameter must be already rendered. The parameters which are not passed, will be
-    picked from self.channel.data dictionary and rendered at the moment.
+    Inject the rendered payload and get the result.
+    
+    The request is composed by parameters from:
+    
+        - Already rendered passed **kwargs, or
+        - self.get() to be rendered, or
+        - self.actions.get() to be rendered
+        
     """
     def render(self, code, **kwargs):
 
-        header_template = kwargs.get('header', self.get('header'))
-        if header_template:
-            header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
+        # If header == '', do not send headers
+        header_template = kwargs.get('header')
+        if header_template != '':
             
-            if '%(header)s' in header_template:
-                header = header_template % ({ 'header' : header_rand })
-            else:
-                header = header_template
+            header_template = kwargs.get('header', self.get('header'))
+            if not header_template:
+                header_template = self.actions.get('render',{}).get('header')
+                
+            if header_template:
+                header_rand = kwargs.get('header_rand', self.get('header_rand', rand.randint_n(10)))
+                
+                if '%(header)s' in header_template:
+                    header = header_template % ({ 'header' : header_rand })
+                else:
+                    header = header_template
         else:
             header_rand = 0
             header = ''
 
-        trailer_template = kwargs.get('trailer', self.get('trailer'))
-        if trailer_template:
-            trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
 
-            if '%(trailer)s' in trailer_template:
-                trailer = trailer_template % ({ 'trailer' : trailer_rand })
-            else:
-                trailer = trailer_template
+        # If trailer == '', do not send headers
+        trailer_template = kwargs.get('trailer')
+        if trailer_template != '':
+                
+            trailer_template = kwargs.get('trailer', self.get('trailer'))
+            if not trailer_template:
+                trailer_template = self.actions.get('render',{}).get('trailer')
+                        
+            if trailer_template:
+                trailer_rand = kwargs.get('trailer_rand', self.get('trailer_rand', rand.randint_n(10)))
+
+                if '%(trailer)s' in trailer_template:
+                    trailer = trailer_template % ({ 'trailer' : trailer_rand })
+                else:
+                    trailer = trailer_template
 
         else:
             trailer_rand = 0
             trailer = ''
+            
+        payload_template = kwargs.get('render', self.get('render'))
+        if not payload_template:
+            payload_template = self.actions.get('render',{}).get('render')
+                    
+        payload = payload_template % ({ 'code': code })
             
         prefix = kwargs.get('prefix', self.get('prefix', ''))
         suffix = kwargs.get('suffix', self.get('suffix', ''))
 
         blind = kwargs.get('blind', False)
         
-        injection = header + code + trailer
-
+        injection = header + payload + trailer
+        
         # Save the average HTTP request time of rendering in order
         # to better tone the blind request timeouts.
         result_raw = self.inject(
@@ -415,7 +446,7 @@ class Plugin(object):
         if blind:
             return result_raw
         else:
-            result = None
+            result = ''
 
             # Return result_raw if header and trailer are not specified
             if not header and not trailer:
