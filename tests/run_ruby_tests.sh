@@ -34,13 +34,20 @@ function run_webserver()
 
 
 if [[ "$1" == "--test" ]]; then
+  
+  if [ "$#" -gt 1 ]; then
+    TESTS="$2"
+  else
+    TESTS="*"
+  fi
+  
   echo 'Run web server and launch tests'
   run_webserver &
 
   # Wait until the port is open
   while ! echo | curl http://localhost:15005/ -s -o /dev/null; do sleep 1; done
   # Launch python engines tests
-  python -m unittest discover . 'test_ruby_*.py'
+  python -m unittest discover . "test_ruby_$TESTS.py"
   # Shutdown python webserver
   curl http://localhost:15005/shutdown -s -o /dev/null
 else
