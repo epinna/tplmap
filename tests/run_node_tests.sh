@@ -19,6 +19,8 @@ http://localhost:15004/javascript?inj=*
 http://localhost:15004/blind/javascript?inj=*
 http://localhost:15004/dot?inj=*
 http://localhost:15004/blind/dot?inj=*
+http://localhost:15004/dust?inj=*
+http://localhost:15004/blind/dust?inj=*
 http://localhost:15004/marko?inj=*
 http://localhost:15004/blind/marko?inj=*
 
