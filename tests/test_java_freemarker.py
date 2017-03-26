@@ -16,7 +16,7 @@ class FreemarkerTest(unittest.TestCase, BaseTest):
         'execute' : True,
         'trailer': '${%(trailer)s?c}',
         'header': '${%(header)s?c}',
-        'render': '${%(code)s}',
+        'render': '%(code)s',
         'write': True,
         'read': True,
         'prefix' : '',

