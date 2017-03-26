@@ -17,7 +17,7 @@ class SmartySecuredTest(unittest.TestCase, BaseTest):
         'engine': 'smarty',
         'trailer': '{%(trailer)s}',
         'header': '{%(header)s}',
-        'render': '{%(code)s}',
+        'render': '%(code)s',
         'prefix' : '',
         'suffix' : '',
     }

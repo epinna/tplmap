@@ -21,7 +21,7 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         'read': True,
         'trailer': '{%(trailer)s}',
         'header': '{%(header)s}',
-        'render': '{%(code)s}',
+        'render': '%(code)s',
         'prefix' : '',
         'suffix' : '',
         'bind_shell' : True,
