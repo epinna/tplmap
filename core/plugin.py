@@ -782,10 +782,15 @@ class Plugin(object):
 
     def update_actions(self, actions):
 
-        # Recurrsively update actions on the instance
+        # Recursively update actions on the instance
         self.actions = _recursive_update(
             self.actions, actions
         )
+
+    def set_actions(self, actions):
+
+        # Set actions on the instance
+        self.actions = actions
 
     def set_contexts(self, contexts):
 
