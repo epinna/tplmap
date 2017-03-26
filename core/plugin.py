@@ -512,9 +512,15 @@ class Plugin(object):
 
         execution_code = payload % ({ 'path' : remote_path })
 
-        return getattr(self, call_name)(
+        result = getattr(self, call_name)(
             code = execution_code,
         )
+        
+        # Check md5 result format
+        if re.match(r"([a-fA-F\d]{32})", result):
+            return result
+        else:
+            return None
 
     """ Overridable function to detect read capabilities. """
     def detect_read(self):
