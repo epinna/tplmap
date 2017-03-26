@@ -37,13 +37,20 @@ function run_webserver()
 
 
 if [[ "$1" == "--test" ]]; then
+  
+  if [ "$#" -gt 1 ]; then
+    TESTS="$2"
+  else
+    TESTS="*"
+  fi
+  
   echo 'Run web server and launch tests'
   run_webserver &
   GRADLEPID=$!
 
   while ! echo | nc localhost 15003; do sleep 1; done
 
-  python -m unittest discover . 'test_java_*.py'
+  python -m unittest discover . "test_java_$TESTS.py"
 
   # Shutdown Java webserver
   kill ${GRADLEPID}
