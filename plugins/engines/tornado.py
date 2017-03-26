@@ -29,10 +29,10 @@ class Tornado(python.Python):
             { 'level': 0 },
             
             # This covers {{%s}}
-            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : python.ctx_closures },
 
             # This covers {% %s %}
-            { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : python.ctx_closures },
 
             # Comment blocks
             { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },

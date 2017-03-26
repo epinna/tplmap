@@ -1,6 +1,6 @@
 from utils.strings import quote
 from core.plugin import Plugin
-from core import languages
+from plugins.languages import bash
 from utils.loggers import log
 from utils import rand
 import base64
@@ -55,11 +55,11 @@ class Ruby(Plugin):
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
+                'bind_shell': bash.bind_shell
             },
             'reverse_shell' : {
                 'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
+                'reverse_shell' : bash.reverse_shell
             },
             'execute_blind' : {
                 'call': 'inject',
@@ -71,12 +71,6 @@ class Ruby(Plugin):
 
             # Text context, no closures
             { 'level': 0 },
-            
-            # Code context escape with eval() injection is not easy, since eval is used to evaluate a single 
-            # dynamically generated Python expression e.g. eval("""1;print 1"""); would fail. 
-            
-            # TODO: the plugin should support the exec() injections, which can be assisted by code context escape
-
         ])
 
     language = 'ruby'

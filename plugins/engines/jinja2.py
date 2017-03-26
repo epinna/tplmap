@@ -42,15 +42,15 @@ class Jinja2(python.Python):
             { 'level': 0 },
 
             # This covers {{%s}}
-            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '', 'closures' : python.ctx_closures },
 
             # This covers {% %s %}
-            { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s%%}', 'suffix' : '', 'closures' : python.ctx_closures },
 
             # If and for blocks
             # # if %s:\n# endif
             # # for a in %s:\n# endfor
-            { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : languages.python_ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s\n', 'suffix' : '\n', 'closures' : python.ctx_closures },
 
             # Comment blocks
             { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },

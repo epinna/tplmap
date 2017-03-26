@@ -55,12 +55,12 @@ class Nunjucks(javascript.Javascript):
             # Text context, no closures
             { 'level': 0 },
 
-            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : languages.javascript_ctx_closures },
-            { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
-            { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}}', 'suffix' : '{{1', 'closures' : javascript.ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s %%}', 'suffix' : '', 'closures' : javascript.ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s %%}{%% endfor %%}{%% for a in [1] %%}', 'suffix' : '', 'closures' : javascript.ctx_closures },
 
             # This escapes string {% set %s = 1 %}
-            { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : languages.javascript_ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : javascript.ctx_closures },
 
             # Comment blocks
             { 'level': 5, 'prefix' : '#}', 'suffix' : '{#' },

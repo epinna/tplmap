@@ -1,6 +1,7 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
-from core import languages
+from plugins.languages import bash
+from utils import closures
 from core.plugin import Plugin
 from utils import rand
 import base64
@@ -61,11 +62,11 @@ class Javascript(Plugin):
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
+                'bind_shell': bash.bind_shell
             },
             'reverse_shell' : {
                 'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
+                'reverse_shell' : bash.reverse_shell
             }
         })
 
@@ -75,10 +76,10 @@ class Javascript(Plugin):
             { 'level': 0 },
 
             # This terminates the statement with ;
-            { 'level': 1, 'prefix' : '%(closure)s;', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+            { 'level': 1, 'prefix' : '%(closure)s;', 'suffix' : '//', 'closures' : ctx_closures },
 
             # This does not need termination e.g. if(%s) {}
-            { 'level': 2, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : languages.javascript_ctx_closures },
+            { 'level': 2, 'prefix' : '%(closure)s', 'suffix' : '//', 'closures' : ctx_closures },
 
             # Comment blocks
             { 'level': 5, 'prefix' : '*/', 'suffix' : '/*' },
@@ -111,3 +112,28 @@ class Javascript(Plugin):
             self.set('write', True)
             self.set('bind_shell', True)
             self.set('reverse_shell', True)
+
+ctx_closures = {
+        1: [
+            closures.close_single_duble_quotes + closures.integer,
+            closures.close_function + closures.empty
+        ],
+        2: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.var,
+            closures.close_function + closures.empty
+        ],
+        3: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.var,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty
+        ],
+        4: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.var,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty
+        ],
+        5: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.var,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty,
+            closures.close_function + closures.close_list + closures.empty,
+        ],
+}
+

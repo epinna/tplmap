@@ -22,21 +22,21 @@ class Mako(python.Python):
             { 'level': 0 },
 
             # Normal reflecting tag ${}
-            { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '', 'closures' : python.ctx_closures },
 
             # Code blocks
             # This covers <% %s %>, <%! %s %>, <% %s=1 %>
-            { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : languages.python_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s%%>', 'suffix' : '<%%#', 'closures' : python.ctx_closures },
 
             # If and for blocks
             # % if %s:\n% endif
             # % for a in %s:\n% endfor
-            { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : languages.python_ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s#\n', 'suffix' : '\n', 'closures' : python.ctx_closures },
 
             # Mako blocks
             { 'level': 5, 'prefix' : '</%%doc>', 'suffix' : '<%%doc>' },
-            { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : languages.python_ctx_closures },
-            { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : languages.python_ctx_closures },
-            { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : languages.python_ctx_closures},
+            { 'level': 5, 'prefix' : '</%%def>', 'suffix' : '<%%def name="t(x)">', 'closures' : python.ctx_closures },
+            { 'level': 5, 'prefix' : '</%%block>', 'suffix' : '<%%block>', 'closures' : python.ctx_closures },
+            { 'level': 5, 'prefix' : '</%%text>', 'suffix' : '<%%text>', 'closures' : python.ctx_closures},
 
         ])

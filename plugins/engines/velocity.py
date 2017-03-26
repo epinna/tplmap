@@ -1,6 +1,5 @@
 from utils.loggers import log
 from plugins.languages import java
-from core import languages
 from utils import rand
 from utils.strings import quote
 import re
@@ -98,13 +97,13 @@ ${output}
                 # Text context, no closures
                 { 'level': 0 },
 
-                { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : languages.java_ctx_closures },
+                { 'level': 1, 'prefix': '%(closure)s)', 'suffix' : '', 'closures' : java.ctx_closures },
 
                 # This catches
                 # #if(%s == 1)\n#end
                 # #foreach($item in %s)\n#end
                 # #define( %s )a#end
-                { 'level': 3, 'prefix': '%(closure)s#end#if(1==1)', 'suffix' : '', 'closures' : languages.java_ctx_closures },
+                { 'level': 3, 'prefix': '%(closure)s#end#if(1==1)', 'suffix' : '', 'closures' : java.ctx_closures },
                 { 'level': 5, 'prefix': '*#', 'suffix' : '#*' },
 
         ])

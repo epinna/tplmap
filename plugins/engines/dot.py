@@ -49,7 +49,7 @@ class Dot(javascript.Javascript):
             # Text context, no closures
             { 'level': 0 },
 
-            { 'level': 1, 'prefix': '%(closure)s;}}', 'suffix' : '{{1;', 'closures' : languages.javascript_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s;}}', 'suffix' : '{{1;', 'closures' : javascript.ctx_closures },
             
         ])
         

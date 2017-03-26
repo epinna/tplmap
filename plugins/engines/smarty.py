@@ -45,15 +45,15 @@ class Smarty(php.Php):
             # Text context, no closures
             { 'level': 0 },
 
-            { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : languages.php_ctx_closures },
+            { 'level': 1, 'prefix': '%(closure)s}', 'suffix' : '{', 'closures' : php.ctx_closures },
 
             # {config_load file="missing_file"} raises an exception
 
             # Escape Ifs
-            { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s}{/if}{if 1}', 'suffix' : '', 'closures' : php.ctx_closures },
 
             # Escape {assign var="%s" value="%s"}
-            { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
+            { 'level': 5, 'prefix': '%(closure)s var="" value=""}{assign var="" value=""}', 'suffix' : '', 'closures' : php.ctx_closures },
 
             # Comments
             { 'level': 5, 'prefix': '*}', 'suffix' : '{*' },
