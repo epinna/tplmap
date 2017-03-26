@@ -424,7 +424,10 @@ class Plugin(object):
         payload_template = kwargs.get('render', self.get('render'))
         if not payload_template:
             payload_template = self.actions.get('render',{}).get('render')
-                    
+        if not payload_template:
+            # Exiting, actions.render.render is not set
+            return None
+        
         payload = payload_template % ({ 'code': code })
             
         prefix = kwargs.get('prefix', self.get('prefix', ''))
