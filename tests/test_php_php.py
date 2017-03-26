@@ -22,7 +22,7 @@ class PhpTests(unittest.TestCase, BaseTest):
         'write' : True,
         'prefix' : '',
         'suffix': '',
-        'render': """print_r(%(code)s);""",
+        'render': """%(code)s""",
         'header': """print_r('%(header)s');""",
         'trailer': """print_r('%(trailer)s');""",
         'bind_shell' : True,
