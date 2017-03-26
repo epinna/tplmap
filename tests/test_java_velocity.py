@@ -18,7 +18,7 @@ class VelocityTest(unittest.TestCase, BaseTest):
         'execute' : True,
         'trailer': '\n#set($t=%(trailer)s)\n${t}\n',
         'header': '\n#set($h=%(header)s)\n${h}\n',
-        'render': '#set($c=%(code)s)\n${c}\n',
+        'render': '%(code)s',
         'write': True,
         'read': True,
         'prefix' : '',
