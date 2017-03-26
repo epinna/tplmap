@@ -1,6 +1,5 @@
 from utils.strings import quote, chunkit, md5
 from utils.loggers import log
-from core import languages
 from plugins.languages import javascript
 from utils import rand
 import base64

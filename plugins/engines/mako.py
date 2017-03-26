@@ -1,4 +1,3 @@
-from core import languages
 from plugins.languages import python
 from utils.loggers import log
 from utils import rand

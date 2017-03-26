@@ -1,7 +1,6 @@
 from utils.loggers import log
 from plugins.languages import php
 from utils import rand
-from core import languages
 import string
 
 class Twig(php.Php):
