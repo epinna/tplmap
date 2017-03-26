@@ -1,14 +1,14 @@
 from utils.loggers import log
-from core.plugin import Plugin
+from plugins.languages import php
 from utils import rand
 from core import languages
 import string
 
-class Twig(Plugin):
+class Twig(php.Php):
     
     def init(self):
 
-        self.update_actions({
+        self.set_actions({
             'render' : {
                 'render': '{{%(code)s}}',
                 'header': '{{%(header)s}}',
@@ -40,5 +40,3 @@ class Twig(Plugin):
             { 'level': 5, 'prefix': '%(closure)s = 1 %%}', 'suffix' : '', 'closures' : languages.php_ctx_closures },
 
         ])
-
-    language = 'php'
