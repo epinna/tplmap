@@ -1,13 +1,13 @@
 Tplmap
 ======
 
-Tplmap automates the detection and exploitation of Server-Side Template Injection (SSTI) vulnerabilities to break-out the sandbox and achieve remote command execution on the operating system. 
+Tplmap automates the detection and exploitation of Code Injection and Server-Side Template Injection vulnerabilities and sandbox escape techniques to get access to the underlying operating system.
 
-The tool can be used as a testbed to conduct researches on the SSTI vulnerability class and as offensive security tool in penetration test engagements.
+The tool and its test suite are developed to research the SSTI vulnerability class and to be used as offensive security tool during web application penetration tests.
 
 The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10] and other public researches [\[1\]][1] [\[2\]][2] and original works to extend this tool capabilities [\[3\]][3] [\[4\]][4].
 
-It can achieve full compromise in several code context and blind injection scenarios. It also exploits _eval()_-like code injections in different languages and generic unsandboxed template engines.
+It fully compromises the server exploiting several code context and blind injection scenarios. It supports _eval()_-like code injections in Python, Ruby, PHP, Java and generic unsandboxed template engines.
 
 Server-Side Template Injection
 ------------------------------
@@ -52,7 +52,7 @@ Hello 49!
 Exploitation
 ------------
 
-Tplmap is able to detect and exploit SSTI in a range of template engines, including Jinja2, to get access to the underlying file system and operating system. Run it against the URL to test if the parameters are vulnerable.
+Tplmap is able to detect and exploit SSTI in a range of template engines to get access to the underlying file system and operating system. Run it against the URL to test if the parameters are vulnerable.
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/page?name=John'
@@ -76,11 +76,11 @@ $ ./tplmap.py -u 'http://www.target.com/page?name=John'
   Technique: render
   Capabilities:
 
-   Shell command execution: yes
-   Bind and reverse shell: yes
-   File write: yes
-   File read: yes
-   Code evaluation: yes, python code
+   Shell command execution: ok
+   Bind and reverse shell: ok
+   File write: ok
+   File read: ok
+   Code evaluation: ok, python code
 
 [+] Rerun tplmap providing one of the following options:
 
@@ -112,7 +112,7 @@ bin:x:2:2:bin:/bin:/bin/sh
 Supported template engines
 --------------------------
 
-Tplmap can exploit SSTI vulnerabilities in over 15 template engines, unsandboxed template engines and generic _eval()_-like injections. Blind injections and injections in code contexts are also supported.
+Tplmap supports over 15 template engines, unsandboxed template engines and generic _eval()_-like injections.
 
 | Template engine        | Remote Command Execution |  Blind | Code evaluation | File read | File write |
 |------------------------|-------|-------------------|-----------------|-----------|------------|
