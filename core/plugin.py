@@ -248,8 +248,8 @@ class Plugin(object):
     def _detect_blind(self):
 
         action = self.actions.get('blind', {})
-        payload_true = action.get('bool_true')
-        payload_false = action.get('bool_false')
+        payload_true = action.get('test_bool_true')
+        payload_false = action.get('test_bool_false')
         call_name = action.get('call', 'inject')
 
         # Skip if something is missing or call function is not set

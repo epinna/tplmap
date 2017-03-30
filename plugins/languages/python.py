@@ -47,8 +47,8 @@ class Python(Plugin):
             },
             'blind' : {
                 'call': 'evaluate_blind',
-                'bool_true' : """'a'.join('ab') == 'aab'""",
-                'bool_false' : 'True == False'
+                'test_bool_true' : """'a'.join('ab') == 'aab'""",
+                'test_bool_false' : 'True == False'
             },
             'evaluate_blind' : {
                 'call': 'evaluate',

@@ -46,8 +46,8 @@ class Ruby(Plugin):
             },
             'blind' : {
                 'call': 'evaluate_blind',
-                'bool_true' : """1.to_s=='1'""",
-                'bool_false' : """1.to_s=='2'"""
+                'test_bool_true' : """1.to_s=='1'""",
+                'test_bool_false' : """1.to_s=='2'"""
             },
             'evaluate_blind' : {
                 'call': 'inject',

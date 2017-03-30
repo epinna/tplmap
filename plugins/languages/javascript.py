@@ -46,8 +46,8 @@ class Javascript(Plugin):
             },
             'blind' : {
                 'call': 'execute_blind',
-                'bool_true' : 'true',
-                'bool_false' : 'false'
+                'test_bool_true' : 'true',
+                'test_bool_false' : 'false'
             },
             # Not using execute here since it's rendered and requires set headers and trailers
             'execute_blind' : {

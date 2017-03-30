@@ -49,8 +49,8 @@ class Php(Plugin):
             },
             'blind' : {
                 'call': 'evaluate_blind',
-                'bool_true' : """True""",
-                'bool_false' : """False"""
+                'test_bool_true' : """True""",
+                'test_bool_false' : """False"""
             },
             'evaluate_blind' : {
                 'call': 'inject',

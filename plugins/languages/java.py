@@ -21,8 +21,8 @@ class Java(Plugin):
             # tests (since && characters can\'t be used) but enough for the detection phase.
             'blind' : {
                 'call': 'execute_blind',
-                'bool_true' : 'true',
-                'bool_false' : 'false'
+                'test_bool_true' : 'true',
+                'test_bool_false' : 'false'
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
