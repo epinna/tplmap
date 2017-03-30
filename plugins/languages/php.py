@@ -19,10 +19,10 @@ class Php(Plugin):
                 'render': """%(code)s""",
                 'header': """print_r('%(header)s');""",
                 'trailer': """print_r('%(trailer)s');""",
-                'render_test': 'print(%(r1)s);' % { 
+                'test_render': 'print(%(r1)s);' % { 
                     'r1' : rand.randints[0]
                 },
-                'render_expected': '%(r1)s' % { 
+                'test_render_expected': '%(r1)s' % { 
                     'r1' : rand.randints[0]
                 }
             },

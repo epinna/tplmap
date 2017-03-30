@@ -16,11 +16,11 @@ class Python(Plugin):
                 'render': """str(%(code)s)""",
                 'header': """'%(header)s'+""",
                 'trailer': """+'%(trailer)s'""",
-                'render_test': """'%(s1)s'.join('%(s2)s')""" % { 
+                'test_render': """'%(s1)s'.join('%(s2)s')""" % { 
                     's1' : rand.randstrings[0], 
                     's2' : rand.randstrings[1]
                 },
-                'render_expected': '%(res)s' % { 
+                'test_render_expected': '%(res)s' % { 
                     'res' : rand.randstrings[0].join(rand.randstrings[1])
                 }
             },

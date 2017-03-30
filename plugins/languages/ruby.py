@@ -15,11 +15,11 @@ class Ruby(Plugin):
                 'render': '"#{%(code)s}"',
                 'header': """'%(header)s'+""",
                 'trailer': """+'%(trailer)s'""",
-                'render_test': """%(s1)i*%(s2)i""" % { 
+                'test_render': """%(s1)i*%(s2)i""" % { 
                     's1' : rand.randints[0], 
                     's2' : rand.randints[1]
                 },
-                'render_expected': '%(res)s' % { 
+                'test_render_expected': '%(res)s' % { 
                     'res' : rand.randints[0]*rand.randints[1]
                 }
             },

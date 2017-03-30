@@ -14,11 +14,11 @@ class Nunjucks(javascript.Javascript):
                 'render': '{{%(code)s}}',
                 'header': '{{%(header)s}}',
                 'trailer': '{{%(trailer)s}}',
-                'render_test': '%(n1)s*%(n2)s' % { 
+                'test_render': '%(n1)s*%(n2)s' % { 
                     'n1' : rand.randints[0], 
                     'n2' : rand.randints[1]
                 },
-                'render_expected': '%(res)s' % { 
+                'test_render_expected': '%(res)s' % { 
                     'res' : rand.randints[0]*rand.randints[1] 
                 }
             },

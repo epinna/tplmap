@@ -13,11 +13,11 @@ class Velocity(java.Java):
                 'render': '%(code)s',
                 'header': '\n#set($h=%(header)s)\n${h}\n',
                 'trailer': '\n#set($t=%(trailer)s)\n${t}\n',
-                'render_test': '#set($c=%(n1)s*%(n2)s)\n${c}\n' % { 
+                'test_render': '#set($c=%(n1)s*%(n2)s)\n${c}\n' % { 
                     'n1' : rand.randints[0], 
                     'n2' : rand.randints[1]
                 },
-                'render_expected': '%(res)s' % { 
+                'test_render_expected': '%(res)s' % { 
                     'res' : rand.randints[0]*rand.randints[1] 
                 }
             },

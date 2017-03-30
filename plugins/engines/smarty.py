@@ -14,12 +14,12 @@ class Smarty(php.Php):
                 'render': '%(code)s',
                 'header': '{%(header)s}',
                 'trailer': '{%(trailer)s}',
-                'render_test': """{%(r1)s}{*%(comment)s*}{%(r2)s}""" % { 
+                'test_render': """{%(r1)s}{*%(comment)s*}{%(r2)s}""" % { 
                     'r1' : rand.randints[0],
                     'comment' : rand.randints[1],
                     'r2' : rand.randints[2]
                 },
-                'render_expected': '%(r1)s%(r2)s' % { 
+                'test_render_expected': '%(r1)s%(r2)s' % { 
                     'r1' : rand.randints[0],
                     'r2' : rand.randints[2]
                 }

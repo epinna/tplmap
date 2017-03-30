@@ -14,10 +14,10 @@ class Twig(php.Php):
                 'trailer': '{{%(trailer)s}}',
                 # {{7*'7'}} and a{#b#}c work in freemarker as well
                 # {%% set a=%i*%i %%}{{a}} works in Nunjucks as well
-                'render_test': '"%(s1)s\n"|nl2br' % { 
+                'test_render': '"%(s1)s\n"|nl2br' % { 
                     's1' : rand.randstrings[0]
                 },
-                'render_expected': '%(res)s<br />' % { 
+                'test_render_expected': '%(res)s<br />' % { 
                     'res' : rand.randstrings[0]
                 }
             }

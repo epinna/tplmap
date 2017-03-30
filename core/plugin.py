@@ -215,8 +215,8 @@ class Plugin(object):
         )
 
         # Prepare base operation to be evalued server-side
-        expected = render_action.get('render_expected')
-        payload = render_action.get('render_test')
+        expected = render_action.get('test_render_expected')
+        payload = render_action.get('test_render')
 
         # Probe with payload wrapped by header and trailer, no suffex or prefix.
         # Test if contained, since the page contains other garbage
@@ -302,9 +302,9 @@ class Plugin(object):
         for prefix, suffix in self._generate_contexts():
 
             # Prepare base operation to be evalued server-side
-            expected = render_action.get('render_expected')
+            expected = render_action.get('test_render_expected')
 
-            payload = render_action.get('render_test')
+            payload = render_action.get('test_render')
             header_rand = rand.randint_n(10)
             header = render_action.get('header') % ({ 'header' : header_rand })
             trailer_rand = rand.randint_n(10)

@@ -18,11 +18,11 @@ class Javascript(Plugin):
                 'render': """%(code)s""",
                 'header': """'%(header)s'+""",
                 'trailer': """+'%(trailer)s'""",
-                'render_test': 'typeof(%(r1)s)+%(r2)s' % { 
+                'test_render': 'typeof(%(r1)s)+%(r2)s' % { 
                     'r1' : rand.randints[0],
                     'r2' : rand.randints[1]
                 },
-                'render_expected': 'number%(r2)s' % { 
+                'test_render_expected': 'number%(r2)s' % { 
                     'r2' : rand.randints[1]
                 }
             },
