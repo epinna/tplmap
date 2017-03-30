@@ -69,32 +69,49 @@ class Plugin(object):
 
     def rendered_detected(self):
 
-        # To be overriden. This can define the following
-        # capabilities:
-        #self.set('evaluate', 'language')
-        #self.set('execute', True)
-        #self.set('write', True)
-        #self.set('read', True)
-        #self.set('bind_shell', True)
-        #self.set('reverse_shell', True)
-        #self.set('os', 'undefined')
+        action_evaluate = self.actions.get('evaluate', {})
+        test_os_code = action_evaluate.get('test_os')
+        test_os_code_expected = action_evaluate.get('test_os_expected')
 
-        pass
+        if test_os_code and test_os_code_expected:
+            
+            os = self.evaluate(test_os_code)
+
+            if os and re.search(test_os_code_expected, os):
+                self.set('os', os)
+                self.set('evaluate', self.language)
+                self.set('write', True)
+                self.set('read', True)
+
+                action_execute = self.actions.get('execute', {})
+                test_cmd_code = action_execute.get('test_cmd')
+                test_cmd_code_expected = action_execute.get('test_cmd_expected')
+
+                if (
+                    test_cmd_code and 
+                    test_cmd_code_expected and
+                    test_cmd_code_expected == self.execute(test_cmd_code)
+                    ):
+                        self.set('execute', True)
+                        self.set('bind_shell', True)
+                        self.set('reverse_shell', True)
 
     def blind_detected(self):
+        
+        # Blind has been detected so code has been already evaluated
+        self.set('evaluate_blind', self.language)
 
-        # To be overriden. This can define the following
-        # capabilities:
-        #self.set('evaluate_blind', 'language')
-        #self.set('execute_blind', True)
-        #self.set('write', True)
-        #self.set('write_blind', True)
-        #self.set('read_blind', True)
-        #self.set('bind_shell', True)
-        #self.set('reverse_shell', True)
-        #self.set('os', 'undefined')
+        test_cmd_code = self.actions.get('execute', {}).get('test_cmd')
 
-        pass
+        if (
+            test_cmd_code and
+            # self.execute_blind() returns true or false
+            self.execute_blind(test_cmd_code)
+            ):
+            self.set('execute_blind', True)
+            self.set('write', True)
+            self.set('bind_shell', True)
+            self.set('reverse_shell', True)
 
 
     def detect(self):

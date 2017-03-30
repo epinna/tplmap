@@ -9,6 +9,14 @@ class Java(Plugin):
     def language_init(self):
 
         self.update_actions({
+        
+            'execute' : {
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2],
+                'test_os' : """uname""",
+                'test_os_expected': '^[\w-]+$'
+            },
+        
             'read' : {
                 'call': 'execute',
                 'read' : """base64<'%(path)s'"""
@@ -37,18 +45,32 @@ class Java(Plugin):
     language = 'java'
 
     def rendered_detected(self):
+        
+        # Java has no eval() function, hence the checks are done using
+        # the command execution action.
 
-        expected_rand = str(rand.randint_n(2))
-        if expected_rand == self.execute('echo %s' % expected_rand):
+        test_cmd_code = self.actions.get('execute', {}).get('test_cmd')
+        test_cmd_code_expected = self.actions.get('execute', {}).get('test_cmd_expected')
+
+        if (
+            test_cmd_code and 
+            test_cmd_code_expected and
+            test_cmd_code_expected == self.execute(test_cmd_code)
+            ):
             self.set('execute', True)
             self.set('write', True)
             self.set('read', True)
             self.set('bind_shell', True)
             self.set('reverse_shell', True)
 
-            os = self.execute("""uname""")
-            if os and re.search('^[\w-]+$', os):
-                self.set('os', os)
+            test_os_code = self.actions.get('execute', {}).get('test_os')
+            test_os_code_expected = self.actions.get('execute', {}).get('test_os_expected')
+
+            if test_os_code and test_os_code_expected:
+            
+                os = self.execute(test_os_code)
+                if os and re.search(test_os_code_expected, os):
+                    self.set('os', os)
 
     def blind_detected(self):
 

