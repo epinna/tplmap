@@ -32,6 +32,7 @@ class DotTests(unittest.TestCase, BaseTest):
         'engine': 'dot',
         'blind': True,
         'execute_blind' : True,
+        'evaluate_blind' : 'javascript',
         'write': True,
         'prefix' : '',
         'suffix' : '',

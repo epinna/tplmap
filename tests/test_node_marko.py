@@ -32,6 +32,7 @@ class MarkoTests(unittest.TestCase, BaseTest):
         'engine': 'marko',
         'blind': True,
         'execute_blind' : True,
+        'evaluate_blind' : 'javascript',
         'write': True,
         'prefix' : '',
         'suffix' : '',

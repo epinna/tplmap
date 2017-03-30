@@ -30,6 +30,7 @@ class NunjucksTests(unittest.TestCase, BaseTest):
     expected_data_blind = {
         'language': 'javascript',
         'engine': 'nunjucks',
+        'evaluate_blind' : 'javascript',
         'blind': True,
         'execute_blind' : True,
         'write': True,

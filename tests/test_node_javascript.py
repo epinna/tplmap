@@ -34,6 +34,7 @@ class JavascriptTests(unittest.TestCase, BaseTest):
         'engine': 'javascript',
         'blind': True,
         'execute_blind' : True,
+        'evaluate_blind' : 'javascript',
         'write': True,
         'prefix' : '',
         'suffix' : '',
