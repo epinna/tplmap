@@ -53,24 +53,24 @@ def _print_injection_summary(channel):
     suffix = channel.data.get('suffix', '').replace('\n', '\\n')
 
     if channel.data.get('evaluate_blind'):
-        evaluation = 'yes, %s code (blind)' % (channel.data.get('language'))
+        evaluation = 'ok, %s code (blind)' % (channel.data.get('language'))
     elif channel.data.get('evaluate'):
-        evaluation = 'yes, %s code' % (channel.data.get('language'))
+        evaluation = 'ok, %s code' % (channel.data.get('language'))
     else:
         evaluation = 'no'
 
     if channel.data.get('execute_blind'):
-        execution = 'yes (blind)'
+        execution = 'ok (blind)'
     elif channel.data.get('execute'):
-        execution = 'yes'
+        execution = 'ok'
     else:
         execution = 'no'
 
     if channel.data.get('write'):
         if channel.data.get('blind'):
-            writing = 'yes (blind)'
+            writing = 'ok (blind)'
         else:
-            writing = 'yes'
+            writing = 'ok'
     else:
         writing = 'no'
 
@@ -100,8 +100,8 @@ def _print_injection_summary(channel):
     'evaluate': evaluation,
     'execute': execution,
     'write': writing,
-    'read': 'no' if not channel.data.get('read') else 'yes',
-    'bind_shell': 'no' if not channel.data.get('bind_shell') else 'yes',
+    'read': 'no' if not channel.data.get('read') else 'ok',
+    'bind_shell': 'no' if not channel.data.get('bind_shell') else 'ok',
     'method': channel.injs[channel.inj_idx]['field'],
     'parameter': channel.injs[channel.inj_idx]['param']
 }))
