@@ -1,7 +1,7 @@
 Tplmap
 ======
 
-Tplmap automates the detection and exploitation of Code Injection and Server-Side Template Injection vulnerabilities and sandbox escape techniques to get access to the underlying operating system.
+Tplmap assists the exploitation of Code Injection and Server-Side Template Injection vulnerabilities with a number of sandbox escape techniques to get access to the underlying operating system.
 
 The tool and its test suite are developed to research the SSTI vulnerability class and to be used as offensive security tool during web application penetration tests.
 
