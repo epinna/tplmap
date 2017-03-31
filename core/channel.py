@@ -107,7 +107,7 @@ class Channel:
             if ':' not in param_value:
                 continue
 
-            param, value = param_value.split(':')
+            param, value = param_value.split(':', 1)
             param = param.strip()
             value = value.strip()
 
