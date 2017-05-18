@@ -1,0 +1,12 @@
+FROM python:2
+
+RUN pip install mako jinja2 flask tornado PyYAML requests
+
+WORKDIR /tests
+COPY tests/env_py_tests .
+
+RUN sed -i 's/127\.0\.0\.1/0.0.0.0/' webserver.py
+
+EXPOSE 15001
+
+CMD ["python", "webserver.py"]

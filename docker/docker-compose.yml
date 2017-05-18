@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+
+  tplmap_test_python:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.python
+    ports:
+      - "15001:15001"
+
+  tplmap_test_php:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.php
+    ports:
+      - "15002:15002"
+
+  tplmap_test_java:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.java
+    ports:
+      - "15003:15003"
+
+  tplmap_test_node:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.node
+    ports:
+      - "15004:15004"
+
+  tplmap_test_ruby:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.ruby
+    ports:
+      - "15005:15005"
+
