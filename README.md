@@ -7,7 +7,7 @@ The tool and its test suite are developed to research the SSTI vulnerability cla
 
 The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10] and other public researches [\[1\]][1] [\[2\]][2] and original works to extend this tool capabilities [\[3\]][3] [\[4\]][4].
 
-It fully compromises the server exploiting several code context and blind injection scenarios. It supports _eval()_-like code injections in Python, Ruby, PHP, Java and generic unsandboxed template engines.
+It fully compromises the server exploiting several code context and blind injection scenarios. It also supports _eval()_-like code injections in Python, Ruby, PHP, Java and generic unsandboxed template engines.
 
 Server-Side Template Injection
 ------------------------------
