@@ -126,6 +126,7 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | Marko                  | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | JavaScript (code eval) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | Dust (<= dustjs-helpers@1.5.0) | ✓ |  ✓        | JavaScript      |  ✓        |  ✓         |
+| EJS                    | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | Ruby (code eval)       | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Slim                   | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | ERB                    | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
