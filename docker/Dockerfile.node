@@ -1,0 +1,11 @@
+FROM node:latest
+
+WORKDIR /tests
+
+RUN npm install randomstring connect jade nunjucks dustjs-linkedin@2.6 dustjs-helpers@1.5.0 marko dot ejs
+
+COPY tests/env_node_tests/connect-app.js .
+
+EXPOSE 15004
+
+CMD ["node", "connect-app.js"]

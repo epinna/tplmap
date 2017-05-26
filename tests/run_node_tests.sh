@@ -23,6 +23,8 @@ http://localhost:15004/dust?inj=*
 http://localhost:15004/blind/dust?inj=*
 http://localhost:15004/marko?inj=*
 http://localhost:15004/blind/marko?inj=*
+http://localhost:15004/ejs?inj=*
+http://localhost:15004/blind/ejs?inj=*
 
 Web server standard output and error are redirected to file
 $webserver_log
@@ -48,6 +50,7 @@ function run_webserver()
     npm install dustjs-helpers@1.5.0
     npm install dot
     npm install marko
+    npm install ejs
   fi
 
   cp ../connect-app.js connect-app.js

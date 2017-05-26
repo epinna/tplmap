@@ -8,6 +8,7 @@ var dusthelpers = require('dustjs-helpers');
 var randomstring = require("randomstring");
 var doT=require('dot');
 var marko=require('marko');
+var ejs=require('ejs');
 
 var app = connect();
 
@@ -242,6 +243,43 @@ app.use('/blind/marko', function(req, res){
       tpl = inj;
     }
     marko.load(randomstring.generate(), tpl).renderSync()
+    res.end(randomstring.generate());
+  }
+});
+
+// EJS
+app.use('/ejs', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    res.end(randomstring.generate() + ejs.render(tpl) + randomstring.generate());
+  }
+});
+
+// EJS blind endpoint
+app.use('/blind/ejs', function(req, res){
+  if(req.url) {
+    var url_parts = url.parse(req.url, true);
+
+    var inj = url_parts.query.inj;
+    var tpl = '';
+    if('tpl' in url_parts.query) {
+      // Keep the formatting a-la-python
+      tpl = url_parts.query.tpl.replace('%s', inj);
+    }
+    else {
+      tpl = inj;
+    }
+    ejs.render(tpl);
     res.end(randomstring.generate());
   }
 });
