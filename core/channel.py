@@ -306,3 +306,6 @@ class Channel:
             log.debug("""< %s""" % (result) )
 
         return result
+
+    def detected( self, technique, detail ):
+        pass

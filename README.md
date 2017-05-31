@@ -138,6 +138,26 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | Smarty (secured)       | × | ×                 | ×               | ×         | ×          |
 | Dust (> dustjs-helpers@1.5.0) | × | ×          | ×               | ×         | ×          |
 
+
+Burp Suite Plugin
+-----------------
+
+Tplmap is able to run as a Burp Suite Extension.
+
+### Install
+
+Load burp_extension.py with following conditions.
+
+* Burp Suite edition: Professional
+* The Python modules required for tplmap is installed.
+  * PyYaml
+  * requests
+* Extension type: Python
+
+### Scan
+
+Configure scanning option from 'tplmap' tab, and do an active scan.
+
 [10]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
 [3]: https://github.com/epinna/tplmap/issues/9
 [4]: http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine

@@ -282,22 +282,30 @@ class Plugin(object):
         for prefix, suffix in self._generate_contexts():
 
             # Conduct a true-false test
-            if getattr(self, call_name)(
+            if not getattr(self, call_name)(
                 code = payload_true,
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
-            ) and not getattr(self, call_name)(
+            ):
+                continue
+            detail = {'blind_true':self._inject_verbose}
+            if getattr(self, call_name)(
                 code = payload_false,
                 prefix = prefix,
                 suffix = suffix,
                 blind = True
             ):
-                # We can assume here blind is true
-                self.set('blind', True)
-                self.set('prefix', prefix)
-                self.set('suffix', suffix)
-                return
+                continue
+            detail['blind_false'] = self._inject_verbose
+            detail['average'] = sum(self.render_req_tm)/len(self.render_req_tm)
+
+            # We can assume here blind is true
+            self.set('blind', True)
+            self.set('prefix', prefix)
+            self.set('suffix', suffix)
+            self.channel.detected('blind', detail)
+            return
 
 
     """
@@ -342,6 +350,7 @@ class Plugin(object):
                 self.set('trailer', render_action.get('trailer'))
                 self.set('prefix', prefix)
                 self.set('suffix', suffix)
+                self.channel.detected('render', {'expected' : expected})
                 return
 
     """
@@ -372,6 +381,14 @@ class Plugin(object):
             result = delta.seconds >= expected_delay
 
             log.debug('[blind %s] code above took %s. %s is the threshold, returning %s' % (self.plugin, str(delta.seconds), str(expected_delay), str(result)))
+
+            self._inject_verbose = {
+                'result': result,
+                'payload': injection,
+                'expected_delay': expected_delay,
+                'start': start,
+                'end': end,
+            }
 
             return result
 
