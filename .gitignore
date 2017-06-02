@@ -46,3 +46,6 @@ tests/env_*/templates_c/
 
 # Npm local modules
 node_modules
+
+# Jython
+*.class
