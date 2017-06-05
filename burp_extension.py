@@ -12,7 +12,7 @@ class BurpExtender( IBurpExtender ):
 
     def registerExtenderCallbacks( self, callbacks ):
         configTab = ConfigTab( callbacks )
-        callbacks.setExtensionName( 'tplmap' )
+        callbacks.setExtensionName( 'Tplmap' )
         callbacks.addSuiteTab( configTab )
         callbacks.registerScannerCheck( ScannerCheck( callbacks, configTab ) )
 
@@ -83,12 +83,12 @@ class ScanIssue( IScanIssue ):
         """
 
         blind_template = """
-        The time-based blind payload <b>{payload}</b> was submitted in the <b>{parameter} parameter.
-        The application took {delta:f} milliseconds to respond to the request, compared with {average} milliseconds for the averaged original request, indicating that the injected command caused a time delay.<br><br>
+        The time-based blind payload <b>{payload}</b> was submitted in the <b>{parameter}</b> parameter.
+        The application took {delta:f} milliseconds to respond to the request, compared with {average} milliseconds for the average, indicating that the injected command caused a time delay.<br><br>
         """
 
-        harvest_template = """
-        Harvested Informations:<br>
+        info_template = """
+        Identified Informations:<br>
         <ul>
           <li>Template engine: {template}</li>
           <li>Server side language: {language}</li>
@@ -115,7 +115,7 @@ class ScanIssue( IScanIssue ):
             payload = self._channel.messages[ self._channel.detect_offset - 1 ].get( 'injection' )
             technique_part = render_template.format(
                 parameter = parameter,
-                template = data.get( 'engine' ),
+                template = template,
                 payload = cgi.escape( payload ),
                 rendered = cgi.escape( self._channel.detail.get( 'expected' ) ) )
             execute_method = 'execute'
@@ -134,7 +134,7 @@ class ScanIssue( IScanIssue ):
             execute_method = 'execute_blind'
 
         _okng = lambda f: 'OK' if f else 'NG'
-        harvest = harvest_template.format(
+        info_part = info_template.format(
             template = template,
             language = language,
             technique = self._channel.technique,
@@ -145,7 +145,7 @@ class ScanIssue( IScanIssue ):
             write = _okng( data.get( 'write' ) ),
             bind_shell = _okng( data.get( 'bind_shell' ) ),
             reverse_shell = _okng( data.get( 'reverse_shell' ) ) )
-        return prologue + technique_part + harvest
+        return prologue + technique_part + info_part
 
     def getRemediationDetail( self ):
         return None
@@ -293,7 +293,7 @@ class ConfigTab( ITab, JPanel ):
         layout.setVerticalGroup( vgroup )
 
     def getTabCaption( self ):
-        return 'tplmap'
+        return 'Tplmap'
 
     def getUiComponent( self ):
         return self

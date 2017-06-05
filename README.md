@@ -149,7 +149,7 @@ Tplmap is able to run as a Burp Suite Extension.
 Load burp_extension.py with following conditions.
 
 * Burp Suite edition: Professional
-* The Python modules required for tplmap is installed.
+* The Python modules required for Tplmap are installed.
   * PyYaml
   * requests
 * Extension type: Python
