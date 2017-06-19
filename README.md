@@ -142,21 +142,7 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 Burp Suite Plugin
 -----------------
 
-Tplmap is able to run as a Burp Suite Extension.
-
-### Install
-
-Load burp_extension.py with following conditions.
-
-* Burp Suite edition: Professional
-* The Python modules required for Tplmap are installed.
-  * PyYaml
-  * requests
-* Extension type: Python
-
-### Scan
-
-Configure scanning option from 'tplmap' tab, and do an active scan.
+See [burp_extension/README.md](burp_extension/README.md).
 
 [10]: http://blog.portswigger.net/2015/08/server-side-template-injection.html
 [3]: https://github.com/epinna/tplmap/issues/9
