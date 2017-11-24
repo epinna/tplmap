@@ -38,7 +38,8 @@ if [[ "$1" == "--test" ]]; then
   run_webserver &
 
   # Wait until the port is open
-  while ! echo | nc localhost 15001; do sleep 1; done
+  while ! </dev/tcp/localhost/15001; do sleep 1; done 2> /dev/null
+
   # Launch python engines tests
   python -m unittest discover . 'test_channel*.py'
   # Shutdown python webserver
