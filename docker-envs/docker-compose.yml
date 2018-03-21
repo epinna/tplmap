@@ -6,6 +6,7 @@ services:
     build:
       context: ../
       dockerfile: docker-envs/Dockerfile.python
+    restart: always
     ports:
       - "15001:15001"
 
@@ -13,6 +14,7 @@ services:
     build:
       context: ../
       dockerfile: docker-envs/Dockerfile.php
+    restart: always
     ports:
       - "15002:15002"
 
@@ -20,6 +22,7 @@ services:
     build:
       context: ../
       dockerfile: docker-envs/Dockerfile.java
+    restart: always
     ports:
       - "15003:15003"
 
@@ -27,6 +30,7 @@ services:
     build:
       context: ../
       dockerfile: docker-envs/Dockerfile.node
+    restart: always
     ports:
       - "15004:15004"
 
@@ -34,6 +38,8 @@ services:
     build:
       context: ../
       dockerfile: docker-envs/Dockerfile.ruby
+    restart: always
     ports:
       - "15005:15005"
+
 
