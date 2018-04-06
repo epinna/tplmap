@@ -1,6 +1,7 @@
 FROM python:2
 
 RUN pip install mako jinja2 flask tornado PyYAML requests
+RUN apt-get update && apt-get install dnsutils -y
 
 WORKDIR /tests
 COPY tests/env_py_tests .

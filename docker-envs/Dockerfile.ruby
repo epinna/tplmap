@@ -1,6 +1,7 @@
 FROM ruby:latest
 
 RUN gem install slim tilt cuba rack
+RUN apt-get update && apt-get install dnsutils -y
 
 WORKDIR /tests
 COPY tests/env_ruby_tests .
