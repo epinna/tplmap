@@ -1,7 +1,6 @@
-version: '2'
+version: '2' 
 
 services:
-
   tplmap_test_python:
     build:
       context: ../
@@ -9,7 +8,6 @@ services:
     restart: always
     ports:
       - "15001:15001"
-
   tplmap_test_php:
     build:
       context: ../
@@ -17,7 +15,6 @@ services:
     restart: always
     ports:
       - "15002:15002"
-
   tplmap_test_java:
     build:
       context: ../
@@ -25,7 +22,6 @@ services:
     restart: always
     ports:
       - "15003:15003"
-
   tplmap_test_node:
     build:
       context: ../
@@ -33,7 +29,6 @@ services:
     restart: always
     ports:
       - "15004:15004"
-
   tplmap_test_ruby:
     build:
       context: ../

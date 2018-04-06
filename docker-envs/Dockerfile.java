@@ -7,6 +7,7 @@ COPY tests/env_java_tests/spark-app .
 USER root
 RUN sed -ie 's/id "com\.github\.johnrengelman\.shadow".*//' build.gradle && \
     gradle classes
+RUN apt-get update && apt-get install dnsutils -y
 
 EXPOSE 15003
 
