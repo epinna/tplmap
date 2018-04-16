@@ -19,7 +19,6 @@ Cuba.define do
         when "eval"
           res.write eval(tpl)
         when "slim"
-
           template = Tilt['slim'].new() {|x| tpl}
           res.write template.render
         when "erb"
@@ -50,6 +49,8 @@ Cuba.define do
           res.write "blind #{engine} #{inj} #{tpl}" 
         end
         
+        res.write "ok"; # for set 200 response status code
+
       end
     end
     on 'shutdown' do
