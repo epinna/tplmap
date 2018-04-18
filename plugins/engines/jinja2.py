@@ -14,6 +14,13 @@ class Jinja2(python.Python):
                 'render': '{{%(code)s}}',
                 'header': '{{%(header)s}}',
                 'trailer': '{{%(trailer)s}}',
+                'test_render': '%(n1)s*%(n2)s' % {
+                    'n1' : rand.randints[0],
+                    'n2' : rand.randints[1]
+                },
+                'test_render_expected': '%(res)s' % {
+                    'res' : rand.randints[0]*rand.randints[1]
+                }
             },
             'evaluate' : {
                 'call': 'render',
