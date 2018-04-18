@@ -49,3 +49,10 @@ node_modules
 
 # Jython
 *.class
+
+# Vim
+# swap
+.sw[a-p]
+.*.sw[a-p]
+# tags
+tags
