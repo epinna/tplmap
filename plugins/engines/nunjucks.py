@@ -14,12 +14,13 @@ class Nunjucks(javascript.Javascript):
                 'render': '{{%(code)s}}',
                 'header': '{{%(header)s}}',
                 'trailer': '{{%(trailer)s}}',
-                'test_render': '%(n1)s*%(n2)s' % { 
-                    'n1' : rand.randints[0], 
-                    'n2' : rand.randints[1]
+                'test_render': '(%(n1)s,%(n2)s*%(n3)s)|dump' % {
+                    'n1' : rand.randints[0],
+                    'n2' : rand.randints[1],
+                    'n3' : rand.randints[2]
                 },
-                'test_render_expected': '%(res)s' % { 
-                    'res' : rand.randints[0]*rand.randints[1] 
+                'test_render_expected': '%(res)s' % {
+                    'res' : rand.randints[1]*rand.randints[2]
                 }
             },
             'write' : {
