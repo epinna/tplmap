@@ -1,58 +1,31 @@
 #!/bin/bash
 
-type nc >/dev/null 2>&1 || { echo >&2 "Netcat required but it's not installed.  Aborting."; exit 1; }
-curl --version >/dev/null 2>&1 || { echo >&2 "Curl required but it's not installed.  Aborting."; exit 1; }
-python -c 'import mako' 2>&1 || { echo >&2 "Python Mako required but it's not installed.  Aborting."; exit 1; }
-python -c 'import jinja2' 2>&1 || { echo >&2 "Python Jinja2 required but it's not installed.  Aborting."; exit 1; }
-python -c 'import flask' 2>&1 || { echo >&2 "Python Flask required but it's not installed.  Aborting."; exit 1; }
-python -c 'import tornado' 2>&1 || { echo >&2 "Python Tornado required but it's not installed.  Aborting."; exit 1; }
+INSTANCE_NAME="tplmap-py"
+IMAGE_NAME="tplmap-py-img"
+PORT=15001
 
-webserver_log=$(mktemp)
-webserver_banner="Exposed testing APIs:
+echo "Exposed testing APIs:
 
 http://localhost:15001/reflect/mako?inj=*
-http://localhost:15001/blind/mako?inj=*
 http://localhost:15001/reflect/jinja2?inj=*
-http://localhost:15001/blind/jinja2?inj=*
-http://localhost:15001/reflect/eval?inj=*
-http://localhost:15001/blind/eval?inj=*
-http://localhost:15001/reflect/tornado?inj=*
-http://localhost:15001/blind/tornado?inj=*
-
-Web server standard output and error are redirected to file
-$webserver_log
+http://localhost:15001/post/mako?inj=*
+http://localhost:15001/post/jinja2?inj=*
+http://localhost:15001/limit/mako?inj=*
+http://localhost:15001/limit/jinja2?inj=*
+http://localhost:15001/put/mako?inj=*
+http://localhost:15001/put/jinja2?inj=*
 "
 
-# Run  webserver
-function run_webserver()
-{
-    echo "$webserver_banner"
+cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
-    cd env_py_tests/
-    mkdir tpl/ 2> /dev/null
-    python webserver.py &> $webserver_log
-    cd ..
-}
+docker rm -f $INSTANCE_NAME
+docker build -f docker-envs/Dockerfile.python . -t $IMAGE_NAME
+docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
+# Wait until the port is open
+while ! </dev/tcp/localhost/$PORT; do sleep 1; done 2> /dev/null
 
-if [[ "$1" == "--test" ]]; then
-  
-  if [ "$#" -gt 1 ]; then
-    TESTS="$2"
-  else
-    TESTS="*"
-  fi
-  
-  echo 'Run web server and launch tests'
-  run_webserver &
+# Launch python engines tests
+python -m unittest discover -v tests/ 'test_py_*.py'
 
-  # Wait until the port is open
-  while ! </dev/tcp/localhost/15001; do sleep 1; done 2> /dev/null
-  # Launch python engines tests
-  python -m unittest discover . "test_py_$TESTS.py"
-  # Shutdown python webserver
-  curl http://localhost:15001/shutdown
-else
-  echo 'Starting web server. Press ctrl-C to quit. Run with --test to run automated tests.'
-  run_webserver
-fi
+docker stop $INSTANCE_NAME

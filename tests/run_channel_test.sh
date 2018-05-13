@@ -1,14 +1,10 @@
 #!/bin/bash
 
-type nc >/dev/null 2>&1 || { echo >&2 "Netcat required but it's not installed.  Aborting."; exit 1; }
-curl --version >/dev/null 2>&1 || { echo >&2 "Curl required but it's not installed.  Aborting."; exit 1; }
-python -c 'import mako' 2>&1 || { echo >&2 "Python Mako required but it's not installed.  Aborting."; exit 1; }
-python -c 'import jinja2' 2>&1 || { echo >&2 "Python Jinja2 required but it's not installed.  Aborting."; exit 1; }
-python -c 'import flask' 2>&1 || { echo >&2 "Python Flask required but it's not installed.  Aborting."; exit 1; }
+INSTANCE_NAME="tplmap-py"
+IMAGE_NAME="tplmap-py-img"
+PORT=15001
 
-webserver_log=$(mktemp)
-
-webserver_banner="Exposed testing APIs:
+echo "Exposed testing APIs:
 
 http://localhost:15001/reflect/mako?inj=*
 http://localhost:15001/reflect/jinja2?inj=*
@@ -18,33 +14,18 @@ http://localhost:15001/limit/mako?inj=*
 http://localhost:15001/limit/jinja2?inj=*
 http://localhost:15001/put/mako?inj=*
 http://localhost:15001/put/jinja2?inj=*
-
-Web server standard output and error are redirected to file
-$webserver_log
 "
 
-# Run  webserver
-function run_webserver()
-{
-    echo "$webserver_banner"
-    cd env_py_tests/
-    python webserver.py &> $webserver_log
-    cd ..
-}
+cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
+docker rm -f $INSTANCE_NAME
+docker build -f docker-envs/Dockerfile.python . -t $IMAGE_NAME
+docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
-if [[ "$1" == "--test" ]]; then
-  echo 'Run web server and launch tests'
-  run_webserver &
+# Wait until the port is open
+while ! </dev/tcp/localhost/$PORT; do sleep 1; done 2> /dev/null
 
-  # Wait until the port is open
-  while ! </dev/tcp/localhost/15001; do sleep 1; done 2> /dev/null
+# Launch python engines tests
+python -m unittest discover -v tests/ 'test_channel*.py'
 
-  # Launch python engines tests
-  python -m unittest discover . 'test_channel*.py'
-  # Shutdown python webserver
-  curl http://localhost:15001/shutdown
-else
-    echo 'Starting web server. Press ctrl-C to quit. Run with --test to run automated tests.'
-    run_webserver
-fi
+docker stop $INSTANCE_NAME

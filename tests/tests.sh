@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 for SCRIPT in ./run_*sh
 do
   if [ -f $SCRIPT -a -x $SCRIPT ]
