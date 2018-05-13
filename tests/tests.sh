@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 for SCRIPT in ./run_*sh

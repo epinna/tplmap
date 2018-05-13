@@ -2,6 +2,7 @@
 
 INSTANCE_NAME="tplmap-php"
 IMAGE_NAME="tplmap-php-img"
+PORT=15002
 
 echo "Exposed testing APIs:
 
@@ -17,10 +18,10 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
 docker rm -f $INSTANCE_NAME
 docker build -f docker-envs/Dockerfile.php . -t $IMAGE_NAME
-docker run --rm --name $INSTANCE_NAME -p 15002:15002 -d $IMAGE_NAME
+docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
 # Wait until the port is open
-while ! </dev/tcp/localhost/15002; do sleep 1; done 2> /dev/null
+while ! </dev/tcp/localhost/$PORT; do sleep 1; done 2> /dev/null
 
 # Launch python engines tests
 python -m unittest discover -v tests/ 'test_php_*.py'
