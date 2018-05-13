@@ -92,6 +92,9 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         obj, data = self._get_detection_obj_data(self.url % '')
         self.assertEqual(data, self.expected_data)
 
+        if not EXTRA_DOWNLOAD:
+            return
+
         # Normal ASCII file
         readable_file = '/etc/resolv.conf'
         content = open(readable_file, 'r').read()

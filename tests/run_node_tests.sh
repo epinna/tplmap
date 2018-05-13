@@ -24,7 +24,7 @@ http://localhost:15004/blind/ejs?inj=*
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
-docker rm -f $INSTANCE_NAME
+docker rm -f $INSTANCE_NAME || echo ''
 docker build -f docker-envs/Dockerfile.node . -t $IMAGE_NAME
 docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 

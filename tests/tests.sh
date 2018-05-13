@@ -9,6 +9,6 @@ do
   if [ -f $SCRIPT -a -x $SCRIPT ]
   then
     echo -e "\n## Running $SCRIPT"
-    $SCRIPT --test
+    bash -e $SCRIPT --test
   fi
 done
