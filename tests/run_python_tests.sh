@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 INSTANCE_NAME="tplmap-py"
 IMAGE_NAME="tplmap-py-img"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 INSTANCE_NAME="tplmap-node"
 IMAGE_NAME="tplmap-node-img"

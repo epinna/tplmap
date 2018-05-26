@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 INSTANCE_NAME="tplmap-ruby"
 IMAGE_NAME="tplmap-ruby-img"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 INSTANCE_NAME="tplmap-php"
 IMAGE_NAME="tplmap-php-img"

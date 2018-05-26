@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 INSTANCE_NAME="tplmap-java"
 IMAGE_NAME="tplmap-java-img"
