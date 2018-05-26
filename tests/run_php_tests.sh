@@ -6,9 +6,9 @@ PORT=15002
 
 echo "Exposed testing APIs:
 
-http://localhost:15002/smarty-3.1.29-secured.php?inj=*
-http://localhost:15002/smarty-3.1.29-unsecured.php?inj=*
-http://localhost:15002/smarty-3.1.29-unsecured.php?inj=*&blind=1
+http://localhost:15002/smarty-3.1.32-secured.php?inj=*
+http://localhost:15002/smarty-3.1.32-unsecured.php?inj=*
+http://localhost:15002/smarty-3.1.32-unsecured.php?inj=*&blind=1
 http://localhost:15002/twig-1.24.1-secured.php?inj=*
 http://localhost:15002/eval.php?inj=*
 http://localhost:15002/eval.php?inj=*&blind=1
@@ -17,7 +17,7 @@ http://localhost:15002/eval.php?inj=*&blind=1
 cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
 docker rm -f $INSTANCE_NAME || echo ''
-docker build -f docker-envs/Dockerfile.php . -t $IMAGE_NAME
+docker build --no-cache -f docker-envs/Dockerfile.php . -t $IMAGE_NAME
 docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
 # Wait until the http server is serving

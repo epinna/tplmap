@@ -7,7 +7,7 @@ COPY  . /apps/
 WORKDIR /apps/tests/
 
 RUN mkdir env_php_tests/lib/ && cd env_php_tests/lib && \
-    curl -sL 'https://github.com/smarty-php/smarty/archive/v3.1.29.tar.gz' | tar xzf - && \
+    curl -sL 'https://github.com/smarty-php/smarty/archive/v3.1.32.tar.gz' | tar xzf - && \
     curl -sL 'https://github.com/twigphp/Twig/archive/v1.24.1.tar.gz' | tar xzf - && \
     curl -sL 'https://github.com/twigphp/Twig/archive/v1.19.0.tar.gz' | tar xzf -
 

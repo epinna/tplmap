@@ -41,8 +41,8 @@ class SmartyUnsecuredTest(unittest.TestCase, BaseTest):
         'reverse_shell': True
     }
 
-    url = 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*&tpl=%s'
-    url_blind = 'http://127.0.0.1:15002/smarty-3.1.29-unsecured.php?inj=*&tpl=%s&blind=1'
+    url = 'http://127.0.0.1:15002/smarty-3.1.32-unsecured.php?inj=*&tpl=%s'
+    url_blind = 'http://127.0.0.1:15002/smarty-3.1.32-unsecured.php?inj=*&tpl=%s&blind=1'
     plugin = Smarty
 
     blind_tests = [
