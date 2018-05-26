@@ -23,7 +23,7 @@ until $(curl --output /dev/null --silent --head http://localhost:$PORT/); do
     sleep 1
 done
 
-# Launch python engines tests
-python -m unittest discover -v tests/ 'test_java_*.py'
+# Launch Java engines tests
+docker exec -it $INSTANCE_NAME python -m unittest discover -v . 'test_java_*.py'
 
 docker stop $INSTANCE_NAME

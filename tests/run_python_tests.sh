@@ -26,6 +26,6 @@ docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 while ! </dev/tcp/localhost/$PORT; do sleep 1; done 2> /dev/null
 
 # Launch python engines tests
-python -m unittest discover -v tests/ 'test_py_*.py'
+docker exec -it $INSTANCE_NAME python -m unittest discover -v . 'test_py_*.py'
 
 docker stop $INSTANCE_NAME

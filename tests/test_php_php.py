@@ -8,7 +8,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.languages.php import Php
 from core.channel import Channel
 from core.checks import detect_template_injection
-from basetest import BaseTest
+from basetest import BaseTest, EXTRA_DOWNLOAD
 
 
 class PhpTests(unittest.TestCase, BaseTest):
