@@ -22,6 +22,7 @@ docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 until $(curl --output /dev/null --silent --head http://localhost:$PORT/); do
     sleep 1
 done
+sleep 1
 
 # Launch Java engines tests
 docker exec -it $INSTANCE_NAME python -m unittest discover -v . 'test_java_*.py'

@@ -28,8 +28,10 @@ docker rm -f $INSTANCE_NAME || echo ''
 docker build -f docker-envs/Dockerfile.node . -t $IMAGE_NAME
 docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
-# Wait until the port is open
-while ! </dev/tcp/localhost/$PORT; do sleep 1; done 2> /dev/null
+# Wait until the http server is serving
+until $(curl --output /dev/null --silent --head http://localhost:$PORT/); do
+    sleep 1
+done
 
 # Launch node engines tests
 docker exec -it $INSTANCE_NAME python -m unittest discover -v . 'test_node_*.py'
