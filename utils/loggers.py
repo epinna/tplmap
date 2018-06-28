@@ -38,7 +38,7 @@ file_handler = logging.handlers.RotatingFileHandler(
 file_handler.setFormatter(TplmapFormatter())
 
 """Initialize the normal handler"""
-stream_handler = logging.StreamHandler()
+stream_handler = logging.StreamHandler(stream=sys.stdout)
 stream_handler.setFormatter(TplmapFormatter())
 
 """Initialize the standard logger"""
