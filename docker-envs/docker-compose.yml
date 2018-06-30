@@ -4,10 +4,17 @@ services:
   tplmap_test_python:
     build:
       context: ../
-      dockerfile: docker-envs/Dockerfile.python
+      dockerfile: docker-envs/Dockerfile.python2
     restart: always
     ports:
       - "15001:15001"
+  tplmap_test_python3:
+    build:
+      context: ../
+      dockerfile: docker-envs/Dockerfile.python3
+    restart: always
+    ports:
+      - "15006:15001"
   tplmap_test_php:
     build:
       context: ../

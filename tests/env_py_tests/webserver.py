@@ -5,8 +5,12 @@ from mako.lookup import TemplateLookup
 from jinja2 import Environment as Jinja2Environment
 import tornado.template
 import random
-import string
 import time
+
+try:
+    from string import lowercase as ascii_lowercase
+except ImportError:
+    from string import ascii_lowercase
 
 mylookup = TemplateLookup(directories=['/tpl'])
 
@@ -19,7 +23,7 @@ def shutdown_server():
     func()
 
 def randomword(length = 8):
-   return ''.join(random.choice(string.lowercase) for i in range(length))
+   return ''.join(random.choice(ascii_lowercase) for i in range(length))
 
 @app.route("/reflect/<engine>")
 def reflect(engine):
@@ -37,7 +41,7 @@ def reflect(engine):
     elif engine == 'eval':
         return randomword() + str(eval(template % injection)) + randomword()
     elif engine == 'tornado':
-        return randomword() + tornado.template.Template(template % injection).generate() + randomword()
+        return randomword() + tornado.template.Template(template % injection).generate().decode() + randomword()
 
 @app.route("/url/<engine>/<injection>")
 def url_reflect(engine, injection):
@@ -53,7 +57,7 @@ def url_reflect(engine, injection):
     elif engine == 'eval':
         return randomword() + str(eval(template % injection)) + randomword()
     elif engine == 'tornado':
-        return randomword() + tornado.template.Template(template % injection).generate() + randomword()
+        return randomword() + tornado.template.Template(template % injection).generate().decode() + randomword()
 
 
 @app.route("/post/<engine>", methods = [ "POST" ])
