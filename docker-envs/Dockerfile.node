@@ -6,7 +6,7 @@ RUN pip install requests PyYAML
 COPY  . /apps/
 WORKDIR /apps/tests/
 
-RUN cd /apps/tests/env_node_tests/ && npm install randomstring connect jade nunjucks dustjs-linkedin@2.6 dustjs-helpers@1.5.0 marko dot ejs
+RUN cd /apps/tests/env_node_tests/ && npm install randomstring connect pug nunjucks dustjs-linkedin@2.6 dustjs-helpers@1.5.0 marko dot ejs
 
 EXPOSE 15004
 

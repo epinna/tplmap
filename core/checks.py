@@ -4,7 +4,7 @@ from plugins.engines.smarty import Smarty
 from plugins.engines.twig import Twig
 from plugins.engines.freemarker import Freemarker
 from plugins.engines.velocity import Velocity
-from plugins.engines.jade import Jade
+from plugins.engines.pug import Pug
 from plugins.engines.nunjucks import Nunjucks
 from plugins.engines.dust import Dust
 from plugins.engines.dot import Dot
@@ -37,7 +37,7 @@ plugins = [
     Velocity,
     Slim,
     Erb,
-    Jade,
+    Pug,
     Nunjucks,
     Dot,
     Dust,

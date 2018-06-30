@@ -121,7 +121,7 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | Python (code eval)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Tornado                | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Nunjucks               | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
-| Jade                   | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
+| Pug                    | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | doT                    | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | Marko                  | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |
 | JavaScript (code eval) | ✓ |  ✓                | JavaScript      |  ✓        |  ✓         |

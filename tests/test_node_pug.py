@@ -5,15 +5,15 @@ import sys
 import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from plugins.engines.jade import Jade
+from plugins.engines.pug import Pug
 from basetest import BaseTest
 
 
-class JadeTest(unittest.TestCase, BaseTest):
+class PugTest(unittest.TestCase, BaseTest):
 
     expected_data = {
         'language': 'javascript',
-        'engine': 'jade',
+        'engine': 'pug',
         'evaluate' : 'javascript' ,
         'execute' : True,
         'read' : True,
@@ -29,7 +29,7 @@ class JadeTest(unittest.TestCase, BaseTest):
 
     expected_data_blind = {
         'language': 'javascript',
-        'engine': 'jade',
+        'engine': 'pug',
         'blind': True,
         'execute_blind' : True,
         'evaluate_blind' : 'javascript',
@@ -40,9 +40,9 @@ class JadeTest(unittest.TestCase, BaseTest):
         'reverse_shell': True
     }
 
-    url = 'http://127.0.0.1:15004/jade?inj=*&tpl=%s'
-    url_blind = 'http://127.0.0.1:15004/blind/jade?inj=*&tpl=%s'
-    plugin = Jade
+    url = 'http://127.0.0.1:15004/pug?inj=*&tpl=%s'
+    url_blind = 'http://127.0.0.1:15004/blind/pug?inj=*&tpl=%s'
+    plugin = Pug
 
 
     blind_tests = [

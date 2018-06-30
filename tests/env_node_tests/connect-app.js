@@ -1,7 +1,7 @@
 var connect = require('connect');
 var http = require('http');
 var url = require('url');
-var jade = require('jade');
+var pug = require('pug');
 var nunjucks = require('nunjucks');
 var dust = require('dustjs-linkedin');
 var dusthelpers = require('dustjs-helpers');
@@ -12,8 +12,8 @@ var ejs=require('ejs');
 
 var app = connect();
 
-// Jade
-app.use('/jade', function(req, res){
+// Pug
+app.use('/pug', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
 
@@ -26,12 +26,12 @@ app.use('/jade', function(req, res){
     else {
       tpl = inj;
     }
-    res.end(randomstring.generate() + jade.render(tpl) + randomstring.generate());
+    res.end(randomstring.generate() + pug.render(tpl) + randomstring.generate());
   }
 });
 
-// Jade blind endpoint
-app.use('/blind/jade', function(req, res){
+// Pug blind endpoint
+app.use('/blind/pug', function(req, res){
   if(req.url) {
     var url_parts = url.parse(req.url, true);
 
@@ -44,7 +44,8 @@ app.use('/blind/jade', function(req, res){
     else {
       tpl = inj;
     }
-    jade.render(tpl)
+    console.log('PAYLOAD: ' + tpl);
+    pug.render(tpl)
     res.end(randomstring.generate());
   }
 });

@@ -6,8 +6,8 @@ PORT=15004
 
 echo "Exposed testing APIs:
 
-http://localhost:15004/jade?inj=*
-http://localhost:15004/blind/jade?inj=*
+http://localhost:15004/pug?inj=*
+http://localhost:15004/blind/pug?inj=*
 http://localhost:15004/nunjucks?inj=*
 http://localhost:15004/blind/nunjucks?inj=*
 http://localhost:15004/javascript?inj=*
