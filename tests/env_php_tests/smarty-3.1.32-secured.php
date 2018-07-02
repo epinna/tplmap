@@ -7,6 +7,9 @@ function generateRandomString($length = 10) {
 require('lib/smarty-3.1.32/libs/Smarty.class.php');
 $smarty = new Smarty;
 
+// clear out all cache files
+$smarty->clear_all_cache();
+
 $inj=$_GET["inj"];
 if(isset($_GET["tpl"])) {
   // Keep the formatting a-la-python

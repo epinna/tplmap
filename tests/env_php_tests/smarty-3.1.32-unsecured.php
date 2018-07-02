@@ -7,6 +7,9 @@ function generateRandomString($length = 10) {
 require('lib/smarty-3.1.32/libs/Smarty.class.php');
 $smarty = new SmartyBC;
 
+// clear out all cache files
+$smarty->clear_all_cache();
+
 // Run render via CLI
 if (php_sapi_name() == "cli") {
     $_GET["inj"] = '';
