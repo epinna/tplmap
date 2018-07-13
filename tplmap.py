@@ -5,7 +5,7 @@ from core.channel import Channel
 from utils.loggers import log
 import traceback
 
-version = '0.4'
+version = '0.5'
 
 def main():
     

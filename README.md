@@ -7,7 +7,7 @@ The tool and its test suite are developed to research the SSTI vulnerability cla
 
 The sandbox break-out techniques came from James Kett's [Server-Side Template Injection: RCE For The Modern Web App][10], other public researches [\[1\]][1] [\[2\]][2], and original contributions to this tool [\[3\]][3] [\[4\]][4].
 
-It fully compromises the server exploiting several code context and blind injection scenarios. It also supports _eval()_-like code injections in Python, Ruby, PHP, Java and generic unsandboxed template engines.
+It can exploit several code context and blind injection scenarios. It also supports _eval()_-like code injections in Python, Ruby, PHP, Java and generic unsandboxed template engines.
 
 Server-Side Template Injection
 ------------------------------
@@ -56,7 +56,7 @@ Tplmap is able to detect and exploit SSTI in a range of template engines to get 
 
 ```
 $ ./tplmap.py -u 'http://www.target.com/page?name=John'
-[+] Tplmap 0.3
+[+] Tplmap 0.5
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Testing if GET parameter 'name' is injectable
