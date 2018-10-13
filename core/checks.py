@@ -144,7 +144,7 @@ def check_template_injection(channel):
 
     # Kill execution if no engine have been found
     if not channel.data.get('engine'):
-        log.fatal("""Tested parameters appear to be not injectable. Try to increase '--level' value to perform more tests.""")
+        log.fatal("""Tested parameters appear to be not injectable.""")
         return
 
     # Print injection summary
