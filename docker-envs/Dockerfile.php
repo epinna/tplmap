@@ -1,4 +1,4 @@
-FROM php:apache
+FROM php:7.2.10-apache
 
 RUN apt-get update && apt-get install --upgrade dnsutils python-pip -y
 RUN pip install requests PyYAML

@@ -1,4 +1,4 @@
-FROM python:2
+FROM python:2.7.15
 
 RUN pip install mako jinja2 flask tornado PyYAML requests
 RUN apt-get update && apt-get install dnsutils -y

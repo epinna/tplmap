@@ -1,4 +1,4 @@
-FROM python:2
+FROM python:2.7.15
 
 RUN apt-get update && apt-get install dnsutils python3-pip -y
 RUN pip3 install mako jinja2 flask tornado
