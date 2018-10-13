@@ -17,7 +17,7 @@ http://localhost:15002/eval.php?inj=*&blind=1
 cd "$( dirname "${BASH_SOURCE[0]}" )"/../
 
 docker rm -f $INSTANCE_NAME || echo ''
-docker build --no-cache -f docker-envs/Dockerfile.php . -t $IMAGE_NAME
+docker build -f docker-envs/Dockerfile.php . -t $IMAGE_NAME
 docker run --rm --name $INSTANCE_NAME -p $PORT:$PORT -d $IMAGE_NAME
 
 # Wait until the http server is serving
