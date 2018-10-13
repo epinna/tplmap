@@ -371,16 +371,16 @@ class Plugin(object):
 
             expected_delay = self._get_expected_delay()
 
-            start = datetime.datetime.now()
+            start = int(time.time())
 
             self.channel.req(injection)
 
-            end = datetime.datetime.now()
+            end = int(time.time())
             delta = end - start
 
-            result = delta.seconds >= expected_delay
+            result = delta >= expected_delay
 
-            log.debug('[blind %s] code above took %s. %s is the threshold, returning %s' % (self.plugin, str(delta.seconds), str(expected_delay), str(result)))
+            log.debug('[blind %s] code above took %s (%s-%s). %s is the threshold, returning %s' % (self.plugin, str(delta), str(end), str(start), str(expected_delay), str(result)))
 
             self._inject_verbose = {
                 'result': result,
@@ -393,13 +393,13 @@ class Plugin(object):
             return result
 
         else:
-            start = datetime.datetime.now()
+            start = int(time.time())
             result = self.channel.req(injection)
-            end = datetime.datetime.now()
+            end = int(time.time())
 
             # Append the execution time to a buffer
             delta = end - start
-            self.render_req_tm.append(delta.seconds)
+            self.render_req_tm.append(delta)
 
             return result.strip() if result else result
 
