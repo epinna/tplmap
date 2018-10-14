@@ -9,20 +9,39 @@ from plugins.engines.twig import Twig
 from core.channel import Channel
 from basetest import BaseTest
 
-class TwigTest(unittest.TestCase, BaseTest):
+class TwigUnsecuredTest(unittest.TestCase, BaseTest):
 
     expected_data = {
         'language': 'php',
         'engine': 'twig',
+        'evaluate' : 'php',
+        'execute' : True,
+        'write': True,
+        'read': True,
         'trailer': '{{%(trailer)s}}',
         'header': '{{%(header)s}}',
         'render': '{{%(code)s}}',
         'prefix' : '',
         'suffix' : '',
+        'bind_shell' : True,
+        'reverse_shell': True
+    }
+
+    expected_data_blind = {
+        'language': 'php',
+        'engine': 'twig',
+        'evaluate_blind': 'php',
+        'execute_blind': True,
+        'write': True,
+        'blind': True,
+        'prefix' : '',
+        'suffix' : '',
+        'bind_shell' : True,
+        'reverse_shell': True
     }
     
-    url = 'http://127.0.0.1:15002/twig-1.20.0-secured.php?tpl=%s&inj=*'
-    url_blind = ''
+    url = 'http://127.0.0.1:15002/twig-1.19.0-unsecured.php?tpl=%s&inj=*'
+    url_blind = 'http://127.0.0.1:15002/twig-1.19.0-unsecured.php?tpl=%s&inj=*&blind=1'
     
     plugin = Twig
     
@@ -43,14 +62,3 @@ class TwigTest(unittest.TestCase, BaseTest):
         (1, 3, "{% if 1 in [%s] %}{% endif %}", {'prefix': '1] %}', 'suffix' : ''}),
         #(1, 4, "{{ \"iterpo#{%s}lation\" }}", { 'prefix': '1}}}', 'suffix' : '' }),
     ]
-    
-    # Defuse download tests, capabilities not available
-    def test_download(self):
-        pass
-        
-    # Defuse upload tests, capabilities not available
-    def test_upload(self):
-        pass    
-        
-    def test_upload_blind(self):
-        pass

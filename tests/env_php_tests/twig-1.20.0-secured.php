@@ -22,12 +22,19 @@ else {
   $tpl=$inj;
 }
 
-error_log('DEBUG: ' . $tpl);
-
 $loader = new Twig_Loader_Array(array(
     'tpl' => $tpl,
 ));
 $twig = new Twig_Environment($loader);
 
-echo generateRandomString() . $twig->render('tpl') . generateRandomString();
+error_log('DEBUG<: ' . $tpl);
+$rendered = $twig->render('tpl');
+error_log('DEBUG> : ' . $rendered);
+
+if(!$_GET["blind"]) {
+  echo generateRandomString() . $rendered . generateRandomString();
+}
+else {
+  echo generateRandomString();
+}
  ?>
