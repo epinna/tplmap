@@ -96,7 +96,7 @@ Use `--os-shell` option to launch a pseudo-terminal on the target.
 
 ```
 $ ./tplmap.py --os-shell -u 'http://www.target.com/page?name=John'
-[+] Tplmap 0.3
+[+] Tplmap 0.5
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Run commands on the operating system.
@@ -114,8 +114,8 @@ Supported template engines
 
 Tplmap supports over 15 template engines, unsandboxed template engines and generic _eval()_-like injections.
 
-| Template engine        | Remote Command Execution |  Blind | Code evaluation | File read | File write |
-|------------------------|-------|-------------------|-----------------|-----------|------------|
+| Engine                 | Remote Command Execution |  Blind | Code evaluation | File read | File write |
+|------------------------|---------------|-------------------|-----------------|-----------|------------|
 | Mako                   | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Jinja2                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Python (code eval)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
@@ -132,10 +132,10 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | ERB                    | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
-| Twig (<1.19)           | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
+| Twig (<=1.19)          | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
 | Velocity               | ✓ |  ✓                | ×               |  ✓        |  ✓         |
-| Twig (>=1.20)          | × | ×                 | ×               | ×         | ×          |
+| Twig (>1.19)           | × | ×                 | ×               | ×         | ×          |
 | Smarty (secured)       | × | ×                 | ×               | ×         | ×          |
 | Dust (> dustjs-helpers@1.5.0) | × | ×          | ×               | ×         | ×          |
 
