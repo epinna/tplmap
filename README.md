@@ -132,9 +132,10 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | ERB                    | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
+| Twig (<1.19)           | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
 | Velocity               | ✓ |  ✓                | ×               |  ✓        |  ✓         |
-| Twig                   | × | ×                 | ×               | ×         | ×          |
+| Twig (>=1.20)          | × | ×                 | ×               | ×         | ×          |
 | Smarty (secured)       | × | ×                 | ×               | ×         | ×          |
 | Dust (> dustjs-helpers@1.5.0) | × | ×          | ×               | ×         | ×          |
 
