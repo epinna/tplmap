@@ -43,3 +43,10 @@ services:
     restart: always
     ports:
       - "15005:15005"
+  tplmap_test_struts:
+    build:
+      context: ../
+      dockerfile: docker-envs/Dockerfile.struts
+    restart: always
+    ports:
+      - "15007:15007"

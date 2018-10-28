@@ -3,6 +3,7 @@ from utils.loggers import log
 import urlparse
 from copy import deepcopy
 import utils.config
+import urllib
 
 class Channel:
 
@@ -81,7 +82,7 @@ class Channel:
             self.injs.append({
                 'field' : 'URL',
                 'param' : 'url',
-                'position': url_path_base_index + index
+                'position': index
             })
                 
 
@@ -202,7 +203,7 @@ class Channel:
             
             position = inj['position']
             
-            url_params = self.base_url[:position] + injection + self.base_url[position+1:]
+            url_params = self.base_url[:position] + urllib.quote_plus(injection) + self.base_url[position+1:]
         
         elif inj['field'] == 'POST':
         
@@ -294,18 +295,37 @@ class Channel:
                 # By default, SSL check is skipped.
                 # TODO: add a -k curl-like option to set this.
                 verify = False
-                ).text
+                )
         except requests.exceptions.ConnectionError as e:
             if e and e[0] and e[0][0] == 'Connection aborted.':
                 log.info('Error: connection aborted, bad status line.')
-                result = None
+                return ''
             else:
                 raise
 
-        if utils.config.log_response:
-            log.debug("""< %s""" % (result) )
+        # Result might have an history in case of redirections. For
+        # simplicity, concatenates everything, including the headers.
+        # Add a fake Location header 
+        
+        chain_of_results = result.history + [ result ]
+        response = ''
+        
+        for current_index, current_result in enumerate(chain_of_results):
+    
+            current_response_with_headers = ''
+            
+            if current_result.status_code == 302:
+                current_response_with_headers += 'Location: %s\n' % (chain_of_results[current_index+1].url)
+    
+            for h, v in result.headers.items():
+                current_response_with_headers += '%s: %s\n' % (h, v)
+            
+            response += current_response_with_headers + '\n' + current_result.text
 
-        return result
+        if utils.config.log_response:
+            log.debug("""< %s""" % (repr(response)))
+        
+        return response
 
     def detected( self, technique, detail ):
         pass

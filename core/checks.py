@@ -13,6 +13,7 @@ from plugins.engines.marko import Marko
 from plugins.engines.slim import Slim
 from plugins.engines.erb import Erb
 from plugins.engines.ejs import Ejs
+from plugins.engines.ognl import Ognl
 from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
 from plugins.languages.python import Python
@@ -45,7 +46,8 @@ plugins = [
     Javascript,
     Php,
     Ruby,
-    Ejs
+    Ejs,
+    Ognl
 ]
 
 def _print_injection_summary(channel):

@@ -2,7 +2,7 @@
 base_path: ~/.tplmap/
 
 # Log HTTP responses under tplmap.log
-log_response: False
+log_response: True
 
 # The number of seconds to delay the response when testing for
 # time-based blind injection. This will be added to the average

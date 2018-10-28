@@ -1,0 +1,11 @@
+FROM tomcat:7
+
+RUN rm -rf /usr/local/tomcat/webapps/* \
+  && chmod a+x /usr/local/tomcat/bin/*.sh \
+  && sed -i 's/8080/15007/g' /usr/local/tomcat/conf/server.xml
+
+RUN wget http://central.maven.org/maven2/org/apache/struts/struts2-showcase/2.3.12/struts2-showcase-2.3.12.war -O /root/struts2-2.3.12.war \
+  && mkdir /usr/local/tomcat/webapps/ROOT/ \
+  && unzip /root/struts2-2.3.12.war -d /usr/local/tomcat/webapps/ROOT/
+  
+COPY tests/env_struts_tests/struts2-2.3.12-struts.xml /usr/local/tomcat/webapps/ROOT/WEB-INF/classes/struts.xml 

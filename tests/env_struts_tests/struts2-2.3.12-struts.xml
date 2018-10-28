@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<!-- START SNIPPET: xworkSample -->
+<struts>
+
+    <constant name="struts.mapper.alwaysSelectFullNamespace" value="true" />
+
+    <!-- Some or all of these can be flipped to true for debugging -->
+    <constant name="struts.i18n.reload" value="false" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.configuration.xml.reload" value="false" />
+    <constant name="struts.custom.i18n.resources" value="globalMessages" />
+    <constant name="struts.action.extension" value="action,," />
+
+    <constant name="struts.convention.package.locators.basePackage" value="org.apache.struts2.showcase.person" />
+    <constant name="struts.convention.result.path" value="/" />
+
+    <!-- Necessary for Showcase because default includes org.apache.struts2.* -->
+    <constant name="struts.convention.exclude.packages" value="org.apache.struts.*,org.springframework.web.struts.*,org.springframework.web.struts2.*,org.hibernate.*"/>
+
+    <constant name="struts.freemarker.manager.classname" value="customFreemarkerManager" />
+    <constant name="struts.serve.static" value="true" />
+    <constant name="struts.serve.static.browserCache" value="false" />
+
+    <include file="struts-chat.xml" />
+    
+    <include file="struts-interactive.xml" />
+
+    <include file="struts-hangman.xml" />
+
+    <include file="struts-tags.xml"/>
+
+    <include file="struts-validation.xml" />
+
+    <include file="struts-actionchaining.xml" />
+
+    <include file="struts-ajax.xml" />
+
+    <include file="struts-fileupload.xml" />
+
+    <include file="struts-person.xml" />
+
+    <include file="struts-wait.xml" />
+
+    <include file="struts-jsf.xml" />
+
+    <include file="struts-token.xml" />
+
+    <include file="struts-model-driven.xml" />
+
+    <include file="struts-integration.xml" />
+
+    <include file="struts-filedownload.xml" />
+
+    <include file="struts-conversion.xml" />
+
+    <include file="struts-freemarker.xml" />
+
+    <include file="struts-tiles.xml" />
+
+    <include file="struts-xslt.xml" />
+
+    <package name="default" extends="struts-default">
+        <interceptors>
+            <interceptor-stack name="crudStack">
+                <interceptor-ref name="checkbox" />
+                <interceptor-ref name="params" />
+                <interceptor-ref name="staticParams" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+
+        <default-action-ref name="showcase" />
+
+        <action name="showcase">
+            <result>showcase.jsp</result>
+        </action>
+
+        <action name="viewSource" class="org.apache.struts2.showcase.source.ViewSourceAction">
+            <result>viewSource.jsp</result>
+        </action>
+
+        <action name="date" class="org.apache.struts2.showcase.DateAction" method="browse">
+            <result name="success">/date.jsp</result>
+        </action>
+        
+        <action name="help">
+                <result type="redirectAction">
+                        <param name="actionName">date.action</param>
+                </result>
+        </action>
+
+    </package>
+
+    <package name="skill" extends="default" namespace="/skill">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="org.apache.struts2.showcase.action.SkillAction" method="list">
+            <result>/empmanager/listSkills.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit" class="org.apache.struts2.showcase.action.SkillAction">
+            <result>/empmanager/editSkill.jsp</result>
+            <interceptor-ref name="params" />
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="save" class="org.apache.struts2.showcase.action.SkillAction" method="save">
+            <result name="input">/empmanager/editSkill.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+        <action name="delete" class="org.apache.struts2.showcase.action.SkillAction" method="delete">
+            <result name="error">/empmanager/editSkill.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+    </package>
+
+    <package name="employee" extends="default" namespace="/employee">
+        <default-interceptor-ref name="crudStack"/>
+
+        <action name="list" class="org.apache.struts2.showcase.action.EmployeeAction" method="list">
+            <result>/empmanager/listEmployees.jsp</result>
+            <interceptor-ref name="basicStack"/>
+        </action>
+        <action name="edit-*" class="org.apache.struts2.showcase.action.EmployeeAction">
+      		<param name="empId">{1}</param>
+            <result>/empmanager/editEmployee.jsp</result>
+            <interceptor-ref name="crudStack"><param name="validation.excludeMethods">execute</param></interceptor-ref>
+        </action>
+        <action name="save" class="org.apache.struts2.showcase.action.EmployeeAction" method="save">
+            <result name="input">/empmanager/editEmployee.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+        <action name="delete" class="org.apache.struts2.showcase.action.EmployeeAction" method="delete">
+            <result name="error">/empmanager/editEmployee.jsp</result>
+            <result type="redirect">list.action</result>
+        </action>
+
+    </package>
+
+</struts>
+
+<!-- END SNIPPET: xworkSample -->
+
