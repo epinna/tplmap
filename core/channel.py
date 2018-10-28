@@ -140,7 +140,7 @@ class Channel:
 
         if self.args.get('data'):
 
-            params_dict_list = urlparse.parse_qs(self.args.get('data'))
+            params_dict_list = urlparse.parse_qs(self.args.get('data'), keep_blank_values=True)
 
             for param, value_list in params_dict_list.items():
 
@@ -165,7 +165,7 @@ class Channel:
             
     def _parse_get(self, all_injectable = False):
 
-        params_dict_list = urlparse.parse_qs(urlparse.urlsplit(self.url).query)
+        params_dict_list = urlparse.parse_qs(urlparse.urlsplit(self.url).query, keep_blank_values=True)
 
         for param, value_list in params_dict_list.items():
 

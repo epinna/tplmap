@@ -40,12 +40,14 @@ public static Object velocity(Request request, Response response) {
 
   // Get tpl parameter
   String tpl = request.queryParams("tpl");
-  if(tpl == null) {
-    tpl = inj;
-  }
-  else {
+    
+  // If tpl exists
+  if(tpl != null && !tpl.isEmpty()) {
     // Keep the formatting a-la-python
     tpl = tpl.replace("%s", inj);
+  }
+  else {
+    tpl = inj;
   }
   
   String blind = request.queryParams("blind");
@@ -90,12 +92,14 @@ public static Object freemarker(Request request, Response response) {
 
   // Get tpl parameter
   String tpl = request.queryParams("tpl");
-  if(tpl == null) {
-    tpl = inj;
-  }
-  else {
+  
+  // If tpl exists
+  if(tpl != null && !tpl.isEmpty()) {
     // Keep the formatting a-la-python
     tpl = tpl.replace("%s", inj);
+  }
+  else {
+    tpl = inj;
   }
 
   // Get blind parameter
