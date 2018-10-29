@@ -109,7 +109,7 @@ class BaseTest(object):
 
     def test_download(self):
 
-        obj, data = self._get_detection_obj_data(self.url % '')
+        obj, data = self._get_detection_obj_data(self.url)
         self.assertEqual(data, self.expected_data)
 
         if not EXTRA_DOWNLOAD:
@@ -134,7 +134,7 @@ class BaseTest(object):
 
     def test_upload(self):
 
-        obj, data = self._get_detection_obj_data(self.url % '')
+        obj, data = self._get_detection_obj_data(self.url)
         self.assertEqual(data, self.expected_data)
         
         if not EXTRA_UPLOAD:
@@ -167,7 +167,7 @@ class BaseTest(object):
     def test_upload_blind(self):
 
         obj, data = self._get_detection_obj_data(
-            self.url_blind % '',
+            self.url_blind,
             technique = 'T'
         )
         self.assertEqual(data, self.expected_data_blind)
