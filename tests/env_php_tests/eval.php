@@ -5,7 +5,7 @@ function generateRandomString($length = 10) {
 }
 
 $inj=$_GET["inj"];
-if(isset($_GET["tpl"])) {
+if(isset($_GET["tpl"]) && $_GET["tpl"] != "") {
   // Keep the formatting a-la-python
   $tpl=str_replace("%s", $inj, $_GET["tpl"]);
 }
