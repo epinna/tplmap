@@ -19,7 +19,7 @@ app.use('/pug', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -37,7 +37,7 @@ app.use('/blind/pug', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -57,7 +57,7 @@ app.use('/nunjucks', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -75,7 +75,7 @@ app.use('/blind/nunjucks', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -94,7 +94,7 @@ app.use('/javascript', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -112,7 +112,7 @@ app.use('/blind/javascript', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -131,7 +131,7 @@ app.use('/dust', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -156,7 +156,7 @@ app.use('/blind/dust', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -181,7 +181,7 @@ app.use('/dot', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -199,7 +199,7 @@ app.use('/blind/dot', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -218,7 +218,7 @@ app.use('/marko', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -236,7 +236,7 @@ app.use('/blind/marko', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -255,7 +255,7 @@ app.use('/ejs', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
@@ -273,7 +273,7 @@ app.use('/blind/ejs', function(req, res){
 
     var inj = url_parts.query.inj;
     var tpl = '';
-    if('tpl' in url_parts.query) {
+    if('tpl' in url_parts.query && url_parts.query.tpl != '') {
       // Keep the formatting a-la-python
       tpl = url_parts.query.tpl.replace('%s', inj);
     }
