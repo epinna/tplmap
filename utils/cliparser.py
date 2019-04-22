@@ -142,6 +142,11 @@ general.add_option("--injection-tag", dest="injection_tag",
                     help="Use string as injection tag (default '*').",
                     default='*')
 
+general.add_option("--verbose", dest="verbose",
+                    action="store_true",
+                    help="Show tests injection and payloads",
+                    default=False)
+
 parser.add_option_group(target)
 parser.add_option_group(request)
 parser.add_option_group(detection)
