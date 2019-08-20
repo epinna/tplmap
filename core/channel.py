@@ -1,4 +1,5 @@
 import requests
+import urllib3
 from utils.loggers import log
 import urlparse
 from copy import deepcopy
@@ -54,7 +55,7 @@ class Channel:
         
         # Disable requests warning in case of 
         # skipped SSL certificate check
-        requests.packages.urllib3.disable_warnings()
+        urllib3.disable_warnings()
         
     def _parse_method(self):
 
