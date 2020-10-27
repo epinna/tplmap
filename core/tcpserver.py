@@ -2,6 +2,7 @@ import socket
 from utils.loggers import log
 import sys
 import select
+import threading
 
 class TcpServer:
 
@@ -19,6 +20,9 @@ class TcpServer:
 
         if not self.socket: return
 
+        log.info("Incoming connection accepted")
+
+        threading.Thread(target=self.receive_data).start()
         self.forward_data()
 
     def connect_socket(self):
@@ -29,6 +33,7 @@ class TcpServer:
         else:
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,  1)
+
             try:
                 server.setsockopt(socket.SOL_SOCKET, socket.TCP_NODELAY, 1)
             except socket.error:
@@ -52,35 +57,28 @@ class TcpServer:
                 raise
 
 
-    def forward_data(self):
+    def receive_data(self):
+        while(1):
+            self.socket_state = True
+            try:
+                data = ''
+                while 1:
+                    packet = self.socket.recv(1024)
+                    data += packet.decode()
 
-        log.info("Incoming connection accepted")
+                    if len(packet) < 1024:
+                        break
+
+                sys.stdout.write(data)
+                sys.stdout.flush()
+            except socket.error:
+                self.socket_state = False
+
+
+    def forward_data(self):
 
         self.socket.setblocking(0)
 
         while(1):
-            read_ready, write_ready, in_error = select.select(
-                [self.socket, sys.stdin], [], [self.socket, sys.stdin])
-
-            try:
-                buffer = self.socket.recv(1024)
-                while(buffer != ''):
-
-                    self.socket_state = True
-
-                    sys.stdout.write(buffer.decode())
-                    sys.stdout.flush()
-                    buffer = self.socket.recv(1024)
-                return
-            except socket.error:
-                pass
-
-            while(1):
-                r, w, e = select.select([sys.stdin], [], [], 0)
-                if(len(r) == 0):
-                    break
-                c = sys.stdin.read(1)
-                if(c == ''):
-                    return
-                if(self.socket.sendall(c.encode()) != None):
-                    return
+            i = sys.stdin.read(1)
+            self.socket.sendall(i.encode())
