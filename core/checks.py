@@ -296,7 +296,7 @@ def check_template_injection(channel):
     reverse_shell_host_port = channel.args.get('reverse_shell')
     if reverse_shell_host_port:
         host, port = reverse_shell_host_port
-        timeout = 5
+        timeout = 15
 
         if channel.data.get('reverse_shell'):
 
