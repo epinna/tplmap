@@ -63,18 +63,18 @@ class TcpServer:
                 [self.socket, sys.stdin], [], [self.socket, sys.stdin])
 
             try:
-                buffer = self.socket.recv(100)
+                buffer = self.socket.recv(1024)
                 while(buffer != ''):
 
                     self.socket_state = True
 
-                    sys.stdout.write(buffer)
+                    sys.stdout.write(buffer.decode())
                     sys.stdout.flush()
-                    buffer = self.socket.recv(100)
-                if(buffer == ''):
-                    return
+                    buffer = self.socket.recv(1024)
+                return
             except socket.error:
                 pass
+
             while(1):
                 r, w, e = select.select([sys.stdin], [], [], 0)
                 if(len(r) == 0):
@@ -82,5 +82,5 @@ class TcpServer:
                 c = sys.stdin.read(1)
                 if(c == ''):
                     return
-                if(self.socket.sendall(c) != None):
+                if(self.socket.sendall(c.encode()) != None):
                     return
