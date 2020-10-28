@@ -69,7 +69,8 @@ request.add_option("--proxy",
 injection = OptionGroup(parser, "Injection" , "These options can be used to customize the injection points.")
 
 injection.add_option("-p", "--parameters",
-                    dest="inj_parameters",
+                    dest="injection_tag",
+                    default="*",
                     help="Injectable parameter(s).")
 
 injection.add_option("-i", "--inogre",
@@ -149,9 +150,6 @@ general.add_option("--force-level", dest="force_level",
                     help="Force a LEVEL and CLEVEL to test.",
                     nargs=2)
 
-general.add_option("--injection-tag", dest="injection_tag",
-                    help="Use string as injection tag (default '*').",
-                    default='*')
 
 parser.add_option_group(target)
 parser.add_option_group(request)
