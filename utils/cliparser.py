@@ -6,8 +6,16 @@ import sys
 
 _ = os.path.normpath(sys.argv[0])
 
-banner = """Tplmap %s
-    Automatic Server-Side Template Injection Detection and Exploitation Tool
+banner = """
+               ^
+  __          | |                         
+_/  |_______ _| |_ _____ _____  ______   
+\   __\____ \{ - }/     \\__  \ \____ \  
+ |  | |  |_| { - }  Y Y  \/ __ \|  |_| > 
+ |__| |   __/{_-_}__|_|  (____  /   __/  
+      |__|  __| |__    \/     \/|__|
+            *******
+                           Tplmap %s
 """
 usage = "python %prog [options]"
 epilog = """
