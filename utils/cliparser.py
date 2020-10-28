@@ -78,6 +78,7 @@ injection.add_option("-i", "--inogre",
 
 injection.add_option("--injection-tag",
                     dest="injection_tag",
+                    default="*",
                     help="Use string as injection tag.")
 
 # Detection options
