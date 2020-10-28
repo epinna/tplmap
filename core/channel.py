@@ -149,7 +149,7 @@ class Channel:
 
                 self.post_params[param] = value_list
                 
-                if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable):
+                if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable[0]):
                     self.injs.append({
                         'field' : 'POST',
                         'part' : 'param',
@@ -174,7 +174,7 @@ class Channel:
 
             self.get_params[param] = value_list
             
-            if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable):
+            if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable[0]):
                 self.injs.append({
                     'field' : 'GET',
                     'part' : 'param',
