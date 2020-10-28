@@ -16,7 +16,7 @@ class TplmapFormatter(logging.Formatter):
         logging.INFO: Fore.GREEN + "[+]" + Style.RESET_ALL + " %(message)s",
         logging.WARNING: Fore.YELLOW + "[*][%(module)s]" + Style.RESET_ALL + " %(message)s",
         logging.ERROR: Fore.RED + "[-][%(module)s]" + Style.RESET_ALL + " %(message)s",
-        logging.CRITICAL: Back.RED + "[!][%(module)s" + Style.RESET_ALL + "] %(message)s",
+        logging.CRITICAL: Back.RED + "[!][%(module)s]" + Style.RESET_ALL + " %(message)s",
         'DEFAULT': "[%(levelname)s] %(message)s"}
 
     def format(self, record):
