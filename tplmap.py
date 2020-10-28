@@ -26,7 +26,7 @@ if __name__ == '__main__':
     try:
         main()
     except (KeyboardInterrupt):
-        log.info('Exiting.')
+        log.error('Exiting.')
     except Exception as e:
         log.critical('Exiting: %s' % e)
         log.debug(traceback.format_exc())
