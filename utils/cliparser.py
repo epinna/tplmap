@@ -69,13 +69,16 @@ request.add_option("--proxy",
 injection = OptionGroup(parser, "Injection" , "These options can be used to customize the injection points.")
 
 injection.add_option("-p", "--parameters",
-                    dest="injection_tag",
-                    default="*",
+                    dest="inj_parameters",
                     help="Injectable parameter(s).")
 
 injection.add_option("-i", "--inogre",
                     dest="skip_parameters",
                     help="Inogre testing for given parameter(s).")
+
+injection.add_option("--injection-tag",
+                    dest="injection_tag",
+                    help="Use string as injection tag.")
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
