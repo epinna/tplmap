@@ -17,6 +17,8 @@ class Channel:
         self.base_url = self.url.split("?")[0] if '?' in self.url else self.url
 
         self.tag = self.args.get('injection_tag')
+        self.injectable = self.args.get('inj_parameters').split(',')
+        self.ignore = self.args.get('skip_parameters').split(',')
 
         self.data = {}
 
@@ -147,7 +149,7 @@ class Channel:
 
                 self.post_params[param] = value_list
                 
-                if self.tag in param:
+                if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable):
                     self.injs.append({
                         'field' : 'POST',
                         'part' : 'param',
@@ -155,7 +157,7 @@ class Channel:
                     })
                 
                 for idx, value in enumerate(value_list):
-                    if self.tag in value or all_injectable:
+                    if self.tag in value:
                         self.injs.append({
                             'field' : 'POST',
                             'part' : 'value',
@@ -172,7 +174,7 @@ class Channel:
 
             self.get_params[param] = value_list
             
-            if self.tag in param:
+            if (self.tag in param or all_injectable) and param not in self.ignore and (param in self.injectable or not self.injectable):
                 self.injs.append({
                     'field' : 'GET',
                     'part' : 'param',
@@ -180,7 +182,7 @@ class Channel:
                 })
             
             for idx, value in enumerate(value_list):
-                if self.tag in value or all_injectable:
+                if self.tag in value:
                     self.injs.append({
                         'field' : 'GET',
                         'part': 'value',
