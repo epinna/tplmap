@@ -1,6 +1,7 @@
-from utils.strings import quote, chunkit, md5
 from utils.loggers import log
 from plugins.languages import java
+from utils.strings import quote
+import re
 
 
 class Pebble(java.Java):
