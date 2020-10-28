@@ -73,10 +73,10 @@ injection.add_option("-p", "--parameters",
                     default="",
                     help="Injectable parameter(s).")
 
-injection.add_option("-i", "--inogre",
+injection.add_option("-i", "--ignore",
                     dest="skip_parameters",
                     default="",
-                    help="Inogre testing for given parameter(s).")
+                    help="Ignore testing for given parameter(s).")
 
 injection.add_option("--injection-tag",
                     dest="injection_tag",
