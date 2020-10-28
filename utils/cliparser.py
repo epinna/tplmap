@@ -70,10 +70,12 @@ injection = OptionGroup(parser, "Injection" , "These options can be used to cust
 
 injection.add_option("-p", "--parameters",
                     dest="inj_parameters",
+                    default="",
                     help="Injectable parameter(s).")
 
 injection.add_option("-i", "--inogre",
                     dest="skip_parameters",
+                    default="",
                     help="Inogre testing for given parameter(s).")
 
 injection.add_option("--injection-tag",
