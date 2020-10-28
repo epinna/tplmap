@@ -3,6 +3,7 @@ import logging
 import sys
 import utils.config
 import os
+from colorama import Fore, Back, Style
 
 log = None
 logfile = None
@@ -11,11 +12,11 @@ class TplmapFormatter(logging.Formatter):
 
     FORMATS = {
         # logging.DEBUG :"[D][%(module)s.%(funcName)s:%(lineno)d] %(message)s",
-        logging.DEBUG: "[D][%(module)s] %(message)s",
-        logging.INFO: "[+] %(message)s",
-        logging.WARNING: "[*][%(module)s] %(message)s",
-        logging.ERROR: "[-][%(module)s] %(message)s",
-        logging.CRITICAL: "[!][%(module)s] %(message)s",
+        logging.DEBUG: Fore.BLUE + "[D][%(module)s]" + Style.RESET_ALL + " %(message)s",
+        logging.INFO: Fore.GREEN + "[+]" + Style.RESET_ALL + " %(message)s",
+        logging.WARNING: Fore.YELLOW + "[*][%(module)s]" + Style.RESET_ALL + " %(message)s",
+        logging.ERROR: Fore.RED + "[-][%(module)s]" + Style.RESET_ALL + " %(message)s",
+        logging.CRITICAL: Back.RED + "[!][%(module)s" + Style.RESET_ALL + "] %(message)s",
         'DEFAULT': "[%(levelname)s] %(message)s"}
 
     def format(self, record):
