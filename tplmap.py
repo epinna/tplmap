@@ -21,8 +21,8 @@ def main():
     
 if __name__ == '__main__':
 
-    log.info(cliparser.banner % version)
-    
+    print(cliparser.banner % version)
+
     try:
         main()
     except (KeyboardInterrupt):
