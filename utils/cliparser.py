@@ -26,7 +26,7 @@ parser = MyParser(usage=usage, epilog=epilog)
 # Target options
 target = OptionGroup(parser, "Target", "These options have to be provided, to define the target URL. ")
 
-target.add_option("-u","--url",
+target.add_option("-u", "--url",
                 action="store",
                 dest="url",
                 help="Target URL.")
@@ -34,29 +34,29 @@ target.add_option("-u","--url",
 # Request options
 request = OptionGroup(parser, "Request", "These options have how to connect and where to inject to the target URL.")
 
-request.add_option("-d","--data",
+request.add_option("-d", "--data",
                 dest="data",
                 help="Data string to be sent through POST. It must be as query string: param1=value1&param2=value2.",
                 )
 
-request.add_option("-H","--headers",
+request.add_option("-H", "--headers",
                 action="append",
                 dest="headers",
                 help="Extra headers (e.g. 'Header1: Value1'). Use multiple times to add new headers.",
                 default=[])
 
-request.add_option("-c","--cookie",
+request.add_option("-c", "--cookie",
                 action="append",
                 dest="cookies",
                 help="Cookies (e.g. 'Field1=Value1'). Use multiple times to add new cookies.",
                 default=[])
                 
-target.add_option("-X","--request",
+target.add_option("-X", "--request",
                 action="store",
                 dest="request",
                 help="Force usage of given HTTP method (e.g. PUT).")
 
-request.add_option("-A","--user-agent",
+request.add_option("-A", "--user-agent",
                 dest="user_agent",
                 help="HTTP User-Agent header value."
                 )
@@ -64,6 +64,17 @@ request.add_option("--proxy",
                 dest="proxy",
                 help="Use a proxy to connect to the target URL"
                 )
+
+# Injection options
+injection = OptionGroup(parser, "Injection" , "These options can be used to customize the injection points.")
+
+injection.add_option("-p", "--parameters",
+                    dest="inj_parameters",
+                    help="Injectable parameter(s).")
+
+injection.add_option("-i", "--inogre",
+                    dest="skip_parameters",
+                    help="Inogre testing for given parameter(s).")
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
@@ -144,6 +155,7 @@ general.add_option("--injection-tag", dest="injection_tag",
 
 parser.add_option_group(target)
 parser.add_option_group(request)
+parser.add_option_group(injection)
 parser.add_option_group(detection)
 parser.add_option_group(oscmd)
 parser.add_option_group(tplcmd)
