@@ -78,10 +78,10 @@ injection.add_option("-i", "--ignore",
                     default="",
                     help="Ignore testing for given parameter(s).")
 
-injection.add_option("--injection-tag",
+injection.add_option("--injection-point",
                     dest="injection_tag",
                     default="*",
-                    help="Use string as injection tag.")
+                    help="Use string as injection point. (e.g. -H 'Referer: ME' --injection-point 'ME')")
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")
