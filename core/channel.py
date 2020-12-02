@@ -17,6 +17,7 @@ class Channel:
         self.base_url = self.url.split("?")[0] if '?' in self.url else self.url
 
         self.tag = self.args.get('injection_tag')
+        self.param = self.args.get('parameter')
 
         self.data = {}
 
