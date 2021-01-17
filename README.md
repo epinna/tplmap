@@ -1,6 +1,8 @@
 Tplmap
 ======
 
+> This project is no longer maintained. I'm happy to merge new PRs as long they don't break the [test suite](https://github.com/epinna/tplmap/wiki/Run-the-test-suite).
+
 Tplmap assists the exploitation of Code Injection and Server-Side Template Injection vulnerabilities with a number of sandbox escape techniques to get access to the underlying operating system.
 
 The tool and its test suite are developed to research the SSTI vulnerability class and to be used as offensive security tool during web application penetration tests.
