@@ -16,18 +16,27 @@ An example of a simple setup procedure:
 
 1. Install Jython by installer
 ```sh
-$ wget 'http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.0/jython-installer-2.7.0.jar' -O jython_installer.jar
-$ java -jar jython_installer.jar -s -d /path/to/install/jython -t standard
+$ wget 'https://repo1.maven.org/maven2/org/python/jython-installer/2.7.2/jython-installer-2.7.2.jar' -O jython_installer.jar
+$ mkdir "$HOME"/jython
+$ java -jar jython_installer.jar -s -d "$HOME"/jython -t standard
+$ rm jython_installer.jar
 ```
 2. Install additional Python modules
 ```sh
-$ cd /path/to/install/jython
-$ ./bin/pip install PyYaml requests
+$ curl -sL 'https://github.com/yaml/pyyaml/archive/refs/tags/5.1.2.tar.gz' | tar xzf -
+$ cd pyyaml-5.1.2
+$ "$HOME"/jython/bin/jython setup.py install
+$ cd ..
+$ curl -sL 'https://github.com/psf/requests/archive/refs/tags/v2.22.0.tar.gz' | tar xzf -
+$ cd requests-2.22.0
+$ "$HOME"/jython/bin/jython setup.py install
+$ cd ..
+$ rm -rf pyyaml-5.1.2 requests-2.22.0
 ```
 3. Run your Burp Suite
 4. Open Jython file chooser dialog
 [Extender] - [Options] - [Python Environment] - [Location of the Jython standalone JAR file]
-5. Choose the file `/path/to/install/jython/jython.jar`
+5. Choose the file `$HOME/jython/jython.jar`
 6. Load `burp_extender.py` as Python type burp extension
 
 ### Scanning
