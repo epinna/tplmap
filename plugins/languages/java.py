@@ -11,7 +11,7 @@ class Java(Plugin):
         self.update_actions({
         
             'execute' : {
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2],
                 'test_os' : """uname""",
                 'test_os_expected': '^[\w-]+$'

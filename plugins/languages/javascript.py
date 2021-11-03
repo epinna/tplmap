@@ -61,7 +61,7 @@ class Javascript(Plugin):
             'execute' : {
                 'call': 'render',
                 'execute': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString())""",
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2] 
             },
             'bind_shell' : {

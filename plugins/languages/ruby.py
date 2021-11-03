@@ -45,7 +45,7 @@ class Ruby(Plugin):
             'execute' : {
                 'call': 'evaluate',
                 'execute': """(require'base64';%%x(#{Base64.urlsafe_decode64('%(code_b64)s')})).to_s""",
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2]
             },
             'blind' : {

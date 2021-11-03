@@ -86,7 +86,6 @@ class Plugin(object):
                 action_execute = self.actions.get('execute', {})
                 test_cmd_code = action_execute.get('test_cmd')
                 test_cmd_code_expected = action_execute.get('test_cmd_expected')
-
                 if (
                     test_cmd_code and 
                     test_cmd_code_expected and
@@ -695,7 +694,7 @@ class Plugin(object):
             suffix = suffix,
             blind = blind
         )
-        return result
+        return result.replace('\\n', '\n')
 
 
     def evaluate_blind(self, code, **kwargs):

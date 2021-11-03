@@ -27,7 +27,7 @@ class Dust(javascript.Javascript):
                 # execSync() has been introduced in node 0.11, so this will not work with old node versions.
                 # TODO: use another function.
                 'execute_blind': """require('child_process').execSync(Buffer('%(code_b64)s', 'base64').toString() + ' && sleep %(delay)i');""",
-                'test_cmd': bash.echo % { 's1': rand.randstrings[2] },
+                'test_cmd': bash.printf % { 's1': rand.randstrings[2] },
                 'test_cmd_expected': rand.randstrings[2] 
             }
         })
