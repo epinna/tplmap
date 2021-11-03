@@ -102,6 +102,7 @@ class Plugin(object):
                 action_execute = self.actions.get('execute', {})
                 test_cmd_code = action_execute.get('test_cmd')
                 test_cmd_code_expected = action_execute.get('test_cmd_expected')
+
                 if (
                     test_cmd_code and 
                     test_cmd_code_expected and
