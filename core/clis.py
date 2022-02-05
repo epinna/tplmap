@@ -10,7 +10,7 @@ class Shell(cmd.Cmd):
         self.prompt = prompt
     
     def default(self, line):
-        print self.inject_function(line)
+        print(self.inject_function(line))
     
     def emptyline(self):
         pass
@@ -54,8 +54,8 @@ class MultilineShell(cmd.Cmd):
         if line:
             self.lines.append(line)
 
-        print
-        print self.inject_function('\n'.join(self.lines))
+        print('')
+        print(self.inject_function('\n'.join(self.lines)))
         self.lines = []
         
     

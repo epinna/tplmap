@@ -23,7 +23,13 @@ from core.clis import Shell, MultilineShell
 from core.tcpserver import TcpServer
 import time
 import telnetlib
-import urlparse
+import sys
+
+if sys.version_info.major > 2 :
+    import urllib.parse as urlparse
+else :
+    import urlparse
+
 import socket
 
 plugins = [
@@ -111,7 +117,12 @@ def _print_injection_summary(channel):
 def detect_template_injection(channel, plugins = plugins):
 
     # Loop manually the channel.injs modifying channel's inj_idx
-    for i in xrange(len(channel.injs)):
+    if sys.version_info.major >= 2 :
+        wrappedRange = range
+    else :
+        wrappedRange = xrange
+
+    for i in wrappedRange(len(channel.injs)):
 
         log.info("Testing if %s parameter '%s' is injectable" % (
             channel.injs[channel.inj_idx]['field'],
@@ -181,14 +192,14 @@ def check_template_injection(channel):
             log.info("""Delay is introduced appending '&& sleep <delay>' to the shell commands. True or False is returned whether it returns successfully or not.""")
 
             if channel.args.get('os_cmd'):
-                print current_plugin.execute_blind(channel.args.get('os_cmd'))
+                print(current_plugin.execute_blind(channel.args.get('os_cmd')))
             elif channel.args.get('os_shell'):
                 log.info('Run commands on the operating system.')
                 Shell(current_plugin.execute_blind, '%s (blind) $ ' % (channel.data.get('os', ''))).cmdloop()
 
         elif channel.data.get('execute'):
             if channel.args.get('os_cmd'):
-                print current_plugin.execute(channel.args.get('os_cmd'))
+                print(current_plugin.execute(channel.args.get('os_cmd')))
             elif channel.args.get('os_shell'):
                 log.info('Run commands on the operating system.')
 
@@ -210,7 +221,7 @@ def check_template_injection(channel):
                 call = current_plugin.render
 
             if channel.args.get('tpl_code'):
-                print call(channel.args.get('tpl_code'))
+                print(call(channel.args.get('tpl_code')))
             elif channel.args.get('tpl_shell'):
                 log.info('Inject multi-line template code. Press ctrl-D to send the lines')
                 MultilineShell(call, '%s > ' % (channel.data.get('engine', ''))).cmdloop()

@@ -1,3 +1,6 @@
+import struct
+import sys
+
 from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
@@ -13,8 +16,8 @@ import utils.config
 
 def _recursive_update(d, u):
     # Update value of a nested dictionary of varying depth
-    
-    for k, v in u.iteritems():
+
+    for k, v in u.items():
         if isinstance(d, collections.Mapping):
             if isinstance(v, collections.Mapping):
                 r = _recursive_update(d.get(k, {}), v)
@@ -25,6 +28,19 @@ def _recursive_update(d, u):
             d = {k: u[k]}
             
     return d
+
+def compatible_url_safe_base64_encode(input):
+    code_b64 = input
+
+    if sys.version_info.major >= 2:
+        code_b64 = code_b64.encode(encoding='UTF-8')
+
+    code_b64 = base64.urlsafe_b64encode(code_b64)
+
+    if sys.version_info.major >= 2:
+        code_b64 = code_b64.decode(encoding='UTF-8')
+
+    return code_b64
 
 class Plugin(object):
 
@@ -658,7 +674,7 @@ class Plugin(object):
 
         if '%(code_b64)s' in payload:
             log.debug('[b64 encoding] %s' % code)
-            execution_code = payload % ({ 'code_b64' : base64.urlsafe_b64encode(code) })
+            execution_code = payload % ({ 'code_b64' : compatible_url_safe_base64_encode(code) })
         else:
             execution_code = payload % ({ 'code' : code })
 
@@ -685,7 +701,7 @@ class Plugin(object):
 
         if '%(code_b64)s' in payload:
             log.debug('[b64 encoding] %s' % code)
-            execution_code = payload % ({ 'code_b64' : base64.urlsafe_b64encode(code) })
+            execution_code = payload % ({ 'code_b64' : compatible_url_safe_base64_encode(code) })
         else:
             execution_code = payload % ({ 'code' : code })
 
@@ -717,7 +733,7 @@ class Plugin(object):
         if '%(code_b64)s' in payload_action:
             log.debug('[b64 encoding] %s' % code)
             execution_code = payload_action % ({
-                'code_b64' : base64.urlsafe_b64encode(code),
+                'code_b64' : compatible_url_safe_base64_encode(code),
                 'delay' : expected_delay
             })
         else:
@@ -752,7 +768,7 @@ class Plugin(object):
         if '%(code_b64)s' in payload_action:
             log.debug('[b64 encoding] %s' % code)
             execution_code = payload_action % ({
-                'code_b64' : base64.urlsafe_b64encode(code),
+                'code_b64' : compatible_url_safe_base64_encode(code),
                 'delay' : expected_delay
             })
         else:

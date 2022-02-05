@@ -1,7 +1,13 @@
 import requests
 import urllib3
 from utils.loggers import log
-import urlparse
+import sys
+
+if sys.version_info.major > 2 :
+    import urllib.parse as urlparse
+else :
+    import urlparse
+
 from copy import deepcopy
 import utils.config
 
