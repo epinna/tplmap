@@ -34,6 +34,11 @@ target.add_option("-u","--url",
 # Request options
 request = OptionGroup(parser, "Request", "These options have how to connect and where to inject to the target URL.")
 
+request.add_option("-p","--parameter",
+                dest="parameter",
+                help="Specify the parameter name to attempt",
+                )
+
 request.add_option("-d","--data",
                 dest="data",
                 help="Data string to be sent through POST. It must be as query string: param1=value1&param2=value2.",
