@@ -1,4 +1,4 @@
-PyYAML==5.1.2
+PyYAML==5.4
 certifi==2018.10.15
 chardet==3.0.4
 idna==2.8
