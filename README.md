@@ -94,6 +94,13 @@ $ ./tplmap.py -u 'http://www.target.com/page?name=John'
     --download REMOTE LOCAL   Download remote files
 ```
 
+In case the injectable parameter is in the path and not a URL parameter, you can use `*` in the URL where the injection point is.
+Example:
+```
+./tplmap.py -u 'http://www.target.com/*'
+```
+
+
 Use `--os-shell` option to launch a pseudo-terminal on the target.
 
 ```
