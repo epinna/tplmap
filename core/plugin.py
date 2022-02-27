@@ -380,6 +380,10 @@ class Plugin(object):
         blind = kwargs.get('blind', False)
 
         injection = prefix + code + suffix
+
+        if self.channel.args.get('verbose'):
+            log.info('\n\033[93m[+] {}\033[00m\n'.format(injection))
+
         log.debug('[request %s] %s' % (self.plugin, repr(self.channel.url)))
 
         # If the request is blind
