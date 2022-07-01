@@ -18,8 +18,8 @@ def _recursive_update(d, u):
     # Update value of a nested dictionary of varying depth
 
     for k, v in u.items():
-        if isinstance(d, collections.Mapping):
-            if isinstance(v, collections.Mapping):
+        if isinstance(d, collections.abc.Mapping):
+            if isinstance(v, collections.abc.Mapping):
                 r = _recursive_update(d.get(k, {}), v)
                 d[k] = r
             else:
