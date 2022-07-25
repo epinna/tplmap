@@ -9,7 +9,7 @@ import re
 import itertools
 import base64
 import datetime
-import collections
+from collections.abc import Mapping
 import threading
 import time
 import utils.config
@@ -18,8 +18,8 @@ def _recursive_update(d, u):
     # Update value of a nested dictionary of varying depth
 
     for k, v in u.items():
-        if isinstance(d, collections.Mapping):
-            if isinstance(v, collections.Mapping):
+        if isinstance(d, Mapping):
+            if isinstance(v, Mapping):
                 r = _recursive_update(d.get(k, {}), v)
                 d[k] = r
             else:
