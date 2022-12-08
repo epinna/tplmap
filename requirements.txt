@@ -1,5 +1,5 @@
 PyYAML==5.1.2
-certifi==2018.10.15
+certifi==2022.12.7
 chardet==3.0.4
 idna==2.8
 requests==2.22.0
