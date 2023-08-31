@@ -4,12 +4,12 @@ import sys
 from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
-import collections
+from collections.abc import Mapping
 import re
 import itertools
 import base64
 import datetime
-import collections
+import collections.abc
 import threading
 import time
 import utils.config
@@ -18,8 +18,8 @@ def _recursive_update(d, u):
     # Update value of a nested dictionary of varying depth
 
     for k, v in u.items():
-        if isinstance(d, collections.Mapping):
-            if isinstance(v, collections.Mapping):
+        if isinstance(d, collections.abc.Mapping):
+            if isinstance(v, collections.abc.Mapping):
                 r = _recursive_update(d.get(k, {}), v)
                 d[k] = r
             else:
@@ -711,7 +711,11 @@ class Plugin(object):
             suffix = suffix,
             blind = blind
         )
-        return result.replace('\\n', '\n')
+        if result:
+            result = result.replace('\\n', '\n')
+
+        return result
+
 
 
     def evaluate_blind(self, code, **kwargs):
