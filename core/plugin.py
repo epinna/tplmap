@@ -4,7 +4,10 @@ import sys
 from utils.strings import chunkit, md5
 from utils import rand
 from utils.loggers import log
-import collections
+if sys.version_info >= (3, 3):
+    from collections.abc import Mapping as Mapping
+else:
+    from collections import Mapping as Mapping
 import re
 import itertools
 import base64
@@ -18,8 +21,8 @@ def _recursive_update(d, u):
     # Update value of a nested dictionary of varying depth
 
     for k, v in u.items():
-        if isinstance(d, collections.Mapping):
-            if isinstance(v, collections.Mapping):
+        if isinstance(d, Mapping):
+            if isinstance(v, Mapping):
                 r = _recursive_update(d.get(k, {}), v)
                 d[k] = r
             else:
