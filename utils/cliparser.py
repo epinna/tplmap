@@ -14,6 +14,8 @@ epilog = """
 Example:
 
  ./tplmap -u 'http://www.target.com/page.php?id=1*'
+ or
+ docker run --rm tplmap:latest -u 'http://www.target.com/page.php?id=1*'
 
 """
 
@@ -62,8 +64,14 @@ request.add_option("-A","--user-agent",
                 )
 request.add_option("--proxy",
                 dest="proxy",
-                help="Use a proxy to connect to the target URL"
+                help="Use a proxy to connect to the target URL."
                 )
+request.add_option("-k", "--insecure",
+                   dest="ssl_verf",
+                   action="store_false",
+                   default=True,
+                   help="Allow insecure server connections."
+                   )
 
 # Detection options
 detection = OptionGroup(parser, "Detection" , "These options can be used to customize the detection phase.")

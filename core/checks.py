@@ -17,11 +17,9 @@ from plugins.languages.javascript import Javascript
 from plugins.languages.php import Php
 from plugins.languages.python import Python
 from plugins.languages.ruby import Ruby
-from core.channel import Channel
 from utils.loggers import log
 from core.clis import Shell, MultilineShell
 from core.tcpserver import TcpServer
-import time
 import telnetlib
 import sys
 

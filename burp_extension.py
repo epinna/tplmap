@@ -1,1 +1,0 @@
-from burp_extension.burp_extender import BurpExtender

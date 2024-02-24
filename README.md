@@ -1,8 +1,6 @@
 Tplmap
 ======
 
-> This project is no longer maintained. I'm happy to merge new PRs as long they don't break the [test suite](https://github.com/epinna/tplmap/wiki/Run-the-test-suite).
-
 Tplmap assists the exploitation of Code Injection and Server-Side Template Injection vulnerabilities with a number of sandbox escape techniques to get access to the underlying operating system.
 
 The tool and its test suite are developed to research the SSTI vulnerability class and to be used as offensive security tool during web application penetration tests.
@@ -98,7 +96,7 @@ Use `--os-shell` option to launch a pseudo-terminal on the target.
 
 ```
 $ ./tplmap.py --os-shell -u 'http://www.target.com/page?name=John'
-[+] Tplmap 0.5
+[+] Tplmap 0.3
     Automatic Server-Side Template Injection Detection and Exploitation Tool
 
 [+] Run commands on the operating system.
@@ -110,14 +108,21 @@ root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 bin:x:2:2:bin:/bin:/bin/sh
 ```
+### Using docker
+You can use docker instead, if you encounter any issue with the script (mostly caused by python2 dependencies e.g yaml).
+```console
+$ docker build -t tplmap .
+$ docker run --rm tplmap:latest -h
+$ docker run --rm tplmap:latest -u 'http://www.target.com/page?name=jhon'
+```
 
 Supported template engines
 --------------------------
 
 Tplmap supports over 15 template engines, unsandboxed template engines and generic _eval()_-like injections.
 
-| Engine                 | Remote Command Execution |  Blind | Code evaluation | File read | File write |
-|------------------------|---------------|-------------------|-----------------|-----------|------------|
+| Template engine        | Remote Command Execution |  Blind | Code evaluation | File read | File write |
+|------------------------|-------|-------------------|-----------------|-----------|------------|
 | Mako                   | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Jinja2                 | ✓ |  ✓                | Python          |  ✓        |  ✓         |
 | Python (code eval)     | ✓ |  ✓                | Python          |  ✓        |  ✓         |
@@ -134,10 +139,9 @@ Tplmap supports over 15 template engines, unsandboxed template engines and gener
 | ERB                    | ✓ |  ✓                | Ruby            |  ✓        |  ✓         |
 | Smarty (unsecured)     | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
 | PHP (code eval)        | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
-| Twig (<=1.19)          | ✓ |  ✓                | PHP             |  ✓        |  ✓         |
-| Freemarker             | ✓ |  ✓                | Java            |  ✓        |  ✓         |
-| Velocity               | ✓ |  ✓                | Java            |  ✓        |  ✓         |
-| Twig (>1.19)           | × | ×                 | ×               | ×         | ×          |
+| Freemarker             | ✓ |  ✓                | ×               |  ✓        |  ✓         |
+| Velocity               | ✓ |  ✓                | ×               |  ✓        |  ✓         |
+| Twig                   | × | ×                 | ×               | ×         | ×          |
 | Smarty (secured)       | × | ×                 | ×               | ×         | ×          |
 | Dust (> dustjs-helpers@1.5.0) | × | ×          | ×               | ×         | ×          |
 
