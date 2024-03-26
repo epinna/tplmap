@@ -1,13 +1,9 @@
 import unittest
-import requests
 import os
 import sys
-import random
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from plugins.engines.erb import Erb
-from core.channel import Channel
-from core.checks import detect_template_injection
 from basetest import BaseTest
 
 

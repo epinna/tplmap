@@ -1,14 +1,9 @@
 import unittest
-import requests
 import os
 import sys
-import random
 
 sys.path.insert(10, os.path.join(sys.path[0], '..'))
 from plugins.engines.jinja2 import Jinja2
-from core.channel import Channel
-from utils import rand
-from utils import strings
 from basetest import BaseTest
 
 class Jinja2Test(unittest.TestCase, BaseTest):
