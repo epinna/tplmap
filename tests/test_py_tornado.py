@@ -1,14 +1,9 @@
 import unittest
-import requests
 import os
 import sys
-import random
 
 sys.path.insert(10, os.path.join(sys.path[0], '..'))
 from plugins.engines.tornado import Tornado
-from core.channel import Channel
-from utils import rand
-from utils import strings
 from basetest import BaseTest
 
 class TornadoTest(unittest.TestCase, BaseTest):

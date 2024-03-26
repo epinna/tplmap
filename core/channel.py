@@ -28,6 +28,7 @@ class Channel:
 
         self.injs = []
         self.inj_idx = 0
+        self.ssl_verf = self.args.get('ssl_verf')
 
         proxy = self.args.get('proxy')
         if proxy:
@@ -201,6 +202,7 @@ class Channel:
         post_params = deepcopy(self.post_params)
         header_params = deepcopy(self.header_params)
         url_params = self.base_url
+        ssl_verfication = self.ssl_verf
         
         # Pick current injection by index
         inj = deepcopy(self.injs[self.inj_idx])
@@ -298,9 +300,10 @@ class Channel:
                 data = post_params,
                 headers = header_params,
                 proxies = self.proxies,
-                # By default, SSL check is skipped.
-                # TODO: add a -k curl-like option to set this.
-                verify = False
+                # By default, SSL check is not skipped.
+                # WARNING : Using this option makes the transfer insecure.
+                # TODO: add a -k curl-like option to set this. (Done)
+                verify = ssl_verfication
                 ).text
         except requests.exceptions.ConnectionError as e:
             if e and e[0] and e[0][0] == 'Connection aborted.':
