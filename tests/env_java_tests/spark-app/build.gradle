@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+    id "application"
+    id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
+group 'org.tplmap.webframeworks'
+version '1.0-SNAPSHOT'
+
+
+sourceCompatibility = 1.8
+mainClassName = 'org.tplmap.webframeworks.SparkApplication'
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.3'
+    compile group: 'org.freemarker', name: 'freemarker', version: '2.3.14'
+    compile group: 'org.apache.velocity', name: 'velocity', version: '1.6.2'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}

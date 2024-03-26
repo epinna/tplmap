@@ -1,0 +1,3 @@
+require "./webserver"
+
+run Cuba
